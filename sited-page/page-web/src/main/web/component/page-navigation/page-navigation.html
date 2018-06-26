@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:j="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" type="text/css" href="page-navigation.css">
+</head>
+<body>
+<div class="component page-navigation">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="page-navigation__item" j:if="prev != null">
+                <span j:text="i18n('page.prevPage')" class="page-navigation__item-title">Prev</span>
+                <a j:href="prev.path" j:text="prev.title" class="page-navigation__item-link">Title</a>
+            </div>
+        </div>
+        <div class="col-md-12">
+            <div class="page-navigation__item" j:if="next != null">
+                <span j:text="i18n('page.nextPage')" class="page-navigation__item-title">Prev</span>
+                <a j:href="next.path" j:text="next.title" class="page-navigation__item-link">Title</a>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

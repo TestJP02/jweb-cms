@@ -1,0 +1,18 @@
+app:
+  name: test
+  env: DEV
+  language: zh
+  supportLanguages:
+    - zh
+    - en
+
+database:
+  url: jdbc:hsqldb:mem:db;sql.syntax_mys=true
+  createTableEnabled: true
+  showSQLEnabled: true
+
+smtp:
+  host: localhost
+  port: 25
+  username: root
+  password: root

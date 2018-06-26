@@ -1,0 +1,129 @@
+.el-form-item .el-form-item {
+    margin: 0;
+}
+
+.page-header__editor {
+    min-width: 880px;
+}
+
+.page-header {
+    height: 100%;
+    background: #eee;
+}
+
+.page-header__container {
+    padding: 20px;
+}
+
+.page-header__link:first-child .page-header__link-name {
+    margin-left: -5px;
+}
+
+.page-header .page-image-slider__image-add {
+    width: 100px;
+    height: 64px;
+    padding: 0;
+    border: 0;
+}
+
+.page-header-container__logo-preview {
+    position: relative;
+    width: 120px;
+    height: 80px;
+    overflow: hidden;
+}
+
+.page-header-container__logo-preview img {
+    width: 100%;
+    height: 100%;
+}
+
+.page-header-container__logo-preview .el-button {
+    position: absolute;
+    right: 0;
+    top: 0;
+    text-align: center;
+    border: 0;
+    border-radius: 0;
+    color: #fff;
+    background: rgba(0, 0, 0, 0.6);
+    transition: all 0.2s ease;
+    transform: translate3d(0, -100%, 0);
+}
+
+.page-header-container__logo-preview:hover .el-button {
+    transform: translate3d(0, 0, 0);
+}
+
+.page-header__preview {
+    color: #666;
+    background: #eee;
+    height: 50px;
+}
+
+.page-header__preview::before,
+.page-header__preview::after {
+    content: "";
+    display: block;
+    clear: both;
+}
+
+.page-header-preview__logo {
+    float: left;
+    width: 100px;
+    height: 30px;
+    font-size: 30px;
+    text-align: center;
+    padding: 10px 15px;
+}
+
+.page-header-preview__logo img {
+    width: 100%;
+    height: 100%;
+}
+
+.page-header-preview__links,
+.page-header-preview__user,
+.page-header-preview__search {
+    float: right;
+    font-size: 14px;
+    line-height: 20px;
+}
+
+.page-header-preview__links {
+    text-align: right;
+}
+
+.page-header-preview__link,
+.page-header-preview__user-link,
+.page-header-preview__search-inner {
+    color: #666;
+    text-decoration: none;
+    display: inline-block;
+    padding: 15px 14px;
+}
+
+.page-header-preview__search-inner {
+    margin: 10px 14px;
+    border: 1px solid #666;
+    background: #fafafa;
+    border-radius: 15px;
+    padding: 0 10px;
+    width: 80px;
+    line-height: 28px;
+    box-sizing: border-box;
+}
+
+.page-header__link-subcontainer {
+    padding: 5px 0;
+    clear: both;
+    overflow: hidden;
+}
+
+.page-header__link-sublink {
+    float: left;
+    width: 100%;
+    padding: 5px;
+    background: #f6f6f6;
+
+}

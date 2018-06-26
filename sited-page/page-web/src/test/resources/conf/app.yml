@@ -1,0 +1,27 @@
+app:
+  env: DEV
+web:
+  baseURL: http://localhost:8081
+  roots:
+    - ../../../../page-web/src/main/resources/web
+    - ../web
+
+page-web:
+  site:
+    name: test site
+    og:
+      seeMore:
+        - http://www.twitter.com/@test
+        - http://www.facebook.com/test
+    twitter:
+      site: Test
+
+smtp:
+  host: localhost
+  port: 25
+  username: root
+  password: root
+
+database:
+  url: jdbc:hsqldb:mem:db;sql.syntax_mys=true
+  createTableEnabled: true

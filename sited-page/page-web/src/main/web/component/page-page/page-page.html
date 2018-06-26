@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:j="http://www.w3.org/1999/xhtml">
+<head>
+    <link rel="stylesheet" href="page-page.css">
+</head>
+<body>
+<article class="component page" itemscope itemtype="http://schema.org/Article">
+    <meta itemprop="url" j:content="page.path"/>
+    <meta itemprop="mainEntityOfPage" j:content="page.path"/>
+    <meta itemprop="dateModified" j:content="format(page.createdTime,'yyyy-MM-dd hh:mm')"/>
+    <meta itemprop="headline" j:content="page.title" j:if="!titleEnabled"/>
+    <meta itemprop="description" j:content="page.description"/>
+    <meta itemprop="image" j:content="page.imageURL"/>
+    <div itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+        <meta itemprop="name" j:content=""/>
+        <meta itemprop="logo" j:content="">
+    </div>
+    <div class="page-title" j:if="titleEnabled">
+        <h1 class="page-title__title" j:text="page.title">Title</h1>
+        <div class="page-title__author">
+            <j:username j:userId="page.userId">Author</j:username>
+            <span itemprop="datePublished" j:text="format(page.createdTime,'yyyy-MM-dd hh:mm')"></span>
+            <span j:text="i18n('page.visited') +  '('+ page.totalVisited + ')'"></span>
+        </div>
+    </div>
+    <div class="page-content" j:html="content">
+    </div>
+</article>
+</body>
+</html>

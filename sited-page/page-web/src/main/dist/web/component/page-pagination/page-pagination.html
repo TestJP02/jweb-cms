@@ -1,0 +1,22 @@
+<!doctype html>
+<html lang="en-US" xmlns:j="http://www.w3.org/1999/xhtml">
+    <head>
+        <link rel="stylesheet" href="page-pagination.c37f.css">
+    </head>
+    <body>
+        <div class="pagination">
+            <ul class="pagination__list">
+                <li class="pagination__item" j:if="pagination.prev != null">
+                    <a class="pagination__link pagination__link--prev" j:href="pagination.prev.link" j:text="i18n('page.prev')">Prev</a>
+                </li>
+                <li class="pagination__item" j:for="link:pagination.items">
+                    <a class="pagination__link" j:class="link.selected? 'pagination__link--active': ''" j:href="link.link" j:text="link.displayName">X</a>
+                </li>
+                <li class="pagination__item" j:if="pagination.next != null">
+                    <a class="pagination__link pagination__link--next" j:href="pagination.next.link" j:text="i18n('page.next')">Next</a>
+                </li>
+            </ul>
+        </div>
+    </body>
+</html>
+

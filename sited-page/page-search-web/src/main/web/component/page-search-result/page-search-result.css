@@ -1,0 +1,128 @@
+.search-result__list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.search-result__item {
+    margin-bottom: 1em;
+}
+
+.search-result__link {
+    display: block;
+    width: 100%;
+    overflow: hidden;
+    text-decoration: none;
+}
+
+.search-result__item-image {
+    display: block;
+    float: left;
+    vertical-align: top;
+    height: 80px;
+    width: 80px;
+    padding-right: 15px;
+}
+
+.search-result__item-image img {
+    width: 100%;
+    height: 100%;
+    vertical-align: top;
+}
+
+.search-result__item-content {
+    position: relative;
+    display: block;
+    vertical-align: top;
+    overflow: hidden;
+}
+
+.search-result__item-title {
+    word-break: keep-all;
+    width: 100%;
+}
+
+.page-list__item-title:hover {
+}
+
+.search-result__item-summary {
+    display: none;
+}
+
+.search-result__item-author {
+}
+
+.search-result__item-author-text {
+    display: inline-block;
+    vertical-align: middle;
+}
+
+.search-result__item-author-divider {
+    display: inline-block;
+    width: 0;
+    height: 11px;
+    border-left: 1px solid #999;
+    vertical-align: bottom;
+    margin: 0 5px;
+}
+
+.search-result__list-more {
+    text-align: center;
+    padding: 20px;
+}
+
+.search-result__list-more-btn {
+    display: inline-block;
+    font-size: 11px;
+    line-height: 15px;
+    padding: 7px 28px;
+    border-radius: 2px;
+}
+
+@media (min-width: 992px) {
+    .search-result__list {
+        padding: 0;
+    }
+
+    .search-result__item {
+    }
+
+    .search-result__item-image {
+        width: 80px;
+        height: 80px;
+        padding-right: 20px;
+    }
+
+    .search-result__item-title {
+    }
+
+    .search-result__item-summary {
+        display: block;
+    }
+
+    .search-result__item-author {
+        left: 0;
+        font-size: 14px;
+        line-height: 14px;
+        height: 14px;
+    }
+
+    .search-result__item-author-divider {
+        display: inline-block;
+        width: 0;
+        height: 14px;
+        border-left: 1px solid #999;
+        vertical-align: middle;
+    }
+
+    .search-result__list-more {
+        padding: 40px;
+    }
+
+    .search-result__list-more-btn {
+        font-size: 14px;
+        line-height: 18px;
+        padding: 11px 52px;
+        border-radius: 4px;
+    }
+}

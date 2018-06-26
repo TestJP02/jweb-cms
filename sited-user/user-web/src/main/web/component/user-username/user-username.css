@@ -1,0 +1,18 @@
+.username {
+    display: inline-block;
+    height: 1em;
+    line-height: 1em;
+}
+
+.username__image {
+    display: inline-block;
+}
+
+.username__nickname {
+    display: inline-block;
+}
+
+.username__image-image {
+    height: 1em;
+    width: 1em;
+}

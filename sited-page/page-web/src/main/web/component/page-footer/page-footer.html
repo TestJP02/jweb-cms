@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:j="http://www.w3.org/1999/xhtml">
+    <head>
+        <link rel="stylesheet" href="page-footer.css">
+    </head>
+    <body>
+
+        <div class="component page-footer">
+            <div class="page-footer__link-list">
+                <a j:href="link.link" class="page-footer__link" j:for="link:links" j:text="link.displayName">Display Name</a>
+            </div>
+            <div class="page-footer__copyright" j:text="copyrights">Copyright</div>
+        </div>
+    </body>
+</html>

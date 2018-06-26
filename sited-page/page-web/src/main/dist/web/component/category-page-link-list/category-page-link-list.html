@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:j="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="category-page-link-list.89c8.css">
+</head>
+<body>
+<div class="component page-link-list">
+    <div class="component__title" j:text="title">Title</div>
+    <div class="component__body">
+        <ul class="page-link-list__list">
+            <li class="page-link-list__item" j:for="page:pages">
+                <a j:href="page.path" class="page-link-list__item-link">
+                    <div class="page-link-list__item-content">
+                        <div class="page-link-list__item-title" j:text="page.title">Title</div>
+                        <div class="page-link-list__item-author">
+                            <span j:text="format(page.createdTime, 'yyyy-MM-dd hh:mm')">X min</span>
+                        </div>
+                    </div>
+                </a>
+            </li>
+        </ul>
+    </div>
+</div>
+</body>
+</html>

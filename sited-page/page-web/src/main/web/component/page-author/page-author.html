@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:j="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="page-author.css">
+    <script src="page-author.js"></script>
+</head>
+<body>
+<div class="component page-author">
+    <div class="page-author__author">
+        <div class="page-author__author-avatar"></div>
+        <div class="page-author__author-name" j:text="author.nickname">Name</div>
+    </div>
+    <ul class="page-author__link-list">
+        <li class="page-author__link-item" j:for="authorPage:pages"><a j:href="authorPage.path">{{authorPage.title}}</a></li>
+    </ul>
+</div>
+</body>
+</html>

@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:j="http://www.w3.org/1999/xhtml">
+<head>
+    <link rel="stylesheet" href="page-header.css">
+    <script type="text/javascript" src="page-header.js"></script>
+</head>
+<body>
+<div class="component page-header">
+    <div class="container page-header__container">
+        <div class="page-header__logo">
+            <a class="page-header__wrapper" href="/" j:if="logoImageURL !=null">
+                <img j:src="logoImageURL" j:alt="logoText" class="page-header__logo-image">
+            </a>
+            <h1 class="page-header__wrapper" j:if="logoText != null && request.path().equals('')"><a href="/" j:text="logoText" class="page-header__logo-text"></a></h1>
+            <a href="/" class="page-header__wrapper page-header__logo-text" j:if="logoText != null && !request.path().equals('')" j:text="logoText"></a>
+        </div>
+        <div class="page-header__operation">
+            <div class="page-header__search-mask" j:if="searchEnabled"></div>
+
+            <div class="page-header__search" j:if="searchEnabled">
+                <form j:action="searchURL" class="page-header__search-form">
+                    <input type="text" class="page-header__search-input" name="q">
+                    <button type="submit" class="page-header__search-btn">
+                        <i class="fa fa-search"></i>
+                    </button>
+                </form>
+            </div>
+            <a href="javascript:void(0)" class="page-header__operation-toggle page-header__operation-btn hidden-md hidden-lg hidden-xl">
+                <i class="page-header__operation-toggle-inner"></i>
+            </a>
+            <div class="header-account page-header__operation-btn-group hidden-xs" j:if="userEnabled">
+                <a href="/user/login" class="page-header__operation-btn" j:text="i18n('page.login')">Login</a>
+                <a href="/user/register" class="page-header__operation-btn" j:text="i18n('page.register')">Register</a>
+            </div>
+        </div>
+        <div class="page-header__nav-list">
+            <div class="page-header__nav-list-inner">
+                <div class="page-header__nav-item page-header__nav-login" j:if="userEnabled">
+                    <a href="/user/login" class="page-nav__link hidden-md hidden-lg hidden-xl" j:text="i18n('page.login')">
+                        Login
+                    </a>
+                </div>
+                <div class="page-header__nav-item" j:for="link:links" j:class="link.link==path?'page-header__nav-item--selected':''">
+                    <a j:href="link.link" class="page-nav__link" j:if="link.children==null">
+                        <span j:text="link.displayName">Link Name</span>
+                        <i j:if="link.children!=null" class="fa fa-angle-down"></i>
+                    </a>
+                    <a href="javascript:void(0)" class="page-nav__link" j:if="link.children!=null">
+                        <span j:text="link.displayName">Link Name</span>
+                        <i j:if="link.children!=null" class="fa fa-angle-down"></i>
+                    </a>
+                    <div class="page-header__nav-sublist" j:if="link.children!=null">
+                        <div class="page-header__nav-subitem" j:for="sub:link.children">
+                            <a j:href="sub.link" class="page-nav__link" j:text="sub.displayName">Link Name</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="page-header__nav-list-mask"></div>
+    </div>
+</div>
+
+<template id="login-menu">
+    <div class="page-header__nav-item">
+        <a href="javascript:void(0)" class="page-nav__link page-header__operation-avatar">
+            <img src="data.imageURL">
+            <i class="fa fa-angle-down"></i>
+        </a>
+        <div class="page-header__nav-sublist">
+            <!--<div class="page-header__nav-subitem">-->
+            <!--<a href="/home" class="page-nav__link page-header__operation-username"></a>-->
+            <!--</div>-->
+            <div class="page-header__nav-subitem">
+                <a href="/user/logout" class="page-nav__link">{{i18n('page.logout')}}</a>
+            </div>
+        </div>
+    </div>
+</template>
+</body>
+</html>

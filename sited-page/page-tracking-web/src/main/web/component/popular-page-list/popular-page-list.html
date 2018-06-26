@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:j="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" type="text/css" href="popular-page-list.css"/>
+    <script src="popular-page-list.js"></script>
+</head>
+<body>
+<div class="component page-rank">
+    <div class="component__title" j:text="title" j:if="title != null">title</div>
+    <div class="component__body">
+        <div class="page-rank__tabs">
+            <div class="page-rank__tab active" j:text="i18n('page.24hrs')">24小时</div>
+            <div class="page-rank__tab" j:text="i18n('page.weekly')">周最热</div>
+            <div class="page-rank__tab" j:text="i18n('page.monthly')">月最热</div>
+        </div>
+        <div class="page-rank__list-container">
+            <ul class="page-rank__list">
+                <li j:for="page:daily" class="page-rank__item">
+                    <div class="page-rank__item-title">
+                        <a j:href="page.path" class="page-rank__item-link" j:text="page.title">Page Title
+                        </a>
+                    </div>
+                    <div class="page-rank__item-author">
+                        <span j:text="format(page.createdTime,'yyyy-MM-dd hh:mm')">12:00 1</span>
+                    </div>
+                </li>
+            </ul>
+            <ul class="page-rank__list">
+                <li j:for="page:weekly" class="page-rank__item">
+                    <div class="page-rank__item-title">
+                        <a j:href="page.path" class="page-rank__item-link" j:text="page.title">Page Title
+                        </a>
+                    </div>
+                    <div class="page-rank__item-author">
+                        <span j:text="format(page.createdTime, 'yyyy-MM-dd hh:mm')">12:00 2</span>
+                    </div>
+                </li>
+            </ul>
+            <ul class="page-rank__list">
+                <li j:for="page:monthly" class="page-rank__item">
+                    <div class="page-rank__item-title">
+                        <a j:href="page.path" class="page-rank__item-link" j:text="page.title">Page Title
+                        </a>
+                    </div>
+                    <div class="page-rank__item-author">
+                        <span j:text="format(page.createdTime, 'yyyy-MM-dd hh:mm')">12:00 3</span>
+                    </div>
+                </li>
+            </ul>
+        </div>
+    </div>
+</div>
+</body>
+</html>

@@ -1,0 +1,8 @@
+.page-update__field .el-input-group__prepend{
+    padding: 0;
+    overflow: hidden;
+}
+.page-update__field .el-input-group__prepend .el-input__inner {
+    height: 100%;
+    border: 0;
+}

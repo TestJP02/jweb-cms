@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:j="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" type="text/css" href="./page-search-result.css">
+</head>
+<body>
+<div class="component search-result">
+    <div class="component__title" j:if="titleEnabled">
+        {{i18n('page.search')}}:{{keyword}},
+        <span class="search-result__total">{{pages.total}}{{i18n('page.searchResult')}}</span>
+    </div>
+    <ul class="component__body search-result__list">
+        <li class="search-result__item" j:for="page:pages.items">
+            <div class="search-result__item-image" j:if="page.imageURL!=null">
+                <a j:href="page.path">
+                    <img j:src="page.imageURL" j:alt="page.title">
+                </a>
+            </div>
+            <div class="search-result__item-content">
+                <a class="search-result__item-title" j:text="page.title" j:href="page.path" j:html="page.title">Title</a>
+                <p class="search-result__item-summary" j:html="page.description">description</p>
+                <div class="search-result__item-author">
+                    <span class="search-result__item-author-text"><j:username j:userId="page.userId"/></span>
+                    <div class="search-result__item-author-divider"></div>
+                    <span class="search-result__item-author-text" j:text="format(page.createdTime,'yyyy-MM-dd hh:mm')">Min</span>
+                </div>
+            </div>
+        </li>
+    </ul>
+    <j:pagination j:items="pages" path="/search"></j:pagination>
+</div>
+</body>
+</html>

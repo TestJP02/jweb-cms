@@ -1,0 +1,121 @@
+package io.sited.template;
+
+import com.google.common.base.Joiner;
+import com.google.common.base.Strings;
+import io.sited.util.JSON;
+
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.time.OffsetDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.Date;
+import java.util.List;
+
+/**
+ * @author chi
+ */
+public class TemplateFunctions {
+    public String ellipsis(String content, int limit) {
+        if (content == null || content.length() < limit) {
+            return content;
+        } else {
+            return content.substring(0, Math.max(0, limit)) + "...";
+        }
+    }
+
+    public int toInt(String value) {
+        if (Strings.isNullOrEmpty(value)) {
+            return 0;
+        }
+        return Integer.parseInt(value);
+    }
+
+    public boolean toBool(String value) {
+        return Boolean.valueOf(value);
+    }
+
+    public double toDouble(String value) {
+        return Double.valueOf(value);
+    }
+
+    public float toFloat(String value) {
+        return Float.valueOf(value);
+    }
+
+    public long toLong(String value) {
+        return Long.valueOf(value);
+    }
+
+    public String trim(String value) {
+        if (value == null) {
+            return null;
+        }
+        return value.trim();
+    }
+
+    public String substring(String value, int start) {
+        if (value == null) {
+            return null;
+        }
+        return value.substring(start);
+    }
+
+    public String substring(String value, int start, int end) {
+        if (value == null) {
+            return null;
+        }
+        return value.substring(start, end);
+    }
+
+    public String format(OffsetDateTime value, String pattern) {
+        return value.format(DateTimeFormatter.ofPattern(pattern));
+    }
+
+    public String format(LocalDateTime value, String pattern) {
+        return value.format(DateTimeFormatter.ofPattern(pattern));
+    }
+
+    public String format(Date value, String pattern) {
+        return new SimpleDateFormat(pattern).format(value);
+    }
+
+    public String format(LocalDate value, String pattern) {
+        return value.format(DateTimeFormatter.ofPattern(pattern));
+    }
+
+    public String format(LocalTime value, String pattern) {
+        return value.format(DateTimeFormatter.ofPattern(pattern));
+    }
+
+
+    public String join(List<?> list, String separator) {
+        if (list != null) {
+            return Joiner.on(separator).skipNulls().join(list);
+        }
+        return "";
+    }
+
+    public <T> String join(T[] list, String separator) {
+        if (list != null) {
+            return Joiner.on(separator).skipNulls().join(list);
+        }
+        return "";
+    }
+
+    public String join(List<?> list) {
+        return join(list, ",");
+    }
+
+    public <T> String join(T... array) {
+        return join(array, ",");
+    }
+
+    public String json(Object instance) {
+        if (instance != null) {
+            return JSON.toJSON(instance);
+        }
+        return "";
+    }
+}

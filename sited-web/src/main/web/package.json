@@ -1,0 +1,26 @@
+{
+    "name": "web",
+    "version": "1.0.0",
+    "description": "",
+    "main": "index.js",
+    "scripts": {
+        "release": "gulp release"
+    },
+    "author": "",
+    "license": "ISC",
+    "dependencies": {
+        "jquery": "^1.12.1",
+        "purecss": "^1.0.0",
+        "typocss": "^1.4.0"
+    },
+    "devDependencies": {
+        "del": "^2.2.2",
+        "gulp": "^3.9.1",
+        "gulp-csso": "^3.0.0",
+        "gulp-if": "^2.0.2",
+        "gulp-resources": "^0.5.0",
+        "gulp-rev-all": "^0.9.7",
+        "gulp-uglify": "^2.1.0",
+        "yargs": "^7.0.2"
+    }
+}

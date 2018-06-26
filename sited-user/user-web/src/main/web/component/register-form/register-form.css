@@ -1,0 +1,174 @@
+input {
+    border-radius: 4px;
+}
+
+.form-container {
+    max-width: 420px;
+    width: 100%;
+    margin: auto;
+}
+
+.form-validation {
+    margin-bottom: 10px;
+    border: 1px solid;
+    height: 32px;
+    padding: 8px 10px;
+    text-align: left;
+    font-size: 12px;
+    line-height: 16px;
+}
+
+.form-validation--error {
+    background: #ffe9e9;
+    border-color: #ffcfcf;
+    color: #ff3300;
+}
+
+.form-validation .fa {
+    font-size: 16px;
+    line-height: 16px;
+    vertical-align: top;
+    padding-right: 5px;
+}
+
+.form-validation__text {
+    vertical-align: top;
+}
+
+.user-login__logo-image {
+    display: block;
+    margin: 0 auto;
+    width: 44px;
+    height: 52px;
+}
+
+.user-login__form {
+    padding: 34px 0 0;
+    max-width: 420px;
+    margin: auto;
+}
+
+.user-login__input-wrap {
+    position: relative;
+}
+
+.user-login__input {
+    width: 100%;
+    height: 44px;
+    font-size: 14px;
+    line-height: 42px;
+    padding: 0 20px;
+    background-color: #fff;
+    border: 1px solid #e8e8e8;
+    box-shadow: none;
+}
+
+.user-login__input:focus {
+    border-color: #3498db;
+}
+
+.user-login__input.error {
+    border-color: #ff331f;
+}
+
+.user-login__input.user-login__input--pincode {
+    padding-right: 80px;
+}
+
+.user-login__pincode {
+    position: absolute;
+    top: 1px;
+    right: 1px;
+    line-height: 42px;
+    background: #fff;
+    padding: 0 20px;
+    border-radius: 4px;
+    color: #3498db;
+}
+
+.user-login__pincode.waiting::before {
+    content: attr(countdown) "s";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: #fff;
+    color: #333;
+}
+
+.user-login__form input:-moz-placeholder {
+    color: #9e9e9e;
+}
+
+.user-login__form input:-ms-input-placeholder {
+    color: #9e9e9e;
+}
+
+.user-login__form input::-moz-placeholder {
+    color: #9e9e9e;
+}
+
+.user-login__form input::-webkit-input-placeholder {
+    color: #9e9e9e;
+}
+
+.user-login__button {
+    margin-top: 20px;
+    cursor: pointer;
+    font-size: 16px;
+    line-height: 30px;
+    background: #fafafa;
+    color: #666;
+    border: 1px solid #fafafa;
+}
+
+.btn-submit {
+    color: #fff;
+    background: #3498db;
+    border-color: #3498db;
+}
+
+.user-login__separator {
+    position: relative;
+    padding: 30px 0 10px;
+    font-size: 14px;
+    line-height: 14px;
+    text-align: center;
+}
+
+.user-login__separator::before {
+    content: "";
+    position: absolute;
+    display: block;
+    top: 37px;
+    left: 0;
+    width: 100%;
+    height: 1px;
+    background: #e5e5e5;
+
+}
+
+.user-login__separator-text {
+    position: relative;
+    display: inline-block;
+    padding: 0 5px;
+    color: #9e9e9e;
+    z-index: 1;
+    background: #fff;
+}
+
+@media (min-width: 768px) {
+    .user-login__button {
+        width: 100%;
+        max-width: none;
+    }
+
+    .btn-submit {
+        margin-top: 40px;
+    }
+}
+
+.user-login__count-down {
+    display: none;
+}

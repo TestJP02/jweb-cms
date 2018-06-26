@@ -1,0 +1,81 @@
+package io.sited;
+
+import com.google.common.base.Charsets;
+import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
+import io.sited.resource.ClasspathResourceRepository;
+import io.sited.resource.CompositeResourceRepository;
+import io.sited.resource.FileResourceRepository;
+import io.sited.resource.Resource;
+import io.sited.resource.ResourceRepository;
+import io.sited.util.JSON;
+import io.sited.util.YAML;
+import io.sited.util.type.ClassValidator;
+
+import java.lang.reflect.InvocationTargetException;
+import java.nio.charset.Charset;
+import java.nio.file.Path;
+import java.time.Duration;
+import java.time.LocalDate;
+import java.time.LocalTime;
+import java.time.OffsetDateTime;
+import java.time.Period;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
+import java.util.Optional;
+
+public final class YAMLProfile implements Profile {
+    private final List<Class<?>> allowedTypes = Lists.newArrayList(Map.class, List.class, Locale.class, String.class, Integer.class, Long.class,
+        Double.class, Boolean.class, Duration.class, LocalDate.class, OffsetDateTime.class, LocalTime.class, Period.class, Charset.class);
+    private final Map<String, Map<String, Object>> options;
+
+    public YAMLProfile(Resource resource) {
+        options = YAML.fromYAML(resource.toText(Charsets.UTF_8), Map.class);
+    }
+
+    public static Profile load(Path dir) {
+        ResourceRepository repository = new CompositeResourceRepository(new FileResourceRepository(dir), new ClasspathResourceRepository(""));
+        Optional<Resource> resource = repository.get("conf/app.yml");
+        if (!resource.isPresent()) {
+            throw new ApplicationException("missing configuration file, path=conf/app.yml");
+        }
+        return new YAMLProfile(resource.get());
+    }
+
+    @Override
+    public <T> T options(String name, Class<T> optionClass) {
+        classValidator(optionClass).validate();
+        Map<String, Object> options = Maps.newHashMap();
+        options.putAll(defaultOptions(optionClass));
+        if (this.options.containsKey(name)) {
+            options.putAll(this.options.get(name));
+        }
+        return JSON.convert(options, optionClass);
+    }
+
+    public <T> void setOptions(String name, T options) {
+        this.options.put(name, JSON.convert(options, Map.class));
+    }
+
+    @SuppressWarnings("unchecked")
+    private <T> Map<String, Object> defaultOptions(Class<T> type) {
+        try {
+            return YAML.OBJECT_MAPPER.convertValue(type.getDeclaredConstructor().newInstance(), Map.class);
+        } catch (InstantiationException | IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
+            throw new ApplicationException(e);
+        }
+    }
+
+    public String toYAML() {
+        return YAML.toYAML(options);
+    }
+
+    private ClassValidator classValidator(Class<?> optionClass) {
+        ClassValidator classValidator = new ClassValidator(optionClass);
+        classValidator.allowEnum();
+        classValidator.allowGeneric();
+        allowedTypes.forEach(classValidator::allow);
+        return classValidator;
+    }
+}

@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:j="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" type="text/css" href="page-related-list.css">
+</head>
+<body>
+<div class="component related-list">
+    <div j:text="title" j:if="title != null" class="component__title">Title</div>
+    <div j:if="title == null" class="component__title" j:text="i18n('page.relatedListTitle')"></div>
+    <div class="component__body">
+        <ul class="related-list__list">
+            <li class="related-list__item" j:for="page:pages">
+                <div class="related-list__link">
+                    <div class="related-list__item-image" j:if="page.imageURL">
+                        <a j:href="page.path">
+                            <img j:src="page.imageURL" j:alt="page.title">
+                        </a>
+                    </div>
+                    <div class="related-list__item-content">
+                        <a class="related-list__item-title" j:text="ellipsis(page.title, 50)" j:href="page.path" j:title="page.title">Title</a>
+                        <p class="related-list__item-summary" j:text="ellipsis(page.description, 100)">Description</p>
+                        <div class="related-list__item-author">
+                            <j:username j:userId="page.userId">Author</j:username>
+                            <div class="related-list__item-author-divider"></div>
+                            <span j:text="format(page.createdTime,'yyyy-MM-dd hh:mm')">X min</span>
+                        </div>
+                    </div>
+                </div>
+            </li>
+        </ul>
+    </div>
+</div>
+</body>
+</html>

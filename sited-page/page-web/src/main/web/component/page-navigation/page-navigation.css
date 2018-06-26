@@ -1,0 +1,11 @@
+.page-navigation__item {
+    padding: 10px 0;
+}
+
+.page-navigation__item-title {
+    display: block;
+}
+
+.page-navigation__item-link {
+    display: block;
+}

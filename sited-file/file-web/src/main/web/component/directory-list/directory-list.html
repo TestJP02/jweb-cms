@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en-US" xmlns:j="http://www.w3.org/1999/xhtml">
+    <head>
+        <link rel="stylesheet" href="../../node_modules/purecss/build/pure-min.css">
+        <link rel="stylesheet" href="../../node_modules/purecss/build/grids-responsive-min.css">
+        <link rel="stylesheet" href="../../node_modules/font-awesome/css/font-awesome.min.css">
+        <link rel="stylesheet" href="../../static/css/file.css">
+    </head>
+    <body>
+
+        <a href="javascript:void(0)" class="sited-directory-create-handler sited-file__button sited-file__button--primary">
+            <span j:text="i18n('file.createFolder')"></span>
+        </a>
+
+        <div class="sited-file-directory">
+            <div class="sited-file-directory__head">
+                <div class="sited-file-directory__title">
+                    <div j:text="i18n('file.createFolder')"></div>
+                </div>
+                <a href="javascript:void(0)" class="sited-file-directory__head-button sited-file-directory__close ">
+                    <i class="iconfont icon-dms_close"></i>
+                </a>
+            </div>
+            <div class="sited-file-directory__body">
+                <div class="sited-file-directory__table-body-container">
+                    <form id="form" onsubmit="return false;">
+                        <div class="sited-file-directory__row">
+                            <div class="sited-file-directory__col">
+                                <label j:text="i18n('file.path')"></label>
+                                <input name="path">
+                            </div>
+                        </div>
+                        <div class="sited-file-directory__row">
+                            <div class="sited-file-directory__col">
+                                <label j:text="i18n('file.displayName')"></label>
+                                <input name="displayName">
+                            </div>
+                        </div>
+                        <div class="sited-file-directory__row">
+                            <div class="sited-file-directory__col">
+                                <label j:text="i18n('file.owner')"></label>
+                                <input name="owner">
+                                <label j:text="i18n('file.roles')"></label>
+                                <div>
+                                    <p j:for="role:roles"><label><input name="role.owner" type="checkbox" j:value="role"/><span j:text="role"></span></label></p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="sited-file-directory__row">
+                            <div class="sited-file-directory__col">
+                                <label j:text="i18n('file.userGroup')"></label>
+                                <input name="userGroup">
+                                <label j:text="i18n('file.roles')"></label>
+                                <div>
+                                    <p j:for="role:roles"><label><input name="role.userGroup" type="checkbox" j:value="role"/><span j:text="role"></span></label></p>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <div class="sited-file-directory__foot">
+                <a href="javascript:void(0)" class="sited-file__button sited-file-directory__close" j:text="i18n('file.close')"></a>
+                <a href="javascript:void(0)" class="sited-file__button sited-file__button--primary">
+                    <label for="submit" j:text="i18n('file.save')"></label>
+                    <input id="submit" class="sited-file-directory-handler">
+                </a>
+            </div>
+        </div>
+        <script src="../../node_modules/jquery/dist/jquery.min.js"></script>
+        <script src="../../static/js/file.directory.js"></script>
+    </body>
+</html>

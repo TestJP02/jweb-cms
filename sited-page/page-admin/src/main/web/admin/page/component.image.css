@@ -1,0 +1,8 @@
+.image-component {
+    text-align: center;
+}
+
+.image-component__image img {
+    display: block;
+    max-width: 100%;
+}

@@ -1,0 +1,56 @@
+import java.time.Instant
+
+apply plugin: 'build-dashboard'
+defaultTasks 'clean', 'build'
+
+subprojects {
+    apply plugin: 'java'
+    apply plugin: 'maven'
+
+    sourceCompatibility = JavaVersion.VERSION_1_10
+    targetCompatibility = JavaVersion.VERSION_1_10
+
+    tasks.withType(JavaCompile) {
+        options.encoding = 'UTF-8'
+        options.deprecation = true
+        options.compilerArgs += ['-Xlint:all', '-proc:none']
+    }
+
+    buildDir = "${rootDir}/build/${name}"
+
+    repositories {
+        mavenCentral()
+        mavenLocal()
+    }
+
+    afterEvaluate {
+        tasks.withType(Jar) {
+            manifest {
+                def copy = configurations.runtimeElements.copyRecursive().setTransitive(true)
+                copy.setCanBeResolved(true)
+                def dependencies = copy.resolvedConfiguration.resolvedArtifacts.collect { artifact ->
+                    def dependency = artifact.getModuleVersion().getId();
+                    return dependency.getGroup() + ":" + (dependency.getName().startsWith("sited-") ? dependency.getName().substring("sited-".length()) : dependency.getName()) + ":" + dependency.getVersion()
+                }.join(';');
+
+                attributes 'Implementation-Title': project.name,
+                        'Implementation-Version': project.version,
+                        'Created-By': "Sited.io",
+                        'Built-With': "gradle-${project.gradle.gradleVersion}",
+                        'Build-Time': Instant.now().toString(),
+                        "Dependencies": dependencies
+            }
+        }
+    }
+}
+
+allprojects {
+    apply plugin: 'idea'
+    idea.module.inheritOutputDirs = true
+}
+
+apply from: file("${rootDir}/gradle/quality.gradle")
+
+task wrapper(type: Wrapper) {
+    gradleVersion = '4.5.1'
+}

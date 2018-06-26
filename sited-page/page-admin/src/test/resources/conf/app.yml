@@ -1,0 +1,31 @@
+app:
+  name: test
+  language: zh
+  env: DEV
+  supportLanguages:
+    - zh
+    - en
+
+web:
+  baseURL: http://localhost:8080
+  cacheEnabled: false
+  roots:
+    - ../../../../page-web/src/main/web
+
+smtp:
+  host: 127.0.0.1
+  port: 25
+  username: root
+  password: root
+
+page-admin:
+  uploadPath: /upload/page/
+
+user-admin:
+  defaultAdminUser:
+    username: admin
+    password: admin
+
+page-web:
+  maxSitemapEntries: 10
+

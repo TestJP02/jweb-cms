@@ -1,0 +1,52 @@
+.page .el-card {
+    overflow: visible;
+}
+
+.component-selector {
+    position: relative;
+    text-align: center;
+}
+
+.component-selector .el-select {
+    text-align: left;
+}
+
+.component-selector__bg {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+    text-align: center;
+}
+
+.component-selector__bg .fa {
+    line-height: 36px;
+    color: #777;
+    font-size: 1.2em;
+}
+
+.component-selector .el-input__icon {
+    display: none;
+}
+
+.component-selector .el-input__inner {
+    border: 0;
+    background: none;
+}
+
+.page-grid-editor__add {
+    width: 100%;
+}
+
+.component-selector__input {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 1;
+}
+
+.page-grid-editor__button {
+    width: 100%;
+}
