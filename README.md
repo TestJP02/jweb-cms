@@ -1,7 +1,6 @@
 # Sited CMS
 
-A modern developer friendly Java 10 based on JAX-RS, Guice style DI, Bean Validation, JPA and 
-React. 
+A developer friendly Java CMS based on JAX-RS, Guice style DI, Bean Validation, JPA and React. 
 
 - Provides a light framework for JAX-RS modules.
 - A new Java template engine to support page widgets
@@ -117,5 +116,5 @@ Please read [CONTRIBUTING.md](https://gist.github.com/PurpleBooth/b24679402957c6
 
 ## License
 
-This project is licensed under the AGPL License and commercial license. 
-If you need support or customization, feel freely to contact me, brodie.chi#gmail.com. 
+This project is licensed under the AGPL License. 
+If you need support or customization, please feel free to contact me, chiron.chi#gmail.com. 
