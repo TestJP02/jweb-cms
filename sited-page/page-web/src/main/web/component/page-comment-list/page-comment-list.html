@@ -5,72 +5,77 @@
     <script src="./page-comment-list.js"></script>
 </head>
 <body>
-<div class="comment-container">
-    <div class="user-comment__forbidden">
-        <span j:text="i18n('comment.forbidden')"></span>
-    </div>
-    <div class="user-comment">
-        <div class="user-comment__title" j:text="i18n('comment.commentTitle')"></div>
-        <form action="" class="user-comment-form">
-            <input type="hidden" id="visitorCommentEnabled" j:value="visitorCommentEnabled">
-            <input type="hidden" id="pageId" name="pageId" j:value="page.id">
-            <textarea maxlength="1000" name="content" rows="3" class="user-comment-text" j:if="!visitorCommentEnabled&&!user.isAuthenticated()" disabled
-                    j:placeholder="i18n('comment.placeholderContent')"></textarea>
-            <textarea maxlength="1000" name="content" rows="3" class="user-comment-text" j:if="visitorCommentEnabled||user.isAuthenticated()"
-                    j:placeholder="i18n('comment.placeholderUserContent')"></textarea>
-            <a href="javascript:void(0)" j:if="visitorCommentEnabled||user.isAuthenticated()" class="btn btn-primary user-comment-submit" j:text="i18n('comment.submit')"></a>
-            <div j:if="!visitorCommentEnabled&&!user.isAuthenticated()">
-                <a href="javascript:void(0)" class="user-comment-login" j:text="i18n('comment.login')"></a>
-                <span j:text="i18n('comment.commentContent')"></span>
-            </div>
-        </form>
-    </div>
-    <ul class="comment-list">
-        <li class="comment" j:for="topComment:comments.items">
-            <div class="comment-author">
-                <div class="comment-author-avatar">
-                    <img j:if="topComment.user.imageURL!=null" j:src="topComment.user.imageURL">
-                    <img j:if="topComment.user.imageURL==null" src="/static/img/default-avatar.png">
+<div class="panel panel-default comment-list">
+    <div class="panel-heading" j:text="i18n('comment.commentTitle',client.language())"></div>
+    <div class="panel-body">
+        <div class="user-comment__forbidden">
+            <span j:text="i18n('comment.forbidden',client.language())"></span>
+        </div>
+        <div class="user-comment">
+            <form action="" class="user-comment-form">
+                <input type="hidden" id="visitorCommentEnabled" j:value="visitorCommentEnabled">
+                <input type="hidden" id="pageId" name="pageId" j:value="page.id()">
+                <textarea maxlength="1000" name="content" rows="3" class="user-comment-text" j:if="!visitorCommentEnabled&&!user.isAuthenticated()" disabled
+                        j:placeholder="i18n('comment.placeholderContent',client.language())"></textarea>
+                <textarea maxlength="1000" name="content" rows="3" class="user-comment-text" j:if="visitorCommentEnabled||user.isAuthenticated()"
+                        j:placeholder="i18n('comment.placeholderUserContent',client.language())"></textarea>
+                <a href="javascript:void(0)" j:if="visitorCommentEnabled||user.isAuthenticated()" class="btn btn-primary user-comment-submit" j:text="i18n('comment.submit',client.language())"></a>
+                <div j:if="!visitorCommentEnabled&&!user.isAuthenticated()">
+                    <a href="javascript:void(0)" class="user-comment-login" j:text="i18n('comment.login',client.language())"></a>
+                    <span j:text="i18n('comment.commentContent',client.language())"></span>
                 </div>
-                <div class="comment-author-name" j:text="topComment.user.nickname"></div>
-                <div class="comment-author-date">
-                    <span j:text="format(topComment.comment.createdTime,'yyyy-MM-dd hh:mm:ss')">2017.02.18</span>
-                </div>
-            </div>
-            <div class="comment-content">
-                <div class="comment-content-text">
-                    <span j:text="topComment.comment.content"></span>
-                    <a href="javascript:void(0)" class="comment-reply-btn" j:if="visitorCommentEnabled||user.isAuthenticated()" j:text="i18n('comment.reply')"></a>
-                    <div class="comment-content-text reply-content">
-                        <textarea maxlength="1000" j:data-id="topComment.comment.id" name="content" rows="3" class="user-comment-text"
-                                j:placeholder="i18n('comment.placeholderUserContent')"></textarea>
-                        <a href="javascript:void(0)" class="btn btn-primary reply-submit" j:if="visitorCommentEnabled||user.isAuthenticated()" j:text="i18n('comment.submit')"></a>
-                        <a href="javascript:void(0)" class="btn btn-default reply-cancel" j:text="i18n('comment.cancel')"></a>
+            </form>
+        </div>
+        <ul class="comment-list__list">
+            <li class="comment" j:for="topComment:comments.items">
+                <div class="comment-author">
+                    <div class="comment-author-avatar">
+                        <img j:if="topComment.user.imageURL!=null" j:src="topComment.user.imageURL">
+                        <img j:if="topComment.user.imageURL==null" src="/static/img/default-avatar.png">
+                    </div>
+                    <div class="comment-author-name" j:text="topComment.user.nickname"></div>
+                    <div class="comment-author-date">
+                        <span j:text="format(topComment.comment.createdTime,'yyyy-MM-dd hh:mm:ss')">2017.02.18</span>
                     </div>
                 </div>
-                <div class="comment-reply">
-                    <ul>
-                        <li class="comment" j:for="subComment:topComment.children">
-                            <div class="comment-author">
-                                <div class="comment-author-avatar">
-                                    <img j:if="subComment.user.imageURL!=null" j:src="subComment.user.imageURL">
-                                    <img j:if="subComment.user.imageURL==null" src="/static/img/default-avatar.png">
+                <div class="comment-content">
+                    <div class="comment-content-text">
+                        <span j:text="topComment.comment.content"></span>
+                        <a href="javascript:void(0)" class="comment-reply-btn" j:if="visitorCommentEnabled||user.isAuthenticated()" j:text="i18n('comment.reply',client.language())"></a>
+                        <div class="comment-content-text reply-content">
+                        <textarea maxlength="1000" j:data-id="topComment.comment.id" name="content" rows="3" class="user-comment-text"
+                                j:placeholder="i18n('comment.placeholderUserContent',client.language())"></textarea>
+                            <a href="javascript:void(0)" class="btn btn-primary reply-submit" j:if="visitorCommentEnabled||user.isAuthenticated()" j:text="i18n('comment.submit',client.language())"></a>
+                            <a href="javascript:void(0)" class="btn btn-default reply-cancel" j:text="i18n('comment.cancel',client.language())"></a>
+                        </div>
+                    </div>
+                    <div class="comment-reply">
+                        <ul>
+                            <li class="comment" j:for="subComment:topComment.children">
+                                <div class="comment-author">
+                                    <div class="comment-author-avatar">
+                                        <img j:if="subComment.user.imageURL!=null" j:src="subComment.user.imageURL">
+                                        <img j:if="subComment.user.imageURL==null" src="/static/img/default-avatar.png">
+                                    </div>
+                                    <div class="comment-author-name">
+                                        <span j:text="subComment.user.nickname"></span>
+                                    </div>
+                                    <div class="comment-author-date">
+                                        <span j:text="format(subComment.comment.createdTime,'yyyy-MM-dd hh:mm:ss')">2017.02.18</span>
+                                    </div>
                                 </div>
-                                <div class="comment-author-name">
-                                    <span j:text="subComment.user.nickname"></span>
+                                <div class="comment-content">
+                                    <div class="comment-content-text">
+                                        <span j:text="subComment.comment.content"></span>
+                                    </div>
                                 </div>
-                            </div>
-                            <div class="comment-content">
-                                <div class="comment-content-text">
-                                    <span j:text="subComment.comment.content"></span>
-                                </div>
-                            </div>
-                        </li>
-                    </ul>
+                            </li>
+                        </ul>
+                    </div>
                 </div>
-            </div>
-        </li>
-    </ul>
+            </li>
+        </ul>
+    </div>
 </div>
 <template id="template-parent">
     <li class="comment">
@@ -84,7 +89,7 @@
         <div class="comment-content">
             <div class="comment-content-text">
                 <span>_authorContent_</span>
-                <a href="javascript:void(0)" data-id="undefined" class="comment-reply-btn" j:text="i18n('comment.reply')">Reply</a>
+                <a href="javascript:void(0)" data-id="undefined" class="comment-reply-btn" j:text="i18n('comment.reply',client.language())">Reply</a>
             </div>
             <div class="comment-reply">
                 <ul>
@@ -100,6 +105,7 @@
                 <img src="/static/img/default-avatar.png">
             </div>
             <div class="comment-author-name"><span>undefined</span></div>
+            <div class="comment-author-date"><span>_authorDate_</span></div>
         </div>
         <div class="comment-content">
             <div class="comment-content-text">
@@ -111,14 +117,14 @@
 <template id="template-more">
     <li class="comment comment-more">
         <a href="javascript:void(0)" data-first-parent-id="undefined" data-page="undefined" class="comment-more-btn">
-            <span j:text="i18n('comment.loadMoreReply')">More reply</span>
+            <span j:text="i18n('comment.loadMoreReply',client.language())">More reply</span>
             (<span class="comment-more__count">undefined</span>条)
         </a>
     </li>
 </template>
-<span class="reply-i18n" j:text="i18n('comment.reply')"></span>
-<span class="submit-i18n" j:text="i18n('comment.submit')"></span>
-<span class="cancel-i18n" j:text="i18n('comment.cancel')"></span>
-<span class="more-i18n" j:text="i18n('comment.loadMoreReply')"></span>
+<span class="reply-i18n" j:text="i18n('comment.reply',client.language())"></span>
+<span class="submit-i18n" j:text="i18n('comment.submit',client.language())"></span>
+<span class="cancel-i18n" j:text="i18n('comment.cancel',client.language())"></span>
+<span class="more-i18n" j:text="i18n('comment.loadMoreReply',client.language())"></span>
 </body>
 </html>

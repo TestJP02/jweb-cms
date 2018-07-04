@@ -16,13 +16,11 @@ import com.google.common.collect.Maps;
 import io.sited.user.api.oauth.Provider;
 import io.sited.user.web.UserWebOptions;
 import io.sited.util.JSON;
-import io.sited.web.NotAuthorizedWebException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.inject.Inject;
 import javax.ws.rs.NotAuthorizedException;
-import java.io.IOException;
 import java.util.Random;
 import java.util.concurrent.ConcurrentMap;
 
@@ -38,27 +36,6 @@ public class Oauth20Service {
 
     public String redirectUri(Provider provider) {
         return service(provider).getAuthorizationUrl();
-    }
-
-    public OauthResponse auth(Provider provider, String code) {
-        OAuth20Service service = service(provider);
-        Response response;
-        try {
-            OAuth2AccessToken accessToken = service.getAccessToken(code);
-            response = getUserInfo(accessToken, provider, service);
-        } catch (Exception e) {
-            logger.error(e.getMessage(), e);
-            throw new NotAuthorizedWebException("login failure", e);
-        }
-        if (response.getCode() != 200) {
-            throw new NotAuthorizedWebException("login failure");
-        }
-        try {
-            Class oauthResponse = response(provider);
-            return JSON.fromJSON(response.getBody(), oauthResponse);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
     }
 
     private Response getUserInfo(OAuth2AccessToken accessToken, Provider provider, OAuth20Service service) throws Exception {

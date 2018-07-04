@@ -49,24 +49,24 @@ public class PageCategoryService {
 
     public List<PageCategory> find(CategoryTreeQuery categoryTreeQuery) {
         Query<PageCategory> query = repository.query("SELECT t FROM PageCategory t WHERE 1=1");
+        int index = 0;
         if (categoryTreeQuery.status != null) {
-            query.append("AND t.status=?", categoryTreeQuery.status);
+            query.append("AND t.status=?" + index++, categoryTreeQuery.status);
+        }
+        if (categoryTreeQuery.parentId != null) {
+            query.append("AND t.parentIds LIKE ?" + index, '%' + categoryTreeQuery.parentId + '%');
         }
         return query.find();
     }
 
     public QueryResponse<PageCategory> find(CategoryQuery categoryQuery) {
         Query<PageCategory> query = repository.query("SELECT t FROM PageCategory t WHERE 1=1");
+        int index = 0;
         if (!Strings.isNullOrEmpty(categoryQuery.query)) {
-            query.append("AND t.name=?0", categoryQuery.query);
+            query.append("AND t.name=?" + index++, categoryQuery.query);
         }
-
-        if (categoryQuery.root != null) {
-            if (categoryQuery.root) {
-                query.append("AND t.parentId IS NULL");
-            } else {
-                query.append("AND t.parentId IS NOT NULL");
-            }
+        if (categoryQuery.parentId != null) {
+            query.append("AND t.parentId=?" + index, categoryQuery.parentId);
         }
         return query.limit(categoryQuery.page, categoryQuery.limit).findAll();
     }
@@ -254,7 +254,7 @@ public class PageCategoryService {
     }
 
     public List<PageCategory> children(String parentId) {
-        return repository.query("SELECT t FROM PageCategory t WHERE t.parent_id=?0 AND t.status=?1", parentId, CategoryStatus.ACTIVE).sort("t.displayOrder", true).find();
+        return repository.query("SELECT t FROM PageCategory t WHERE t.parentId=?0 AND t.status=?1", parentId, CategoryStatus.ACTIVE).sort("t.displayOrder", true).find();
     }
 
     public List<PageCategory> children(List<PageCategory> parents) {

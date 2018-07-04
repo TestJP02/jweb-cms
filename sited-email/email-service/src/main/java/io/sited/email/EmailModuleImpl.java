@@ -41,7 +41,7 @@ public abstract class EmailModuleImpl extends EmailModule {
 
         MessageConfig messageConfig = module(MessageModule.class);
         messageConfig.createTopic(SendEmailRequest.class, new TopicOptions());
-        messageConfig.listen(SendEmailRequest.class, EmailMessageHandler.class);
+        messageConfig.listen(SendEmailRequest.class, requestInjection(new EmailMessageHandler()));
 
         api().service(EmailWebService.class, EmailWebServiceImpl.class);
         api().service(EmailTemplateWebService.class, EmailTemplateWebServiceImpl.class);

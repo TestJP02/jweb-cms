@@ -54,7 +54,7 @@ var childTemplate = $("#template-child").html();
 var moreTemplate = $("#template-more").html();
 Comment = {
     $form: $(".user-comment-form"),
-    $container: $(".comment-container"),
+    $container: $(".comment-list"),
     forbidden: $(".user-comment__forbidden"),
     loginButton: $(".user-comment-login"),
     init: function() {
@@ -103,7 +103,7 @@ Comment = {
             if (response.comment.parentId) {
                 $e.parents(".comment-content").find(">.comment-reply>ul").prepend(html);
             } else {
-                $(".comment-list").prepend(html);
+                $(".comment-list__list").prepend(html);
             }
             $commentText.val("");
         }.bind(this)).fail(function(response) {
@@ -194,6 +194,7 @@ function replyHtml(comment) {
         html.find(".comment-author-avatar").html("<img src='" + comment.user.imageURL + "' alt=\"\">");
     }
     html.find(".comment-author-name>span").text(comment.user.nickname);
+    html.find(".comment-author-date>span").text(dateString(comment.comment.createdTime));
     html.find(".comment-content-text>span").text(comment.comment.content);
     html.find(".comment-reply-btn").data("id", comment.comment.id);
     html.find(".user-comment-text").data("id", comment.comment.id);

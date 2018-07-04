@@ -14,6 +14,7 @@ module sited.page.rating.web {
     requires sited.module;
     requires sited.web;
     requires sited.page.api;
+    requires sited.page.web;
 
     requires sited.template;
     requires sited.page.rating.api;

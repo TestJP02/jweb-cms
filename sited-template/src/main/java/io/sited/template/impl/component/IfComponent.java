@@ -2,6 +2,7 @@ package io.sited.template.impl.component;
 
 import com.google.common.collect.Lists;
 import io.sited.template.AbstractComponent;
+import io.sited.template.Attributes;
 import io.sited.template.Children;
 import io.sited.template.ObjectAttribute;
 
@@ -18,8 +19,8 @@ public class IfComponent extends AbstractComponent {
     }
 
     @Override
-    public void output(Map<String, Object> bindings, Map<String, Object> attributes, Children children, OutputStream out) throws IOException {
-        Boolean condition = (Boolean) attribute("condition").value(attributes);
+    public void output(Map<String, Object> bindings, Attributes attributes, Children children, OutputStream out) throws IOException {
+        Boolean condition = attributes.get("condition");
 
         if (Boolean.TRUE.equals(condition)) {
             children.output(bindings, out);

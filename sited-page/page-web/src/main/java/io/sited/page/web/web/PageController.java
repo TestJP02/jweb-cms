@@ -1,18 +1,20 @@
 package io.sited.page.web.web;
 
 import com.google.common.base.Strings;
-import com.google.common.collect.ImmutableList;
-import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Maps;
 import io.sited.message.MessagePublisher;
 import io.sited.page.api.PageDraftWebService;
 import io.sited.page.api.category.CategoryResponse;
 import io.sited.page.api.draft.DraftResponse;
 import io.sited.page.api.page.PageResponse;
+import io.sited.page.api.page.PageStatus;
 import io.sited.page.api.page.PageVisitedMessage;
 import io.sited.page.web.AbstractPageWebController;
-import io.sited.page.web.service.CachedCategoryService;
-import io.sited.page.web.service.CachedPageService;
+import io.sited.page.web.PageInfo;
+import io.sited.page.web.service.CategoryCacheService;
+import io.sited.page.web.service.PageService;
+import io.sited.template.Template;
+import io.sited.template.TemplateEngine;
 import io.sited.web.NotFoundWebException;
 
 import javax.inject.Inject;
@@ -34,11 +36,13 @@ public class PageController extends AbstractPageWebController {
     @Inject
     MessagePublisher<PageVisitedMessage> publisher;
     @Inject
-    CachedPageService cachedPageService;
+    PageService pageService;
     @Inject
-    CachedCategoryService cachedCategoryService;
+    CategoryCacheService categoryCacheService;
     @Inject
     PageDraftWebService pageDraftWebService;
+    @Inject
+    TemplateEngine templateEngine;
     @Inject
     UriInfo uriInfo;
 
@@ -73,74 +77,141 @@ public class PageController extends AbstractPageWebController {
     }
 
     private Response handlePage(String path) {
-        Optional<PageResponse> pageOptional = cachedPageService.find(path);
+        Optional<PageResponse> pageOptional = pageService.find(path);
         if (!pageOptional.isPresent()) {
             String categoryPath = path + "/";
-            Optional<CategoryResponse> categoryOptional = cachedCategoryService.find(categoryPath);
+            Optional<CategoryResponse> categoryOptional = categoryCacheService.find(categoryPath);
             if (categoryOptional.isPresent()) {
                 return Response.temporaryRedirect(URI.create(categoryPath)).build();
             } else {
-                throw new NotFoundWebException("missing page, path={}", path);
+                return tryTemplate(path).orElseThrow(() -> new NotFoundWebException(appInfo, requestInfo, clientInfo, "missing page, path={}", path));
             }
         }
         PageResponse page = pageOptional.get();
-        CategoryResponse category = cachedCategoryService.get(page.categoryId);
+        CategoryResponse category = categoryCacheService.get(page.categoryId);
         Map<String, Object> bindings = Maps.newHashMap();
         bindings.put("category", category);
         notifyPageVisited(page);
-        return page(page, bindings);
+        return page(page(page), bindings);
+    }
+
+    private Optional<Response> tryTemplate(String path) {
+        String templatePath = templatePath(path);
+        if (templatePath.startsWith("component/") || templatePath.startsWith("template/")) {
+            return Optional.empty();
+        }
+
+        Optional<Template> template = templateEngine.template(templatePath);
+        if (template.isPresent()) {
+            PageInfo build = PageInfo.builder()
+                .setTemplatePath(templatePath)
+                .build();
+            return Optional.of(page(build));
+        }
+        return Optional.empty();
+    }
+
+    private String templatePath(String path) {
+        if (path.endsWith(".html")) {
+            return path.substring(1);
+        } else {
+            return path.substring(1) + ".html";
+        }
     }
 
     private Response handleDraft(String path) {
-        Optional<DraftResponse> draft = pageDraftWebService.findByPath(path);
-        if (!draft.isPresent()) {
-            throw new NotFoundWebException("missing draft, path={}", path);
+        Optional<DraftResponse> draftOptional = pageDraftWebService.findByPath(path);
+        if (!draftOptional.isPresent()) {
+            throw new NotFoundWebException(appInfo, requestInfo, clientInfo, "missing draft, path={}", path);
         }
+        DraftResponse draft = draftOptional.get();
+        CategoryResponse category = categoryCacheService.get(draft.categoryId);
         Map<String, Object> bindings = Maps.newHashMap();
-        PageResponse page = response(draft.get());
-        CategoryResponse category = cachedCategoryService.get(page.categoryId);
         bindings.put("category", category);
-        notifyPageVisited(page);
-        return page(page, bindings);
+        return page(page(draft), bindings);
     }
 
     private Response handleCategory(String path) {
-        Optional<CategoryResponse> categoryOptional = cachedCategoryService.find(path);
+        Optional<CategoryResponse> categoryOptional = categoryCacheService.find(path);
         if (!categoryOptional.isPresent()) {
             String pagePath = path.substring(0, path.length() - 1);
-            Optional<PageResponse> pageOptional = cachedPageService.find(pagePath);
+            Optional<PageResponse> pageOptional = pageService.find(pagePath);
             if (pageOptional.isPresent()) {
                 return Response.temporaryRedirect(URI.create(pagePath)).build();
             } else {
-                throw new NotFoundWebException("missing page, path={}", path);
+                throw new NotFoundWebException(appInfo, requestInfo, clientInfo, "missing page, path={}", path);
             }
         }
-        Map<String, Object> bindings = Maps.newHashMap();
         CategoryResponse category = categoryOptional.get();
+        Map<String, Object> bindings = Maps.newHashMap();
         bindings.put("category", category);
         return page(page(category), bindings);
     }
 
-    private PageResponse response(DraftResponse page) {
-        PageResponse response = new PageResponse();
-        response.id = page.id;
-        response.path = page.path;
-        response.templatePath = page.templatePath;
-        response.userId = page.userId;
-        response.categoryId = page.categoryId;
-        response.tags = page.tags;
-        response.keywords = page.keywords;
-        response.fields = page.fields;
-        response.title = page.title;
-        response.description = page.description;
-        response.imageURL = page.imageURL;
-        response.version = -1;
-        response.status = page.status;
-        response.createdTime = page.createdTime;
-        response.createdBy = page.createdBy;
-        response.updatedTime = page.updatedTime;
-        response.updatedBy = page.updatedBy;
-        return response;
+    private PageInfo page(DraftResponse page) {
+        return PageInfo.builder()
+            .setId(page.id)
+            .setPath(page.path)
+            .setTemplatePath(page.templatePath)
+            .setUserId(page.userId)
+            .setCategoryId(page.categoryId)
+            .setTags(page.tags)
+            .setKeywords(page.keywords)
+            .setFields(page.fields)
+            .setTitle(page.title)
+            .setDescription(page.description)
+            .setImageURL(page.imageURL)
+            .setContent(page.content)
+            .setVersion(page.version)
+            .setStatus(page.status)
+            .setCreatedBy(page.createdBy)
+            .setCreatedTime(page.createdTime)
+            .setUpdatedBy(page.updatedBy)
+            .setUpdatedTime(page.updatedTime)
+            .build();
+    }
+
+    private PageInfo page(PageResponse page) {
+        return PageInfo.builder()
+            .setId(page.id)
+            .setPath(page.path)
+            .setTemplatePath(page.templatePath)
+            .setUserId(page.userId)
+            .setCategoryId(page.categoryId)
+            .setTags(page.tags)
+            .setKeywords(page.keywords)
+            .setFields(page.fields)
+            .setTitle(page.title)
+            .setDescription(page.description)
+            .setImageURL(page.imageURL)
+            .setContent(page.content)
+            .setVersion(page.version)
+            .setStatus(page.status)
+            .setCreatedBy(page.createdBy)
+            .setCreatedTime(page.createdTime)
+            .setUpdatedBy(page.updatedBy)
+            .setUpdatedTime(page.updatedTime)
+            .build();
+    }
+
+    private PageInfo page(CategoryResponse category) {
+        return PageInfo.builder()
+            .setId(category.id)
+            .setPath(category.path)
+            .setTemplatePath(category.templatePath)
+            .setUserId(category.ownerId)
+            .setCategoryId(category.id)
+            .setTags(category.tags)
+            .setKeywords(category.keywords)
+            .setTitle(category.displayName)
+            .setDescription(category.description)
+            .setImageURL(category.imageURL)
+            .setStatus(PageStatus.ACTIVE)
+            .setCreatedBy(category.createdBy)
+            .setCreatedTime(category.createdTime)
+            .setUpdatedBy(category.updatedBy)
+            .setUpdatedTime(category.updatedTime)
+            .build();
     }
 
     private void notifyPageVisited(PageResponse page) {
@@ -155,22 +226,6 @@ public class PageController extends AbstractPageWebController {
 
     private boolean isCategory(String path) {
         return path.endsWith("/");
-    }
-
-    private PageResponse page(CategoryResponse category) {
-        PageResponse page = new PageResponse();
-        page.id = category.id;
-        page.path = category.path;
-        page.templatePath = category.templatePath;
-        page.userId = category.ownerId;
-        page.categoryId = category.parentId;
-        page.title = category.displayName;
-        page.keywords = category.keywords;
-        page.description = category.description;
-        page.tags = category.tags;
-        page.fields = ImmutableMap.of();
-        page.imageURLs = ImmutableList.of();
-        return page;
     }
 }
 

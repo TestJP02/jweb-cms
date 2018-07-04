@@ -1,35 +1,36 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:j="http://www.w3.org/1999/xhtml">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-    <link rel="stylesheet" type="text/css" href="./page-search-result.css">
-</head>
-<body>
-<div class="component search-result">
-    <div class="component__title" j:if="titleEnabled">
-        {{i18n('page.search')}}:{{keyword}},
-        <span class="search-result__total">{{pages.total}}{{i18n('page.searchResult')}}</span>
-    </div>
-    <ul class="component__body search-result__list">
-        <li class="search-result__item" j:for="page:pages.items">
-            <div class="search-result__item-image" j:if="page.imageURL!=null">
-                <a j:href="page.path">
-                    <img j:src="page.imageURL" j:alt="page.title">
-                </a>
+    <head>
+        <link rel="stylesheet" type="text/css" href="./page-search-result.css">
+    </head>
+    <body>
+        <div class="panel panel-default search-result">
+            <div class="panel-heading">
+                <span class="search-result__total">{{pages.total}}{{i18n('page.searchResult',client.language())}}</span>
             </div>
-            <div class="search-result__item-content">
-                <a class="search-result__item-title" j:text="page.title" j:href="page.path" j:html="page.title">Title</a>
-                <p class="search-result__item-summary" j:html="page.description">description</p>
-                <div class="search-result__item-author">
-                    <span class="search-result__item-author-text"><j:username j:userId="page.userId"/></span>
-                    <div class="search-result__item-author-divider"></div>
-                    <span class="search-result__item-author-text" j:text="format(page.createdTime,'yyyy-MM-dd hh:mm')">Min</span>
-                </div>
+            <div class="panel-body">
+                <ul class="media-list page-list">
+                    <li class="media" j:for="page:pages">
+                        <div class="media-body">
+                            <h3 class="media-heading">
+                                <a class="page-list__item-title" j:href="page.path" j:title="page.title" j:html="page.title">
+                                </a>
+                            </h3>
+                            <p class="page-list__item-description" j:html="page.description">Description</p>
+                            <div class="media-bottom page-list__item-bottom">
+                                <j:username j:userId="page.userId"/>&nbsp;
+                                <span j:text="fromNow(page.createdTime,client.language())">12:00 1</span>
+                            </div>
+                        </div>
+                        <div class="media-right">
+                            <a j:href="page.path" class="page-list__item-image" j:if="page.imageURL!=null">
+                                <img j:src="page.imageURL" j:alt="page.title" class="page-list__item-image">
+                            </a>
+                        </div>
+                    </li>
+                </ul>
+                <j:pagination j:items="pages" path="/search"/>
             </div>
-        </li>
-    </ul>
-    <j:pagination j:items="pages" path="/search"></j:pagination>
-</div>
-</body>
+        </div>
+    </body>
 </html>

@@ -61,18 +61,6 @@ public class Page {
     @Column(name = "fields", length = 2048)
     public String fields;
 
-    @Column(name = "total_visited")
-    public Integer totalVisited;
-
-    @Column(name = "total_liked")
-    public Integer totalLiked;
-
-    @Column(name = "total_disliked")
-    public Integer totalDisliked;
-
-    @Column(name = "total_commented")
-    public Integer totalCommented;
-
     @Column(name = "created_time")
     public OffsetDateTime createdTime;
 

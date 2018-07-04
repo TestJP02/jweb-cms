@@ -52,12 +52,13 @@ public class AdminStaticResourceController {
             }
             resource = optional.get();
         }
-        EntityTag eTag = new EntityTag(Integer.toString(resource.hashCode()));
+        EntityTag eTag = new EntityTag(resource.hash());
         Response.ResponseBuilder builder = request.evaluatePreconditions(eTag);
-        if (builder == null) {
-            builder = Response.ok(resource).type(MediaTypes.getMediaType(Files.getFileExtension(path)));
-            builder.tag(eTag);
+        if (builder != null) {
+            return builder.build();
         }
+        builder = Response.ok(resource).type(MediaTypes.getMediaType(Files.getFileExtension(path)));
+        builder.tag(eTag);
         CacheControl cacheControl = new CacheControl();
         cacheControl.setMustRevalidate(true);
         builder.cacheControl(cacheControl);

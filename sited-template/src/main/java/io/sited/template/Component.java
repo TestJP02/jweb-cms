@@ -25,9 +25,7 @@ public interface Component {
         return ImmutableList.of();
     }
 
-    List<ComponentAttribute<?>> attributes();
+    Map<String, ComponentAttribute<?>> attributes();
 
-    <T> ComponentAttribute<T> attribute(String attributeName);
-
-    void output(Map<String, Object> bindings, Map<String, Object> attributes, Children children, OutputStream out) throws IOException;
+    void output(Map<String, Object> bindings, Attributes attributes, Children children, OutputStream out) throws IOException;
 }

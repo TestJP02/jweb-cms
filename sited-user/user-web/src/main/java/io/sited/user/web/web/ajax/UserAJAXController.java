@@ -106,6 +106,10 @@ public class UserAJAXController {
     @POST
     public Response register(RegisterAJAXRequest registerAJAXRequest) throws IOException {
         UserResponse user;
+        boolean pinCodeValidate = pinCode.validate(registerAJAXRequest.pinCode);
+        if (!pinCodeValidate) {
+            throw Exceptions.badRequestException("pinCode", "user.error.pinCodeInvalid");
+        }
         if (registerAJAXRequest.provider == null) {
             CreateUserRequest createUserRequest = new CreateUserRequest();
             createUserRequest.username = registerAJAXRequest.username;

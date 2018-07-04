@@ -7,16 +7,21 @@ import com.google.common.collect.ImmutableMap;
 import io.sited.page.api.PageWebService;
 import io.sited.page.api.page.CreatePageRequest;
 import io.sited.page.api.page.DeletePageRequest;
-import io.sited.page.api.page.LatestQuery;
+import io.sited.page.api.page.LatestPageQuery;
 import io.sited.page.api.page.PageNavigationResponse;
 import io.sited.page.api.page.PageQuery;
 import io.sited.page.api.page.PageRelatedQuery;
 import io.sited.page.api.page.PageResponse;
 import io.sited.page.api.page.PageStatus;
+import io.sited.page.api.page.PopularPageQuery;
 import io.sited.page.api.page.RevertDeletePageRequest;
 import io.sited.page.domain.Page;
+import io.sited.page.domain.PageContent;
+import io.sited.page.domain.PageStatistics;
+import io.sited.page.service.PageContentService;
 import io.sited.page.service.PageDraftService;
 import io.sited.page.service.PageService;
+import io.sited.page.service.PageStatisticsService;
 import io.sited.util.JSON;
 import io.sited.util.collection.QueryResponse;
 
@@ -34,10 +39,14 @@ public class PageWebServiceImpl implements PageWebService {
     PageService pageService;
     @Inject
     PageDraftService pageDraftService;
+    @Inject
+    PageContentService pageContentService;
+    @Inject
+    PageStatisticsService pageStatisticsService;
 
     @Override
     public PageResponse get(String id) {
-        return response(pageService.get(id));
+        return response(pageService.get(id), pageContentService.getByPageId(id));
     }
 
     @Override
@@ -45,10 +54,9 @@ public class PageWebServiceImpl implements PageWebService {
         return pageService.batchGet(ids).stream().map(this::response).collect(Collectors.toList());
     }
 
-
     @Override
     public Optional<PageResponse> findByPath(String path) {
-        return pageService.findByPath(path).map(this::response);
+        return pageService.findByPath(path).map(page -> response(page, pageContentService.getByPageId(page.id)));
     }
 
     @Override
@@ -75,7 +83,6 @@ public class PageWebServiceImpl implements PageWebService {
         return response(pageService.create(request));
     }
 
-
     @Override
     public void batchDelete(DeletePageRequest request) {
         if (request.pages == null) {
@@ -97,8 +104,19 @@ public class PageWebServiceImpl implements PageWebService {
     }
 
     @Override
-    public List<PageResponse> latest(LatestQuery query) {
+    public List<PageResponse> latest(LatestPageQuery query) {
         return pageService.latest(query).stream().map(this::response).collect(Collectors.toList());
+    }
+
+    @Override
+    public QueryResponse<PageResponse> popular(PopularPageQuery query) {
+        QueryResponse<PageStatistics> statistics = pageStatisticsService.find(query);
+        QueryResponse<PageResponse> pages = new QueryResponse<>();
+        pages.total = statistics.total;
+        pages.limit = statistics.limit;
+        pages.page = statistics.page;
+        pages.items = batchGet(statistics.items.stream().map(statistic -> statistic.id).collect(Collectors.toList()));
+        return pages;
     }
 
     private PageResponse response(Page page) {
@@ -117,14 +135,16 @@ public class PageWebServiceImpl implements PageWebService {
         response.imageURL = page.imageURL;
         response.version = page.version;
         response.status = page.status;
-        response.totalVisited = page.totalVisited;
-        response.totalCommented = page.totalCommented;
-        response.totalDisliked = page.totalDisliked;
-        response.totalLiked = page.totalLiked;
         response.createdTime = page.createdTime;
         response.createdBy = page.createdBy;
         response.updatedTime = page.updatedTime;
         response.updatedBy = page.updatedBy;
+        return response;
+    }
+
+    private PageResponse response(Page page, PageContent content) {
+        PageResponse response = response(page);
+        response.content = content.content;
         return response;
     }
 }

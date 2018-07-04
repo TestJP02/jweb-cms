@@ -1,7 +1,6 @@
 package io.sited.file.web.web.ajax;
 
 import com.google.common.base.Strings;
-import com.google.common.hash.Hashing;
 import com.google.common.io.Files;
 import io.sited.file.api.DirectoryWebService;
 import io.sited.file.api.FileRepository;
@@ -37,6 +36,7 @@ import java.io.InputStream;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Optional;
+import java.util.UUID;
 
 /**
  * @author chi
@@ -127,8 +127,7 @@ public class FileAJAXController {
 
     String path(String directoryPath, Resource resource) {
         String fileExtension = Files.getFileExtension(resource.path());
-        String hash = Hashing.md5().hashBytes(resource.toByteArray()).toString();
-        return "/file" + directoryPath + hash + '.' + fileExtension;
+        return "/file" + directoryPath + UUID.randomUUID().toString() + '.' + fileExtension;
     }
 
     String defaultDirectory(String date) {

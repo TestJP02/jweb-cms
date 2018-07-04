@@ -1,0 +1,12 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:j="http://www.w3.org/1999/xhtml">
+    <head>
+        <link rel="stylesheet" href="captcha.css">
+    </head>
+    <body>
+        <div j:if="captchaEnabled" class="form-group captcha-wrap">
+            <input class="form-control input-lg" name="captchaCode" placeholder="Captcha Code">
+            <img src="/captcha.jpg" alt="captcha" class="captcha" onclick="document.querySelector('.captcha').setAttribute('src','/captcha.jpg?' + new Date().getTime())">
+        </div>
+    </body>
+</html>

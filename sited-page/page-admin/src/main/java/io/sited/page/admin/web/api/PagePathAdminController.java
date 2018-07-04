@@ -1,8 +1,7 @@
 package io.sited.page.admin.web.api;
 
 
-import io.sited.page.admin.PathProvider;
-import io.sited.page.admin.service.PathManager;
+import io.sited.page.admin.service.PagePathService;
 import io.sited.page.admin.web.api.page.PagePathSuggestAJAXRequest;
 import io.sited.page.admin.web.api.page.PagePathSuggestAJAXResponse;
 import io.sited.page.admin.web.api.path.ValidatePathRequest;
@@ -26,19 +25,14 @@ public class PagePathAdminController {
     PageDraftWebService pageDraftWebService;
 
     @Inject
-    PathManager pathManager;
+    PagePathService pagePathService;
 
     @RolesAllowed("GET")
     @PUT
     @Path("/suggest")
     public PagePathSuggestAJAXResponse suggestPath(PagePathSuggestAJAXRequest request) {
         PagePathSuggestAJAXResponse response = new PagePathSuggestAJAXResponse();
-        Optional<PathProvider> provider = pathManager.provider(request.language);
-        if (provider.isPresent()) {
-            response.path = provider.get().get(request.title);
-        } else {
-            response.path = "";
-        }
+        response.path = pagePathService.suggest(request.title);
         return response;
     }
 

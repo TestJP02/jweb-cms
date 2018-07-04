@@ -3,8 +3,8 @@ package io.sited.web;
 /**
  * @author chi
  */
-public class NotAuthorizedWebException extends WebApplicationException {
-    public NotAuthorizedWebException(String message, Object... args) {
-        super(message, args);
+public class NotAuthorizedWebException extends WebException {
+    public NotAuthorizedWebException(AppInfo app, RequestInfo request, ClientInfo client, String message, Object... args) {
+        super(app, request, client, message, args);
     }
 }

@@ -36,7 +36,7 @@ public class AppExtension implements TestInstancePostProcessor, AfterTestExecuti
     private MockApp createApp(Class<? extends AbstractModule>... modules) {
         MockApp mockApp = new MockApp(new TempDirectory().root());
         Arrays.asList(modules).forEach(mockApp::install);
-        mockApp.onStartup();
+        mockApp.start();
         return mockApp;
     }
 
@@ -64,7 +64,7 @@ public class AppExtension implements TestInstancePostProcessor, AfterTestExecuti
         ExtensionContext.Store store = context.getStore(ExtensionContext.Namespace.create(AppExtension.class, MockApp.class));
         MockApp app = (MockApp) store.get(MockApp.class);
         if (app != null) {
-            app.onShutdown();
+            app.stop();
             new TempDirectory(app.dir()).delete();
         }
     }

@@ -6,4 +6,5 @@ package io.sited.template;
 public class StyleSheet {
     public String href;
     public String innerText;
+    public Boolean inline;
 }

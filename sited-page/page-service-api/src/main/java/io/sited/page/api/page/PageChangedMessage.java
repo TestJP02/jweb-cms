@@ -14,6 +14,8 @@ import java.util.Map;
 public class PageChangedMessage {
     @XmlElement(name = "id")
     public String id;
+    @XmlElement(name = "firstPublished")
+    public Boolean firstPublished;
     @XmlElement(name = "userId")
     public String userId;
     @XmlElement(name = "categoryId")

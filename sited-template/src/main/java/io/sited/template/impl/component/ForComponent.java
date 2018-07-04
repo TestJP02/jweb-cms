@@ -3,6 +3,7 @@ package io.sited.template.impl.component;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import io.sited.template.AbstractComponent;
+import io.sited.template.Attributes;
 import io.sited.template.Children;
 import io.sited.template.ObjectAttribute;
 import io.sited.template.StringAttribute;
@@ -20,10 +21,10 @@ public class ForComponent extends AbstractComponent {
     }
 
     @Override
-    public void output(Map<String, Object> bindings, Map<String, Object> attributes, Children children, OutputStream out) throws IOException {
-        Iterable<?> items = (Iterable<?>) attribute("items").value(attributes);
-        String item = (String) attribute("item").value(attributes);
-        String index = (String) attribute("index").value(attributes);
+    public void output(Map<String, Object> bindings, Attributes attributes, Children children, OutputStream out) throws IOException {
+        Iterable<?> items = attributes.get("items");
+        String item = attributes.get("item");
+        String index = attributes.get("index");
 
         if (items != null) {
             int i = 0;

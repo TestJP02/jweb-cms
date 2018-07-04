@@ -107,6 +107,7 @@ public class PageCategoryAdminController {
     @PUT
     public CategoryResponse update(@PathParam("id") String id, UpdateCategoryRequest ajaxRequest) throws IOException {
         UpdateCategoryRequest updateCategoryRequest = new UpdateCategoryRequest();
+        updateCategoryRequest.parentId = ajaxRequest.parentId;
         updateCategoryRequest.path = ajaxRequest.path;
         updateCategoryRequest.templatePath = ajaxRequest.templatePath;
         updateCategoryRequest.displayName = ajaxRequest.displayName;

@@ -66,7 +66,7 @@ public class UndertowApp extends App {
         this.undertow.start();
     }
 
-    private void stop() {
+    public void stop() {
         if (undertow != null) {
             undertow.stop();
         }

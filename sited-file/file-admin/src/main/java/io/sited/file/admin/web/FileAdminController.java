@@ -5,10 +5,11 @@ import io.sited.resource.Resource;
 
 import javax.inject.Inject;
 import javax.ws.rs.GET;
-import javax.ws.rs.NotFoundException;
 import javax.ws.rs.Path;
+import javax.ws.rs.core.CacheControl;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
+import java.util.Optional;
 
 /**
  * @author chi
@@ -24,7 +25,12 @@ public class FileAdminController {
     @GET
     public Response file() {
         String path = uriInfo.getPath().substring("/admin/file".length());
-        Resource resource = fileRepository.get(path).orElseThrow(() -> new NotFoundException("missing file, path=" + path));
-        return Response.ok(resource).build();
+        Optional<Resource> resource = fileRepository.get(path);
+        if (!resource.isPresent()) {
+            return Response.ok().status(Response.Status.NOT_FOUND).build();
+        }
+        CacheControl cacheControl = new CacheControl();
+        cacheControl.setMaxAge(Integer.MAX_VALUE);
+        return Response.ok(resource.get()).cacheControl(cacheControl).build();
     }
 }

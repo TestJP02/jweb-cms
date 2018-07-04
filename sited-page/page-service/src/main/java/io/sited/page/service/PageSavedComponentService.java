@@ -93,6 +93,7 @@ public class PageSavedComponentService {
     @Transactional
     public PageSavedComponent update(String id, UpdateSavedComponentRequest request) {
         PageSavedComponent pageComponent = get(id);
+        pageComponent.name = request.name;
         pageComponent.displayName = request.displayName;
         pageComponent.status = SavedComponentStatus.ACTIVE;
         pageComponent.attributes = request.attributes == null ? null : JSON.toJSON(request.attributes);

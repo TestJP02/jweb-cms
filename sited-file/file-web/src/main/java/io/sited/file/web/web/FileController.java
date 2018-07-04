@@ -9,12 +9,13 @@ import io.sited.web.Template;
 
 import javax.inject.Inject;
 import javax.ws.rs.GET;
-import javax.ws.rs.NotFoundException;
 import javax.ws.rs.Path;
 import javax.ws.rs.QueryParam;
+import javax.ws.rs.core.CacheControl;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 import java.util.Map;
+import java.util.Optional;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -35,8 +36,13 @@ public class FileController {
         if (uriPath.endsWith("/")) {
             return directory(uriPath, path, query);
         }
-        Resource resource = fileRepository.get(uriPath).orElseThrow(() -> new NotFoundException("missing file, path=" + path));
-        return Response.ok(resource).type(MediaTypes.getMediaType(resource.path())).build();
+        Optional<Resource> resource = fileRepository.get(uriPath);
+        if (!resource.isPresent()) {
+            return Response.ok().status(Response.Status.NOT_FOUND).build();
+        }
+        CacheControl cacheControl = new CacheControl();
+        cacheControl.setMaxAge(Integer.MAX_VALUE);
+        return Response.ok(resource.get()).cacheControl(cacheControl).type(MediaTypes.getMediaType(uriPath)).build();
     }
 
     @GET

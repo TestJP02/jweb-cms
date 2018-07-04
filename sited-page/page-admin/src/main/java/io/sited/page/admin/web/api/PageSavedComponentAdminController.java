@@ -106,6 +106,7 @@ public class PageSavedComponentAdminController {
 
     private UpdateSavedComponentRequest updateRequest(UpdatePageSavedComponentAJAXRequest ajaxRequest, String requestBy) {
         UpdateSavedComponentRequest request = new UpdateSavedComponentRequest();
+        request.name = ajaxRequest.name;
         request.displayName = ajaxRequest.displayName;
         request.attributes = ajaxRequest.attributes;
         request.requestBy = requestBy;

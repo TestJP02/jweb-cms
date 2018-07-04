@@ -4,6 +4,7 @@ import com.google.common.base.Charsets;
 import com.google.common.collect.Lists;
 import com.google.common.html.HtmlEscapers;
 import io.sited.template.AbstractComponent;
+import io.sited.template.Attributes;
 import io.sited.template.Children;
 import io.sited.template.ObjectAttribute;
 
@@ -20,8 +21,8 @@ public class TextComponent extends AbstractComponent {
     }
 
     @Override
-    public void output(Map<String, Object> bindings, Map<String, Object> attributes, Children children, OutputStream out) throws IOException {
-        Object content = attribute("content").value(attributes);
+    public void output(Map<String, Object> bindings, Attributes attributes, Children children, OutputStream out) throws IOException {
+        Object content = attributes.get("content");
         if (content == null) {
             children.output(bindings, out);
         } else {

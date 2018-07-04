@@ -4,13 +4,14 @@
     "description": "",
     "main": "main.jsx",
     "scripts": {
+        "webpack-dashboard": "webpack --entry pageDashboard=./admin/page/dashboard.page --output-path=../dist/web/admin/static/page --output-filename=[name].min.js --output-library=[name]Bundle --config=./webpack.module.js",
         "webpack": "webpack --entry page=./admin/page/page --output-path=../dist/web/admin/static/page --output-filename=[name].min.js --output-library=[name]Bundle --config=webpack.module.js",
-        "build": "npm run webpack -- --mode=development",
-        "release": "npm run webpack -- --mode=production",
+        "build": "npm run webpack -- --mode=development && npm run webpack-dashboard -- --mode=development",
+        "release": "npm run webpack -- --mode=production && npm run webpack-dashboard -- --mode=production",
         "watch": "npm run webpack -- --mode=development --watch"
     },
     "author": "sited.io",
-  "license": "AGPL",
+    "license": "AGPL",
     "dependencies": {
         "draft-js": "^0.10.5",
         "draft-js-export-html": "^1.2.0",

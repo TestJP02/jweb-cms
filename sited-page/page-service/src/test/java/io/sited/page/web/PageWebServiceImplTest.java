@@ -9,7 +9,7 @@ import io.sited.page.api.PageWebService;
 import io.sited.page.api.draft.CreateDraftRequest;
 import io.sited.page.api.draft.DraftResponse;
 import io.sited.page.api.draft.UpdateDraftRequest;
-import io.sited.page.api.page.LatestQuery;
+import io.sited.page.api.page.LatestPageQuery;
 import io.sited.page.api.page.PageNavigationResponse;
 import io.sited.page.api.page.PageRelatedQuery;
 import io.sited.page.api.page.PageResponse;
@@ -109,9 +109,9 @@ public class PageWebServiceImplTest {
 
     @Test
     public void latest() throws Exception {
-        LatestQuery latestQuery = new LatestQuery();
-        latestQuery.limit = 1;
-        List<PageResponse> latest = pageWebService.latest(latestQuery);
+        LatestPageQuery latestPageQuery = new LatestPageQuery();
+        latestPageQuery.limit = 1;
+        List<PageResponse> latest = pageWebService.latest(latestPageQuery);
         assertEquals(1, latest.size());
     }
 

@@ -49,6 +49,11 @@ public class RequestInfoContextProvider implements Provider<RequestInfo> {
         }
 
         @Override
+        public String pathParam(String name) {
+            return requestContext.getUriInfo().getPathParameters().getFirst(name);
+        }
+
+        @Override
         public Map<String, String> headers() {
             Map<String, String> headers = Maps.newHashMap();
             requestContext.getHeaders().forEach((name, values) -> headers.put(name, values == null || values.isEmpty() ? null : values.get(0)));

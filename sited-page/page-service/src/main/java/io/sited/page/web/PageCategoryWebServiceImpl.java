@@ -98,7 +98,7 @@ public class PageCategoryWebServiceImpl implements PageCategoryWebService {
         list.forEach(category -> {
             CategoryNodeResponse node = node(category);
             node.children = Lists.newArrayList();
-            if (category.parentId == null) {
+            if (Objects.equals(category.parentId, query.parentId)) {
                 firstLevels.add(node);
             }
             index.put(node.id, node);

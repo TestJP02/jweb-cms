@@ -1,1 +1,0 @@
-$(function(){var e=$(".page-rank__tab"),a=$(".page-rank__list");e.hover(function(e){a.hide(),a.eq($(e.currentTarget).index()).show()},function(){a.hide(),a.eq($(".page-rank__tab.active").index()).show()}),e.click(function(a){e.removeClass("active"),$(a.currentTarget).addClass("active")})});

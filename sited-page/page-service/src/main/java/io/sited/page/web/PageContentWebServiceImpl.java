@@ -6,7 +6,6 @@ import io.sited.page.domain.PageContent;
 import io.sited.page.service.PageContentService;
 
 import javax.inject.Inject;
-import javax.ws.rs.NotFoundException;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -19,7 +18,7 @@ public class PageContentWebServiceImpl implements PageContentWebService {
 
     @Override
     public PageContentResponse getByPageId(String pageId) {
-        PageContent pageContent = pageContentService.findByPageId(pageId).orElseThrow(() -> new NotFoundException("missing content, id=" + pageId));
+        PageContent pageContent = pageContentService.getByPageId(pageId);
         return response(pageContent);
     }
 

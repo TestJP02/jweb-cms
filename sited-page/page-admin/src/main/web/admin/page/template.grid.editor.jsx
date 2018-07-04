@@ -16,12 +16,11 @@ export default class TemplateGridEditor extends React.Component {
             this.initSection(section);
             this.setState({section: section});
         }
-
     }
 
     componentWillMount() {
         const widthOptions = [];
-        for (let width = 1; width <= 24; width += 1) {
+        for (let width = 1; width <= 12; width += 1) {
             widthOptions.push(width);
         }
         this.setState({widthOptions});

@@ -30,13 +30,6 @@ public class MessageConfigImpl implements MessageConfig {
     }
 
     @Override
-    public <T> MessageConfig listen(Class<T> messageClass, Class<? extends MessageHandler<T>> handlerClass) {
-        binder.bind(handlerClass);
-        messageManager.listen(module.name(), messageClass, new MessageHandlerDelegate<>(handlerClass, module));
-        return this;
-    }
-
-    @Override
     public <T> MessageConfig listen(Class<T> messageClass, MessageHandler<T> handler) {
         messageManager.listen(module.name(), messageClass, handler);
         return this;

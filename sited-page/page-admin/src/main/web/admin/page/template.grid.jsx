@@ -50,7 +50,7 @@ export default class LayoutGridEditor extends React.Component {
 
     onLayoutChange(layout) {
         try {
-            const templateSections = this.toTemplateSections(layout, 24);
+            const templateSections = this.toTemplateSections(layout, 12);
             const sections = templateSections.map(section => this.toLayoutSection(section));
 
             for (let i = 0; i < sections.length; i += 1) {
@@ -87,15 +87,15 @@ export default class LayoutGridEditor extends React.Component {
             layoutSection.widths = [
                 {
                     screenWidth: "xs",
-                    width: 24
+                    width: 12
                 },
                 {
                     screenWidth: "sm",
-                    width: 24
+                    width: 12
                 },
                 {
                     screenWidth: "md",
-                    width: 24
+                    width: 12
                 }
             ];
         }
@@ -175,7 +175,7 @@ export default class LayoutGridEditor extends React.Component {
                     i: section.id,
                     x: 0,
                     y: 0,
-                    w: 24,
+                    w: 12,
                     h: 4,
                     minH: 4,
                     widths: section.widths
@@ -185,7 +185,7 @@ export default class LayoutGridEditor extends React.Component {
                     Object.assign(layoutSection, {
                         x: width.x ? width.x : 0,
                         y: width.y ? width.y : 0,
-                        w: width.width ? width.width : 24,
+                        w: width.width ? width.width : 12,
                         h: width.height ? width.height : 4
                     });
                 }
@@ -364,7 +364,7 @@ export default class LayoutGridEditor extends React.Component {
             i: uuid.v4(),
             x: 0,
             y: y + 1,
-            w: 24,
+            w: 12,
             h: 4,
             minH: 4
         };
@@ -509,7 +509,7 @@ export default class LayoutGridEditor extends React.Component {
                         onLayoutChange={layout => this.onLayoutChange(layout)}
                         onResize={(layout, oldItem, newItem) => this.onResize(layout, oldItem, newItem)}
                         onResizeStop={() => this.onResizeStop()}
-                        cols={24}>
+                        cols={12}>
                         {this.state.layout.map((section, index) =>
                             <div key={section.i} className="page-grid-editor__grid">
                                 {this.state.currentI === section.i &&

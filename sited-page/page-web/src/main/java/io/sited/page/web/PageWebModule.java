@@ -20,55 +20,57 @@ import io.sited.page.api.component.CreateComponentRequest;
 import io.sited.page.api.component.SavedComponentChangedMessage;
 import io.sited.page.api.content.PageContentResponse;
 import io.sited.page.api.keyword.KeywordChangedMessage;
-import io.sited.page.api.page.PageChangedMessage;
 import io.sited.page.api.page.PageResponse;
 import io.sited.page.api.template.CreateTemplateRequest;
 import io.sited.page.api.template.TemplateChangedMessage;
 import io.sited.page.api.template.TemplateResponse;
 import io.sited.page.api.variable.VariableChangedMessage;
-import io.sited.page.web.component.ArchivePageListComponent;
-import io.sited.page.web.component.AuthorComponent;
-import io.sited.page.web.component.BannerComponent;
-import io.sited.page.web.component.BreadcrumbComponent;
-import io.sited.page.web.component.CategoryTreeComponent;
-import io.sited.page.web.component.CommentListComponent;
-import io.sited.page.web.component.ContentTableComponent;
-import io.sited.page.web.component.FooterComponent;
-import io.sited.page.web.component.HeaderComponent;
-import io.sited.page.web.component.PageArchiveComponent;
-import io.sited.page.web.component.PageCardComponent;
-import io.sited.page.web.component.PageComponent;
-import io.sited.page.web.component.PageLinkListComponent;
-import io.sited.page.web.component.PageListComponent;
-import io.sited.page.web.component.PageNavigationComponent;
-import io.sited.page.web.component.PagePaginationComponent;
-import io.sited.page.web.component.PageRelatedListComponent;
-import io.sited.page.web.component.RecentPageListComponent;
-import io.sited.page.web.component.SavedComponent;
-import io.sited.page.web.component.TagCloudComponent;
-import io.sited.page.web.component.TagPageListComponent;
-import io.sited.page.web.message.CategoryChangedMessageHandler;
-import io.sited.page.web.message.KeywordChangedMessageHandler;
-import io.sited.page.web.message.PageChangedMessageHandler;
-import io.sited.page.web.message.SavedComponentChangedMessageHandler;
-import io.sited.page.web.message.TemplateChangedMessageHandler;
-import io.sited.page.web.message.VariableChangedMessageHandler;
-import io.sited.page.web.service.CachedCategoryService;
-import io.sited.page.web.service.CachedPageContentService;
-import io.sited.page.web.service.CachedPageService;
-import io.sited.page.web.service.CachedTemplateService;
-import io.sited.page.web.service.CachedVariableService;
+import io.sited.page.web.service.CategoryCacheService;
 import io.sited.page.web.service.HtmlComponentTemplateRepository;
 import io.sited.page.web.service.KeywordManager;
+import io.sited.page.web.service.PageService;
 import io.sited.page.web.service.PageTemplateRepository;
-import io.sited.page.web.service.ThemeManager;
+import io.sited.page.web.service.TemplateCacheService;
+import io.sited.page.web.service.ThemeService;
 import io.sited.page.web.service.UserCommentNodeService;
-import io.sited.page.web.web.ArchiveController;
+import io.sited.page.web.service.VariableCacheService;
+import io.sited.page.web.service.component.AuthorComponent;
+import io.sited.page.web.service.component.BannerComponent;
+import io.sited.page.web.service.component.BreadcrumbComponent;
+import io.sited.page.web.service.component.CategoryListComponent;
+import io.sited.page.web.service.component.CategoryPageListComponent;
+import io.sited.page.web.service.component.CategoryTreeComponent;
+import io.sited.page.web.service.component.CommentListComponent;
+import io.sited.page.web.service.component.ContentTableComponent;
+import io.sited.page.web.service.component.FooterComponent;
+import io.sited.page.web.service.component.HeaderComponent;
+import io.sited.page.web.service.component.PageCardComponent;
+import io.sited.page.web.service.component.PageComponent;
+import io.sited.page.web.service.component.PageLinkListComponent;
+import io.sited.page.web.service.component.PageListComponent;
+import io.sited.page.web.service.component.PageNavigationComponent;
+import io.sited.page.web.service.component.PagePaginationComponent;
+import io.sited.page.web.service.component.RelatedPageListComponent;
+import io.sited.page.web.service.component.PopularPageListComponent;
+import io.sited.page.web.service.component.RecentPageListComponent;
+import io.sited.page.web.service.component.SavedComponent;
+import io.sited.page.web.service.component.TagCloudComponent;
+import io.sited.page.web.service.component.TagPageListComponent;
+import io.sited.page.web.service.component.ThemeCSSComponent;
+import io.sited.page.web.service.component.ThemeScriptComponent;
+import io.sited.page.web.service.message.CategoryChangedMessageHandler;
+import io.sited.page.web.service.message.KeywordChangedMessageHandler;
+import io.sited.page.web.service.message.SavedComponentChangedMessageHandler;
+import io.sited.page.web.service.message.TemplateChangedMessageHandler;
+import io.sited.page.web.service.message.VariableChangedMessageHandler;
+import io.sited.page.web.service.processor.ThemeProcessor;
 import io.sited.page.web.web.IndexController;
 import io.sited.page.web.web.PageController;
 import io.sited.page.web.web.SitemapController;
 import io.sited.page.web.web.TagController;
 import io.sited.page.web.web.api.CommentWebController;
+import io.sited.resource.ClasspathResourceRepository;
+import io.sited.resource.FileResourceRepository;
 import io.sited.template.Component;
 import io.sited.template.ComponentAttribute;
 import io.sited.template.TemplateEngine;
@@ -98,17 +100,16 @@ public class PageWebModule extends AbstractWebModule {
         CacheConfig cacheConfig = module(CacheModule.class);
         cacheConfig.create(PageResponse.class, new CacheOptions());
         cacheConfig.create(CategoryResponse.class, new CacheOptions());
-        cacheConfig.create(CachedVariableService.VariableWrapper.class, new CacheOptions());
+        cacheConfig.create(VariableCacheService.VariableWrapper.class, new CacheOptions());
         cacheConfig.create(PageContentResponse.class, new CacheOptions());
         cacheConfig.create(TemplateResponse.class, new CacheOptions());
 
-        bind(CachedPageService.class);
-        bind(CachedCategoryService.class);
-        bind(CachedVariableService.class);
+        bind(PageService.class);
+        bind(CategoryCacheService.class);
+        bind(VariableCacheService.class);
         bind(KeywordManager.class).toInstance(new KeywordManager());
-        bind(CachedPageContentService.class);
-        bind(CachedTemplateService.class);
-        bind(ThemeManager.class);
+        bind(TemplateCacheService.class);
+        bind(ThemeService.class);
         bind(UserCommentNodeService.class);
 
         web().addRepository(requestInjection(new HtmlComponentTemplateRepository()));
@@ -117,7 +118,7 @@ public class PageWebModule extends AbstractWebModule {
         web().addComponent(requestInjection(new AuthorComponent()));
         web().addComponent(requestInjection(new BannerComponent()));
         web().addComponent(requestInjection(new BreadcrumbComponent()));
-        web().addComponent(requestInjection(new PageListComponent()));
+        web().addComponent(requestInjection(new CategoryPageListComponent()));
         web().addComponent(requestInjection(new PageLinkListComponent()));
         web().addComponent(requestInjection(new RecentPageListComponent()));
         web().addComponent(requestInjection(new PageComponent()));
@@ -127,28 +128,40 @@ public class PageWebModule extends AbstractWebModule {
         web().addComponent(requestInjection(new HeaderComponent()));
         web().addComponent(requestInjection(new PageLinkListComponent()));
         web().addComponent(requestInjection(new PageNavigationComponent()));
-        web().addComponent(requestInjection(new PageRelatedListComponent()));
+        web().addComponent(requestInjection(new RelatedPageListComponent()));
         web().addComponent(requestInjection(new PagePaginationComponent()));
         web().addComponent(requestInjection(new CategoryTreeComponent()));
         web().addComponent(requestInjection(new TagCloudComponent()));
-        web().addComponent(requestInjection(new PageArchiveComponent()));
         web().addComponent(requestInjection(new TagPageListComponent()));
-        web().addComponent(requestInjection(new ArchivePageListComponent()));
         web().addComponent(requestInjection(new CommentListComponent()));
+        web().addComponent(requestInjection(new PopularPageListComponent()));
+        web().addComponent(requestInjection(new CategoryListComponent()));
+        web().addComponent(requestInjection(new PageListComponent()));
+        web().addComponent(requestInjection(new ThemeCSSComponent()));
+        web().addComponent(requestInjection(new ThemeScriptComponent()));
+
+        if (options.theme != null) {
+            web().addElementProcessor(new ThemeProcessor(options.theme));
+
+            ClasspathResourceRepository classpathResourceRepository = new ClasspathResourceRepository("web/theme/" + options.theme);
+            web().addRepository(classpathResourceRepository);
+
+            FileResourceRepository fileResourceRepository = new FileResourceRepository(app().dir().resolve("web/theme/" + options.theme));
+            web().addRepository(fileResourceRepository);
+        }
 
         MessageConfig messageConfig = module(MessageModule.class);
-        messageConfig.listen(TemplateChangedMessage.class, TemplateChangedMessageHandler.class);
-        messageConfig.listen(VariableChangedMessage.class, VariableChangedMessageHandler.class);
-        messageConfig.listen(SavedComponentChangedMessage.class, SavedComponentChangedMessageHandler.class);
-        messageConfig.listen(CategoryChangedMessage.class, CategoryChangedMessageHandler.class);
-        messageConfig.listen(KeywordChangedMessage.class, KeywordChangedMessageHandler.class);
-        messageConfig.listen(PageChangedMessage.class, PageChangedMessageHandler.class);
+        messageConfig.listen(TemplateChangedMessage.class, requestInjection(new TemplateChangedMessageHandler()));
+        messageConfig.listen(VariableChangedMessage.class, requestInjection(new VariableChangedMessageHandler()));
+        messageConfig.listen(SavedComponentChangedMessage.class, requestInjection(new SavedComponentChangedMessageHandler()));
+        messageConfig.listen(CategoryChangedMessage.class, requestInjection(new CategoryChangedMessageHandler()));
+        messageConfig.listen(KeywordChangedMessage.class, requestInjection(new KeywordChangedMessageHandler()));
 
         web().controller(PageController.class);
         web().controller(IndexController.class);
         web().controller(SitemapController.class);
         web().controller(TagController.class);
-        web().controller(ArchiveController.class);
+
         web().controller(CommentWebController.class);
     }
 
@@ -195,16 +208,19 @@ public class PageWebModule extends AbstractWebModule {
         PageComponentWebService pageComponentWebService = require(PageComponentWebService.class);
         List<CreateComponentRequest> request = Lists.newArrayList();
         for (Component component : templateEngine.components()) {
-            CreateComponentRequest createComponentRequest = new CreateComponentRequest();
-            createComponentRequest.name = component.name();
-            createComponentRequest.attributes = attributes(component.attributes());
-            request.add(createComponentRequest);
+            if (component instanceof AbstractPageComponent) {
+                CreateComponentRequest createComponentRequest = new CreateComponentRequest();
+                createComponentRequest.name = component.name();
+                createComponentRequest.attributes = attributes(component.attributes());
+                request.add(createComponentRequest);
+            }
         }
         pageComponentWebService.batchCreate(request);
 
         PageSavedComponentWebService pageSavedComponentWebService = require(PageSavedComponentWebService.class);
         pageSavedComponentWebService.find().forEach(savedComponent -> {
-            templateEngine.addComponent(new SavedComponent(savedComponent, templateEngine));
+            Component component = templateEngine.component(savedComponent.componentName).orElseThrow(() -> new ApplicationException("missing component, name={}", savedComponent.componentName));
+            templateEngine.addComponent(new SavedComponent(component, savedComponent));
         });
     }
 
@@ -222,9 +238,9 @@ public class PageWebModule extends AbstractWebModule {
         }
     }
 
-    private Map<String, Object> attributes(List<ComponentAttribute<?>> attributes) {
+    private Map<String, Object> attributes(Map<String, ComponentAttribute<?>> attributes) {
         Map<String, Object> values = Maps.newHashMap();
-        attributes.forEach(attribute -> values.put(attribute.name(), attribute.defaultValue()));
+        attributes.forEach((name, attribute) -> values.put(attribute.name(), attribute.defaultValue()));
         return values;
     }
 }

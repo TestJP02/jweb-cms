@@ -71,6 +71,10 @@ input {
     border-color: #ff331f;
 }
 
+.form-group.form-group--pincode {
+    position: relative;
+}
+
 .user-login__input.user-login__input--pincode {
     padding-right: 80px;
 }

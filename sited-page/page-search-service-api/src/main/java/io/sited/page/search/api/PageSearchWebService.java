@@ -1,7 +1,7 @@
 package io.sited.page.search.api;
 
+import io.sited.page.api.page.PageResponse;
 import io.sited.page.search.api.page.SearchPageRequest;
-import io.sited.page.search.api.page.SearchPageResponse;
 import io.sited.util.collection.QueryResponse;
 
 import javax.ws.rs.GET;
@@ -14,7 +14,7 @@ import javax.ws.rs.Path;
 @Path("/api/page/search")
 public interface PageSearchWebService {
     @PUT
-    QueryResponse<SearchPageResponse> search(SearchPageRequest request);
+    QueryResponse<PageResponse> search(SearchPageRequest request);
 
     @Path("/full-index")
     @GET

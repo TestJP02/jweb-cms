@@ -1,27 +1,10 @@
-.page-content h1::before,
-.page-content h2::before,
-.page-content h3::before,
-.page-content h4::before,
-.page-content h5::before,
-.page-content h6::before {
-    display: block;
-    content: " ";
-    margin-top: -80px;
-    height: 80px;
-    visibility: hidden;
-    pointer-events: none;
-}
-
-.page-title__title {
-    font-size: 1.1em;
-    line-height: 1.8;
-    margin-bottom: 18px;
+.page {
+    padding: 0 15px 15px;
 }
 
 .page-title__author {
     font-size: 0.8em;
     line-height: 1.4;
-    color: #999;
 }
 
 .page-title__author > * {
@@ -33,12 +16,6 @@
 }
 
 @media (min-width: 768px) {
-    .page-title__title {
-        font-size: 1.8em;
-        line-height: 1.4;
-        margin-bottom: 20px;
-    }
-
     .page-title__author {
         margin-bottom: 40px;
     }

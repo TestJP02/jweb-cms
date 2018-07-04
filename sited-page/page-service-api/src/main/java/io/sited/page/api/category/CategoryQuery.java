@@ -11,8 +11,8 @@ import javax.xml.bind.annotation.XmlElement;
 public class CategoryQuery {
     @XmlElement(name = "query")
     public String query;
-    @XmlElement(name = "root")
-    public Boolean root;
+    @XmlElement(name = "parentId")
+    public String parentId;
     @XmlElement(name = "page")
     public Integer page;
     @XmlElement(name = "limit")

@@ -3,8 +3,8 @@ package io.sited.web;
 /**
  * @author chi
  */
-public class BadRequestWebException extends WebApplicationException {
-    public BadRequestWebException(String message, Object... args) {
-        super(message, args);
+public class BadRequestWebException extends WebException {
+    public BadRequestWebException(AppInfo app, RequestInfo request, ClientInfo client, String message, Object... args) {
+        super(app, request, client, message, args);
     }
 }

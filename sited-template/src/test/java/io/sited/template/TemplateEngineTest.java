@@ -24,9 +24,9 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 /**
  * @author chi
  */
-public class TemplateEngineTest {
+class TemplateEngineTest {
     @Test
-    public void template() throws IOException {
+    void template() throws IOException {
         Template template = templateEngine().template("/simple.html").orElseThrow(RuntimeException::new);
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
         HashMap<String, Object> bindings = Maps.newHashMap();
@@ -42,7 +42,7 @@ public class TemplateEngineTest {
     }
 
     @Test
-    public void text() throws IOException {
+    void text() throws IOException {
         Template template = singleTemplateEngine("/template.txt", "hi, {{user}}.").template("/template.txt").orElseThrow(RuntimeException::new);
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
         HashMap<String, Object> bindings = Maps.newHashMap();
@@ -52,7 +52,7 @@ public class TemplateEngineTest {
     }
 
     @Test
-    public void list() throws IOException {
+    void list() throws IOException {
         Template template = singleTemplateEngine("/template.txt", "{{list.get(0).substring(2)}}").template("/template.txt").orElseThrow(RuntimeException::new);
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
         HashMap<String, Object> bindings = Maps.newHashMap();
@@ -62,7 +62,7 @@ public class TemplateEngineTest {
     }
 
     @Test
-    public void function() throws IOException {
+    void function() throws IOException {
         Template template = singleTemplateEngine("/template.txt", "{{ellipsis(description,10)}}").template("/template.txt").orElseThrow(RuntimeException::new);
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
         Map<String, Object> bindings = Maps.newHashMap();
@@ -82,7 +82,7 @@ public class TemplateEngineTest {
     }
 
     @Test
-    public void nestComponent() throws IOException {
+    void nestComponent() throws IOException {
         TemplateEngine templateEngine = templateEngine();
         templateEngine.addComponent(new TemplateComponentImpl("component1", "component/component1.html", ImmutableList.of()));
         templateEngine.addComponent(new TemplateComponentImpl("component2", "component/component2.html", ImmutableList.of()));
@@ -94,7 +94,7 @@ public class TemplateEngineTest {
     }
 
     @Test
-    public void component() throws IOException {
+    void component() throws IOException {
         TemplateEngine templateEngine = templateEngine();
         templateEngine.addComponent(new TemplateComponentImpl("header", "component/header.html", ImmutableList.of()));
         templateEngine.addComponent(new TemplateComponentImpl("footer", "component/footer.html", ImmutableList.of()));
@@ -109,11 +109,19 @@ public class TemplateEngineTest {
     }
 
     @Test
-    public void ieComment() throws IOException {
+    void ieComment() throws IOException {
         Template template = templateEngine().template("test-ie-comment.html").orElseThrow(RuntimeException::new);
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
         template.output(Maps.newHashMap(), outputStream);
         assertNotNull(outputStream.toByteArray());
+    }
+
+    @Test
+    void include() throws IOException {
+        Template template = templateEngine().template("test-auto-component.html").orElseThrow(RuntimeException::new);
+        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+        template.output(Maps.newHashMap(), outputStream);
+        assertEquals("<!doctype html><html lang=\"en-US\" xmlns:j=\"\"><head></head><body>value</body></html>", new String(outputStream.toByteArray(), Charsets.UTF_8));
     }
 
 

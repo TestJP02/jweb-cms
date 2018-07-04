@@ -1,9 +1,9 @@
 package io.sited.page.web;
 
+import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Maps;
-import io.sited.page.api.page.PageResponse;
-import io.sited.page.web.service.CachedTemplateService;
-import io.sited.page.web.service.CachedVariableService;
+import io.sited.page.web.service.TemplateCacheService;
+import io.sited.page.web.service.VariableCacheService;
 import io.sited.web.AbstractWebController;
 import io.sited.web.Template;
 
@@ -17,12 +17,16 @@ import java.util.Map;
  */
 public abstract class AbstractPageWebController extends AbstractWebController {
     @Inject
-    CachedTemplateService templateService;
+    TemplateCacheService templateService;
 
     @Inject
-    CachedVariableService variableService;
+    VariableCacheService variableService;
 
-    protected Response page(PageResponse page, Map<String, Object> bindings) {
+    protected Response page(PageInfo page) {
+        return page(page, ImmutableMap.of());
+    }
+
+    protected Response page(PageInfo page, Map<String, Object> bindings) {
         Map<String, Object> variables = variableService.variables();
         Map<String, Object> templateBindings = Maps.newHashMapWithExpectedSize(bindings.size() + variables.size() + 6);
         templateBindings.putAll(bindings);
@@ -32,7 +36,7 @@ public abstract class AbstractPageWebController extends AbstractWebController {
         templateBindings.put("client", clientInfo);
         templateBindings.put("user", userInfo);
         templateBindings.put("page", page);
-        templateBindings.put("template", templateService.template(page.templatePath));
-        return Response.ok(Template.of(page.templatePath, templateBindings)).type(MediaType.TEXT_HTML).build();
+        templateBindings.put("template", templateService.template(page.templatePath()));
+        return Response.ok(Template.of(page.templatePath(), templateBindings)).type(MediaType.TEXT_HTML).build();
     }
 }

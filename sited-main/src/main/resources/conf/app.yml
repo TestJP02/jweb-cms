@@ -1,7 +1,13 @@
 app:
   name: test
   language: zh-CN
+  supportLanguages:
+    - zh-CN
+    - en-US
   env: DEV
+
+#page-web:
+#  theme: cerulean
 
 database:
   url: jdbc:mysql://localhost:3306/main?useUnicode=true&characterEncoding=utf8&autoReconnect=true&useSSL=false&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC
@@ -22,16 +28,20 @@ web:
     - ./sited-email/email-admin/src/main/dist/web
     - ./sited-user/user-admin/src/main/dist/web
     - ./sited-user/user-web/src/main/web
-    - ./sited-page/page-admin/src/main/dist/web
-    - ./sited-page/page-web/src/main/web
+    - ./sited-user/captcha-web-simple/src/main/web
+    - ./sited-user/pincode-web/src/main/web
+    - ./sited-file/file-admin/src/main/dist/web
     - ./sited-comment/comment-admin/src/main/dist/web
     - ./sited-comment/comment-web/src/main/web
-    - ./sited-file/file-admin/src/main/dist/web
+    - ./sited-page/page-web/src/main/web
+    - ./sited-page/page-admin/src/main/dist/web
     - ./sited-page/page-tracking-admin/src/main/dist/web
     - ./sited-page/page-tracking-web/src/main/web
     - ./sited-page/page-search-admin/src/main/dist/web
     - ./sited-page/page-search-web/src/main/web
-    - ./sited-captcha/captcha-web-simple/src/main/web
+    - ./sited-page/page-archive-web/src/main/web
+    - ./sited-page/page-share-baidu/src/main/web
+    - ./sited-web/src/main/web
 
 user:
   defaultAdminUser:

@@ -1,12 +1,12 @@
 package io.sited.page.web.web;
 
 import com.google.common.collect.ImmutableList;
-import com.google.common.collect.ImmutableMap;
+import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import io.sited.page.api.category.CategoryResponse;
-import io.sited.page.api.page.PageResponse;
 import io.sited.page.web.AbstractPageWebController;
-import io.sited.page.web.service.CachedCategoryService;
+import io.sited.page.web.PageInfo;
+import io.sited.page.web.service.CategoryCacheService;
 import io.sited.web.NotFoundWebException;
 
 import javax.inject.Inject;
@@ -22,13 +22,13 @@ import java.util.Optional;
 @Path("/")
 public class IndexController extends AbstractPageWebController {
     @Inject
-    CachedCategoryService categoryService;
+    CategoryCacheService categoryService;
 
     @GET
     public Response get() {
         Optional<CategoryResponse> categoryOptional = categoryService.find("/");
         if (!categoryOptional.isPresent()) {
-            throw new NotFoundWebException("missing category, path=/");
+            throw new NotFoundWebException(appInfo, requestInfo, clientInfo, "missing category, path=/");
         }
 
         Map<String, Object> bindings = Maps.newHashMap();
@@ -37,22 +37,20 @@ public class IndexController extends AbstractPageWebController {
         return page(page(category), bindings);
     }
 
-    private PageResponse page(CategoryResponse category) {
-        PageResponse page = new PageResponse();
-        page.id = category.id;
-        page.userId = category.ownerId;
-        page.categoryId = category.parentId;
-        page.templatePath = category.templatePath;
-        page.title = category.displayName;
-        page.keywords = category.keywords;
-        page.description = category.description;
-        page.tags = category.tags;
-        page.fields = ImmutableMap.of();
-        page.imageURLs = category.imageURL == null ? ImmutableList.of() : ImmutableList.of(category.imageURL);
-        page.createdTime = category.createdTime;
-        page.createdBy = category.createdBy;
-        page.updatedTime = category.updatedTime;
-        page.updatedBy = category.updatedBy;
-        return page;
+    private PageInfo page(CategoryResponse category) {
+        return PageInfo.builder().setUserId(category.ownerId)
+            .setCategoryId(category.id)
+            .setTemplatePath(category.templatePath)
+            .setTitle(category.displayName)
+            .setDescription(category.description)
+            .setKeywords(category.keywords)
+            .setTags(category.tags)
+            .setImageURL(category.imageURL)
+            .setImageURLs(category.imageURL == null ? ImmutableList.of() : Lists.newArrayList(category.imageURL))
+            .setCreatedTime(category.createdTime)
+            .setCreatedBy(category.createdBy)
+            .setUpdatedTime(category.updatedTime)
+            .setUpdatedBy(category.updatedBy)
+            .build();
     }
 }

@@ -9,6 +9,12 @@ import javax.xml.bind.annotation.XmlElement;
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 public class CategoryTreeQuery {
+    @XmlElement(name = "parentId")
+    public String parentId;
+
+    @XmlElement(name = "depth")
+    public Integer depth;
+
     @XmlElement(name = "status")
     public CategoryStatus status;
 }

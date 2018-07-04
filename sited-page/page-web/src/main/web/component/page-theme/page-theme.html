@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="" xmlns:j="http://www.w3.org/1999/XSL/Transform">
+<head>
+    <!-- build:js ../static/js/lib.js -->
+    <script src="../../node_modules/jquery/dist/jquery.min.js"></script>
+    <script src="../../node_modules/bootstrap/dist/js/bootstrap.min.js"></script>
+    <!-- endbuild -->
+</head>
+<body>
+<!-- build:js ../static/js/respond.min.js -->
+<script src="../../node_modules/Respond.js/dest/respond.min.js"></script>
+<!-- endbuild -->
+<j:if j:condition="theme == null">
+    <!-- build:css ../static/css/theme.default.css -->
+    <link rel="stylesheet" href="../../node_modules/bootstrap/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="../../node_modules/font-awesome/css/font-awesome.min.css">
+    <!-- endbuild -->
+</j:if>
+<j:if j:condition="theme == 'cerulean'">
+    <!-- build:css ../static/css/theme.cerulean.css -->
+    <link rel="stylesheet" href="../../static/css/theme.cerulean.css">
+    <link rel="stylesheet" href="../../node_modules/font-awesome/css/font-awesome.min.css">
+    <!-- endbuild -->
+</j:if>
+</body>
+</html>

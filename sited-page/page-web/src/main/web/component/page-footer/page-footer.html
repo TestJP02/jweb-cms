@@ -4,12 +4,13 @@
         <link rel="stylesheet" href="page-footer.css">
     </head>
     <body>
-
-        <div class="component page-footer">
-            <div class="page-footer__link-list">
-                <a j:href="link.link" class="page-footer__link" j:for="link:links" j:text="link.displayName">Display Name</a>
+        <div class="footer">
+            <div class="container">
+                <div class="footer__copyright" j:text="copyrights">Copyright</div>
+                <div class="footer__link-list">
+                    <a j:href="link.link" class="footer__link" j:for="link:links" j:text="link.displayName">Display Name</a>
+                </div>
             </div>
-            <div class="page-footer__copyright" j:text="copyrights">Copyright</div>
         </div>
     </body>
 </html>

@@ -39,18 +39,10 @@ public class PageResponse {
     public String imageURL;
     @XmlElement(name = "imageURLs")
     public List<String> imageURLs;
-    @XmlElement(name = "totalVisited")
-    public Integer totalVisited;
-    @XmlElement(name = "totalLiked")
-    public Integer totalLiked;
-    @XmlElement(name = "totalDisliked")
-    public Integer totalDisliked;
-    @XmlElement(name = "totalCommented")
-    public Integer totalCommented;
-
+    @XmlElement(name = "content")
+    public String content;
     @XmlElement(name = "fields")
     public Map<String, String> fields;
-
     @XmlElement(name = "status")
     public PageStatus status;
     @XmlElement(name = "createdTime")

@@ -90,6 +90,16 @@ project(':sited-module') {
     }
 }
 
+
+project(':sited-logback') {
+    apply from: file("${rootDir}/gradle/module.gradle")
+
+    dependencies {
+        api project(':sited-module')
+        compile group: 'ch.qos.logback', name: 'logback-classic', version: '1.2.3'
+    }
+}
+
 project(':sited-service') {
     apply from: file("${rootDir}/gradle/module.gradle")
 
@@ -148,6 +158,17 @@ project(':sited-cache') {
 
     dependencies {
         api project(':sited-module')
+        testImplementation project(':sited-test')
+    }
+}
+
+project(':sited-scheduler') {
+    apply from: file("${rootDir}/gradle/module.gradle")
+
+
+    dependencies {
+        api project(':sited-module')
+        implementation group: 'org.quartz-scheduler', name: 'quartz', version: '2.3.0'
         testImplementation project(':sited-test')
     }
 }
@@ -249,9 +270,9 @@ project(':sited-test') {
         api(group: 'org.glassfish.jersey.core', name: 'jersey-server', version: '2.27') {
             exclude group: 'javax.validation'
         }
-        api group: 'ch.qos.logback', name: 'logback-classic', version: '1.2.3'
         implementation 'org.hsqldb:hsqldb:2.4.0'
         implementation project(':sited-database')
+        implementation project(':sited-logback')
         implementation group: 'org.glassfish.jersey.core', name: 'jersey-common', version: '2.27'
 
         testImplementation project(':sited-web')
@@ -269,15 +290,16 @@ project(':sited-main') {
         }
         compile project(':sited-module')
         compile project(':sited-web')
+        compile project(':sited-logback')
         compile project(':sited-admin')
         compile project(':sited-service')
         compile project(':sited-database')
         compile project(':sited-undertow')
-        compile project(':sited-captcha:captcha-web-simple')
+        compile project(':sited-user:captcha-web-simple')
         compile project(':sited-email:email-admin')
         compile project(':sited-email:email-smtp')
-        compile project(':sited-pincode:pincode-web')
-        compile project(':sited-pincode:pincode-service')
+        compile project(':sited-user:pincode-web')
+        compile project(':sited-user:pincode-service')
         compile project(':sited-file:file-web')
         compile project(':sited-file:file-admin')
         compile project(':sited-file:file-service')
@@ -288,23 +310,23 @@ project(':sited-main') {
         compile project(':sited-page:page-web')
         compile project(':sited-page:page-admin')
         compile project(':sited-page:page-rss-web')
-        compile project(':sited-page:page-tracking-service')
-        compile project(':sited-page:page-tracking-admin')
-        compile project(':sited-page:page-tracking-web')
         compile project(':sited-page:page-search-service')
         compile project(':sited-page:page-search-admin')
         compile project(':sited-page:page-search-web')
         compile project(':sited-page:page-rating-service')
         compile project(':sited-page:page-rating-web')
+        compile project(':sited-page:page-archive-service')
+        compile project(':sited-page:page-archive-web')
         compile project(':sited-page:page-og-meta-web')
+        compile project(':sited-page:page-share-baidu')
 
         compile group: 'ch.qos.logback', name: 'logback-classic', version: '1.2.3'
-        compile 'mysql:mysql-connector-java:6.0.6'
+        compile 'mysql:mysql-connector-java:8.0.11'
         compile 'org.hsqldb:hsqldb:2.4.0'
     }
 }
 
-project(':sited-pincode:pincode-service-api') {
+project(':sited-user:pincode-service-api') {
     apply from: file("${rootDir}/gradle/module.gradle")
 
     dependencies {
@@ -313,11 +335,11 @@ project(':sited-pincode:pincode-service-api') {
     }
 }
 
-project(':sited-pincode:pincode-service') {
+project(':sited-user:pincode-service') {
     apply from: file("${rootDir}/gradle/module.gradle")
 
     dependencies {
-        api project(':sited-pincode:pincode-service-api')
+        api project(':sited-user:pincode-service-api')
         api project(':sited-email:email-service-api')
         api project(':sited-database')
         api project(':sited-message')
@@ -326,14 +348,14 @@ project(':sited-pincode:pincode-service') {
     }
 }
 
-project(':sited-pincode:pincode-web') {
+project(':sited-user:pincode-web') {
     apply from: file("${rootDir}/gradle/module.gradle")
 
     dependencies {
-        api project(':sited-pincode:pincode-service-api')
+        api project(':sited-user:pincode-service-api')
         implementation "com.github.cage:cage:1.0"
         implementation project(':sited-web')
-        testImplementation project(':sited-pincode:pincode-service')
+        testImplementation project(':sited-user:pincode-service')
         testImplementation project(':sited-test')
         testImplementation project(':sited-email:email-smtp')
         testImplementation project(':sited-database')
@@ -341,7 +363,7 @@ project(':sited-pincode:pincode-web') {
 }
 
 
-project(':sited-captcha:captcha-web') {
+project(':sited-user:captcha-web') {
     apply from: file("${rootDir}/gradle/module.gradle")
 
     dependencies {
@@ -351,11 +373,11 @@ project(':sited-captcha:captcha-web') {
 }
 
 
-project(':sited-captcha:captcha-web-simple') {
+project(':sited-user:captcha-web-simple') {
     apply from: file("${rootDir}/gradle/module.gradle")
 
     dependencies {
-        api project(':sited-captcha:captcha-web')
+        api project(':sited-user:captcha-web')
         api project(':sited-web')
         implementation files("${rootDir}/libs/simplecaptcha-1.2.1.jar")
         testImplementation project(':sited-test')
@@ -467,7 +489,7 @@ project(':sited-file:file-admin') {
         testImplementation project(':sited-file:file-service')
         testImplementation project(':sited-file:file-web')
         testImplementation project(':sited-test')
-        testImplementation project(':sited-captcha:captcha-web')
+        testImplementation project(':sited-user:captcha-web')
         testImplementation project(':sited-database')
         testImplementation project(':sited-undertow')
     }
@@ -502,8 +524,7 @@ project(':sited-user:user-admin') {
     dependencies {
         api project(':sited-user:user-service-api')
         api project(':sited-admin')
-        implementation project(':sited-captcha:captcha-web')
-//        implementation project(':sited-pincode:pincode-web')
+        implementation project(':sited-user:captcha-web')
         testImplementation project(':sited-test')
         testImplementation project(':sited-user:user-service')
         testImplementation project(':sited-email:email-smtp')
@@ -516,11 +537,12 @@ project(':sited-user:user-web') {
     dependencies {
         api project(':sited-user:user-service-api')
         api project(':sited-web')
+        api project(':sited-page:page-web')
         api project(':sited-message')
         api project(':sited-cache')
         implementation project(':sited-email:email-service-api')
-        implementation project(':sited-captcha:captcha-web')
-        implementation project(':sited-pincode:pincode-web')
+        implementation project(':sited-user:captcha-web')
+        implementation project(':sited-user:pincode-web')
         implementation project(':sited-page:page-service-api')
         implementation "com.github.scribejava:scribejava-apis:4.2.0"
         testImplementation project(':sited-test')
@@ -543,6 +565,7 @@ project(':sited-page:page-service') {
         api project(':sited-page:page-service-api')
         implementation project(':sited-database')
         implementation project(':sited-message')
+        implementation project(':sited-scheduler')
         implementation 'com.atlassian.commonmark:commonmark:0.11.0'
         implementation 'com.atlassian.commonmark:commonmark-ext-gfm-tables:0.11.0'
         implementation 'com.atlassian.commonmark:commonmark-ext-gfm-strikethrough:0.11.0'
@@ -608,50 +631,6 @@ project(':sited-page:page-rss-web') {
     }
 }
 
-project(':sited-page:page-tracking-service-api') {
-    apply from: file("${rootDir}/gradle/module.gradle")
-
-    dependencies {
-        api project(':sited-service')
-        testImplementation project(':sited-test')
-    }
-}
-
-project(':sited-page:page-tracking-service') {
-    apply from: file("${rootDir}/gradle/module.gradle")
-
-    dependencies {
-        api project(':sited-page:page-tracking-service-api')
-        api project(':sited-message')
-        implementation project(':sited-service')
-        implementation project(':sited-page:page-service-api')
-        implementation project(':sited-database')
-        testImplementation project(':sited-test')
-        testImplementation project(':sited-page:page-service')
-    }
-}
-
-project(':sited-page:page-tracking-web') {
-    apply from: file("${rootDir}/gradle/module.gradle")
-
-    dependencies {
-        api project(':sited-page:page-web')
-        implementation project(':sited-page:page-tracking-service-api')
-        implementation project(':sited-web')
-        testImplementation project(':sited-test')
-    }
-}
-
-project(":sited-page:page-tracking-admin") {
-    apply from: file("${rootDir}/gradle/module.gradle")
-    dependencies {
-        api project(':sited-page:page-tracking-service-api')
-        implementation project(':sited-page:page-service-api')
-        implementation project(':sited-admin')
-        testImplementation project(':sited-test')
-    }
-}
-
 
 project(':sited-page:page-rating-service-api') {
     apply from: file("${rootDir}/gradle/module.gradle")
@@ -679,6 +658,7 @@ project(':sited-page:page-rating-web') {
     dependencies {
         api project(':sited-page:page-rating-service-api')
         api project(':sited-page:page-service-api')
+        api project(':sited-page:page-web')
         api project(':sited-web')
         testImplementation project(':sited-page:page-rating-service')
         testImplementation project(':sited-database')
@@ -692,6 +672,7 @@ project(':sited-page:page-search-service-api') {
 
     dependencies {
         api project(':sited-service')
+        api project(':sited-page:page-service-api')
         testImplementation project(':sited-test')
     }
 }
@@ -758,6 +739,38 @@ project(":sited-page:page-search-admin") {
     }
 }
 
+
+project(':sited-page:page-archive-service-api') {
+    apply from: file("${rootDir}/gradle/module.gradle")
+
+    dependencies {
+        api project(':sited-service')
+        testImplementation project(':sited-test')
+    }
+}
+
+project(':sited-page:page-archive-service') {
+    apply from: file("${rootDir}/gradle/module.gradle")
+
+    dependencies {
+        api project(':sited-page:page-archive-service-api')
+        api project(':sited-page:page-service-api')
+        implementation project(':sited-database')
+        implementation project(':sited-message')
+        testImplementation project(':sited-test')
+    }
+}
+
+project(':sited-page:page-archive-web') {
+    apply from: file("${rootDir}/gradle/module.gradle")
+
+    dependencies {
+        api project(':sited-page:page-archive-service-api')
+        api project(':sited-page:page-web')
+        api project(':sited-web')
+        testImplementation project(':sited-test')
+    }
+}
 
 project(":sited-page:page-share-baidu") {
     apply from: file("${rootDir}/gradle/module.gradle")

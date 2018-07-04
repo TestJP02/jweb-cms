@@ -18,6 +18,7 @@ import io.sited.user.api.user.UserChangedMessage;
 import io.sited.user.api.user.UserGroupStatus;
 import io.sited.user.api.user.UserLoginMessage;
 import io.sited.user.api.user.UserPasswordChangedMessage;
+import io.sited.user.api.user.UserQuery;
 import io.sited.user.api.user.UserRegisterMessage;
 import io.sited.user.api.user.UserStatus;
 import io.sited.user.domain.OauthUser;
@@ -72,7 +73,7 @@ public class UserModuleImpl extends UserModule {
         bind(UserAutoLoginTokenService.class);
         bind(UserRegisterMessageHandler.class);
 
-        messageConfig.listen(UserRegisterMessage.class, UserRegisterMessageHandler.class);
+        messageConfig.listen(UserRegisterMessage.class, requestInjection(new UserRegisterMessageHandler()));
         api().service(UserWebService.class, UserWebServiceImpl.class);
         api().service(UserGroupWebService.class, UserGroupWebServiceImpl.class);
         api().service(OauthUserWebService.class, OauthUserWebServiceImpl.class);
@@ -99,7 +100,10 @@ public class UserModuleImpl extends UserModule {
                 userGroupResponse = userGroupResponseOptional.get();
             }
 
-            if (!userWebService.findByUsername(defaultAdminUser.username).isPresent()) {
+            UserQuery query = new UserQuery();
+            query.page = 0;
+            query.limit = 0;
+            if (userWebService.find(query).total == 0) {
                 logger.info("create default admin user, username={}", defaultAdminUser.username);
 
                 CreateUserRequest createUserRequest = new CreateUserRequest();

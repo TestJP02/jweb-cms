@@ -4,6 +4,7 @@ import com.google.common.collect.Lists;
 import io.sited.AbstractModule;
 import io.sited.Binder;
 import io.sited.Configurable;
+import io.sited.Environment;
 import io.sited.resource.ClasspathResourceRepository;
 import io.sited.resource.FileResourceRepository;
 import io.sited.resource.ResourceRepository;
@@ -25,14 +26,15 @@ import io.sited.web.impl.controller.HealthCheckController;
 import io.sited.web.impl.controller.NodeModulesResourceController;
 import io.sited.web.impl.controller.RobotsResourceController;
 import io.sited.web.impl.controller.StaticResourceController;
+import io.sited.web.impl.controller.SwitchLanguageWebController;
 import io.sited.web.impl.exception.BadRequestWebExceptionMapper;
 import io.sited.web.impl.exception.DefaultWebExceptionMapper;
 import io.sited.web.impl.exception.ForbiddenWebExceptionMapper;
 import io.sited.web.impl.exception.NotAuthorizedWebExceptionMapper;
 import io.sited.web.impl.exception.NotFoundWebExceptionMapper;
 import io.sited.web.impl.exception.ValidationWebExceptionMapper;
-import io.sited.web.impl.template.processor.HrefElementProcessor;
-import io.sited.web.impl.template.processor.SrcElementProcessor;
+import io.sited.web.impl.processor.HrefElementProcessor;
+import io.sited.web.impl.processor.SrcElementProcessor;
 
 import java.nio.file.Paths;
 import java.util.List;
@@ -51,16 +53,19 @@ public final class WebModule extends AbstractModule implements Configurable<WebC
         webOptions = options("web", WebOptions.class);
         bind(WebOptions.class).toInstance(webOptions);
 
-        List<ResourceRepository> repositories = Lists.newArrayList(webOptions.roots.stream().map(dir -> new FileResourceRepository(Paths.get("").resolve(dir))).collect(Collectors.toList()));
-        repositories.add(new FileResourceRepository(app().dir().resolve("web")));
+        List<ResourceRepository> repositories = Lists.newArrayList();
         repositories.add(new ClasspathResourceRepository("web"));
+        repositories.add(new FileResourceRepository(app().dir().resolve("web")));
+        if (app().env() == Environment.DEV) {
+            repositories.addAll(webOptions.roots.stream().map(dir -> new FileResourceRepository(Paths.get("").resolve(dir))).collect(Collectors.toList()));
+        }
 
-        webRoot = new WebRoot(repositories.toArray(new ResourceRepository[0]));
+        webRoot = new WebRoot();
+        repositories.forEach(webRoot::add);
         bind(WebRoot.class).toInstance(webRoot);
 
-        templateEngine = new TemplateEngine()
-            .addRepository(webRoot)
-            .setCacheEnabled(webOptions.cacheEnabled);
+        templateEngine = new TemplateEngine().setCacheEnabled(webOptions.cacheEnabled);
+        repositories.forEach(templateEngine::addRepository);
 
         templateEngine.addElementProcessor(new HrefElementProcessor(webRoot));
         templateEngine.addElementProcessor(new SrcElementProcessor(webRoot));
@@ -79,6 +84,7 @@ public final class WebModule extends AbstractModule implements Configurable<WebC
         webConfig.controller(FaviconResourceController.class);
         webConfig.controller(RobotsResourceController.class);
         webConfig.controller(NodeModulesResourceController.class);
+        webConfig.controller(SwitchLanguageWebController.class);
 
 //        webConfig.bind(UserInfo.class, UserInfoContextProvider.class);
         webConfig.bind(ClientInfo.class, ClientInfoContextProvider.class);
@@ -97,7 +103,7 @@ public final class WebModule extends AbstractModule implements Configurable<WebC
         webConfig.bindExceptionMapper(requestInjection(new BadRequestWebExceptionMapper()));
         webConfig.bindExceptionMapper(requestInjection(new DefaultWebExceptionMapper()));
 
-        message("conf/messages/pagination");
+        message("conf/messages/web");
     }
 
     @Override

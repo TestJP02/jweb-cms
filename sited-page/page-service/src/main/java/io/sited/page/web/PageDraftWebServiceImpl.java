@@ -119,10 +119,6 @@ public class PageDraftWebServiceImpl implements PageDraftWebService {
         response.imageURLs = page.imageURLs == null ? ImmutableList.of() : Splitter.on(";").splitToList(page.imageURLs);
         response.version = page.version;
         response.status = page.status;
-        response.totalVisited = page.totalVisited;
-        response.totalCommented = page.totalCommented;
-        response.totalDisliked = page.totalDisliked;
-        response.totalLiked = page.totalLiked;
         response.createdTime = page.createdTime;
         response.createdBy = page.createdBy;
         response.updatedTime = page.updatedTime;

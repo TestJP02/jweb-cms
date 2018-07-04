@@ -1,8 +1,5 @@
 package io.sited.template;
 
-import com.google.common.collect.ImmutableList;
-import io.sited.ApplicationException;
-
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -25,17 +22,7 @@ public abstract class AbstractComponent implements Component {
     }
 
     @Override
-    public List<ComponentAttribute<?>> attributes() {
-        return ImmutableList.copyOf(attributes.values());
-    }
-
-    @SuppressWarnings("unchecked")
-    @Override
-    public <T> ComponentAttribute<T> attribute(String attributeName) {
-        ComponentAttribute<T> componentAttribute = (ComponentAttribute<T>) attributes.get(attributeName);
-        if (componentAttribute == null) {
-            throw new ApplicationException("missing attribute, name={}", attributeName);
-        }
-        return componentAttribute;
+    public Map<String, ComponentAttribute<?>> attributes() {
+        return attributes;
     }
 }

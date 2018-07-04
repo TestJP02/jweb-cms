@@ -60,22 +60,17 @@ public class App extends Application {
     final Profile profile;
     final ResourceRepository repository;
     final CompositeMessageBundle compositeMessageBundle;
-    private final Validator validator;
-    private final Configuration configuration;
+    private Validator validator;
+    private Configuration configuration;
 
     ServiceLocator serviceLocator;
     ModuleBinder binder;
 
     public App(Path dir, Profile profile) {
-        configuration = Validation.byDefaultProvider().configure()
-            .messageInterpolator(new MessageInterpolatorImpl())
-            .addProperty("hibernate.validator.fail_fast", "true");
-        validator = configuration.buildValidatorFactory().getValidator();
-
         this.dir = dir;
         this.profile = profile;
         repository = new CompositeResourceRepository(new FileResourceRepository(dir), new ClasspathResourceRepository(""));
-        options = options("app", AppOptions.class);
+        options = profile.options("app", AppOptions.class);
         if (options.language == null) {
             options.language = Locale.getDefault().toLanguageTag();
         } else {
@@ -116,9 +111,11 @@ public class App extends Application {
 
     public <T> T options(String name, Class<T> optionClass) {
         T options = profile.options(name, optionClass);
-        Set<ConstraintViolation<T>> violations = validator.validate(options);
-        if (!violations.isEmpty()) {
-            throw new ApplicationException("invalid options, name={}, type={}, message={}", name, optionClass, violations.iterator().next().getMessage());
+        if (validator != null) {
+            Set<ConstraintViolation<T>> violations = validator.validate(options);
+            if (!violations.isEmpty()) {
+                throw new ApplicationException("invalid options, name={}, type={}, message={}", name, optionClass, violations.iterator().next().getMessage());
+            }
         }
         return options;
     }
@@ -230,6 +227,11 @@ public class App extends Application {
     protected void configure() {
         logger.info("init app, name={}, language={}, dir={}", name(), language(), dir());
         binder = new ModuleBinder();
+
+        configuration = Validation.byDefaultProvider().configure()
+            .messageInterpolator(new MessageInterpolatorImpl())
+            .addProperty("hibernate.validator.fail_fast", "true");
+        validator = configuration.buildValidatorFactory().getValidator();
 
         binder.bind(App.class).toInstance(this);
         binder.bind(MessageBundle.class).toInstance(message());

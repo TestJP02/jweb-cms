@@ -44,11 +44,6 @@ export default class User extends React.Component {
                     required: true,
                     message: window.ElementUI.i18n.t("user.emailRule"),
                     trigger: "blur"
-                }],
-                phone: [{
-                    required: true,
-                    message: window.ElementUI.i18n.t("user.phoneRule"),
-                    trigger: "blur"
                 }]
             },
             changePasswordRules: {

@@ -8,6 +8,7 @@ import io.sited.file.api.directory.DirectoryResponse;
 import io.sited.file.api.file.FileListQuery;
 import io.sited.file.web.service.FileService;
 import io.sited.file.web.web.ajax.directory.DirectoryBreadAJAXResponse;
+import io.sited.template.Attributes;
 import io.sited.template.Children;
 import io.sited.template.TemplateComponent;
 
@@ -32,7 +33,7 @@ public class FileComponent extends TemplateComponent {
     }
 
     @Override
-    public void output(Map<String, Object> bindings, Map<String, Object> attributes, Children children, OutputStream out) throws IOException {
+    public void output(Map<String, Object> bindings, Attributes attributes, Children children, OutputStream out) throws IOException {
 
         attributes.forEach(bindings::put);
         String pathAttribute = (String) attributes.get("path");

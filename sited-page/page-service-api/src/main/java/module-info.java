@@ -14,7 +14,6 @@ module sited.page.api {
     requires sited.service;
 
     exports io.sited.page.api;
-    exports io.sited.page.api.archive;
     exports io.sited.page.api.category;
     exports io.sited.page.api.component;
     exports io.sited.page.api.content;
@@ -26,4 +25,5 @@ module sited.page.api {
     exports io.sited.page.api.template;
     exports io.sited.page.api.variable;
     exports io.sited.page.api.comment;
+    exports io.sited.page.api.statistics;
 }

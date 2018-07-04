@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:j="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" type="text/css" href="archive-page-list.css">
+</head>
+<body>
+
+<div class="panel panel-default archive-page-list">
+    <div class="panel-header" j:text="title" j:if="title != null">title</div>
+    <div class="panel-body">
+        <j:page-list j:pages="pages"/>
+        <j:pagination j:items="pages" j:path="path" j:display="display"/>
+    </div>
+</div>
+</body>
+</html>

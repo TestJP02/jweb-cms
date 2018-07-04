@@ -16,9 +16,6 @@ import io.sited.template.impl.processor.ClassElementProcessorImpl;
 import io.sited.template.impl.processor.ForElementProcessorImpl;
 import io.sited.template.impl.processor.HtmlElementProcessorImpl;
 import io.sited.template.impl.processor.IfElementProcessorImpl;
-import io.sited.template.impl.processor.ImageElementProcessor;
-import io.sited.template.impl.processor.LinkElementProcessor;
-import io.sited.template.impl.processor.ScriptElementProcessor;
 import io.sited.template.impl.processor.TextElementProcessorImpl;
 import org.apache.commons.jexl3.JexlBuilder;
 import org.apache.commons.jexl3.JexlEngine;
@@ -36,12 +33,13 @@ import java.util.concurrent.ConcurrentHashMap;
 public class TemplateEngine {
     private final Logger logger = LoggerFactory.getLogger(TemplateEngine.class);
     private final CompositeResourceRepository resourceRepository = new CompositeResourceRepository();
-    private final ComponentRegistry componentRegistry = new ComponentRegistry();
+    private final ComponentRegistry componentRegistry = new ComponentRegistry(this);
     private final ElementProcessorRegistry elementProcessorRegistry = new ElementProcessorRegistry();
     private final Map<String, TemplateImpl> cache = new ConcurrentHashMap<>();
     private final Map<String, Object> functions = Maps.newHashMap();
     private volatile boolean cacheEnabled = true;
-    private volatile boolean commentEnabled = false;
+    private volatile boolean skipCommentEnabled = false;
+
     private JexlEngine jexlEngine = new JexlBuilder().namespaces(functions).create();
 
     public TemplateEngine() {
@@ -50,9 +48,6 @@ public class TemplateEngine {
         elementProcessorRegistry.add(new TextElementProcessorImpl());
         elementProcessorRegistry.add(new HtmlElementProcessorImpl());
         elementProcessorRegistry.add(new ClassElementProcessorImpl());
-        elementProcessorRegistry.add(new LinkElementProcessor());
-        elementProcessorRegistry.add(new ScriptElementProcessor());
-        elementProcessorRegistry.add(new ImageElementProcessor());
 
         addComponent(new ForComponent());
         addComponent(new IfComponent());
@@ -67,8 +62,13 @@ public class TemplateEngine {
         return this;
     }
 
-    public TemplateEngine setCommentEnabled(boolean commentEnabled) {
-        this.commentEnabled = commentEnabled;
+    public TemplateEngine setSkipCommentEnabled(boolean skipCommentEnabled) {
+        this.skipCommentEnabled = skipCommentEnabled;
+        return this;
+    }
+
+    public TemplateEngine setAutoComponentEnabled(boolean autoComponentEnabled) {
+        componentRegistry.setAutoComponentEnabled(autoComponentEnabled);
         return this;
     }
 
@@ -87,7 +87,7 @@ public class TemplateEngine {
             if (!source.isPresent()) {
                 return Optional.empty();
             }
-            template = new TemplateParser(source.get(), asComponent, commentEnabled, resourceRepository, componentRegistry, elementProcessorRegistry, jexlEngine).parse();
+            template = new TemplateParser(source.get(), asComponent, skipCommentEnabled, resourceRepository, componentRegistry, elementProcessorRegistry, jexlEngine).parse();
             if (cacheEnabled) {
                 cache.put(templateId, template);
             }

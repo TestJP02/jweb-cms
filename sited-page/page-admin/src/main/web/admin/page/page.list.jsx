@@ -98,11 +98,11 @@ export default class PageList extends React.Component {
                         if (data.status === "DRAFT") {
                             return (
                                 <span className="el-table__actions">
+                                    <Button onClick={e => this.publish(data, e)} type="text">{i18n.t("page.publish")}</Button>
                                     <Button type="text">
                                         <Link to={"/admin/page/draft/" + data.id}>{i18n.t("page.update")}</Link>
                                     </Button>
                                     <Button onClick={e => this.delete(data, e)} type="text">{i18n.t("page.delete")}</Button>
-                                    <Button onClick={e => this.publish(data, e)} type="text">{i18n.t("page.publish")}</Button>
                                 </span>
                             );
                         } else if (data.status === "ACTIVE") {
@@ -117,8 +117,8 @@ export default class PageList extends React.Component {
                         } else if (data.status === "INACTIVE") {
                             return (
                                 <span className="el-table__actions">
-                                    <Button onClick={e => this.delete(data, e)} type="text">{i18n.t("page.delete")}</Button>
                                     <Button onClick={e => this.revert(data, e)} type="text">{i18n.t("page.revert")}</Button>
+                                    <Button onClick={e => this.delete(data, e)} type="text">{i18n.t("page.delete")}</Button>
                                 </span>
                             );
                         }

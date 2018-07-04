@@ -117,7 +117,9 @@ public class HTMLParser {
         htmlElement.getAttributes().forEach(htmlAttribute -> {
             String attributeName = htmlAttribute.getName();
             boolean dynamic = isDynamicAttribute(attributeName);
-            Attribute attribute = new Attribute(attributeName(attributeName), dynamic, htmlAttribute.getBegin(), htmlAttribute.getEnd(), resource.path());
+
+            RowColumnVector position = htmlAttribute.getRowColumnVector();
+            Attribute attribute = new Attribute(attributeName(attributeName), dynamic, position.getRow(), position.getColumn(), resource.path());
             String attributeValue = htmlAttribute.getValue();
             attribute.setValue(attributeValue);
             if (dynamic) {

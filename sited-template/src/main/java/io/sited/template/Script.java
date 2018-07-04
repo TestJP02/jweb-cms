@@ -6,4 +6,5 @@ package io.sited.template;
 public class Script {
     public String src;
     public String innerText;
+    public Boolean inline;
 }

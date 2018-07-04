@@ -17,6 +17,7 @@ module sited.page {
     requires sited.page.api;
     requires sited.database;
     requires sited.message;
+    requires sited.scheduler;
     requires org.commonmark;
     requires org.commonmark.ext.autolink;
     requires org.commonmark.ext.gfm.strikethrough;

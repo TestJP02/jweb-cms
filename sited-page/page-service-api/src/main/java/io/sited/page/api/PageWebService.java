@@ -3,11 +3,12 @@ package io.sited.page.api;
 
 import io.sited.page.api.page.CreatePageRequest;
 import io.sited.page.api.page.DeletePageRequest;
-import io.sited.page.api.page.LatestQuery;
+import io.sited.page.api.page.LatestPageQuery;
 import io.sited.page.api.page.PageNavigationResponse;
 import io.sited.page.api.page.PageQuery;
 import io.sited.page.api.page.PageRelatedQuery;
 import io.sited.page.api.page.PageResponse;
+import io.sited.page.api.page.PopularPageQuery;
 import io.sited.page.api.page.RevertDeletePageRequest;
 import io.sited.util.collection.QueryResponse;
 
@@ -61,6 +62,10 @@ public interface PageWebService {
 
     @Path("/latest")
     @PUT
-    List<PageResponse> latest(LatestQuery query);
+    List<PageResponse> latest(LatestPageQuery query);
+
+    @Path("/popular")
+    @PUT
+    QueryResponse<PageResponse> popular(PopularPageQuery query);
 }
 

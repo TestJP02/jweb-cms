@@ -4,6 +4,8 @@ import com.google.common.base.Joiner;
 import com.google.common.base.Strings;
 import io.sited.util.JSON;
 
+import java.text.DecimalFormat;
+import java.text.DecimalFormatSymbols;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -12,11 +14,16 @@ import java.time.OffsetDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 /**
  * @author chi
  */
 public class TemplateFunctions {
+    public boolean isNullOrEmpty(String content) {
+        return Strings.isNullOrEmpty(content);
+    }
+
     public String ellipsis(String content, int limit) {
         if (content == null || content.length() < limit) {
             return content;
@@ -89,6 +96,14 @@ public class TemplateFunctions {
         return value.format(DateTimeFormatter.ofPattern(pattern));
     }
 
+    public String format(Number value, String pattern) {
+        return new DecimalFormat(pattern).format(value);
+    }
+
+    public String format(Number value, String pattern, String language) {
+        DecimalFormatSymbols symbols = new DecimalFormatSymbols(Locale.forLanguageTag(language));
+        return new DecimalFormat(pattern, symbols).format(value);
+    }
 
     public String join(List<?> list, String separator) {
         if (list != null) {

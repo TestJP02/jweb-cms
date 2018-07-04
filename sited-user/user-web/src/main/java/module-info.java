@@ -13,6 +13,7 @@ module sited.user.web {
     requires java.ws.rs;
     requires sited.module;
     requires sited.web;
+    requires sited.page.web;
     requires sited.template;
     requires sited.message;
     requires sited.cache;

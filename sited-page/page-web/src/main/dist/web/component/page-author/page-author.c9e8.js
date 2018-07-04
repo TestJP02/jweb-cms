@@ -1,1 +1,0 @@
-$(function(){app.user().then(function(a){a.authenticated&&($(".page-author__author-name").text(a.nickname),$(".page-author__author-avatar").html("<img src='"+a.imageURL+"'>"))})});

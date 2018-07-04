@@ -1,6 +1,9 @@
 const gulp = require("gulp"),
     resources = require("gulp-resources"),
     RevAll = require("gulp-rev-all"),
+    useref = require("gulp-useref"),
+    filter = require('gulp-filter'),
+    cssref = require("gulp-css-useref"),
     gulpif = require("gulp-if"),
     minifyJs = require("gulp-uglify"),
     minifyCss = require("gulp-csso");
@@ -13,17 +16,23 @@ gulp.task("clean", function() {
 });
 
 gulp.task("release", ["clean"], function() {
+    const excludeNodeModules = filter(["**/*", "!node_modules/**/*"]);
     return gulp.src(["favicon.ico",
         "robots.txt",
         "template/**/*.html",
         "component/**/*.html",
-        "static/**/*",
-        "node_modules/font-awesome/fonts/*"], {base: "."})
-        .pipe(resources())
+        "theme/**/*.html",
+        "static/img/**/*"], {base: "."})
+        .pipe(resources({skipNotExistingFiles: true}))
+        .pipe(cssref({
+            base: 'static'
+        }))
+        .pipe(useref())
         .pipe(RevAll.revision({
             hashLength: 4,
             dontRenameFile: [/^\/favicon.ico$/g, /^\/robots.txt$/g, ".html"]
         }))
+        .pipe(excludeNodeModules)
         .pipe(gulpif("*.js", minifyJs()))
         .pipe(gulpif("*.css", minifyCss()))
         .pipe(gulp.dest(output));

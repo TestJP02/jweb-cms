@@ -10,10 +10,9 @@ import io.sited.database.Query;
 import io.sited.database.Repository;
 import io.sited.message.MessagePublisher;
 import io.sited.page.api.page.CreatePageRequest;
-import io.sited.page.api.page.LatestQuery;
+import io.sited.page.api.page.LatestPageQuery;
 import io.sited.page.api.page.PageChangedMessage;
 import io.sited.page.api.page.PageDeletedMessage;
-import io.sited.page.api.page.PagePublishedMessage;
 import io.sited.page.api.page.PageQuery;
 import io.sited.page.api.page.PageRelatedQuery;
 import io.sited.page.api.page.PageStatus;
@@ -44,13 +43,13 @@ public class PageService {
     @Inject
     PageContentService pageContentService;
     @Inject
-    MessagePublisher<PagePublishedMessage> pagePublishedPublisher;
-    @Inject
     MessagePublisher<PageDeletedMessage> pageDeletePublisher;
     @Inject
     MessagePublisher<PageChangedMessage> pageChangedMessagePublisher;
     @Inject
     PageCategoryService pageCategoryService;
+    @Inject
+    PageStatisticsService pageStatisticsService;
 
 
     public Page get(String id) {
@@ -130,12 +129,12 @@ public class PageService {
 
     public Optional<Page> findNext(String id) {
         Page page = get(id);
-        return repository.query("SELECT t from Page t WHERE t.updatedTime>?0", page.updatedTime).sort("t.updatedTime", false).findOne();
+        return repository.query("SELECT t from Page t WHERE t.updatedTime>?0 AND t.categoryId!=null", page.updatedTime).sort("t.updatedTime", false).findOne();
     }
 
     public Optional<Page> findPrev(String id) {
         Page page = get(id);
-        return repository.query("SELECT t from Page t WHERE t.updatedTime<?0", page.updatedTime).sort("t.updatedTime", true).findOne();
+        return repository.query("SELECT t from Page t WHERE t.updatedTime<?0 AND t.categoryId!=null", page.updatedTime).sort("t.updatedTime", true).findOne();
     }
 
     public List<Page> findRelated(PageRelatedQuery pageRelatedQuery) {
@@ -176,16 +175,16 @@ public class PageService {
             notifyPageDelete(page);
         } else {
             page.status = PageStatus.INACTIVE;
-
             page.updatedBy = requestBy;
             page.updatedTime = OffsetDateTime.now();
             repository.update(id, page);
         }
     }
 
-    private void notifyPageChanged(Page page) {
+    private void notifyPageChanged(Page page, boolean firstPublished) {
         PageChangedMessage pageChangedMessage = new PageChangedMessage();
         pageChangedMessage.id = page.id;
+        pageChangedMessage.firstPublished = firstPublished;
         pageChangedMessage.path = page.path;
         pageChangedMessage.templatePath = page.templatePath;
         pageChangedMessage.userId = page.userId;
@@ -201,26 +200,6 @@ public class PageService {
         pageChangedMessage.createdBy = page.createdBy;
         pageChangedMessage.createdTime = page.createdTime;
         pageChangedMessagePublisher.publish(pageChangedMessage);
-    }
-
-    private void notifyPagePublished(Page page) {
-        PagePublishedMessage pagePublishedMessage = new PagePublishedMessage();
-        pagePublishedMessage.id = page.id;
-        pagePublishedMessage.path = page.path;
-        pagePublishedMessage.templatePath = page.templatePath;
-        pagePublishedMessage.title = page.title;
-        pagePublishedMessage.userId = page.userId;
-        pagePublishedMessage.categoryId = page.categoryId;
-        pagePublishedMessage.tags = page.tags == null ? ImmutableList.of() : Splitter.on(";").splitToList(page.tags);
-        pagePublishedMessage.keywords = page.keywords == null ? ImmutableList.of() : Splitter.on(";").splitToList(page.keywords);
-        pagePublishedMessage.fields = page.fields == null ? ImmutableMap.of() : JSON.fromJSON(page.fields, Map.class);
-        pagePublishedMessage.status = page.status;
-        pagePublishedMessage.description = page.description;
-        pagePublishedMessage.updatedBy = page.updatedBy;
-        pagePublishedMessage.updatedTime = page.updatedTime;
-        pagePublishedMessage.createdBy = page.createdBy;
-        pagePublishedMessage.createdTime = page.createdTime;
-        pagePublishedPublisher.publish(pagePublishedMessage);
     }
 
     private void notifyPageDelete(Page page) {
@@ -262,8 +241,7 @@ public class PageService {
             pageContentService.update(page.id, draft.content, requestBy);
             repository.update(page.id, page);
             pageDraftService.delete(id);
-            notifyPageChanged(page);
-//            notifyPagePublished(page);
+            notifyPageChanged(page, false);
             return page;
         } else {
             Page page = new Page();
@@ -280,10 +258,6 @@ public class PageService {
             page.keywords = draft.keywords;
             page.imageURL = draft.imageURL;
             page.imageURLs = draft.imageURLs;
-            page.totalVisited = 0;
-            page.totalLiked = 0;
-            page.totalDisliked = 0;
-            page.totalCommented = 0;
             page.status = PageStatus.ACTIVE;
             page.createdTime = OffsetDateTime.now();
             page.createdBy = requestBy;
@@ -292,8 +266,7 @@ public class PageService {
             pageContentService.create(page.id, draft.content, requestBy);
             repository.insert(page);
             pageDraftService.delete(id);
-            notifyPageChanged(page);
-            notifyPagePublished(page);
+            notifyPageChanged(page, true);
             return page;
         }
     }
@@ -308,28 +281,12 @@ public class PageService {
         page.updatedBy = requestBy;
         page.updatedTime = OffsetDateTime.now();
         repository.update(page.id, page);
-        notifyPageChanged(page);
-        notifyPagePublished(page);
+        notifyPageChanged(page, false);
     }
 
 
-    public List<Page> latest(LatestQuery query) {
+    public List<Page> latest(LatestPageQuery query) {
         return repository.query("SELECT t FROM Page t WHERE t.status=?0 ORDER BY t.createdTime DESC ", PageStatus.ACTIVE).limit(1, query.limit).find();
-    }
-
-    @Transactional
-    public void visit(String id, int count, Object requestBy) {
-        repository.execute("UPDATE Page t SET t.totalVisited=t.totalVisited+?0,t.updatedTime=?1,t.updatedBy=?2 WHERE t.id=?3", count, OffsetDateTime.now(), requestBy, id);
-    }
-
-    @Transactional
-    public void commentCreated(String id, int count, Object requestBy) {
-        repository.execute("UPDATE Page t SET t.totalCommented=t.totalCommented+?0,t.updatedTime=?1,t.updatedBy=?2 WHERE t.id=?3", count, OffsetDateTime.now(), requestBy, id);
-    }
-
-    @Transactional
-    public void commentDeleted(String id, int count, Object requestBy) {
-        repository.execute("UPDATE Page t SET t.totalCommented=t.totalCommented-?0,t.updatedTime=?1,t.updatedBy=?2 WHERE t.id=?3", count, OffsetDateTime.now(), requestBy, id);
     }
 
     @Transactional
@@ -354,7 +311,9 @@ public class PageService {
             page.updatedBy = request.requestBy;
             pageContentService.update(page.id, request.content, request.requestBy);
             repository.update(page.id, page);
-            notifyPageChanged(page);
+            notifyPageChanged(page, true);
+            pageStatisticsService.createIfNoneExist(page.id, request.requestBy);
+
             return page;
         } else {
             Page page = new Page();
@@ -371,10 +330,6 @@ public class PageService {
             page.description = request.description;
             page.imageURL = request.imageURL;
             page.imageURLs = Joiner.on(";").join(Markdown.imageURLs(request.content));
-            page.totalVisited = 0;
-            page.totalLiked = 0;
-            page.totalDisliked = 0;
-            page.totalCommented = 0;
             page.status = PageStatus.ACTIVE;
             page.createdTime = OffsetDateTime.now();
             page.createdBy = request.requestBy;
@@ -382,8 +337,8 @@ public class PageService {
             page.updatedBy = request.requestBy;
             pageContentService.create(page.id, request.content, request.requestBy);
             repository.insert(page);
-            notifyPageChanged(page);
-            notifyPagePublished(page);
+            notifyPageChanged(page, false);
+            pageStatisticsService.createIfNoneExist(page.id, request.requestBy);
             return page;
         }
     }

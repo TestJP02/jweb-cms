@@ -13,7 +13,6 @@ import io.sited.page.api.page.PageQuery;
 import io.sited.page.api.page.PageResponse;
 import io.sited.page.api.page.PageStatus;
 import io.sited.page.search.api.page.SearchPageRequest;
-import io.sited.page.search.api.page.SearchPageResponse;
 import io.sited.util.JSON;
 import io.sited.util.collection.QueryResponse;
 import org.apache.lucene.analysis.Analyzer;
@@ -120,7 +119,7 @@ public class PageSearchService {
         }
     }
 
-    public QueryResponse<SearchPageResponse> search(SearchPageRequest request) {
+    public QueryResponse<PageResponse> search(SearchPageRequest request) {
         int page = request.page == null ? 1 : request.page;
         int limit = request.limit == null ? 20 : request.limit;
 
@@ -154,7 +153,7 @@ public class PageSearchService {
             BooleanQuery searchQuery = builder.build();
             TopDocs results = indexSearcher.search(searchQuery, page * limit, sort);
 
-            QueryResponse<SearchPageResponse> queryResponse = new QueryResponse<>();
+            QueryResponse<PageResponse> queryResponse = new QueryResponse<>();
             queryResponse.page = page;
             queryResponse.limit = limit;
             queryResponse.total = results.totalHits;
@@ -205,28 +204,6 @@ public class PageSearchService {
         }
     }
 
-    public boolean batchIndex(List<PageResponse> pages, Map<String, PageContentResponse> contents) {
-        try {
-            indexWriter.deleteAll();
-            for (PageResponse page : pages) {
-                PageContentResponse content = contents.get(page.id);
-                if (indexSearcher != null) {
-                    Term id = new Term("id", page.id);
-                    TermQuery termQuery = new TermQuery(id);
-                    TopDocs search = indexSearcher.search(termQuery, 1);
-                    if (search.totalHits > 0) {
-                        indexWriter.updateDocument(id, document(page, content));
-                    }
-                }
-                indexWriter.addDocument(document(page, content));
-            }
-            indexWriter.commit();
-            resetIndexSearcher();
-            return true;
-        } catch (IOException e) {
-            throw new ApplicationException("failed to index page", e);
-        }
-    }
 
     public boolean removeIndex(String pageId) {
         try {
@@ -238,42 +215,54 @@ public class PageSearchService {
         }
     }
 
-    public boolean fullIndex() {
-        PageQuery pageQuery = new PageQuery();
-        pageQuery.status = PageStatus.ACTIVE;
-        pageQuery.page = 1;
-        pageQuery.limit = BATCH_SIZE;
-        List<PageResponse> list;
-        do {
-            QueryResponse<PageResponse> pages = pageWebService.find(pageQuery);
-            list = pages.items;
-            if (list.isEmpty()) {
-                break;
-            }
+    public void fullIndex() {
+        try {
+            indexWriter.deleteAll();
+            indexWriter.commit();
 
-            List<String> pageIds = pages.items.stream().map(page -> page.id).collect(Collectors.toList());
-            Map<String, PageContentResponse> contents = pageContentWebService.batchGetByPageIds(pageIds).stream().collect(Collectors.toMap(content -> content.pageId, content -> content));
-            batchIndex(pages.items, contents);
-            pageQuery.page += 1;
-        } while (list.size() == BATCH_SIZE);
-        return true;
+            PageQuery pageQuery = new PageQuery();
+            pageQuery.status = PageStatus.ACTIVE;
+            pageQuery.page = 1;
+            pageQuery.limit = BATCH_SIZE;
+            List<PageResponse> list;
+            do {
+                QueryResponse<PageResponse> pages = pageWebService.find(pageQuery);
+                list = pages.items;
+                if (list.isEmpty()) {
+                    break;
+                }
+
+                List<String> pageIds = pages.items.stream().map(page -> page.id).collect(Collectors.toList());
+                Map<String, PageContentResponse> contents = pageContentWebService.batchGetByPageIds(pageIds).stream().collect(Collectors.toMap(content -> content.pageId, content -> content));
+                batchIndex(pages.items, contents);
+                pageQuery.page += 1;
+            } while (list.size() == BATCH_SIZE);
+            indexWriter.commit();
+        } catch (IOException e) {
+            throw new ApplicationException("failed to full index pages", e);
+        }
+    }
+
+    private void batchIndex(List<PageResponse> pages, Map<String, PageContentResponse> contents) throws IOException {
+        for (PageResponse page : pages) {
+            PageContentResponse content = contents.get(page.id);
+            indexWriter.addDocument(document(page, content));
+        }
     }
 
     private void resetIndexSearcher() {
         indexSearcher = null;
     }
 
-    private SearchPageResponse response(Document document, Highlighter highlighter) {
-        SearchPageResponse response = new SearchPageResponse();
+    private PageResponse response(Document document, Highlighter highlighter) {
+        PageResponse response = new PageResponse();
         response.id = document.get("id");
         response.categoryId = document.get("categoryId");
-        response.subTitle = document.get("subTitle");
         response.path = document.get("path");
         response.title = highlight("title", document.get("title"), highlighter);
         response.description = highlight("description", document.get("description"), highlighter);
         response.userId = document.get("userId");
         response.imageURL = document.get("imageURL");
-        response.language = document.get("language");
         String tags = document.get("tags");
         if (tags != null) {
             response.tags = Splitter.on(" ").splitToList(tags);

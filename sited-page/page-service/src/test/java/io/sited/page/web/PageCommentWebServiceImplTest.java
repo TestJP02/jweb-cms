@@ -21,7 +21,6 @@ import org.junit.jupiter.api.extension.ExtendWith;
 
 import javax.inject.Inject;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 /**
@@ -57,8 +56,6 @@ class PageCommentWebServiceImplTest {
         assertNotNull(comment.id);
 
         Thread.sleep(1000);
-        PageResponse pageResponse = pageWebService.get(page.id);
-        assertEquals(1, (int) pageResponse.totalCommented);
     }
 
     private CreateDraftRequest create(String path, String title, String description) throws InterruptedException {

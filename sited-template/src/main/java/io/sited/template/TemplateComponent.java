@@ -1,5 +1,6 @@
 package io.sited.template;
 
+import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Maps;
 import io.sited.ApplicationException;
 
@@ -11,9 +12,13 @@ import java.util.Map;
 /**
  * @author chi
  */
-public abstract class TemplateComponent extends AbstractComponent {
+public class TemplateComponent extends AbstractComponent {
     private final String templatePath;
     TemplateEngine templateEngine;
+
+    public TemplateComponent(String name, String templatePath) {
+        this(name, templatePath, ImmutableList.of());
+    }
 
     public TemplateComponent(String name, String templatePath, List<ComponentAttribute<?>> componentAttributes) {
         super(name, componentAttributes);
@@ -28,10 +33,10 @@ public abstract class TemplateComponent extends AbstractComponent {
     }
 
     @Override
-    public void output(Map<String, Object> bindings, Map<String, Object> attributes, Children children, OutputStream out) throws IOException {
+    public void output(Map<String, Object> bindings, Attributes attributes, Children children, OutputStream out) throws IOException {
         Map<String, Object> scopeBindings = Maps.newHashMapWithExpectedSize(bindings.size() + 1);
         scopeBindings.putAll(bindings);
-        scopeBindings.put("attributes", attributes);
+        scopeBindings.putAll(attributes);
         template().output(scopeBindings, out);
     }
 

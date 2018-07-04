@@ -54,9 +54,6 @@ public class ResourceMessageBundle implements MessageBundle {
         if (properties == null) {
             Optional<Resource> candidate = resource(language);
             if (!candidate.isPresent()) {
-                candidate = resource(defaultLanguage);
-            }
-            if (!candidate.isPresent()) {
                 candidate = resource(null);
             }
             Resource resource = candidate.orElseThrow(() -> new ApplicationException("missing message file, bundleFile={}", path));

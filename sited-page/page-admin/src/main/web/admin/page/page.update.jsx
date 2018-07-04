@@ -20,13 +20,6 @@ export default class PageUpdate extends Component {
             directoryPath: "/upload/page/",
             templateOptions: [],
             pageRules: {
-                categoryId: [
-                    {
-                        required: true,
-                        message: i18n.t("page.categoryRequired"),
-                        trigger: "change"
-                    }
-                ],
                 title: [{
                     required: true,
                     message: i18n.t("page.titleRequired"),
@@ -458,7 +451,7 @@ export default class PageUpdate extends Component {
                                     <Cascader
                                         options={this.state.categoryList ? this.state.categoryList : []}
                                         value={this.state.categorySelected}
-                                        changeOnSelect={true}
+                                        changeOnSelect={false}
                                         onChange={value => this.selectCategory(value)}
                                         props={{
                                             value: "id",

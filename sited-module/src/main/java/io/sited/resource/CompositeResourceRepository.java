@@ -28,7 +28,8 @@ public class CompositeResourceRepository implements ResourceRepository {
 
     @Override
     public Optional<Resource> get(String path) {
-        for (ResourceRepository sourceRepository : repositories) {
+        for (int i = repositories.size() - 1; i >= 0; i--) {
+            ResourceRepository sourceRepository = repositories.get(i);
             Optional<Resource> source = sourceRepository.get(path);
             if (source.isPresent()) {
                 return source;

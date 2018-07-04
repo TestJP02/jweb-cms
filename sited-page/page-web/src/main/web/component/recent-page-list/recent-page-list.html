@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:j="http://www.w3.org/1999/xhtml">
+    <head>
+        <meta charset="UTF-8">
+        <link rel="stylesheet" href="page-recent-link-list.css">
+    </head>
+    <body>
+        <div class="panel panel-default recent-link-list">
+            <div class="panel-heading" j:text="title">{{i18n('page.recentPages',client.language())}}</div>
+            <div class="panel-body">
+                <j:page-link-list j:pages="pages"/>
+            </div>
+        </div>
+    </body>
+</html>

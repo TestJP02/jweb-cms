@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html xmlns:j="http://www.w3.org/1999/xhtml" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="page-archive.css">
+</head>
+<body>
+<div class="panel panel-default page-archive">
+    <div class="panel-heading" j:text="title">{{i18n('page.archiveListTitle',client.language())}}</div>
+    <div class="panel-body">
+        <ul class="media-list">
+            <li class="media" j:for="archive:archives">
+                <a j:href="'/archive/'+archive.name" class="media-body">
+                    <span j:text="archive.name">2018-01</span>(<span j:text="archive.count">1</span>)
+                </a>
+            </li>
+        </ul>
+    </div>
+</div>
+</body>
+</html>

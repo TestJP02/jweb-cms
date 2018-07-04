@@ -7,9 +7,9 @@ import io.sited.page.domain.PageContent;
 
 import javax.inject.Inject;
 import javax.transaction.Transactional;
+import javax.ws.rs.NotFoundException;
 import java.time.OffsetDateTime;
 import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
 
 /**
@@ -19,8 +19,9 @@ public class PageContentService {
     @Inject
     Repository<PageContent> repository;
 
-    public Optional<PageContent> findByPageId(String pageId) {
-        return repository.query("SELECT t from PageContent t WHERE t.pageId=?0", pageId).findOne();
+
+    public PageContent getByPageId(String pageId) {
+        return repository.query("SELECT t from PageContent t WHERE t.pageId=?0", pageId).findOne().orElseThrow(() -> new NotFoundException("missing content, pageId=" + pageId));
     }
 
     @Transactional

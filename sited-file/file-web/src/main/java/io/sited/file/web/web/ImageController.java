@@ -1,7 +1,7 @@
 package io.sited.file.web.web;
 
 import io.sited.file.api.FileRepository;
-import io.sited.file.web.service.CachedImageResourceRepository;
+import io.sited.file.web.service.ImageResourceRepository;
 import io.sited.file.web.service.ImageScalar;
 import io.sited.file.web.service.ImageSize;
 import io.sited.resource.ByteArrayResource;
@@ -11,9 +11,11 @@ import javax.inject.Inject;
 import javax.ws.rs.GET;
 import javax.ws.rs.NotFoundException;
 import javax.ws.rs.Path;
+import javax.ws.rs.core.CacheControl;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 import java.io.IOException;
+import java.util.Optional;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -22,7 +24,7 @@ import java.util.regex.Pattern;
  */
 @Path("/image")
 public class ImageController {
-    private static final Pattern IMAGE_PATTERN = Pattern.compile("/image/([^/]*)/(.*)");
+    private static final Pattern IMAGE_PATTERN = Pattern.compile("image/([^/]*)/(.*)");
 
     @Inject
     ImageScalar imageScalar;
@@ -31,7 +33,7 @@ public class ImageController {
     FileRepository fileRepository;
 
     @Inject
-    CachedImageResourceRepository repository;
+    ImageResourceRepository repository;
     @Inject
     UriInfo uriInfo;
 
@@ -39,15 +41,20 @@ public class ImageController {
     @GET
     public Response image() throws IOException {
         String path = uriInfo.getPath();
+        Optional<Resource> resource = repository.get(path);
+        CacheControl cacheControl = new CacheControl();
+        cacheControl.setMaxAge(Integer.MAX_VALUE);
+        if (resource.isPresent()) {
+            return Response.ok(resource.get()).cacheControl(cacheControl).build();
+        }
         Matcher matcher = IMAGE_PATTERN.matcher(path);
         if (!matcher.matches()) {
             throw new NotFoundException(path);
         }
-        String imagePath = path.substring("/image/".length());
         Resource file = fileRepository.get(matcher.group(2)).orElseThrow(() -> new NotFoundException("missing file, path=" + matcher.group(2)));
         byte[] scaled = imageScalar.scale(file, new ImageSize(matcher.group(1)));
-        ByteArrayResource image = new ByteArrayResource(imagePath, scaled, file.lastModified());
+        ByteArrayResource image = new ByteArrayResource(path, scaled, file.lastModified());
         repository.create(image);
-        return Response.ok(image).build();
+        return Response.ok(image).cacheControl(cacheControl).build();
     }
 }

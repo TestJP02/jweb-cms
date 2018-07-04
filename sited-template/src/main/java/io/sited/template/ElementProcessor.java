@@ -7,7 +7,7 @@ import io.sited.resource.Resource;
  */
 public interface ElementProcessor {
     default int priority() {
-        return 0;
+        return 100;
     }
 
     Element process(Element element, Resource resource);

@@ -10,6 +10,7 @@ module sited.page.search.api {
     requires java.validation;
     requires java.ws.rs;
     requires sited.module;
+    requires sited.page.api;
     requires sited.service;
 
     exports io.sited.page.search.api;

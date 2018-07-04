@@ -13,6 +13,8 @@ public interface RequestInfo {
 
     Optional<String> queryParam(String name);
 
+    String pathParam(String name);
+
     Map<String, String> headers();
 
     Map<String, String> cookies();

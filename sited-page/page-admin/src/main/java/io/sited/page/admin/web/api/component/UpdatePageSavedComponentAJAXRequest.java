@@ -10,6 +10,9 @@ import java.util.Map;
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 public class UpdatePageSavedComponentAJAXRequest {
+    @XmlElement(name = "name")
+    public String name;
+
     @XmlElement(name = "displayName")
     public String displayName;
 

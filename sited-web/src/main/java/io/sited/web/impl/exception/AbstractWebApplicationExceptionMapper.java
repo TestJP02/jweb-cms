@@ -4,7 +4,7 @@ import com.google.common.collect.Maps;
 import io.sited.template.Template;
 import io.sited.template.TemplateEngine;
 import io.sited.util.exception.Exceptions;
-import io.sited.web.WebApplicationException;
+import io.sited.web.WebException;
 import io.sited.web.WebOptions;
 
 import javax.inject.Inject;
@@ -12,14 +12,13 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.ext.ExceptionMapper;
 import java.io.ByteArrayOutputStream;
-import java.io.IOException;
 import java.util.Map;
 import java.util.Optional;
 
 /**
  * @author chi
  */
-public abstract class AbstractWebApplicationExceptionMapper<T extends WebApplicationException> implements ExceptionMapper<T> {
+public abstract class AbstractWebApplicationExceptionMapper<T extends WebException> implements ExceptionMapper<T> {
     private final Response.Status statusCode;
     @Inject
     WebOptions webOptions;
@@ -35,13 +34,17 @@ public abstract class AbstractWebApplicationExceptionMapper<T extends WebApplica
         Optional<Template> template = templateEngine.template(templatePath());
         if (template.isPresent()) {
             Map<String, Object> bindings = Maps.newHashMap();
-            bindings.put("exception", exception);
+            bindings.put("e", exception);
+            bindings.put("app", exception.app);
+            bindings.put("request", exception.request);
+            bindings.put("client", exception.client);
+            bindings.put("page", null);
             ByteArrayOutputStream out = new ByteArrayOutputStream();
             try {
                 template.get().output(bindings, out);
                 return Response.ok(out.toByteArray()).status(statusCode).type(MediaType.TEXT_HTML).build();
-            } catch (IOException e) {
-                e.initCause(e);
+            } catch (Throwable e) {
+                e.addSuppressed(exception);
                 return printStackTrace(e);
             }
         }

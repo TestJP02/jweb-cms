@@ -15,7 +15,7 @@ import java.util.Optional;
  */
 public class PageTemplateRepository implements ResourceRepository {
     @Inject
-    ThemeManager themeManager;
+    ThemeService themeService;
     @Inject
     PageTemplateWebService pageTemplateWebService;
 
@@ -24,7 +24,7 @@ public class PageTemplateRepository implements ResourceRepository {
         Optional<TemplateResponse> pageTemplateResponseOptional = pageTemplateWebService.findByTemplatePath(path);
         if (pageTemplateResponseOptional.isPresent()) {
             TemplateResponse templateResponse = pageTemplateResponseOptional.get();
-            return Optional.of(themeManager.template(templateResponse));
+            return Optional.of(themeService.template(templateResponse));
         }
         return Optional.empty();
     }

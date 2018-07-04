@@ -35,8 +35,12 @@ export default class TemplateList extends React.Component {
                     prop: "layoutName"
                 },
                 {
+                    label: i18n.t("page.status"),
+                    prop: "status"
+                },
+                {
                     label: i18n.t("page.createdTime"),
-                    render: function(data) {
+                    render: function (data) {
                         return (
                             <ElementUI.DateFormatter date={data.createdTime}/>
                         );
@@ -44,7 +48,7 @@ export default class TemplateList extends React.Component {
                 },
                 {
                     label: i18n.t("page.updatedTime"),
-                    render: function(data) {
+                    render: function (data) {
                         return (
                             <ElementUI.DateFormatter date={data.updatedTime}/>
                         );
@@ -54,7 +58,7 @@ export default class TemplateList extends React.Component {
                     label: i18n.t("page.action"),
                     fixed: "right",
                     width: 200,
-                    render: function(current) {
+                    render: function (current) {
                         return (
                             <span className="el-table__actions">
                                 {!current.readOnly &&

@@ -1,19 +1,23 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:j="http://www.w3.org/1999/xhtml">
-    <head>
-        <meta charset="UTF-8">
-        <link rel="stylesheet" type="text/css" href="../../node_modules/slick-carousel/slick/slick.css">
-        <script type="text/javascript" src="../../node_modules/slick-carousel/slick/slick.min.js"></script>
-        <link rel="stylesheet" type="text/css" href="page-banner.css">
-        <script type="text/javascript" src="page-banner.js"></script>
-    </head>
-    <body>
-        <div class="component page-banner">
-            <div class="page-banner-item" j:for="banner:banners">
-                <a j:href="banner.link" class="page-banner-item-link">
-                    <img j:src="banner.src" j:alt="banner.alt" j:width="banner.attribute.width+'px'" j:height="banner.attribute.height+'px'">
-                </a>
-            </div>
-        </div>
-    </body>
+<head>
+    <meta charset="UTF-8">
+    <!-- build:css ./page-banner.css-->
+    <link rel="stylesheet" type="text/css" href="../../node_modules/slick-carousel/slick/slick.css">
+    <link rel="stylesheet" type="text/css" href="page-banner.css">
+    <!-- endbuild -->
+    <!-- build:js ./page-banner.js-->
+    <script type="text/javascript" src="../../node_modules/slick-carousel/slick/slick.min.js"></script>
+    <script type="text/javascript" src="page-banner.js"></script>
+    <!-- endbuild-->
+</head>
+<body>
+<div class="component page-banner">
+    <div class="page-banner-item" j:for="banner:banners">
+        <a j:href="banner.link" class="page-banner-item-link">
+            <img j:src="banner.src" j:alt="banner.alt" j:width="banner.attribute.width+'px'" j:height="banner.attribute.height+'px'">
+        </a>
+    </div>
+</div>
+</body>
 </html>

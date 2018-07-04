@@ -1,20 +1,16 @@
 package io.sited.page.admin.web.api;
 
 
-import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
 import io.sited.page.admin.PageAdminOptions;
-import io.sited.page.admin.TagProvider;
-import io.sited.page.admin.service.PageTagManager;
 import io.sited.page.admin.web.api.page.DeletePageAJAXRequest;
 import io.sited.page.admin.web.api.page.PageAdminQuery;
 import io.sited.page.admin.web.api.page.PageAdminRequest;
 import io.sited.page.admin.web.api.page.PageAdminResponse;
-import io.sited.page.admin.web.api.page.PageTagSuggestAJAXRequest;
-import io.sited.page.admin.web.api.page.PageTagSuggestAJAXResponse;
 import io.sited.page.admin.web.api.page.SiteURLResponse;
 import io.sited.page.api.PageContentWebService;
 import io.sited.page.api.PageDraftWebService;
+import io.sited.page.api.PageStatisticsWebService;
 import io.sited.page.api.PageWebService;
 import io.sited.page.api.draft.CreateDraftRequest;
 import io.sited.page.api.draft.DraftQuery;
@@ -25,6 +21,7 @@ import io.sited.page.api.page.PageQuery;
 import io.sited.page.api.page.PageResponse;
 import io.sited.page.api.page.PageStatus;
 import io.sited.page.api.page.RevertDeletePageRequest;
+import io.sited.page.api.statistics.PageStatisticsResponse;
 import io.sited.util.collection.QueryResponse;
 import io.sited.web.ClientInfo;
 import io.sited.web.UserInfo;
@@ -54,9 +51,7 @@ public class PageAdminController {
     @Inject
     PageDraftWebService pageDraftWebService;
     @Inject
-    PageTagManager pageTagManager;
-    //@Inject
-    //PageCategoryAccessService pageCategoryAccessService;
+    PageStatisticsWebService pageStatisticsWebService;
     @Inject
     PageContentWebService pageContentWebService;
 
@@ -229,22 +224,6 @@ public class PageAdminController {
         return siteURLResponse;
     }
 
-
-    @RolesAllowed("GET")
-    @PUT
-    @Path("/tag/suggest")
-    public PageTagSuggestAJAXResponse tagSuggest(PageTagSuggestAJAXRequest request) {
-        PageTagSuggestAJAXResponse response = new PageTagSuggestAJAXResponse();
-        Optional<TagProvider> provider = pageTagManager.provider(request.language);
-        if (provider.isPresent()) {
-            response.tags = provider.get().get(request.title);
-        } else {
-            response.tags = ImmutableList.of();
-        }
-        return response;
-    }
-
-
     private PageAdminResponse response(DraftResponse draft) {
         PageAdminResponse response = new PageAdminResponse();
         response.id = draft.id;
@@ -281,8 +260,15 @@ public class PageAdminController {
         response.version = page.version;
         response.userId = page.userId;
         response.title = page.title;
-        response.totalCommented = page.totalCommented;
-        response.totalVisited = page.totalVisited;
+
+        Optional<PageStatisticsResponse> pageStatisticsResponse = pageStatisticsWebService.findById(page.id);
+        if (pageStatisticsResponse.isPresent()) {
+            response.totalCommented = pageStatisticsResponse.get().totalCommented;
+            response.totalVisited = pageStatisticsResponse.get().totalVisited;
+        } else {
+            response.totalCommented = 0;
+            response.totalVisited = 0;
+        }
         response.description = page.description;
         response.imageURL = page.imageURL;
         response.keywords = page.keywords;

@@ -126,12 +126,17 @@ public class TemplateParser {
             }
 
             if (element.isDynamic()) {
-                Component component = componentRegistry.component(element.name()).orElseThrow(() -> new TemplateException("missing component, name={}, template={}", element.name(), resource.path()));
+                Component component = component(element);
                 componentRefs.add(component);
             }
 
             element.children().forEach(this::process);
         }
+    }
+
+    private Component component(Element element) {
+        Optional<Component> component = componentRegistry.component(element.name());
+        return component.orElseThrow(() -> new TemplateException("missing component, name={}, template={}", element.name(), resource.path()));
     }
 
     private String inlineStyles(List<Component> components) {
@@ -375,7 +380,7 @@ public class TemplateParser {
                 }
             });
             Component component = componentRegistry.component(componentName).orElseThrow(() -> new TemplateException("missing component, name={}, template={}", element.name(), resource.path()));
-            for (ComponentAttribute<?> attribute : component.attributes()) {
+            for (ComponentAttribute<?> attribute : component.attributes().values()) {
                 if (!attributeExpressions.containsKey(attribute.name())) {
                     attributeExpressions.put(attribute.name(), new ConstantExpression(attribute.defaultValue()));
                 }

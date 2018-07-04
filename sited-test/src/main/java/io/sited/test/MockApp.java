@@ -26,14 +26,14 @@ public class MockApp extends App {
         });
     }
 
-    public void onStartup() {
+    public void start() {
         configure();
-
         container = new MockContainer(this);
         container.getApplicationHandler().onStartup(container);
+        Runtime.getRuntime().addShutdownHook(new Thread(this::stop));
     }
 
-    void onShutdown() {
+    public void stop() {
         if (container != null) {
             container.getApplicationHandler().onShutdown(container);
         }

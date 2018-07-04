@@ -1,19 +1,26 @@
 package io.sited.template.impl.segment;
 
+import com.google.common.base.Stopwatch;
 import com.google.common.collect.Maps;
+import io.sited.template.Attributes;
 import io.sited.template.Children;
 import io.sited.template.Component;
 import io.sited.template.Expression;
 import io.sited.template.impl.Segment;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.io.OutputStream;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 /**
  * @author chi
  */
 public class ComponentSegment implements Segment {
+    private final Logger logger = LoggerFactory.getLogger(ComponentSegment.class);
+
     private final Component component;
     private final Children children;
     private final Map<String, Expression> attributes;
@@ -26,8 +33,10 @@ public class ComponentSegment implements Segment {
 
     @Override
     public void output(Map<String, Object> bindings, OutputStream outputStream) throws IOException {
-        Map<String, Object> attributes = Maps.newHashMapWithExpectedSize(this.attributes.size());
-        this.attributes.forEach((key, expression) -> attributes.put(key, expression.eval(bindings)));
-        component.output(bindings, attributes, children, outputStream);
+        Stopwatch w = Stopwatch.createStarted();
+        Map<String, Object> attributeValues = Maps.newHashMapWithExpectedSize(this.attributes.size());
+        this.attributes.forEach((key, expression) -> attributeValues.put(key, expression.eval(bindings)));
+        component.output(bindings, new Attributes(attributeValues), children, outputStream);
+        logger.info("component rendered, name={}, in {}ms", component.name(), w.elapsed(TimeUnit.MILLISECONDS));
     }
 }
