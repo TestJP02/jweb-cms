@@ -6,7 +6,6 @@ import io.sited.database.DatabaseModule;
 import io.sited.message.MessageConfig;
 import io.sited.message.MessageModule;
 import io.sited.message.TopicOptions;
-import io.sited.user.api.OauthUserWebService;
 import io.sited.user.api.UserAutoLoginTokenWebService;
 import io.sited.user.api.UserGroupWebService;
 import io.sited.user.api.UserModule;
@@ -21,18 +20,15 @@ import io.sited.user.api.user.UserPasswordChangedMessage;
 import io.sited.user.api.user.UserQuery;
 import io.sited.user.api.user.UserRegisterMessage;
 import io.sited.user.api.user.UserStatus;
-import io.sited.user.domain.OauthUser;
 import io.sited.user.domain.ResetPasswordToken;
 import io.sited.user.domain.User;
 import io.sited.user.domain.UserAutoLoginToken;
 import io.sited.user.domain.UserGroup;
-import io.sited.user.service.OauthUserService;
 import io.sited.user.service.ResetPasswordTokenService;
 import io.sited.user.service.UserAutoLoginTokenService;
 import io.sited.user.service.UserGroupService;
 import io.sited.user.service.UserRegisterMessageHandler;
 import io.sited.user.service.UserService;
-import io.sited.user.web.OauthUserWebServiceImpl;
 import io.sited.user.web.UserAutoLoginTokenWebServiceImpl;
 import io.sited.user.web.UserGroupWebServiceImpl;
 import io.sited.user.web.UserWebServiceImpl;
@@ -57,8 +53,7 @@ public class UserModuleImpl extends UserModule {
             .entity(UserGroup.class)
             .entity(ResetPasswordToken.class)
             .entity(UserAutoLoginToken.class)
-            .entity(User.class)
-            .entity(OauthUser.class);
+            .entity(User.class);
 
         MessageConfig messageConfig = module(MessageModule.class);
         messageConfig.createTopic(UserLoginMessage.class, new TopicOptions());
@@ -68,7 +63,6 @@ public class UserModuleImpl extends UserModule {
 
         bind(UserService.class);
         bind(UserGroupService.class);
-        bind(OauthUserService.class);
         bind(ResetPasswordTokenService.class);
         bind(UserAutoLoginTokenService.class);
         bind(UserRegisterMessageHandler.class);
@@ -76,7 +70,6 @@ public class UserModuleImpl extends UserModule {
         messageConfig.listen(UserRegisterMessage.class, requestInjection(new UserRegisterMessageHandler()));
         api().service(UserWebService.class, UserWebServiceImpl.class);
         api().service(UserGroupWebService.class, UserGroupWebServiceImpl.class);
-        api().service(OauthUserWebService.class, OauthUserWebServiceImpl.class);
         api().service(UserAutoLoginTokenWebService.class, UserAutoLoginTokenWebServiceImpl.class);
     }
 

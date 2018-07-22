@@ -45,6 +45,6 @@ public class PinCodeAJAXController {
         PinCodeResponse response = pinCodeWebService.create(createPinCodeRequest);
         sessionInfo.put("pinCode", response.code);
         long interval = OffsetDateTime.now().toEpochSecond() + 60;
-        sessionInfo.put(PIN_CODE_COUNT_DOWN_SESSION_KEY, interval + "");
+        sessionInfo.put(PIN_CODE_COUNT_DOWN_SESSION_KEY, String.valueOf(interval));
     }
 }

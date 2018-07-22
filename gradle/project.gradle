@@ -42,7 +42,13 @@ subprojects {
             }
         }
     }
+
+    test {
+        useJUnitPlatform()
+    }
 }
+
+
 
 allprojects {
     apply plugin: 'idea'
@@ -53,4 +59,13 @@ apply from: file("${rootDir}/gradle/quality.gradle")
 
 task wrapper(type: Wrapper) {
     gradleVersion = '4.5.1'
+}
+
+buildscript {
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+        classpath 'net.sf.proguard:proguard-gradle:5.3.3'
+    }
 }

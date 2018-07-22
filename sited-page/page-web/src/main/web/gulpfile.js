@@ -22,10 +22,10 @@ gulp.task("release", ["clean"], function() {
         "template/**/*.html",
         "component/**/*.html",
         "theme/**/*.html",
-        "static/img/**/*"], {base: "."})
+        "static/img/**/*"])
         .pipe(resources({skipNotExistingFiles: true}))
         .pipe(cssref({
-            base: 'static'
+            base: '../web/static'
         }))
         .pipe(useref())
         .pipe(RevAll.revision({

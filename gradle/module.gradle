@@ -117,14 +117,3 @@ afterEvaluate {
         signArchives.dependsOn signJar
     }
 }
-
-
-
-buildscript {
-    repositories {
-        mavenCentral()
-    }
-    dependencies {
-        classpath 'net.sf.proguard:proguard-gradle:5.3.3'
-    }
-}

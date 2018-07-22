@@ -26,6 +26,7 @@ public class KeywordManagerTest {
         PageKeywordWebService pageKeywordWebService = Mockito.mock(PageKeywordWebService.class);
         when(pageKeywordWebService.find()).thenReturn(keywords());
         keyManager = new KeywordManager().setPageKeywordWebService(pageKeywordWebService);
+        keyManager.start();
     }
 
     @Test

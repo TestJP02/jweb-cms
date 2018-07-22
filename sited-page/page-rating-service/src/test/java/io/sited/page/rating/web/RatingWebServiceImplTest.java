@@ -72,22 +72,17 @@ public class RatingWebServiceImplTest {
     @Test
     public void rate() {
         RatingRequest request = request();
-        ContainerResponse httpResponse = mockApp.post("/api/page/rating").setEntity(request).execute();
-        assertEquals(200, httpResponse.getStatus());
-        RatingResponse response = (RatingResponse) httpResponse.getEntity();
-        assertEquals(request.pageId, response.pageId);
-        assertEquals(request.score.intValue(), response.averageScore.intValue());
         request.pageId = ratingResponse.pageId;
         request.userId = UUID.randomUUID().toString();
         request.score = 1;
         request.content = "new";
         request.ip = "127.0.0.1";
         request.requestBy = request.userId;
-        httpResponse = mockApp.post("/api/page/rating").setEntity(request).execute();
+        ContainerResponse httpResponse = mockApp.post("/api/page/rating").setEntity(request).execute();
         assertEquals(200, httpResponse.getStatus());
-        response = (RatingResponse) httpResponse.getEntity();
+        RatingResponse response = (RatingResponse) httpResponse.getEntity();
         assertEquals(ratingResponse.id, response.id);
-        assertEquals((5 + 1) / 2, response.averageScore.intValue());
+        assertEquals(3, response.averageScore.intValue());
     }
 
     @Test

@@ -48,9 +48,6 @@ public class PageService {
     MessagePublisher<PageChangedMessage> pageChangedMessagePublisher;
     @Inject
     PageCategoryService pageCategoryService;
-    @Inject
-    PageStatisticsService pageStatisticsService;
-
 
     public Page get(String id) {
         return repository.get(id);
@@ -312,8 +309,6 @@ public class PageService {
             pageContentService.update(page.id, request.content, request.requestBy);
             repository.update(page.id, page);
             notifyPageChanged(page, true);
-            pageStatisticsService.createIfNoneExist(page.id, request.requestBy);
-
             return page;
         } else {
             Page page = new Page();
@@ -338,7 +333,6 @@ public class PageService {
             pageContentService.create(page.id, request.content, request.requestBy);
             repository.insert(page);
             notifyPageChanged(page, false);
-            pageStatisticsService.createIfNoneExist(page.id, request.requestBy);
             return page;
         }
     }

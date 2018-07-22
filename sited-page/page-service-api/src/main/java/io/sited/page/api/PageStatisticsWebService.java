@@ -5,6 +5,7 @@ import io.sited.page.api.statistics.PageStatisticsResponse;
 import io.sited.util.collection.QueryResponse;
 
 import javax.ws.rs.GET;
+import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import java.util.Optional;
@@ -15,7 +16,7 @@ import java.util.Optional;
 @Path("/api/page/statistics")
 public interface PageStatisticsWebService {
     @Path("/find")
-    @GET
+    @PUT
     QueryResponse<PageStatisticsResponse> find(PageStatisticsQuery query);
 
     @Path("/page/{pageId}")

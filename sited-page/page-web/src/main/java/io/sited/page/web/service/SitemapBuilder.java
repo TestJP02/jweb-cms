@@ -59,10 +59,8 @@ public class SitemapBuilder {
             flush();
             b.append("<?xml version=\"1.0\" encoding=\"UTF-8\"?><sitemapindex xmlns=\"http://www.sitemaps.org/schemas/sitemap/0.9\">");
             for (int i = 0; i < fileIndex; i++) {
-                b.append("<sitemap>");
-                b.append("<loc>").append(baseURL).append("/sitemap/sitemap").append(i + 1).append(".xml</loc>");
-                b.append("<lastmod>").append(OffsetDateTime.now().format(DateTimeFormatter.ISO_LOCAL_DATE)).append("</lastmod>");
-                b.append("</sitemap>");
+                b.append("<sitemap><loc>").append(baseURL).append("/sitemap/sitemap").append(i + 1).append(".xml</loc><lastmod>");
+                b.append(OffsetDateTime.now().format(DateTimeFormatter.ISO_LOCAL_DATE)).append("</lastmod></sitemap>");
             }
             b.append("</sitemapindex>");
             Resource resource = new StringResource(path, b.toString());
@@ -81,11 +79,7 @@ public class SitemapBuilder {
     }
 
     private void appendURL(String path, OffsetDateTime updatedTime, String changeFrequency, String priority) {
-        b.append("<url>");
-        b.append("<loc>").append(baseURL).append(path).append("</loc>");
-        b.append("<lastmod>").append(updatedTime.format(DateTimeFormatter.ISO_LOCAL_DATE)).append("</lastmod>");
-        b.append("<changefreq>").append(changeFrequency).append("</changefreq>");
-        b.append("<priority>").append(priority).append("</priority>");
-        b.append("</url>");
+        b.append("<url><loc>").append(baseURL).append(path).append("</loc><lastmod>").append(updatedTime.format(DateTimeFormatter.ISO_LOCAL_DATE))
+            .append("</lastmod><changefreq>").append(changeFrequency).append("</changefreq><priority>").append(priority).append("</priority></url>");
     }
 }

@@ -80,7 +80,9 @@ public class DatabaseImpl implements Database {
     private Properties properties() {
         Properties properties = new Properties();
         properties.put("hibernate.dialect", dialect(options.dialect, options.url));
-        properties.put("hibernate.hbm2ddl.auto", options.createTableEnabled ? "create-drop" : "validate");
+        if (options.createTableEnabled) {
+            properties.put("hibernate.hbm2ddl.auto", "create-drop");
+        }
         properties.put("hibernate.connection.datasource", new DataSourceFactory(options).setDir(dir).build());
         properties.put("javax.persistence.validation.mode", "NONE");
         properties.put("hibernate.show_sql", options.showSQLEnabled);

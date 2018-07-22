@@ -3,6 +3,7 @@ package io.sited.page;
 
 import io.sited.database.DatabaseModule;
 import io.sited.message.MessageModule;
+import io.sited.scheduler.SchedulerModule;
 import io.sited.service.ServiceModule;
 import io.sited.test.AppExtension;
 import io.sited.test.Install;
@@ -18,7 +19,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
  * @author chi
  */
 @ExtendWith(AppExtension.class)
-@Install({PageModuleImpl.class, DatabaseModule.class, MessageModule.class, ServiceModule.class})
+@Install({PageModuleImpl.class, DatabaseModule.class, MessageModule.class, ServiceModule.class, SchedulerModule.class})
 public class PageModuleImplTest {
     @Inject
     MockApp app;

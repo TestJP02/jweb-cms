@@ -8,6 +8,7 @@ import io.sited.page.api.PageSavedComponentWebService;
 import io.sited.page.api.component.CreateSavedComponentRequest;
 import io.sited.page.api.component.SavedComponentQuery;
 import io.sited.page.api.component.SavedComponentResponse;
+import io.sited.scheduler.SchedulerModule;
 import io.sited.service.ServiceModule;
 import io.sited.test.AppExtension;
 import io.sited.test.Install;
@@ -24,7 +25,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
  * @author chi
  */
 @ExtendWith(AppExtension.class)
-@Install({PageModuleImpl.class, DatabaseModule.class, MessageModule.class, ServiceModule.class})
+@Install({PageModuleImpl.class, DatabaseModule.class, MessageModule.class, ServiceModule.class, SchedulerModule.class})
 public class SavedPageComponentWebServiceImplTest {
     @Inject
     PageSavedComponentWebService pageComponentWebService;

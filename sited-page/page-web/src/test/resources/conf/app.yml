@@ -25,3 +25,6 @@ smtp:
 database:
   url: jdbc:hsqldb:mem:db;sql.syntax_mys=true
   createTableEnabled: true
+
+page:
+  url: http://localhost

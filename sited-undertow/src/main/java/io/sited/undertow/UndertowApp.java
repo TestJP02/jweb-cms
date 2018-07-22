@@ -1,20 +1,15 @@
 package io.sited.undertow;
 
 import io.sited.App;
-import io.sited.ApplicationException;
 import io.sited.Profile;
 import io.sited.YAMLProfile;
-import io.sited.resource.Resource;
 import io.sited.undertow.impl.UndertowHttpContainer;
 import io.sited.undertow.impl.UndertowIOHandler;
 import io.undertow.Undertow;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.IOException;
-import java.io.InputStream;
 import java.nio.file.Path;
-import java.util.Properties;
 
 import static io.undertow.Handlers.path;
 
@@ -32,20 +27,6 @@ public class UndertowApp extends App {
 
     public UndertowApp(Path dir) {
         this(dir, YAMLProfile.load(dir));
-    }
-
-    private Properties undertowOptions() {
-        Properties properties = new Properties();
-        InputStream inputStream = Resource.classpath("undertow.properties").openStream();
-        if (inputStream == null) {
-            return properties;
-        }
-        try (InputStream input = inputStream) {
-            properties.load(input);
-            return properties;
-        } catch (IOException e) {
-            throw new ApplicationException(e);
-        }
     }
 
     public void start() {

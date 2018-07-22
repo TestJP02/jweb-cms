@@ -1,6 +1,5 @@
 package io.sited.user.web.web.ajax.user;
 
-import io.sited.user.api.oauth.Provider;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
@@ -27,6 +26,4 @@ public class RegisterAJAXRequest {
     public String phone;
     @XmlElement(name = "pinCode")
     public String pinCode;
-    @XmlElement(name = "provider")
-    public Provider provider;
 }

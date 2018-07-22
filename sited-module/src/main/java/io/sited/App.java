@@ -11,12 +11,15 @@ import io.sited.resource.ClasspathResourceRepository;
 import io.sited.resource.CompositeResourceRepository;
 import io.sited.resource.FileResourceRepository;
 import io.sited.resource.ResourceRepository;
+import io.sited.util.JSON;
 import io.sited.util.exception.Exceptions;
 import io.sited.util.i18n.CompositeMessageBundle;
 import io.sited.util.i18n.MessageBundle;
 import io.sited.util.type.Types;
 import org.glassfish.hk2.api.ServiceLocator;
 import org.glassfish.hk2.utilities.general.internal.MessageInterpolatorImpl;
+import org.glassfish.jersey.jackson.JacksonFeature;
+import org.glassfish.jersey.jackson.internal.jackson.jaxrs.json.JacksonJaxbJsonProvider;
 import org.glassfish.jersey.server.ContainerRequest;
 import org.glassfish.jersey.server.monitoring.ApplicationEvent;
 import org.glassfish.jersey.server.monitoring.ApplicationEventListener;
@@ -27,9 +30,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.validation.Configuration;
-import javax.validation.ConstraintViolation;
 import javax.validation.Validation;
-import javax.validation.Validator;
 import javax.ws.rs.core.Application;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.ParameterizedType;
@@ -60,8 +61,6 @@ public class App extends Application {
     final Profile profile;
     final ResourceRepository repository;
     final CompositeMessageBundle compositeMessageBundle;
-    private Validator validator;
-    private Configuration configuration;
 
     ServiceLocator serviceLocator;
     ModuleBinder binder;
@@ -110,14 +109,7 @@ public class App extends Application {
     }
 
     public <T> T options(String name, Class<T> optionClass) {
-        T options = profile.options(name, optionClass);
-        if (validator != null) {
-            Set<ConstraintViolation<T>> violations = validator.validate(options);
-            if (!violations.isEmpty()) {
-                throw new ApplicationException("invalid options, name={}, type={}, message={}", name, optionClass, violations.iterator().next().getMessage());
-            }
-        }
-        return options;
+        return profile.options(name, optionClass);
     }
 
     public Environment env() {
@@ -228,24 +220,24 @@ public class App extends Application {
         logger.info("init app, name={}, language={}, dir={}", name(), language(), dir());
         binder = new ModuleBinder();
 
-        configuration = Validation.byDefaultProvider().configure()
-            .messageInterpolator(new MessageInterpolatorImpl())
-            .addProperty("hibernate.validator.fail_fast", "true");
-        validator = configuration.buildValidatorFactory().getValidator();
-
         binder.bind(App.class).toInstance(this);
         binder.bind(MessageBundle.class).toInstance(message());
-        binder.bind(Configuration.class).toInstance(configuration);
+
+        binder.bind(Configuration.class).toInstance(Validation.byDefaultProvider().configure()
+            .messageInterpolator(new MessageInterpolatorImpl())
+            .addProperty("hibernate.validator.fail_fast", "true"));
+        register(ValidationFeature.class);
+
+        JacksonJaxbJsonProvider jacksonProvider = new JacksonJaxbJsonProvider();
+        jacksonProvider.setMapper(JSON.OBJECT_MAPPER);
+        register(jacksonProvider);
+        register(JacksonFeature.class);
 
         register(binder.raw());
         register(new DefaultContainerLifecycleListener(this));
 
-        register(ValidationFeature.class);
         register(new AppEventListener());
-        register(new DefaultMessageBodyWriter());
-        register(new DefaultMessageBodyReader());
         register(DefaultExceptionMapper.class);
-        register(new SetDefaultContentTypeResponseFilter());
 
         moduleRegistry.createGraph();
         moduleRegistry.forEach(this::configure);

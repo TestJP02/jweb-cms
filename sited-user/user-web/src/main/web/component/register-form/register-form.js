@@ -23,7 +23,7 @@
     };
     var Register = {
         submitBtn: $("#submit"),
-        form: $("#register-form"),
+        form: $("#user-register-form"),
         waitingPincode: false,
         waitingSubmit: false,
         pinCodeButton: $(".user-login__pincode"),

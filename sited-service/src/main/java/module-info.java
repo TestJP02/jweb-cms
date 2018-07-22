@@ -12,9 +12,8 @@ module sited.service {
     requires sited.module;
     requires jersey.client;
     requires javassist;
-
-    requires jersey.media.json.jackson;
     requires jersey.bean.validation;
+    requires jersey.media.json.jackson;
 
     exports io.sited.service;
 }

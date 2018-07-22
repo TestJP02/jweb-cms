@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html xmlns:j="http://www.w3.org/1999/xhtml" lang="en">
 <head>
-    <link rel="stylesheet" href="register-form.6f82.css">
-    <script src="register-form.b7db.js"></script>
+    <link rel="stylesheet" href="register-form.d348.css">
+    <script src="register-form.8367.js"></script>
 </head>
 <body>
 <div class="form-container">
@@ -10,21 +10,21 @@
     <div class="user-login__logo">
         <img class="user-login__logo-image" j:src="app.imageURL()" alt="">
     </div>
-    <form id="register-form.b7db" onsubmit="return false;" class="user-login__form">
-        <div class="user-login__input-wrap">
-            <input class="user-login__input" name="username" placeholder="Email"
+    <form id="user-register-form" onsubmit="return false;" class="user-login__form">
+        <div class="form-group">
+            <input class="form-control input-lg" name="username" placeholder="Email"
                     j:data-rule-needEmail="i18n('user.usernameNeedEmail',client.language())"
                     j:data-rule-needPhone="i18n('user.usernameNeedPhone',client.language())"
                     j:data-rule-needUsername="i18n('user.usernameNeedValid',client.language())"
                     j:data-rule-needEmailOrPhone="i18n('user.usernameNeedEmailOrPhone',client.language())"
             >
         </div>
-        <div class="user-login__input-wrap">
-            <input class="user-login__input" type="password" name="password" placeholder="Password"
+        <div class="form-group">
+            <input class="form-control input-lg" type="password" name="password" placeholder="Password"
                     j:data-rule-limit="i18n('user.passwordLimit',client.language())">
         </div>
-        <div class="user-login__input-wrap">
-            <input class="user-login__input user-login__input--pincode" type="text" name="pinCode" placeholder="pincode"
+        <div class="form-group form-group--pincode">
+            <input class="form-control input-lg user-login__input--pincode" type="text" name="pinCode" placeholder="pincode"
                     j:data-rule-limit="i18n('user.user.pincode',client.language())">
             <a href="javascript:void(0)" class="user-login__pincode">发送</a>
             <span class="user-login__count-down" id="countDown" j:text="countDown"></span>

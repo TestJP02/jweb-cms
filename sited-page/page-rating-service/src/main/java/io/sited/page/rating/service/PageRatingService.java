@@ -28,32 +28,40 @@ public class PageRatingService {
         Optional<PageRating> optional = findByPageId(ratingRequest.pageId);
         int index = 0;
         if (optional.isPresent()) {
-            if (pageRatingTrackingService.findTracking(ratingRequest).isPresent()) return optional.get();
+            PageRating pageRating = optional.get();
+            if (pageRatingTrackingService.findTracking(ratingRequest).isPresent()) return pageRating;
             StringBuilder sql = new StringBuilder(64);
             sql.append("UPDATE PageRating SET totalScore=totalScore+?").append(index++).append(",totalScored=totalScored+1,updatedTime=?").append(index++).append(",updated_by=?").append(index++).append(',');
+            pageRating.totalScore += ratingRequest.score;
+            pageRating.totalScored += 1;
             switch (ratingRequest.score) {
                 case 1:
                     sql.append("totalScored1=totalScored1+1 ");
+                    pageRating.totalScored1 += 1;
                     break;
                 case 2:
                     sql.append("totalScored2=totalScored2+1 ");
+                    pageRating.totalScored2 += 1;
                     break;
                 case 3:
                     sql.append("totalScored3=totalScored3+1 ");
+                    pageRating.totalScored3 += 1;
                     break;
                 case 4:
                     sql.append("totalScored4=totalScored4+1 ");
+                    pageRating.totalScored4 += 1;
                     break;
                 case 5:
                     sql.append("totalScored5=totalScored5+1 ");
+                    pageRating.totalScored4 += 1;
                     break;
                 default:
                     throw Exceptions.badRequestException("rating.score", "invalid score");
             }
             sql.append("WHERE id=?").append(index);
-            repository.execute(sql.toString(), ratingRequest.score, OffsetDateTime.now(), ratingRequest.requestBy, optional.get().id);
+            repository.execute(sql.toString(), ratingRequest.score, OffsetDateTime.now(), ratingRequest.requestBy, pageRating.id);
             pageRatingTrackingService.track(ratingRequest);
-            return get(optional.get().id);
+            return pageRating;
         } else {
             return createRating(ratingRequest);
         }

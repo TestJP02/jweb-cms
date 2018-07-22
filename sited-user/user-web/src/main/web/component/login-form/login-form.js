@@ -19,7 +19,7 @@
 
     var Login = {
         submitBtn: $("#submit"),
-        form: $("#login-form"),
+        form: $("#user-login-form"),
         init: function () {
             this.initEvent();
         },

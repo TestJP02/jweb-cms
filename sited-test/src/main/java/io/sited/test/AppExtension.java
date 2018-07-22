@@ -9,8 +9,6 @@ import org.junit.jupiter.api.extension.AfterAllCallback;
 import org.junit.jupiter.api.extension.AfterTestExecutionCallback;
 import org.junit.jupiter.api.extension.ExtensionContext;
 import org.junit.jupiter.api.extension.TestInstancePostProcessor;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityTransaction;
@@ -20,8 +18,6 @@ import java.util.Arrays;
  * @author chi
  */
 public class AppExtension implements TestInstancePostProcessor, AfterTestExecutionCallback, AfterAllCallback {
-    private final Logger logger = LoggerFactory.getLogger(AppExtension.class);
-
     @Override
     public void postProcessTestInstance(Object testInstance, ExtensionContext context) throws Exception {
         ExtensionContext.Store store = context.getStore(ExtensionContext.Namespace.create(AppExtension.class, MockApp.class));

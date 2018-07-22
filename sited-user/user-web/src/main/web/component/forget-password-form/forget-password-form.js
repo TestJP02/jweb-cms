@@ -9,7 +9,7 @@
     };
 
     var ForgetPassword = {
-        form: $("#forget-password-form"),
+        form: $("#user-forget-password-form"),
         submitBtn: $(".btn-submit"),
         init: function () {
             this.initEvent();

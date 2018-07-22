@@ -20,6 +20,11 @@ public class Attributes implements Map<String, Object> {
     }
 
     @Override
+    public Object get(Object key) {
+        return attributeValues.get(key);
+    }
+
+    @Override
     public int size() {
         return attributeValues.size();
     }
@@ -37,11 +42,6 @@ public class Attributes implements Map<String, Object> {
     @Override
     public boolean containsValue(Object value) {
         return attributeValues.containsValue(value);
-    }
-
-    @Override
-    public Object get(Object key) {
-        return attributeValues.get(key);
     }
 
     @Override

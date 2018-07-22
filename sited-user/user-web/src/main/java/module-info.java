@@ -22,8 +22,6 @@ module sited.user.web {
     requires sited.captcha.web;
     requires sited.pincode.api;
     requires sited.pincode.web;
-    requires scribejava.core;
-    requires scribejava.apis;
     requires sited.page.api;
 
     exports io.sited.user.web;

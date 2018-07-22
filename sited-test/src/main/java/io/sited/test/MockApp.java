@@ -30,7 +30,6 @@ public class MockApp extends App {
         configure();
         container = new MockContainer(this);
         container.getApplicationHandler().onStartup(container);
-        Runtime.getRuntime().addShutdownHook(new Thread(this::stop));
     }
 
     public void stop() {

@@ -1,7 +1,7 @@
 /**
  * @author chi
  */
-module sited.netty {
+module sited.undertow {
     requires com.google.common;
     requires java.xml.bind;
     requires aopalliance.repackaged;

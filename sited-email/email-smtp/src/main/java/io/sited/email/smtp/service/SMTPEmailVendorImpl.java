@@ -35,9 +35,7 @@ public class SMTPEmailVendorImpl implements EmailVendor {
         properties.setProperty("mail.debug", "true");
         properties.setProperty("mail.smtp.auth", "true");
         properties.setProperty("mail.smtp.host", options.host);
-        properties.setProperty("mail.smtp.port", options.port);
-        properties.setProperty("mail.user", options.username);
-        properties.setProperty("mail.password", options.password);
+        properties.setProperty("mail.smtp.port", String.valueOf(options.port));
         properties.setProperty("mail.transport.protocol", "smtp");
         properties.setProperty("mail.mime.charset", "UTF-8");
         if (options.starttls != null) {

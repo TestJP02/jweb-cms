@@ -34,24 +34,25 @@ public class PageStatisticsService {
     }
 
     public QueryResponse<PageStatistics> find(PopularPageQuery query) {
-        Query<PageStatistics> statisticsQuery = repository.query("SELECT t from PageStatistics t");
+        Query<PageStatistics> statisticsQuery = repository.query("SELECT t from PageStatistics t WHERE t.categoryId != null");
         if (query.type == null || query.type == RankType.DAILY) {
-            statisticsQuery.append("ORDER BY t.totalDailyVisited");
+            statisticsQuery.sort("t.totalDailyVisited");
         } else if (query.type == RankType.WEEKLY) {
-            statisticsQuery.append("ORDER BY t.totalWeeklyVisited");
+            statisticsQuery.sort("t.totalWeeklyVisited");
         } else if (query.type == RankType.MONTHLY) {
-            statisticsQuery.append("ORDER BY t.totalMonthlyVisited");
+            statisticsQuery.sort("t.totalMonthlyVisited");
         }
         statisticsQuery.limit(query.page, query.limit);
         return statisticsQuery.findAll();
     }
 
     @Transactional
-    public PageStatistics createIfNoneExist(String pageId, String requestBy) {
+    public PageStatistics createIfNoneExist(String pageId, String categoryId, String requestBy) {
         Optional<PageStatistics> pageStatisticsOptional = repository.query("SELECT t from PageStatistics t WHERE id=?0", pageId).findOne();
         if (!pageStatisticsOptional.isPresent()) {
             PageStatistics pageStatistics = new PageStatistics();
             pageStatistics.id = pageId;
+            pageStatistics.categoryId = categoryId;
             pageStatistics.totalCommented = 0;
             pageStatistics.totalVisited = 0;
             pageStatistics.totalDailyVisited = 0;

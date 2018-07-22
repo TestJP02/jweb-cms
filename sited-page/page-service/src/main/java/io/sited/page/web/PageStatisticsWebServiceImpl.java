@@ -30,6 +30,7 @@ public class PageStatisticsWebServiceImpl implements PageStatisticsWebService {
     private PageStatisticsResponse response(PageStatistics pageStatistics) {
         PageStatisticsResponse response = new PageStatisticsResponse();
         response.id = pageStatistics.id;
+        response.categoryId = pageStatistics.categoryId;
         response.totalVisited = pageStatistics.totalVisited;
         response.totalCommented = pageStatistics.totalCommented;
         response.createdTime = pageStatistics.createdTime;

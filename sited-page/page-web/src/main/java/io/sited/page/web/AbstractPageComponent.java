@@ -25,7 +25,7 @@ public abstract class AbstractPageComponent extends TemplateComponent {
     }
 
     @Override
-    public final void output(Map<String, Object> bindings, io.sited.template.Attributes attributes, Children children, OutputStream out) throws IOException {
+    public final void output(Map<String, Object> bindings, Attributes attributes, Children children, OutputStream out) throws IOException {
         ComponentBindings componentBindings = new ComponentBindings(new HashMap<>(bindings));
         output(componentBindings, attributes, children, out);
     }

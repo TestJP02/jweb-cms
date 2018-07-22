@@ -12,7 +12,7 @@ public class SMTPOptions {
     @XmlElement(name = "host")
     public String host;
     @XmlElement(name = "port")
-    public String port;
+    public Integer port;
     @XmlElement(name = "username")
     public String username;
     @XmlElement(name = "password")

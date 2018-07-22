@@ -11,7 +11,11 @@ import io.sited.resource.ResourceRepository;
 import io.sited.util.JSON;
 import io.sited.util.YAML;
 import io.sited.util.type.ClassValidator;
+import org.glassfish.hk2.utilities.general.internal.MessageInterpolatorImpl;
 
+import javax.validation.ConstraintViolation;
+import javax.validation.Validation;
+import javax.validation.Validator;
 import java.lang.reflect.InvocationTargetException;
 import java.nio.charset.Charset;
 import java.nio.file.Path;
@@ -24,14 +28,19 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Optional;
+import java.util.Set;
 
 public final class YAMLProfile implements Profile {
     private final List<Class<?>> allowedTypes = Lists.newArrayList(Map.class, List.class, Locale.class, String.class, Integer.class, Long.class,
         Double.class, Boolean.class, Duration.class, LocalDate.class, OffsetDateTime.class, LocalTime.class, Period.class, Charset.class);
     private final Map<String, Map<String, Object>> options;
+    private final Validator validator;
 
     public YAMLProfile(Resource resource) {
         options = YAML.fromYAML(resource.toText(Charsets.UTF_8), Map.class);
+        validator = Validation.byDefaultProvider().configure()
+            .messageInterpolator(new MessageInterpolatorImpl())
+            .addProperty("hibernate.validator.fail_fast", "true").buildValidatorFactory().getValidator();
     }
 
     public static Profile load(Path dir) {
@@ -51,7 +60,13 @@ public final class YAMLProfile implements Profile {
         if (this.options.containsKey(name)) {
             options.putAll(this.options.get(name));
         }
-        return JSON.convert(options, optionClass);
+        T value = JSON.convert(options, optionClass);
+        Set<ConstraintViolation<T>> violations = validator.validate(value);
+        if (!violations.isEmpty()) {
+            ConstraintViolation<T> violation = violations.iterator().next();
+            throw new ApplicationException("invalid options, type={}, path={}, message={}", optionClass.getCanonicalName(), violation.getPropertyPath(), violation.getMessage());
+        }
+        return value;
     }
 
     public <T> void setOptions(String name, T options) {

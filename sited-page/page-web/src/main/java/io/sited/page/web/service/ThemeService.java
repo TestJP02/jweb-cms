@@ -164,7 +164,7 @@ public class ThemeService {
         return String.valueOf(width);
     }
 
-    @SuppressWarnings("checkstyle:NestedIfDepth")
+    @SuppressWarnings({"checkstyle:NestedIfDepth", "PMD.ConsecutiveLiteralAppends"})
     private void appendComponent(PageComponentView pageComponentView, StringBuilder b) {
         Optional<Component> pageComponentOptional = templateEngine.component(pageComponentView.name);
         if (!pageComponentOptional.isPresent()) {
@@ -178,14 +178,10 @@ public class ThemeService {
             }
         }
         Component pageComponent = pageComponentOptional.get();
-        b.append("<j:");
-        b.append(pageComponent.name());
-        b.append(" j:id=\"'").append(pageComponentView.id).append("'\"");
+        b.append("<j:").append(pageComponent.name()).append(" j:id=\"'").append(pageComponentView.id).append("'\"");
 
         pageComponent.attributes().forEach((name, attribute) -> {
-            b.append(" j:");
-            b.append(attribute.name());
-            b.append("=\"template.components.get(\'").append(pageComponentView.id).append("\').attributes.").append(attribute.name()).append('\"');
+            b.append(" j:").append(attribute.name()).append("=\"template.components.get(\'").append(pageComponentView.id).append("\').attributes.").append(attribute.name()).append('\"');
         });
         b.append("></j:").append(pageComponent.name()).append('>');
     }

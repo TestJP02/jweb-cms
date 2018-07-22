@@ -2,6 +2,7 @@ package io.sited.user.web;
 
 import com.google.common.collect.Lists;
 import io.sited.database.DatabaseModule;
+import io.sited.email.smtp.SMTPModule;
 import io.sited.message.MessageModule;
 import io.sited.service.ServiceModule;
 import io.sited.test.AppExtension;
@@ -39,7 +40,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
  * @author chi
  */
 @ExtendWith(AppExtension.class)
-@Install({MessageModule.class, UserModuleImpl.class, DatabaseModule.class, ServiceModule.class})
+@Install({MessageModule.class, UserModuleImpl.class, DatabaseModule.class, ServiceModule.class, SMTPModule.class})
 public class UserWebServiceImplTest {
     @Inject
     UserWebService userWebService;
@@ -157,12 +158,12 @@ public class UserWebServiceImplTest {
         applyPasswordRequest.newPassword = "111";
         applyPasswordRequest.requestBy = "Test";
         response = app.put("/api/user/password/reset/apply").setEntity(applyPasswordRequest).execute();
-        assertEquals(200, response.getStatus());
+        assertEquals(204, response.getStatus());
     }
 
     @Test
     public void deleteAutoLoginToken() {
         ContainerResponse response = app.delete("/api/user/" + id + "/auto-login-token").execute();
-        assertEquals(200, response.getStatus());
+        assertEquals(204, response.getStatus());
     }
 }

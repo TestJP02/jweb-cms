@@ -25,7 +25,7 @@ import java.util.Optional;
 public interface FileWebService {
     @Path("/{id}")
     @GET
-    FileResponse get(@PathParam(value = "id") String id);
+    FileResponse get(@PathParam("id") String id);
 
     @GET
     Optional<FileResponse> findByPath(@QueryParam("path") String path);

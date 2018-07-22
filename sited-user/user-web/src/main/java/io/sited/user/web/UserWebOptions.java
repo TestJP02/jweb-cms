@@ -1,6 +1,5 @@
 package io.sited.user.web;
 
-import io.sited.user.web.service.OauthStrategy;
 import io.sited.user.web.service.UsernameStrategy;
 import io.sited.user.web.service.ValidationRules;
 
@@ -23,16 +22,6 @@ public class UserWebOptions {
     public String autoLoginCookie = "token";
     @XmlElement(name = "userNameStrategy")
     public UsernameStrategy usernameStrategy = UsernameStrategy.EMAIL;
-    @XmlElement(name = "google")
-    public OauthStrategy google;
-    @XmlElement(name = "facebook")
-    public OauthStrategy facebook;
-    @XmlElement(name = "github")
-    public OauthStrategy github;
-    @XmlElement(name = "twitter")
-    public OauthStrategy twitter;
-    @XmlElement(name = "weibo")
-    public OauthStrategy weibo;
     @XmlElement(name = "validationRule")
     public ValidationRules validationRules;
 }

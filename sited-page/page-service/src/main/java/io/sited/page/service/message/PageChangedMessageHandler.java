@@ -28,6 +28,6 @@ public class PageChangedMessageHandler implements MessageHandler<PageChangedMess
         if (message.keywords != null)
             pageKeywordService.update(message.path, Sets.newHashSet(message.keywords), message.updatedBy);
 
-        pageStatisticsService.createIfNoneExist(message.id, message.updatedBy);
+        pageStatisticsService.createIfNoneExist(message.id, message.categoryId, message.updatedBy);
     }
 }

@@ -8,19 +8,15 @@ A developer friendly Java CMS based on JAX-RS, Guice style DI, Bean Validation, 
 - **More modules are coming...**
 
 
-| [![Admin Login](doc/img/login.png)](http://)  | [![Edit Template](doc/img/edit-template.png)](http://) | [![Edit Page](doc/img/edit-page.png)](http://) |
-|:---:|:---:|:---:|
-| [Admin Login](http://) | [Edit Template](doc/img/edit-template.png) | [Edit Page](doc/img/edit-page.png) |
-| [![Edit Category](doc/img/edit-category.png)](http://)  | [![Edit Component](doc/img/edit-component.png)](http://) | [![Edit Variable](doc/img/edit-variable.png)](http://) |
-| [Edit Category](http://) | [Edit Component](http://) | [Edit Variable](http://) |
-| [![Index Page](doc/img/index.png)](http://)  | [![Category Page](doc/img/category.png)](http://) | [![Post Page](doc/img/page.png)](http://) |
-| [Index Page](http://) | [Category Page](http://) | [Post Page](http://) |
+[![Edit Template](doc/img/edit-template.png)](http://) | [![Edit Page](doc/img/edit-page.png)](http://) |
+|:---:|:---:|
+[Edit Template](doc/img/edit-template.png) | [Edit Page](doc/img/edit-page.png) |
+| [![Index Page](doc/img/index.png)](http://)  |  [![Post Page](doc/img/page.png)](http://) |
+| [Index Page](http://) | [Post Page](http://) |
 
 
 ## Online demo
-   1. [Simple demo blog](http://localhost) 
-   2. [Amazon affiliate site with extra modules](http://localhost)
-   3. [Online insurance e-commerce site](http://localhost)
+TODO
 
 ## Features
 
@@ -52,11 +48,6 @@ Provides
 
 These instructions will get you a copy of the Sited CMS up and running on your local machine.<br>
 
-> For Windows, you can directly download the JRE bundled package. <br>
-> [**sited-windows-0.9.zip(50.3M)**]()
-
-
-
 ### Prerequisites
 
 1. Download and install [Open JDK 10](http://jdk.java.net/10/) or [Oracle JDK 10](http://www.oracle.com/technetwork/java/javase/downloads/jdk10-downloads-4416644.html)
@@ -73,14 +64,14 @@ These instructions will get you a copy of the Sited CMS up and running on your l
 2. Unzip the package
 3. Run `./bin/sited`
 4. Use a browser(IE11+) to open ```http://localhost:8080```
-5. Fill in the require information to set up sited. 
-   1. Input app name, the name will be displayed in page title. 
-   2. Select language. 
+5. Fill in the require information to setup sited. 
+   1. Choose language. 
+   2. Input app name, the name will be displayed in page title. 
    3. Select database. 
       1. If you want to use MySQL, input the info of database and user you created.
    4. Input SMTP settings. 
-      > Optional, but if you skip the SMTP settings, user register will be disabled.
-   5. Click setup button. Sited will restart.
+      > Optional, if you skip the SMTP settings, user register will be disabled.
+   5. Click install button. Sited will restart.
 6. Open ```http://localhost:8080/admin/```
 
 
@@ -190,7 +181,6 @@ public class TodoServiceModuleImpl extends TodoServiceModule {
     * email ```chiron.chi#gmail.com```
     * skype ```chiron.chi#gmail.com```
     * wechat ```sited-io```
-* You?
 
 See also the list of [contributors](https://github.com/your/project/contributors) who participated in this project.
 
@@ -201,6 +191,6 @@ Please read [CONTRIBUTING.md](https://gist.github.com/PurpleBooth/b24679402957c6
 
 ## License
 
-This project is licensed under the AGPL License and Commercial License- see the [LICENSE.md](LICENSE.md) file for details
+This project is licensed under the AGPL License - see the [LICENSE.md](LICENSE.md) file for details
 
 

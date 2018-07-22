@@ -17,8 +17,8 @@ import java.util.concurrent.atomic.AtomicInteger;
  * @author chi
  */
 public class KeywordManager {
-    private PageKeywordWebService pageKeywordWebService;
-    private volatile KeywordTrie trie;
+    PageKeywordWebService pageKeywordWebService;
+    volatile KeywordTrie trie;
 
     public KeywordManager setPageKeywordWebService(PageKeywordWebService pageKeywordWebService) {
         this.pageKeywordWebService = pageKeywordWebService;
@@ -166,7 +166,7 @@ public class KeywordManager {
             char[] chars = keyword.value.toCharArray();
             String[] words = words(chars);
             int keyWordLength = 0;
-            for (int i = 0, length = words.length; i < length; i += 1) {
+            for (int i = 0; i < words.length; i += 1) {
                 String key = words[i];
                 keyWordLength++;
 
@@ -206,7 +206,7 @@ public class KeywordManager {
         }
 
         @SuppressWarnings("checkstyle:NestedIfDepth")
-        private String[] words(char[] chars) {
+        String[] words(char... chars) {
             List<String> list = Lists.newArrayList();
             for (int i = 0; i < chars.length; i++) {
                 char c = chars[i];
@@ -236,7 +236,7 @@ public class KeywordManager {
         }
     }
 
-    static class KeywordNode {
+    public static class KeywordNode {
         public String path;
         public Map<String, KeywordNode> children;
     }

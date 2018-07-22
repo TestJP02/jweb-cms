@@ -25,12 +25,12 @@ public class ThemeProcessor implements ElementProcessor {
 
     @Override
     public Element process(Element element, Resource resource) {
-        if (isTemplate(resource) && isThemeCss(element)) {
+        if (isTemplate(resource) && isHead(element)) {
             Element themeElement = new Element("theme-css", true, element.row(), element.column(), element.source());
             Attribute attribute = new Attribute("name", false, element.row(), element.column(), element.source());
             attribute.setValue(themeName);
             themeElement.addAttribute(attribute);
-            element.parent().replaceChild(element, themeElement);
+            element.addChild(themeElement);
 
             Optional<Element> body = body(element);
             if (body.isPresent()) {
@@ -67,19 +67,11 @@ public class ThemeProcessor implements ElementProcessor {
         return Optional.empty();
     }
 
-    private boolean isThemeCss(Element element) {
-        if (!isLinkElement(element)) {
-            return false;
-        }
-        Optional<Attribute> href = element.attribute("href");
-        return href.isPresent() && href.get().value().contains("bootstrap.min.");
-    }
-
     private boolean isTemplate(Resource resource) {
         return resource.path().startsWith("template/");
     }
 
-    private boolean isLinkElement(Element element) {
-        return "link".equalsIgnoreCase(element.name());
+    private boolean isHead(Element element) {
+        return "head".equalsIgnoreCase(element.name());
     }
 }

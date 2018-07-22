@@ -2,6 +2,7 @@ package io.sited.user.web;
 
 import com.google.common.collect.Lists;
 import io.sited.database.DatabaseModule;
+import io.sited.email.smtp.SMTPModule;
 import io.sited.message.MessageModule;
 import io.sited.service.ServiceModule;
 import io.sited.test.AppExtension;
@@ -32,7 +33,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
  * @author chi
  */
 @ExtendWith(AppExtension.class)
-@Install({MessageModule.class, UserModuleImpl.class, DatabaseModule.class, ServiceModule.class})
+@Install({MessageModule.class, UserModuleImpl.class, DatabaseModule.class, ServiceModule.class, SMTPModule.class})
 public class UserGroupWebServiceImplTest {
     @Inject
     MockApp app;
@@ -61,7 +62,7 @@ public class UserGroupWebServiceImplTest {
     public void batchGet() {
         BatchGetRequest request = new BatchGetRequest();
         request.ids = Lists.newArrayList(id);
-        ContainerResponse response = app.get("/api/user/group").setEntity(request).execute();
+        ContainerResponse response = app.put("/api/user/group/batch-get").setEntity(request).execute();
         assertEquals(200, response.getStatus());
     }
 
@@ -70,7 +71,7 @@ public class UserGroupWebServiceImplTest {
         UserGroupQuery query = new UserGroupQuery();
         query.page = 1;
         query.limit = 10;
-        QueryResponse<UserGroupResponse> response = (QueryResponse<UserGroupResponse>) app.put("/api/user/group").setEntity(query).execute().getEntity();
+        QueryResponse<UserGroupResponse> response = (QueryResponse<UserGroupResponse>) app.put("/api/user/group/find").setEntity(query).execute().getEntity();
         assertEquals(1, response.total.intValue());
     }
 
@@ -95,6 +96,6 @@ public class UserGroupWebServiceImplTest {
         request.ids = Lists.newArrayList(id);
         request.requestBy = "test";
         ContainerResponse response = app.put("/api/user/group/batch-delete").setEntity(request).execute();
-        assertEquals(200, response.getStatus());
+        assertEquals(204, response.getStatus());
     }
 }

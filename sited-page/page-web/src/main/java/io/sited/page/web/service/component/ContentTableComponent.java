@@ -27,6 +27,7 @@ import java.util.List;
 /**
  * @author chi
  */
+
 public class ContentTableComponent extends AbstractPageComponent {
     private final Parser parser = Parser.builder().extensions(Arrays.asList(TablesExtension.create(), AutolinkExtension.create(), StrikethroughExtension.create(), InsExtension.create(), HeadingAnchorExtension.create())).build();
     private final IdGenerator idGenerator = IdGenerator.builder().build();
@@ -61,6 +62,7 @@ public class ContentTableComponent extends AbstractPageComponent {
         template().output(bindings, output);
     }
 
+    @SuppressWarnings("PMD.ConsecutiveLiteralAppends")
     private String output(List<HeadingView> headingList) {
         if (headingList.isEmpty()) {
             return "";
@@ -68,8 +70,7 @@ public class ContentTableComponent extends AbstractPageComponent {
         StringBuilder builder = new StringBuilder(256);
         builder.append("<ul class=\"content-table__list\">");
         headingList.forEach(heading -> {
-            builder.append("<li class=\"content-table__item\">")
-                .append("<a class=\"content-table__item-link\" href=\"#")
+            builder.append("<li class=\"content-table__item\"><a class=\"content-table__item-link\" href=\"#")
                 .append(idGenerator.generateId(heading.title))
                 .append("\">")
                 .append(heading.title)

@@ -110,25 +110,15 @@ public class UserAJAXController {
         if (!pinCodeValidate) {
             throw Exceptions.badRequestException("pinCode", "user.error.pinCodeInvalid");
         }
-        if (registerAJAXRequest.provider == null) {
-            CreateUserRequest createUserRequest = new CreateUserRequest();
-            createUserRequest.username = registerAJAXRequest.username;
-            createUserRequest.nickname = registerAJAXRequest.nickname;
-            createUserRequest.email = email(registerAJAXRequest.username, registerAJAXRequest.email);
-            createUserRequest.phone = phone(registerAJAXRequest.username, registerAJAXRequest.phone);
-            createUserRequest.requestBy = "user-web";
-            createUserRequest.password = registerAJAXRequest.password;
-            createUserRequest.language = clientInfo.language();
-            user = userWebService.create(createUserRequest);
-        } else {
-            UpdateUserRequest updateUserRequest = new UpdateUserRequest();
-            updateUserRequest.email = email(registerAJAXRequest.username, registerAJAXRequest.email);
-            updateUserRequest.phone = phone(registerAJAXRequest.username, registerAJAXRequest.phone);
-            updateUserRequest.requestBy = registerAJAXRequest.provider.name();
-            user = userWebService.update(registerAJAXRequest.userId, updateUserRequest);
-        }
-
-        sessionInfo.put("pinCode", null);
+        CreateUserRequest createUserRequest = new CreateUserRequest();
+        createUserRequest.username = registerAJAXRequest.username;
+        createUserRequest.nickname = registerAJAXRequest.nickname;
+        createUserRequest.email = email(registerAJAXRequest.username, registerAJAXRequest.email);
+        createUserRequest.phone = phone(registerAJAXRequest.username, registerAJAXRequest.phone);
+        createUserRequest.requestBy = "user-web";
+        createUserRequest.password = registerAJAXRequest.password;
+        createUserRequest.language = clientInfo.language();
+        user = userWebService.create(createUserRequest);
 
         if (Boolean.TRUE.equals(userWebOptions.registerAutoLoginEnabled)) {
             sessionInfo.put(UserInfoContextProvider.SESSION_USER_ID, user.id);

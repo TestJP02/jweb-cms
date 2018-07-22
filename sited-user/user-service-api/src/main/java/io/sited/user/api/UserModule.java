@@ -14,7 +14,6 @@ public class UserModule extends AbstractServiceModule {
         ServiceOptions options = options("user", ServiceOptions.class);
         api().service(UserGroupWebService.class, options.url);
         api().service(UserWebService.class, options.url);
-        api().service(OauthUserWebService.class, options.url);
         api().service(UserAutoLoginTokenWebService.class, options.url);
     }
 }

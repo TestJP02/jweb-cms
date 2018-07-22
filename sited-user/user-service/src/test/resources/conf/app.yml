@@ -13,3 +13,9 @@ ses:
 user:
   needVerify: false
   verifyDomain: www.sited.io
+
+smtp:
+  host: test.sited.io
+  port: 587
+  username: notification@sited.io
+  password: password

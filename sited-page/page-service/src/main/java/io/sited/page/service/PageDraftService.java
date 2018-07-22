@@ -130,6 +130,6 @@ public class PageDraftService {
 
     @Transactional
     public void deleteByPageId(String pageId) {
-        repository.execute("DELETE FROM PageDraft t WHERE t.pageId=?", pageId);
+        repository.execute("DELETE FROM PageDraft t WHERE t.pageId=?0", pageId);
     }
 }

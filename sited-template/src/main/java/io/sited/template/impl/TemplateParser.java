@@ -130,7 +130,9 @@ public class TemplateParser {
                 componentRefs.add(component);
             }
 
-            element.children().forEach(this::process);
+            for (int i = 0; i < element.children().size(); i++) {
+                process(element.children().get(i));
+            }
         }
     }
 
@@ -361,6 +363,8 @@ public class TemplateParser {
                 return new StaticSegment(comment.outerHtml());
             } else if (isMSComment(comment)) {
                 return new StaticSegment(comment.outerHtml());
+            } else {
+                return new StaticSegment("");
             }
         }
 
@@ -372,7 +376,7 @@ public class TemplateParser {
         if (element.isDynamic()) {
             String componentName = element.name();
             Map<String, Expression> attributeExpressions = new HashMap<>();
-            element.attributes().forEach((attribute) -> {
+            element.attributes().forEach(attribute -> {
                 if (attribute.isDynamic()) {
                     attributeExpressions.put(attribute.name(), parseExpression(element, attribute.value(), attribute.defaultValue(), element.source()));
                 } else {
@@ -394,7 +398,7 @@ public class TemplateParser {
             List<Segment> start = new ArrayList<>();
             List<Segment> end = new ArrayList<>();
             start.add(new StaticSegment("<" + element.name()));
-            element.attributes().forEach((attribute) -> {
+            element.attributes().forEach(attribute -> {
                 if (isBoolAttribute(attribute.name())) {
                     if (attribute.isDynamic()) {
                         IfSegment attributeIfSegment = new IfSegment(parseExpression(element, attribute.value(), attribute.defaultValue(), attribute.source()));

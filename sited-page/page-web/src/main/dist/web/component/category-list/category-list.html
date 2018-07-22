@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:j="http://www.w3.org/1999/xhtml">
+    <head>
+        <link rel="stylesheet" type="text/css" href="category-list.145f.css">
+    </head>
+    <body>
+
+        <div class="component category-list">
+            <div class="component__title" j:text="title" j:if="title != null">title</div>
+            <div class="component__body">
+                <div class="category-list__item" j:for="category:categories">
+                    <j:category-page-list j:categoryId="category.id" j:title="category.displayName"/>
+                </div>
+            </div>
+        </div>
+    </body>
+</html>

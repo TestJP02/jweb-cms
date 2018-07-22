@@ -6,8 +6,8 @@ app:
     - en-US
   env: DEV
 
-#page-web:
-#  theme: cerulean
+page-web:
+  theme: cerulean
 
 database:
   url: jdbc:mysql://localhost:3306/main?useUnicode=true&characterEncoding=utf8&autoReconnect=true&useSSL=false&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC

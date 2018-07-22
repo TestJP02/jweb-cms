@@ -2,6 +2,7 @@ package io.sited.page.meta.web.service.processor;
 
 import com.google.common.base.Charsets;
 import com.google.common.collect.Maps;
+import io.sited.page.web.PageInfo;
 import io.sited.resource.SingleResourceRepository;
 import io.sited.resource.StringResource;
 import io.sited.template.Template;
@@ -44,13 +45,16 @@ public class OgMetaElementProcessorTest {
         Template template = templateEngine.template("/test.html").orElseThrow(RuntimeException::new);
         ByteArrayOutputStream out = new ByteArrayOutputStream();
 
-        Map<String, Object> page = Maps.newHashMap();
-        page.put("title", "title");
-        page.put("imageURL", "http://localhost/image.jpg");
-        page.put("description", "description");
-        page.put("fields", Collections.singletonMap("type", "recipe"));
+        PageInfo pageInfo = PageInfo.builder()
+            .setTitle("title")
+            .setDescription("description")
+            .setPath("")
+            .setImageURL("http://localhost/image.jpg")
+            .setFields(Collections.singletonMap("type", "recipe"))
+            .build();
+
         Map<String, Object> bindings = Maps.newHashMap();
-        bindings.put("page", page);
+        bindings.put("page", pageInfo);
         bindings.put("request", request);
         bindings.put("app", app);
         template.output(bindings, out);

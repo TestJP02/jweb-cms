@@ -58,7 +58,7 @@ public class FileComponent extends TemplateComponent {
             if (Strings.isNullOrEmpty(displayName)) {
                 continue;
             }
-            path.append(displayName).append("/");
+            path.append(displayName).append('/');
             DirectoryBreadAJAXResponse directoryBreadAJAXResponse = new DirectoryBreadAJAXResponse();
             directoryBreadAJAXResponse.displayName = displayName;
             directoryBreadAJAXResponse.path = path.toString();
@@ -87,13 +87,13 @@ public class FileComponent extends TemplateComponent {
     }
 
     private void buildFullPath(StringBuilder fullPath, String pathAttribute, FileListQuery query) {
-        fullPath.append("?");
+        fullPath.append('?');
         if (!Strings.isNullOrEmpty(pathAttribute)) {
             fullPath.append("path=").append(pathAttribute);
         }
         if (!Strings.isNullOrEmpty(query.query)) {
             if (!Strings.isNullOrEmpty(pathAttribute)) {
-                fullPath.append("&");
+                fullPath.append('&');
             }
             fullPath.append("query=").append(query.query);
         }

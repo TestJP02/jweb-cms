@@ -27,13 +27,13 @@ import static org.mockito.Mockito.when;
 public class PageTextExtensionTest {
     private final Parser parser = Parser.builder().extensions(Arrays.asList(TablesExtension.create(), AutolinkExtension.create(), StrikethroughExtension.create(), InsExtension.create(), HeadingAnchorExtension.create())).build();
     private HtmlRenderer renderer;
-    private KeywordManager keyManager;
 
     @BeforeEach
     public void setup() {
         PageKeywordWebService pageKeywordWebService = Mockito.mock(PageKeywordWebService.class);
         when(pageKeywordWebService.find()).thenReturn(keywords());
-        keyManager = new KeywordManager().setPageKeywordWebService(pageKeywordWebService);
+        KeywordManager keyManager = new KeywordManager().setPageKeywordWebService(pageKeywordWebService);
+        keyManager.start();
         renderer = HtmlRenderer.builder().extensions(Arrays.asList(
             TablesExtension.create(),
             AutolinkExtension.create(),

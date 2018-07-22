@@ -266,8 +266,8 @@ public class DirectoryService {
     }
 
     private List<String> directories(String path) {
-        if (!path.startsWith("/") || !path.endsWith("/")) {
-            throw Exceptions.badRequestException("path", "invalid directory path");
+        if (Strings.isNullOrEmpty(path) || path.charAt(0) != '/' || !path.endsWith("/")) {
+            throw Exceptions.badRequestException("path", "invalid directory path, path=" + path);
         }
         List<String> directories = Lists.newArrayList();
         for (int i = 0; i < path.length(); i++) {

@@ -11,6 +11,7 @@ import io.sited.page.api.draft.CreateDraftRequest;
 import io.sited.page.api.draft.DraftResponse;
 import io.sited.page.api.page.PageResponse;
 import io.sited.page.api.page.PageVisitedMessage;
+import io.sited.scheduler.SchedulerModule;
 import io.sited.service.ServiceModule;
 import io.sited.test.AppExtension;
 import io.sited.test.Install;
@@ -19,11 +20,13 @@ import org.junit.jupiter.api.extension.ExtendWith;
 
 import javax.inject.Inject;
 
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+
 /**
  * @author chi
  */
 @ExtendWith(AppExtension.class)
-@Install({PageModuleImpl.class, DatabaseModule.class, MessageModule.class, ServiceModule.class})
+@Install({PageModuleImpl.class, DatabaseModule.class, MessageModule.class, ServiceModule.class, SchedulerModule.class})
 public class PageVisitedMessageHandlerTest {
     @Inject
     PageDraftWebService pageDraftWebService;
@@ -36,16 +39,15 @@ public class PageVisitedMessageHandlerTest {
 
     @Test
     public void visit() throws InterruptedException {
-
         DraftResponse draft = pageDraftWebService.create(request());
         PageResponse page = pageDraftWebService.publish(draft.id, draft.updatedBy);
         PageVisitedMessage visitedMessage = new PageVisitedMessage();
         visitedMessage.pageId = page.id;
 
         publisher.publish(visitedMessage);
-
         Thread.sleep(1000);
         PageResponse updatedPage = pageWebService.get(page.id);
+        assertNotNull(updatedPage);
     }
 
     private CreateDraftRequest request() {

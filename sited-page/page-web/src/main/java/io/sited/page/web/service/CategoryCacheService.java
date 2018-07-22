@@ -16,7 +16,7 @@ public class CategoryCacheService {
     @Inject
     PageCategoryWebService pageCategoryWebService;
 
-    public Optional<CategoryResponse> find(String path) {
+    public Optional<CategoryResponse> findByPath(String path) {
         String cacheKey = path;
         Optional<CategoryResponse> category = cache.get(cacheKey);
         if (!category.isPresent()) {

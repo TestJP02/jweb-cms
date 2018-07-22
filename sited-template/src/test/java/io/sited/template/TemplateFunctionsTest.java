@@ -11,6 +11,6 @@ class TemplateFunctionsTest {
     @Test
     void format() {
         TemplateFunctions templateFunctions = new TemplateFunctions();
-        assertEquals("", templateFunctions.format(1, "##0.0##"));
+        assertEquals("1.0", templateFunctions.format(1, "##0.0##"));
     }
 }

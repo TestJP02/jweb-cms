@@ -80,7 +80,7 @@ public class PageController extends AbstractPageWebController {
         Optional<PageResponse> pageOptional = pageService.find(path);
         if (!pageOptional.isPresent()) {
             String categoryPath = path + "/";
-            Optional<CategoryResponse> categoryOptional = categoryCacheService.find(categoryPath);
+            Optional<CategoryResponse> categoryOptional = categoryCacheService.findByPath(categoryPath);
             if (categoryOptional.isPresent()) {
                 return Response.temporaryRedirect(URI.create(categoryPath)).build();
             } else {
@@ -88,7 +88,12 @@ public class PageController extends AbstractPageWebController {
             }
         }
         PageResponse page = pageOptional.get();
-        CategoryResponse category = categoryCacheService.get(page.categoryId);
+        CategoryResponse category;
+        if (page.categoryId == null) {
+            category = categoryCacheService.findByPath("/").orElse(null);
+        } else {
+            category = categoryCacheService.get(page.categoryId);
+        }
         Map<String, Object> bindings = Maps.newHashMap();
         bindings.put("category", category);
         notifyPageVisited(page);
@@ -132,7 +137,7 @@ public class PageController extends AbstractPageWebController {
     }
 
     private Response handleCategory(String path) {
-        Optional<CategoryResponse> categoryOptional = categoryCacheService.find(path);
+        Optional<CategoryResponse> categoryOptional = categoryCacheService.findByPath(path);
         if (!categoryOptional.isPresent()) {
             String pagePath = path.substring(0, path.length() - 1);
             Optional<PageResponse> pageOptional = pageService.find(pagePath);

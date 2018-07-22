@@ -3,8 +3,10 @@ package io.sited.page.archive;
 
 import io.sited.database.DatabaseModule;
 import io.sited.message.MessageModule;
+import io.sited.page.PageModuleImpl;
 import io.sited.page.archive.api.archive.PageArchiveQuery;
 import io.sited.page.archive.api.archive.PageArchiveResponse;
+import io.sited.scheduler.SchedulerModule;
 import io.sited.service.ServiceModule;
 import io.sited.test.AppExtension;
 import io.sited.test.Install;
@@ -22,7 +24,8 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
  * @author chi
  */
 @ExtendWith(AppExtension.class)
-@Install({PageArchiveModuleImpl.class, DatabaseModule.class, MessageModule.class, ServiceModule.class})
+@Install({PageArchiveModuleImpl.class, DatabaseModule.class, MessageModule.class, ServiceModule.class, PageModuleImpl.class,
+    SchedulerModule.class})
 public class PageArchiveWebServiceImplTest {
     @Inject
     MockApp mockApp;

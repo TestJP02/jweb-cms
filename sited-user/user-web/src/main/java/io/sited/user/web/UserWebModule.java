@@ -6,8 +6,6 @@ import io.sited.cache.CacheOptions;
 import io.sited.message.MessageConfig;
 import io.sited.message.MessageModule;
 import io.sited.user.api.user.UserChangedMessage;
-import io.sited.user.web.service.Oauth10aService;
-import io.sited.user.web.service.Oauth20Service;
 import io.sited.user.web.service.UserCacheService;
 import io.sited.user.web.service.UserCacheView;
 import io.sited.user.web.service.UserInfoContextProvider;
@@ -44,8 +42,6 @@ public class UserWebModule extends AbstractWebModule {
 
         web().bindRequestFilter(requestInjection(new LoginRequiredInterceptor()));
 
-        bind(Oauth20Service.class);
-        bind(Oauth10aService.class);
         web().controller(UserAJAXController.class);
         web().controller(UserController.class);
         message("conf/messages/user");

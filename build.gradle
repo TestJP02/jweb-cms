@@ -7,13 +7,8 @@ def jerseyVersion = '2.27'
 def sitedVersion = '0.9.0'
 
 subprojects {
-
     apply plugin: 'maven-publish'
-
     repositories {
-        maven {
-            url 'http://git.yiue.com/maven-repo/'
-        }
         maven { url 'http://maven.aliyun.com/nexus/content/groups/public/' }
         mavenCentral()
         mavenLocal()
@@ -46,7 +41,6 @@ subprojects {
 project(':sited-module') {
     apply from: file("${rootDir}/gradle/module.gradle")
 
-
     dependencies {
         api("com.google.guava:guava:${guavaVersion}") {
             exclude group: 'com.google.code.findbugs'
@@ -63,16 +57,23 @@ project(':sited-module') {
         implementation group: 'org.slf4j', name: 'jul-to-slf4j', version: '1.7.25'
         implementation 'com.sun.activation:javax.activation:1.2.0'
 
+        implementation group: 'org.jboss.logging', name: 'jboss-logging', version: '3.3.2.Final'
         implementation(group: 'org.glassfish.jersey.core', name: 'jersey-server', version: "${jerseyVersion}") {
             exclude group: 'javax.validation'
         }
         implementation(group: 'org.glassfish.jersey.inject', name: 'jersey-hk2', version: "${jerseyVersion}") {
             exclude group: 'javax.inject'
+            exclude group: 'org.glassfish.hk2.external', module: 'javax.inject'
+        }
+        compile(group: 'org.glassfish.jersey.media', name: 'jersey-media-json-jackson', version: '2.27') {
+            exclude group: 'com.fasterxml.jackson.core'
+            exclude group: 'com.fasterxml.jackson.module'
         }
         implementation(group: 'org.glassfish.jersey.ext', name: 'jersey-bean-validation', version: "${jerseyVersion}") {
             exclude group: 'org.hibernate'
+            exclude group: 'javax.el'
+            exclude group: 'org.glassfish.web', module: 'javax.el'
         }
-
         implementation group: 'org.ow2.asm', name: 'asm', version: '6.1.1'
 
         implementation(group: 'org.hibernate.validator', name: 'hibernate-validator', version: '6.0.9.Final') {
@@ -85,6 +86,7 @@ project(':sited-module') {
         implementation "com.fasterxml.jackson.dataformat:jackson-dataformat-yaml:${jacksonVersion}"
 
         testImplementation group: 'org.junit.jupiter', name: 'junit-jupiter-api', version: '5.2.0'
+        testRuntimeOnly "org.junit.jupiter:junit-jupiter-engine:5.2.0"
         testImplementation 'org.mockito:mockito-core:2.17.0'
         testImplementation 'org.hsqldb:hsqldb:2.4.0'
     }
@@ -103,14 +105,9 @@ project(':sited-logback') {
 project(':sited-service') {
     apply from: file("${rootDir}/gradle/module.gradle")
 
-
     dependencies {
         api project(':sited-module')
         implementation group: 'org.glassfish.jersey.core', name: 'jersey-client', version: '2.27'
-        implementation(group: 'org.glassfish.jersey.media', name: 'jersey-media-json-jackson', version: "${jerseyVersion}") {
-            exclude group: 'com.fasterxml.jackson.core'
-            exclude group: 'com.fasterxml.jackson.module'
-        }
         implementation "com.fasterxml.jackson.module:jackson-module-jaxb-annotations:${jacksonVersion}"
         implementation "com.fasterxml.jackson.datatype:jackson-datatype-jsr310:${jacksonVersion}"
         implementation "com.fasterxml.jackson.datatype:jackson-datatype-jdk8:${jacksonVersion}"
@@ -118,11 +115,16 @@ project(':sited-service') {
         implementation 'org.javassist:javassist:3.22.0-GA'
         implementation(group: 'org.glassfish.jersey.ext', name: 'jersey-bean-validation', version: "${jerseyVersion}") {
             exclude group: 'org.hibernate'
+            exclude group: 'javax.el'
+            exclude group: 'org.glassfish.web', module: 'javax.el'
+        }
+        compile(group: 'org.glassfish.jersey.media', name: 'jersey-media-json-jackson', version: '2.27') {
+            exclude group: 'com.fasterxml.jackson.core'
+            exclude group: 'com.fasterxml.jackson.module'
         }
         implementation(group: 'org.hibernate.validator', name: 'hibernate-validator', version: '6.0.9.Final') {
             exclude group: 'org.jboss.logging'
         }
-
         testImplementation project(':sited-test')
         testImplementation project(':sited-undertow')
     }
@@ -168,7 +170,10 @@ project(':sited-scheduler') {
 
     dependencies {
         api project(':sited-module')
-        implementation group: 'org.quartz-scheduler', name: 'quartz', version: '2.3.0'
+        implementation(group: 'org.quartz-scheduler', name: 'quartz', version: '2.3.0') {
+            exclude group: 'com.mchange'
+            exclude group: 'com.zaxxer'
+        }
         testImplementation project(':sited-test')
     }
 }
@@ -208,6 +213,7 @@ project(':sited-database') {
         implementation 'org.apache.commons:commons-dbcp2:2.2.0'
         implementation(group: 'org.hibernate', name: 'hibernate-core', version: '5.3.1.Final') {
             exclude group: "org.jboss.spec.javax.transaction"
+            exclude group: 'org.jboss.logging'
         }
         testImplementation project(':sited-test')
     }
@@ -219,11 +225,6 @@ project(':sited-undertow') {
 
     dependencies {
         api project(':sited-module')
-
-        // https://mvnrepository.com/artifact/org.glassfish.jersey.containers/jersey-container-netty-http
-        compile group: 'org.glassfish.jersey.containers', name: 'jersey-container-netty-http', version: '2.27'
-
-
         implementation('io.undertow:undertow-core:2.0.3.Final') {
             exclude group: ' org.jboss.logging'
         }
@@ -253,6 +254,9 @@ project(':sited-web') {
         api project(':sited-module')
         api project(':sited-template')
         implementation(group: 'org.glassfish.jersey.core', name: 'jersey-common', version: "${jerseyVersion}")
+        implementation(group: 'org.hibernate.validator', name: 'hibernate-validator', version: '6.0.9.Final') {
+            exclude group: 'org.jboss.logging'
+        }
         implementation 'redis.clients:jedis:2.9.0'
         implementation 'org.apache.commons:commons-pool2:2.5.0'
         testImplementation project(':sited-test')
@@ -274,6 +278,7 @@ project(':sited-test') {
         implementation project(':sited-database')
         implementation project(':sited-logback')
         implementation group: 'org.glassfish.jersey.core', name: 'jersey-common', version: '2.27'
+        implementation "org.junit.jupiter:junit-jupiter-engine:5.2.0"
 
         testImplementation project(':sited-web')
         testImplementation project(':sited-service')
@@ -287,6 +292,7 @@ project(':sited-main') {
     dependencies {
         compile(group: 'org.glassfish.jersey.inject', name: 'jersey-hk2', version: "${jerseyVersion}") {
             exclude group: 'javax.inject'
+            exclude group: 'org.glassfish.hk2.external', module: 'javax.inject'
         }
         compile project(':sited-module')
         compile project(':sited-web')
@@ -309,10 +315,6 @@ project(':sited-main') {
         compile project(':sited-page:page-service')
         compile project(':sited-page:page-web')
         compile project(':sited-page:page-admin')
-        compile project(':sited-page:page-rss-web')
-        compile project(':sited-page:page-search-service')
-        compile project(':sited-page:page-search-admin')
-        compile project(':sited-page:page-search-web')
         compile project(':sited-page:page-rating-service')
         compile project(':sited-page:page-rating-web')
         compile project(':sited-page:page-archive-service')
@@ -515,6 +517,7 @@ project(':sited-user:user-service') {
         api project(':sited-database')
         api project(':sited-message')
         testImplementation project(':sited-test')
+        testImplementation project(':sited-email:email-smtp')
     }
 }
 
@@ -544,7 +547,6 @@ project(':sited-user:user-web') {
         implementation project(':sited-user:captcha-web')
         implementation project(':sited-user:pincode-web')
         implementation project(':sited-page:page-service-api')
-        implementation "com.github.scribejava:scribejava-apis:4.2.0"
         testImplementation project(':sited-test')
     }
 }
@@ -605,7 +607,6 @@ project(':sited-page:page-admin') {
         api project(':sited-admin')
         implementation project(':sited-file:file-service-api')
         implementation project(':sited-user:user-service-api')
-        implementation group: 'org.jsoup', name: 'jsoup', version: '1.11.2'
         testImplementation project(':sited-test')
     }
 }
@@ -617,20 +618,9 @@ project(':sited-page:page-og-meta-web') {
     dependencies {
         api project(':sited-web')
         testImplementation project(':sited-test')
+        testImplementation project(':sited-page:page-web')
     }
 }
-
-project(':sited-page:page-rss-web') {
-    apply from: file("${rootDir}/gradle/module.gradle")
-
-    dependencies {
-        implementation project(':sited-web')
-        implementation project(':sited-page:page-service-api')
-        implementation 'com.rometools:rome:1.8.0'
-        testImplementation project(':sited-test')
-    }
-}
-
 
 project(':sited-page:page-rating-service-api') {
     apply from: file("${rootDir}/gradle/module.gradle")
@@ -647,7 +637,6 @@ project(':sited-page:page-rating-service') {
     dependencies {
         api project(':sited-page:page-rating-service-api')
         implementation project(':sited-database')
-        implementation "org.jsoup:jsoup:1.11.2"
         testImplementation project(':sited-test')
     }
 }
@@ -665,80 +654,6 @@ project(':sited-page:page-rating-web') {
         testImplementation project(':sited-test')
     }
 }
-
-
-project(':sited-page:page-search-service-api') {
-    apply from: file("${rootDir}/gradle/module.gradle")
-
-    dependencies {
-        api project(':sited-service')
-        api project(':sited-page:page-service-api')
-        testImplementation project(':sited-test')
-    }
-}
-
-project(':sited-page:page-search-service') {
-    apply plugin: 'java-library'
-    apply plugin: 'signing'
-    apply plugin: 'maven-publish'
-
-    sourceSets {
-        test.compileClasspath += configurations.compileOnly
-        test.runtimeClasspath += configurations.compileOnly
-    }
-
-    task sourcesJar(type: Jar, dependsOn: classes) {
-        from sourceSets.main.allSource
-        classifier 'sources'
-    }
-
-    artifacts {
-        archives sourcesJar
-    }
-
-    dependencies {
-        api project(':sited-page:page-search-service-api')
-        implementation project(':sited-message')
-        implementation 'org.apache.lucene:lucene-core:7.1.0'
-        implementation('org.apache.lucene:lucene-queryparser:7.1.0') {
-            exclude group: 'org.apache.lucene'
-        }
-        implementation('org.apache.lucene:lucene-analyzers-smartcn:7.1.0') {
-            exclude group: 'org.apache.lucene'
-        }
-        implementation 'org.apache.lucene:lucene-highlighter:7.1.0'
-        implementation project(':sited-page:page-service-api')
-
-        testImplementation project(':sited-page:page-service')
-        testImplementation project(':sited-database')
-        testImplementation project(':sited-test')
-    }
-}
-
-project(':sited-page:page-search-web') {
-    apply from: file("${rootDir}/gradle/module.gradle")
-
-    dependencies {
-        api project(':sited-web')
-        api project(':sited-page:page-search-service-api')
-        implementation project(':sited-page:page-web')
-        implementation project(':sited-page:page-service-api')
-
-        testImplementation project(':sited-test')
-    }
-}
-
-project(":sited-page:page-search-admin") {
-    apply from: file("${rootDir}/gradle/module.gradle")
-    dependencies {
-        api project(':sited-page:page-search-service-api')
-        implementation project(':sited-admin')
-        implementation project(':sited-page:page-admin')
-
-        testImplementation project(':sited-test')
-    }
-}
-
 
 project(':sited-page:page-archive-service-api') {
     apply from: file("${rootDir}/gradle/module.gradle")
@@ -758,6 +673,8 @@ project(':sited-page:page-archive-service') {
         implementation project(':sited-database')
         implementation project(':sited-message')
         testImplementation project(':sited-test')
+        testImplementation project(':sited-page:page-service')
+        testImplementation project(':sited-scheduler')
     }
 }
 

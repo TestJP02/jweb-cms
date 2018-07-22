@@ -45,6 +45,9 @@ public class LocalMessageClient {
     @SuppressWarnings("unchecked")
     public <T> void listen(String topic, String messageGroup, Class<T> messageClass, MessageHandler<T> messageHandler) {
         Map<String, BlockingQueue<?>> queues = this.topics.get(topic);
+        if (queues == null) {
+            return;
+        }
         BlockingQueue<T> blockingQueue = (BlockingQueue<T>) queues.get(messageGroup);
         if (blockingQueue == null) {
             blockingQueue = new LinkedBlockingQueue<>(100000);

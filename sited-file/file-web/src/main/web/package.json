@@ -9,7 +9,7 @@
     "author": "sited.io",
     "license": "AGLP",
     "dependencies": {
-        "Respond.js": "https://github.com/scottjehl/Respond",
+        "respond.js": "^1.4.2",
         "bootstrap": "^3.3.7",
         "font-awesome": "^4.7.0",
         "jquery": "^1.12.1",

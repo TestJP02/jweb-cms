@@ -15,6 +15,8 @@ public class PageStatistics {
     @Id
     @Column(name = "id", length = 36)
     public String id;
+    @Column(name = "category_id", length = 36)
+    public String categoryId;
     @Column(name = "total_visited")
     public Integer totalVisited;
     @Column(name = "total_daily_visited")

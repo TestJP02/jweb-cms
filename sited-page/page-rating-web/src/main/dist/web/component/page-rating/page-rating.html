@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:j="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" type="text/css" href="page-rating.9c17.css"/>
+    <script src="page-rating.1a9b.js"></script>
+</head>
+<body>
+<div class="component rating" j:data-rating="rating.averageScore" j:data-page-id="pageId" itemprop="aggregateRating" itemscope="" itemtype="http://schema.org/AggregateRating">
+    <div class="rating__stars">
+        <i class="rating__star fa fa-star"></i>
+        <i class="rating__star fa fa-star"></i>
+        <i class="rating__star fa fa-star"></i>
+        <i class="rating__star fa fa-star"></i>
+        <i class="rating__star fa fa-star"></i>
+    </div>
+    <div class="rating__description">
+        (<span class="rating__total" itemprop="ratingCount" j:text="rating.totalScored">0</span> 人打了分，平均分： <span class="rating__average" itemprop="ratingValue"
+            j:text="rating.averageScore">0</span> )
+    </div>
+    <meta itemprop="bestRating" content="0">
+    <meta itemprop="worstRating" content="5">
+</div>
+</body>
+</html>

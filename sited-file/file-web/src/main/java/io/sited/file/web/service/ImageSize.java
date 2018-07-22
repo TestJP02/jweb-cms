@@ -8,7 +8,7 @@ public class ImageSize {
     public final int height;
 
     public ImageSize(String size) {
-        if (size.startsWith("x")) {
+        if (size.charAt(0) == 'x') {
             width = 0;
             height = Integer.parseInt(size.substring(1));
         } else if (size.endsWith("x")) {

@@ -26,7 +26,7 @@ public class IndexController extends AbstractPageWebController {
 
     @GET
     public Response get() {
-        Optional<CategoryResponse> categoryOptional = categoryService.find("/");
+        Optional<CategoryResponse> categoryOptional = categoryService.findByPath("/");
         if (!categoryOptional.isPresent()) {
             throw new NotFoundWebException(appInfo, requestInfo, clientInfo, "missing category, path=/");
         }

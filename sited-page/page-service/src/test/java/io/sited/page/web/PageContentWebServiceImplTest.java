@@ -11,6 +11,7 @@ import io.sited.page.api.content.PageContentResponse;
 import io.sited.page.api.draft.CreateDraftRequest;
 import io.sited.page.api.draft.DraftResponse;
 import io.sited.page.api.page.PageResponse;
+import io.sited.scheduler.SchedulerModule;
 import io.sited.service.ServiceModule;
 import io.sited.test.AppExtension;
 import io.sited.test.Install;
@@ -27,7 +28,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
  * @author chi
  */
 @ExtendWith(AppExtension.class)
-@Install({PageModuleImpl.class, DatabaseModule.class, MessageModule.class, ServiceModule.class})
+@Install({PageModuleImpl.class, DatabaseModule.class, MessageModule.class, ServiceModule.class, SchedulerModule.class})
 public class PageContentWebServiceImplTest {
     @Inject
     PageDraftWebService pageDraftWebService;

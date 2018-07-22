@@ -52,7 +52,7 @@ public class TemplateFunctions {
     }
 
     public long toLong(String value) {
-        return Long.valueOf(value);
+        return Long.parseLong(value);
     }
 
     public String trim(String value) {

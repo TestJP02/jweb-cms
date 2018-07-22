@@ -4,20 +4,15 @@ import com.google.common.collect.Maps;
 import io.sited.App;
 import io.sited.page.web.AbstractPageWebController;
 import io.sited.page.web.PageInfo;
-import io.sited.user.api.oauth.Provider;
 import io.sited.user.web.UserWebOptions;
-import io.sited.user.web.service.Oauth10aService;
-import io.sited.user.web.service.Oauth20Service;
 import io.sited.user.web.service.ValidationRules;
 import io.sited.util.i18n.MessageBundle;
-import io.sited.web.ClientInfo;
 import io.sited.web.Cookies;
 import io.sited.web.SessionInfo;
 
 import javax.inject.Inject;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
-import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Response;
 import java.net.URI;
 import java.time.OffsetDateTime;
@@ -29,32 +24,18 @@ import java.util.Optional;
  */
 @Path("/user")
 public class UserController extends AbstractPageWebController {
-    private static final String SESSION_PROVIDER = "provider";
     @Inject
     App app;
-    @Inject
-    Oauth20Service oauth20Service;
-    @Inject
-    Oauth10aService oauth10aService;
     @Inject
     UserWebOptions options;
     @Inject
     SessionInfo sessionInfo;
     @Inject
     MessageBundle messageBundle;
-    @Inject
-    ClientInfo clientInfo;
 
     @Path("/login")
     @GET
-    public Response login(@QueryParam("provider") Provider provider) {
-        if (provider != null) {
-            sessionInfo.put(SESSION_PROVIDER, provider.name());
-            if (provider.oauth2)
-                return Response.temporaryRedirect(URI.create(oauth20Service.redirectUri(provider))).build();
-            return Response.temporaryRedirect(URI.create(oauth10aService.redirectUri(provider, sessionInfo))).build();
-        }
-
+    public Response login() {
         Map<String, Object> bindings = Maps.newHashMap();
         bindings.put("baseURL", app.baseURL());
 
@@ -89,7 +70,7 @@ public class UserController extends AbstractPageWebController {
 
         Optional<String> pinCodeCountDown = sessionInfo.get("PinCodeCountDown");
         if (pinCodeCountDown.isPresent()) {
-            long time = Long.valueOf(pinCodeCountDown.get());
+            long time = Long.parseLong(pinCodeCountDown.get());
             long current = OffsetDateTime.now().toEpochSecond();
             if (current >= time) {
                 bindings.put("countDown", 0);

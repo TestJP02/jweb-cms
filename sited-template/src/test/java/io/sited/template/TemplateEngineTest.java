@@ -38,7 +38,7 @@ class TemplateEngineTest {
         bindings.put("disabled", true);
         bindings.put("active", true);
         template.output(bindings, outputStream);
-        assertEquals("<!doctype html><html lang=\"en-US\" xmlns:j=\"http://www.w3.org/1999/xhtml\"><head><meta charset=\"UTF-8\"/><title></title></head><body><div><p>1</p></div><div>&lt;p&gt;1&lt;/p&gt;</div><ul disabled class=\"active list\"><li>1</li><li>2</li><li>3</li></ul></body></html>", new String(outputStream.toByteArray(), Charsets.UTF_8));
+        assertEquals("<!doctype html><html lang=\"en-US\" xmlns:j=\"http://www.w3.org/1999/xhtml\"><head><meta charset=\"UTF-8\"/></head><body><div><p>1</p></div><div>&lt;p&gt;1&lt;/p&gt;</div><ul disabled class=\"active list\"><li>1</li><li>2</li><li>3</li></ul></body></html>", new String(outputStream.toByteArray(), Charsets.UTF_8));
     }
 
     @Test
@@ -139,7 +139,7 @@ class TemplateEngineTest {
     }
 
     public static class TemplateComponentImpl extends TemplateComponent {
-        public TemplateComponentImpl(String name, String templatePath, List<ComponentAttribute<?>> componentAttributes) {
+        TemplateComponentImpl(String name, String templatePath, List<ComponentAttribute<?>> componentAttributes) {
             super(name, templatePath, componentAttributes);
         }
     }

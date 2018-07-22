@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:j="http://www.w3.org/1999/xhtml">
+    <head>
+        <meta charset="UTF-8">
+        <title>Title</title>
+        <link rel="stylesheet" type="text/css" href="page-list.4ecd.css">
+    </head>
+    <body>
+        <ul class="media-list page-list">
+            <li class="media" j:for="page:pages">
+                <div class="media-body">
+                    <h3 class="media-heading">
+                        <a class="page-list__item-title" j:href="page.path" j:title="page.title" j:text="page.title">
+                            title
+                        </a>
+                    </h3>
+                    <p class="page-list__item-description" j:text="ellipsis(page.description, 100)">Description</p>
+                    <div class="media-bottom page-list__item-bottom">
+                        <j:username j:userId="page.userId"/>&nbsp;
+                        <span j:text="fromNow(page.createdTime,client.language())">12:00 1</span>
+                    </div>
+                </div>
+                <div class="media-right">
+                    <a j:href="page.path" class="page-list__item-image" j:if="page.imageURL!=null">
+                        <img j:src="page.imageURL" j:alt="page.title" class="page-list__item-image">
+                    </a>
+                </div>
+            </li>
+        </ul>
+    </body>
+</html>

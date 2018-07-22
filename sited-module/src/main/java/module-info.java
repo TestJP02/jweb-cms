@@ -17,6 +17,7 @@ module sited.module {
     requires jackson.core;
     requires jackson.databind;
     requires jackson.datatype.jsr310;
+    requires jersey.media.json.jackson;
 
     requires javassist;
     requires org.objectweb.asm;

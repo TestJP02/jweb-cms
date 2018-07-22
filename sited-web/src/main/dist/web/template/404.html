@@ -1,20 +1,20 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>404</title>
-    <link rel="stylesheet" href="../static/css/error.3c95.css">
-</head>
-<body>
-<div class="page error-page__page">
-    <div class="error-page__container">
-        <div class="error-page__code">404</div>
-        <p class="error-page__text">Page Not Found</p>
-        <a href="/">
-            Return to home
-        </a>
-    </div>
-</div>
-</body>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>404</title>
+        <link rel="stylesheet" href="../static/css/error.3c95.css">
+    </head>
+    <body>
+        <div class="page error-page__page">
+            <div class="error-page__container">
+                <div class="error-page__code">404</div>
+                <p class="error-page__text" j:text="i18n('web.error.404',client.language())">Page Not Found</p>
+                <a href="/" j:text="i18n('web.error.return',client.language())">
+                    Return to home
+                </a>
+            </div>
+        </div>
+    </body>
 </html>

@@ -143,16 +143,17 @@ public class PageTagService {
         if (ids.isEmpty()) {
             return;
         }
-        StringBuilder b = new StringBuilder();
-        b.append("UPDATE PageTag t SET t.totalTagged = t.totalTagged+").append(count);
-        b.append(" WHERE t.id in(");
+        StringBuilder b = new StringBuilder(128);
+        b.append("UPDATE PageTag t SET t.totalTagged = t.totalTagged+")
+            .append(count)
+            .append(" WHERE t.id in(");
         for (int i = 0; i < ids.size(); i++) {
             if (i != 0) {
-                b.append(",");
+                b.append(',');
             }
-            b.append("\'").append(ids.get(i)).append("\'");
+            b.append('\'').append(ids.get(i)).append('\'');
         }
-        b.append(")");
+        b.append(')');
         repository.execute(b.toString());
     }
 
@@ -161,16 +162,15 @@ public class PageTagService {
         if (tags == null || tags.isEmpty()) {
             return;
         }
-        StringBuilder b = new StringBuilder();
-        b.append("UPDATE PageTag SET t.totalTagged = t.totalTagged-1");
-        b.append(" WHERE t.name in(");
+        StringBuilder b = new StringBuilder(128);
+        b.append("UPDATE PageTag SET t.totalTagged = t.totalTagged-1 WHERE t.name in(");
         for (int i = 0; i < tags.size(); i++) {
             if (i != 0) {
-                b.append(",");
+                b.append(',');
             }
-            b.append("\'").append(tags.get(i)).append("\'");
+            b.append('\'').append(tags.get(i)).append('\'');
         }
-        b.append(")");
+        b.append(')');
         repository.execute(b.toString());
     }
 }

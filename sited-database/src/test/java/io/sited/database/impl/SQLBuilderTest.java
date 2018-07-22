@@ -20,16 +20,16 @@ class SQLBuilderTest {
 
     @Test
     void deleteById() {
-        assertEquals("DELETE FROM Entity t WHERE t.id=?", new SQLBuilder("Entity", "id", "").deleteByIdSQL());
+        assertEquals("DELETE FROM Entity t WHERE t.id=?0", new SQLBuilder("Entity", "id", "").deleteByIdSQL());
     }
 
     @Test
     void deleteByIds() {
-        assertEquals("DELETE FROM Entity t WHERE t.id in (?,?,?,?,?) OR t.id in (?,?,?,?,?) OR t.id in (?)", new SQLBuilder("Entity", "id", "").setBatchSize(5).deleteByIdsSQL(11));
+        assertEquals("DELETE FROM Entity t WHERE t.id in (?0,?1,?2,?3,?4) OR t.id in (?5,?6,?7,?8,?9) OR t.id in (?10)", new SQLBuilder("Entity", "id", "").setBatchSize(5).deleteByIdsSQL(11));
     }
 
     @Test
     void findByIds() {
-        assertEquals("SELECT t FROM Entity t WHERE t.id in (?,?,?,?,?) OR t.id in (?,?,?,?,?) OR t.id in (?)", new SQLBuilder("Entity", "id", "").setBatchSize(5).findByIdsSQL(11));
+        assertEquals("SELECT t FROM Entity t WHERE t.id in (?0,?1,?2,?3,?4) OR t.id in (?5,?6,?7,?8,?9) OR t.id in (?10)", new SQLBuilder("Entity", "id", "").setBatchSize(5).findByIdsSQL(11));
     }
 }

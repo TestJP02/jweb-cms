@@ -8,7 +8,7 @@ import java.util.Map;
 /**
  * @author chi
  */
-public class ExpressionImpl implements io.sited.template.Expression {
+public class ExpressionImpl implements Expression {
     private final int id;
     private final String content;
     private final Integer row;

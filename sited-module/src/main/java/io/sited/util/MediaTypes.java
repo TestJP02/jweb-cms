@@ -138,6 +138,12 @@ public class MediaTypes {
         defaultMappings.put("wmls", "text/vnd.wap.wmlscript");
         defaultMappings.put("wmlscriptc", "application/vnd.wap.wmlscriptc");
 
+        defaultMappings.put("ttf", "application/font-sfnt");
+        defaultMappings.put("otf", "font/opentype");
+        defaultMappings.put("woff", "application/font-woff");
+        defaultMappings.put("woff2", "font/woff2");
+        defaultMappings.put("eot", "application/vnd.ms-fontobject");
+
         DEFAULT_MIME_MAPPINGS = Collections.unmodifiableMap(defaultMappings);
         DEFAULT = new MediaTypes(defaultMappings);
     }

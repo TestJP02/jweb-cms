@@ -12,6 +12,8 @@ import java.time.OffsetDateTime;
 public class PageStatisticsResponse {
     @XmlElement(name = "id")
     public String id;
+    @XmlElement(name = "categoryId")
+    public String categoryId;
     @XmlElement(name = "totalVisited")
     public Integer totalVisited;
     @XmlElement(name = "totalDailyVisited")

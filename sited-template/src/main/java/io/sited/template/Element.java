@@ -27,9 +27,8 @@ public class Element implements Node {
     private final String source;
 
     private Element parent;
-    private Map<String, Attribute> attributes = Maps.newHashMap();
+    private final Map<String, Attribute> attributes = Maps.newHashMap();
     private List<Node> children = Lists.newArrayList();
-
 
     public Element(String name, boolean dynamic, Integer row, Integer column, String source) {
         this.name = name;
@@ -39,10 +38,12 @@ public class Element implements Node {
         this.source = source;
     }
 
+    @Override
     public Element parent() {
         return parent;
     }
 
+    @Override
     public void setParent(Element parent) {
         this.parent = parent;
     }
@@ -70,11 +71,9 @@ public class Element implements Node {
         attributes.remove(name);
     }
 
-
     public List<Node> children() {
         return children;
     }
-
 
     public void addChild(Node node) {
         node.setParent(this);
@@ -100,8 +99,7 @@ public class Element implements Node {
 
     public String innerText() {
         StringBuilder b = new StringBuilder();
-        for (int i = 0; i < children.size(); i++) {
-            Node child = children.get(i);
+        for (Node child : Lists.newArrayList(children)) {
             if (child instanceof Element) {
                 b.append(((Element) child).innerText());
             } else if (child.isText()) {
@@ -125,7 +123,7 @@ public class Element implements Node {
                 Element element = (Element) child;
                 b.append('<');
                 b.append(element.name());
-                element.attributes().forEach((attribute) -> {
+                element.attributes().forEach(attribute -> {
                     b.append(' ').append(attribute.name());
                     if (!isBoolAttribute(attribute)) {
                         b.append("=\"").append(attribute.value()).append('\"');
@@ -152,21 +150,22 @@ public class Element implements Node {
         return BOOL_ATTRIBUTES.contains(attribute.name());
     }
 
+    @Override
     public String name() {
         return name;
     }
 
-
+    @Override
     public Integer row() {
         return row;
     }
 
-
+    @Override
     public Integer column() {
         return column;
     }
 
-
+    @Override
     public String source() {
         return source;
     }

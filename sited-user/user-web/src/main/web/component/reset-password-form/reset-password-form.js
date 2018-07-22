@@ -8,7 +8,7 @@
         });
     };
     var ResetPassword = {
-        form: $("#reset-password-form"),
+        form: $("#user-reset-password-form"),
         submitBtn: $(".btn-submit"),
         init: function () {
             this.initEvent();

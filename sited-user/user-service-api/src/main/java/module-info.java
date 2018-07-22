@@ -15,7 +15,6 @@ module sited.user.api {
 
     exports io.sited.user.api;
     exports io.sited.user.api.group;
-    exports io.sited.user.api.oauth;
     exports io.sited.user.api.token;
     exports io.sited.user.api.user;
 }

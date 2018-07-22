@@ -36,7 +36,7 @@ public class JSONEntityControllerTest {
     }
 
     public static class TestModule extends AbstractWebModule {
-        protected TestModule() {
+        public TestModule() {
             super("test", Lists.newArrayList("sited.web"));
         }
 
