@@ -8,19 +8,14 @@ A developer friendly Java CMS based on JAX-RS, Guice style DI, Bean Validation, 
 - **More modules are coming...**
 
 
-[![Edit Template](doc/img/edit-template.png)](http://) | [![Edit Page](doc/img/edit-page.png)](http://) |
+[![Edit Template](doc/img/edit-template.png)](https://github.com/sited-io/sited-project/raw/master/doc/img/edit-template.png) | [![Edit Page](doc/img/edit-page.png)](https://github.com/sited-io/sited-project/raw/master/doc/img/edit-page.png) |
 |:---:|:---:|
 [Edit Template](doc/img/edit-template.png) | [Edit Page](doc/img/edit-page.png) |
-| [![Index Page](doc/img/index.png)](http://)  |  [![Post Page](doc/img/page.png)](http://) |
+| [![Index Page](doc/img/index.png)](https://github.com/sited-io/sited-project/raw/master/doc/img/index.png)  |  [![Post Page](doc/img/page.png)](https://github.com/sited-io/sited-project/raw/master/doc/img/page.png) |
 | [Index Page](http://) | [Post Page](http://) |
 
 
-## Online demo
-TODO
-
 ## Features
-
-Provides 
 
 |***Frameworks***|***Content***|***Notes***|
 |:---:|:---:|:---:|
@@ -60,7 +55,7 @@ These instructions will get you a copy of the Sited CMS up and running on your l
 
 ### Installing
 
-1. Download the package file [sited-0.9.zip](https://link) (***For all platform***)
+1. Download the package file [sited-v0.9.0-beta.zip](https://github.com/sited-io/sited-project/releases/download/v0.9.0/sited-v0.9.0-beta.zip) (***For all platform***)
 2. Unzip the package
 3. Run `./bin/sited`
 4. Use a browser(IE11+) to open ```http://localhost:8080```
@@ -75,45 +70,13 @@ These instructions will get you a copy of the Sited CMS up and running on your l
 6. Open ```http://localhost:8080/admin/```
 
 
-### Customize
-
-The directory structure of sited
-
-```
- sited
-|-- bin
-|   `-- sited
-|-- conf
-|   |-- messages
-|   `-- app.yml
-|-- lib
-|   `-- jars...
-|-- web
-|-- file
-|-- cache
-`-- index
-```
-
-Sited use YAML syntax for configuration. Edit ***conf/app.yml*** to customize sited. 
-
-##### app options
-
-
-```
-app:
-  name: test
-  language: en-US
-  env: PROD
-```
-
-
 ## Run Source Code
 
 1. Clone the repo
 2. Import as a Gradle project to Intellij IDEA or Eclipse.
 3. Run sited-main/src/java/Main.java 
 
-###Known issues
+### Known issues
 
 * There will be errors in module-info.java for duplicate module java.xml.bind
 * There will be errors in DAO related source codes for missing @Transactional. 
@@ -168,7 +131,7 @@ public class TodoServiceModuleImpl extends TodoServiceModule {
   * GA tracking
 
 
-* 0.9.0 · Beta release · [sited-0.9.zip](http://some)
+* 0.9.0 · Beta release 
   * User management, supports login/register/forget password/pincode/captcha code.
   * Page management, supports category/page/template/variable/components.
   * File management, supports upload files, download files, scale images, react file browser. 
