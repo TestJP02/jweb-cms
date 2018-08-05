@@ -20,5 +20,4 @@ class MockAppTest {
     void configure() {
         assertNotNull(app);
     }
-
 }

@@ -10,7 +10,7 @@ import io.sited.file.web.service.FileService;
 import io.sited.file.web.web.ajax.directory.DirectoryBreadAJAXResponse;
 import io.sited.template.Attributes;
 import io.sited.template.Children;
-import io.sited.template.TemplateComponent;
+import io.sited.web.AbstractWebComponent;
 
 import javax.inject.Inject;
 import java.io.IOException;
@@ -22,7 +22,7 @@ import java.util.Optional;
 /**
  * @author chi
  */
-public class FileComponent extends TemplateComponent {
+public class FileComponent extends AbstractWebComponent {
     @Inject
     DirectoryWebService directoryService;
     @Inject

@@ -6,6 +6,7 @@ import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlElementWrapper;
 import java.time.OffsetDateTime;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author chi
@@ -35,6 +36,8 @@ public class CategoryChangedMessage {
     @XmlElementWrapper(name = "tags")
     @XmlElement(name = "tag")
     public List<String> tags;
+    @XmlElement(name = "fields")
+    public Map<String, String> fields;
     @XmlElement(name = "stats")
     public CategoryStatus status;
     @XmlElement(name = "ownerId")

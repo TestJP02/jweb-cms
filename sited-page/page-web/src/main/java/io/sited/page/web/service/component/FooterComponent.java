@@ -7,7 +7,7 @@ import com.google.common.collect.Maps;
 import io.sited.page.api.PageCategoryWebService;
 import io.sited.page.api.category.CategoryResponse;
 import io.sited.page.web.AbstractPageComponent;
-import io.sited.page.web.ComponentBindings;
+import io.sited.page.web.Bindings;
 import io.sited.template.Attributes;
 import io.sited.template.Children;
 import io.sited.template.ObjectAttribute;
@@ -28,13 +28,13 @@ public class FooterComponent extends AbstractPageComponent {
     PageCategoryWebService pageCategoryWebService;
 
     public FooterComponent() {
-        super("footer", "component/page-footer/page-footer.html", ImmutableList.of(
+        super("footer", "component/footer/footer.html", ImmutableList.of(
             new ObjectAttribute<>("links", List.class, null),
             new StringAttribute("copyrights", null)));
     }
 
     @Override
-    public void output(ComponentBindings bindings, Attributes attributes, Children children, OutputStream out) throws IOException {
+    public void output(Bindings bindings, Attributes attributes, Children children, OutputStream out) throws IOException {
         bindings.putAll(attributes);
 
         List links = attributes.get("links");

@@ -14,7 +14,6 @@ module sited.page.admin {
     requires sited.module;
     requires sited.admin;
     requires sited.web;
-    requires sited.user.api;
     requires sited.page.api;
     exports io.sited.page.admin;
 }

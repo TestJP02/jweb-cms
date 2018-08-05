@@ -2,10 +2,11 @@
 
 # Sited CMS
 
-A developer friendly Java CMS based on JAX-RS, Guice style DI, Bean Validation, JPA and React. 
+A developer friendly Java CMS based on Java 10 micro service modules with full API access to contents, users and files. 
 
 - **Built for startup, provides well designed quick prototyping code base.**
-- **More modules are coming...**
+- Supports template editing, perfect for building landing pages.
+- More modules are coming...
 
 
 [![Edit Template](doc/img/edit-template.png)](https://github.com/sited-io/sited-project/raw/master/doc/img/edit-template.png) | [![Edit Page](doc/img/edit-page.png)](https://github.com/sited-io/sited-project/raw/master/doc/img/edit-page.png) |
@@ -14,30 +15,69 @@ A developer friendly Java CMS based on JAX-RS, Guice style DI, Bean Validation, 
 | [![Index Page](doc/img/index.png)](https://github.com/sited-io/sited-project/raw/master/doc/img/index.png)  |  [![Post Page](doc/img/page.png)](https://github.com/sited-io/sited-project/raw/master/doc/img/page.png) |
 | [Index Page](http://) | [Post Page](http://) |
 
-
 ## Features
 
-|***Frameworks***|***Content***|***Notes***|
-|:---:|:---:|:---:|
-|OS|Windows<br>Linux<br>Mac OS|
-|Database|MySQL<br/>HSQL|**For other databases, need to manually install the JDBC driver**|
-|Backend Console|React 16<br/>Element UI|Support IE11+|
-|Frontend|jQuery 1.1.12<br/>Bootstrap 3.3.7|Support IE8+|
-|API|Jersey<br/>Hibernate<br/>Hibernate Validator<br/> Jackson<br/>Guava<br/>DBCP<br/>||
-|Messaging|RabbitMQ|Kafaka support is under development|
-|Caching|Redis||
-|Template Engine|Provides Thymeleaf like syntax<br>JEXL||
-|***Modules***|||
-|User|Login Page<br/>Register Page<br/>reset password <br/>support role<br/>permission management|Oauth support is under development|
-|Page|Index Page<br/> Category Page<br/> Post Page<br/> Tag Page<br/> Archive Page<br/> Search result page|Support drag&drop widgets to edit template|
-|Page Index|Index Pages with Lucene||
-|File|File browser<br/>image scale<br/> file upload<br/> file download|Folder permissions similar to Linux file system is under development|
-|Email|SMTP client<br/>SES client<br/>Email Template<br/>Email Tracking||
-|Pincode|Email pincode||
-|Captcha|Simple captcha image||
+|Platform| Windows/Linux/Mac OS|
+|:---:|:---:|
+|Database|MySQL and HSQL are tested. For other databases, need to manually install drivers|
+|Hardware|AWS micro instance is tested (1 core, 1G mem)|
+|Frontend Browser Compatibility|Build with jQuery and bootstrap, requires IE8+|
+|Admin Browser Compatibility|Build with React, requires IE11+|
+|Deployment|Standalone instance or deploy API/Web/Admin separately|
 
+Sited CMS includes a light JAX-RS module framework and basic CMS modules. 
 
+* JAX-RS module framework
+  * Enhancements to Jersey
+  * Supports Guice style DI/AOP 
+  * Embedded HTTP server with undertow
 
+- Content Management
+  * Full API for Page/Page Category/Template/Template components/Variables/Tag
+  * Edit templates by drag&drop template components
+  * Support drafts
+  * Use markdown as default editor
+  * Supports dynamic fields
+  * OG meta supports
+  * Baidu, addthis social share supports
+  * Baidu, GA statistics supports
+  * Web pages
+    * Index Page
+    * Post category page
+    * Post pages
+    * Tag page list
+   * Web components
+     * Header
+     * Footer 
+     * Category page list with pagination support
+     * Recently page list
+     * Popular page list
+     * Related page list
+     * Next/Pre pages
+     * Breadcrumb
+     * Card for any content
+     * Html for any content
+     * Content table
+     * Category Tree
+     * Banner
+     * Social share
+ 
+- User management
+   * Full API for User/Role/Permission.
+   * Declarative permission validation.
+   * Supports dynamic fields. 
+   * Email pincode
+   * Simple captcha code
+   * Web pages
+     * Login
+     * Register
+     * Forget password
+     * Reset password
+   
+- File management
+   * Create database record for upload file for file access permission(Not quite ready yet)
+   * File browser
+ 
 
 ## Getting Started
 
@@ -125,13 +165,11 @@ public class TodoServiceModuleImpl extends TodoServiceModule {
 
 ## Release Notes
 
-* What's next
-  * Facebook integration
-  * Add this sharing
-  * GA tracking
+* 0.9.1 
+  * Clear modules, remove page search/rss and edm features.
+  * Add GA/addthis modules
 
-
-* 0.9.0 · Beta release 
+* 0.9.0
   * User management, supports login/register/forget password/pincode/captcha code.
   * Page management, supports category/page/template/variable/components.
   * File management, supports upload files, download files, scale images, react file browser. 
@@ -139,11 +177,8 @@ public class TodoServiceModuleImpl extends TodoServiceModule {
 
 ## Authors
 
-* Chi (Xiamen, China)<br>
-  If you need support for customization or commerce license, please feel free to contact me. 
-    * email ```chiron.chi#gmail.com```
-    * skype ```chiron.chi#gmail.com```
-    * wechat ```sited-io```
+* Chi
+  > If you need support for customization or commerce license, please feel free to contact me ``chiron.chi#gmail.com``
 
 See also the list of [contributors](https://github.com/your/project/contributors) who participated in this project.
 

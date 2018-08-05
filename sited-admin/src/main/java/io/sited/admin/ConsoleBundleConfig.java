@@ -13,4 +13,6 @@ public interface ConsoleBundleConfig {
     ConsoleBundleConfig addOptions(Map<String, Object> options);
 
     ConsoleBundleConfig addMenuItems(ConsoleMenu.ConsoleMenuItem... items);
+
+    ConsoleBundleConfig addRoute(String path, String bundleName);
 }

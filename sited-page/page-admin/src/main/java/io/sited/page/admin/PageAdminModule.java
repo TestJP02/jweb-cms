@@ -5,11 +5,9 @@ import com.google.common.collect.Lists;
 import io.sited.admin.AbstractAdminModule;
 import io.sited.admin.ConsoleBundle;
 import io.sited.admin.ConsoleMenu;
-import io.sited.page.admin.service.PageCategoryAccessService;
 import io.sited.page.admin.service.PagePathService;
 import io.sited.page.admin.web.api.PageAdminController;
 import io.sited.page.admin.web.api.PageCategoryAdminController;
-import io.sited.page.admin.web.api.PageCommentAdminController;
 import io.sited.page.admin.web.api.PageComponentAdminController;
 import io.sited.page.admin.web.api.PagePathAdminController;
 import io.sited.page.admin.web.api.PageSavedComponentAdminController;
@@ -27,7 +25,6 @@ public class PageAdminModule extends AbstractAdminModule {
         PageAdminOptions pageAdminOptions = options("page-admin", PageAdminOptions.class);
 
 
-        bind(PageCategoryAccessService.class);
         bind(PageAdminOptions.class).toInstance(pageAdminOptions);
         bind(PagePathService.class);
 
@@ -39,7 +36,6 @@ public class PageAdminModule extends AbstractAdminModule {
         admin().controller(PageSavedComponentAdminController.class);
         admin().controller(PageComponentAdminController.class);
         admin().controller(PageTagAdminController.class);
-        admin().controller(PageCommentAdminController.class);
         admin().controller(PageStatisticsAdminController.class);
 
         admin().install(scriptModule());

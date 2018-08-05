@@ -31,8 +31,8 @@ export default class TemplateList extends React.Component {
                     prop: "path"
                 },
                 {
-                    label: i18n.t("page.layoutName"),
-                    prop: "layoutName"
+                    label: i18n.t("page.type"),
+                    prop: "type"
                 },
                 {
                     label: i18n.t("page.status"),
@@ -40,7 +40,7 @@ export default class TemplateList extends React.Component {
                 },
                 {
                     label: i18n.t("page.createdTime"),
-                    render: function (data) {
+                    render: function(data) {
                         return (
                             <ElementUI.DateFormatter date={data.createdTime}/>
                         );
@@ -48,7 +48,7 @@ export default class TemplateList extends React.Component {
                 },
                 {
                     label: i18n.t("page.updatedTime"),
-                    render: function (data) {
+                    render: function(data) {
                         return (
                             <ElementUI.DateFormatter date={data.updatedTime}/>
                         );
@@ -58,17 +58,14 @@ export default class TemplateList extends React.Component {
                     label: i18n.t("page.action"),
                     fixed: "right",
                     width: 200,
-                    render: function (current) {
+                    render: function(current) {
                         return (
                             <span className="el-table__actions">
-                                {!current.readOnly &&
                                 <Button type="text">
-                                    <Link
-                                        to={{pathname: "/admin/page/template/" + current.id + "/update"}}> {i18n.t("page.update")} </Link>
+                                    <Link to={{pathname: "/admin/page/template/" + current.id + "/update"}}> {current.type === "DEFAULT" ? i18n.t("page.customize") : i18n.t("page.update")} </Link>
                                 </Button>
-                                }
 
-                                {!current.readOnly &&
+                                {current.type !== "DEFAULT" &&
                                 <Button type="text" onClick={e => this.delete(current, e)}>
                                     {i18n.t("page.delete")}
                                 </Button>

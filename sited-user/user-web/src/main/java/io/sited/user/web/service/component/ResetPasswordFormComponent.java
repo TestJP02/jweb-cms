@@ -4,7 +4,7 @@ import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import io.sited.template.Attributes;
 import io.sited.template.Children;
-import io.sited.template.TemplateComponent;
+import io.sited.web.AbstractWebComponent;
 
 import java.io.IOException;
 import java.io.OutputStream;
@@ -13,7 +13,7 @@ import java.util.Map;
 /**
  * @author chi
  */
-public class ResetPasswordFormComponent extends TemplateComponent {
+public class ResetPasswordFormComponent extends AbstractWebComponent {
     public ResetPasswordFormComponent() {
         super("reset-password-form", "component/reset-password-form/reset-password-form.html", Lists.newArrayList());
     }

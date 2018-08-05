@@ -4,7 +4,7 @@ import com.google.common.collect.ImmutableList;
 import io.sited.captcha.simple.CaptchaOptions;
 import io.sited.template.Attributes;
 import io.sited.template.Children;
-import io.sited.template.TemplateComponent;
+import io.sited.web.AbstractWebComponent;
 
 import javax.inject.Inject;
 import java.io.IOException;
@@ -14,7 +14,7 @@ import java.util.Map;
 /**
  * @author chi
  */
-public class CaptchaComponent extends TemplateComponent {
+public class CaptchaComponent extends AbstractWebComponent {
     @Inject
     CaptchaOptions options;
 

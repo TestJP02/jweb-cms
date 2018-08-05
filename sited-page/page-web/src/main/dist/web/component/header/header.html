@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:j="http://www.w3.org/1999/xhtml">
+    <head>
+        <link rel="stylesheet" href="page-header.25c4.css">
+        <script type="text/javascript" src="page-header.22b9.js"></script>
+    </head>
+    <body>
+        <nav class="component navbar-default navbar-fixed-top">
+            <div class="container page-header__container ">
+                <div class="navbar-header">
+                    <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+                        <span class="sr-only">Toggle navigation</span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                    <a class="pull-left" href="/" j:if="logoImageURL!=null">
+                        <img j:src="logoImageURL" j:alt="logoText" class="page-header__logo-image">
+                    </a>
+                    <a href="/" class="navbar-brand" j:if="logoText != null" j:text="logoText"></a>
+                </div>
+                <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                    <ul class="nav navbar-nav">
+                        <li j:for="link:links" j:class="(link.link==path?'active':'')+(link.children!=null?' dropdown':'')">
+                            <a j:href="link.link" j:if="link.children==null">
+                                <span j:text="link.displayName">Link Name</span>
+                            </a>
+                            <a j:if="link.children!=null" href="javascript:void(0)" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+                                <span j:text="link.displayName">Link Name</span>
+                                <span class="caret"></span>
+                            </a>
+                            <ul class="dropdown-menu" j:if="link.children!=null">
+                                <li j:for="sub:link.children">
+                                    <a j:href="sub.link" j:text="sub.displayName">Link Name</a>
+                                </li>
+                            </ul>
+                        </li>
+                    </ul>
+                    <ul class="nav navbar-nav navbar-right">
+                        <li class="dropdown " j:if="app.supportLanguages().size()>1">
+                            <a href="javascript:void(0)" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><span
+                                    j:text="i18n('header.language.' + client.language(),client.language())"></span> <span class="caret"></span></a>
+                            <ul class="dropdown-menu">
+                                <li j:for="language:app.supportLanguages()">
+                                    <a href="javascript:void(0)" class="switch-language" j:text="i18n('header.language.'+language,client.language())" j:data-language="language"></a>
+                                </li>
+                            </ul>
+                        </li>
+
+                        <li j:if="userEnabled" class="header__not-logged">
+                            <a href="/user/login" j:text="i18n('page.login',client.language())">Login</a>
+                        </li>
+                        <li j:if="userEnabled" class="header__not-logged">
+                            <a href="/user/register" j:text="i18n('page.register',client.language())">Register</a>
+                        </li>
+                        <li class="dropdown hidden" id="header__logged" j:if="userEnabled">
+                            <a href="javascript:void(0)" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+                                <img id="header__avatar" class="header__avatar" src="/static/img/default-avatar.8466.png" alt=""><span class="header__username" id="header__username">Dropdown</span> <span
+                                    class="caret"></span>
+                            </a>
+                            <ul class="dropdown-menu">
+                                <li>
+                                    <a href="/user/logout" class="page-nav__link">{{i18n('page.logout',client.language())}}</a>
+                                </li>
+                            </ul>
+                        </li>
+                    </ul>
+                    <form class="navbar-form navbar-right" j:action="searchURL" j:if="searchEnabled">
+                        <div class="input-group">
+                            <input type="text" class="form-control" placeholder="Search" name="q" j:value="request.queryParam('q').orElse('')">
+                            <span class="input-group-btn">
+                        <button type="submit" class="btn btn-default"><i class="fa fa-search"></i></button>
+                    </span>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </nav>
+    </body>
+</html>

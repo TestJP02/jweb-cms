@@ -4,6 +4,7 @@ import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Maps;
 import io.sited.page.api.PageTemplateWebService;
 import io.sited.page.api.page.PageComponentView;
+import io.sited.page.api.template.BatchCreateTemplateRequest;
 import io.sited.page.api.template.BatchDeletePageRequest;
 import io.sited.page.api.template.CreateTemplateRequest;
 import io.sited.page.api.template.TemplateQuery;
@@ -57,6 +58,11 @@ public class PageTemplateWebServiceImpl implements PageTemplateWebService {
     }
 
     @Override
+    public void batchCreate(BatchCreateTemplateRequest request) {
+        pageTemplateService.batchCreate(request);
+    }
+
+    @Override
     public TemplateResponse update(String id, UpdateTemplateRequest request) {
         return response(pageTemplateService.update(id, request));
     }
@@ -71,7 +77,7 @@ public class PageTemplateWebServiceImpl implements PageTemplateWebService {
         response.id = template.id;
         response.path = template.path;
         response.displayName = template.displayName;
-        response.readOnly = template.readOnly;
+        response.type = template.type;
         if (template.sections != null) {
             response.sections = JSON.fromJSON(template.sections, Types.generic(List.class, TemplateSectionView.class));
             response.components = Maps.newHashMap();

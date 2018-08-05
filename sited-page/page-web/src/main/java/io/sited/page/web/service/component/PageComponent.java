@@ -4,7 +4,7 @@ import com.google.common.collect.ImmutableList;
 import io.sited.page.api.PageStatisticsWebService;
 import io.sited.page.api.statistics.PageStatisticsResponse;
 import io.sited.page.web.AbstractPageComponent;
-import io.sited.page.web.ComponentBindings;
+import io.sited.page.web.Bindings;
 import io.sited.page.web.PageInfo;
 import io.sited.page.web.service.KeywordManager;
 import io.sited.page.web.service.PageTextExtension;
@@ -60,7 +60,7 @@ public class PageComponent extends AbstractPageComponent {
     }
 
     @Override
-    public void output(ComponentBindings bindings, Attributes attributes, Children children, OutputStream out) throws IOException {
+    public void output(Bindings bindings, Attributes attributes, Children children, OutputStream out) throws IOException {
         PageInfo page = bindings.page();
         Boolean titleEnabled = attributes.get("titleEnabled");
         bindings.put("titleEnabled", titleEnabled);
@@ -79,6 +79,8 @@ public class PageComponent extends AbstractPageComponent {
             Node document = parser.parse(page.content());
             String htmlContent = renderer().render(document);
             bindings.put("content", htmlContent);
+        } else {
+            bindings.put("content", "");
         }
         template().output(bindings, out);
     }

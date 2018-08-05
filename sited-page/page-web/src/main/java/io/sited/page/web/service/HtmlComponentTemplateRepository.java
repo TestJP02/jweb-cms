@@ -8,7 +8,7 @@ import io.sited.resource.ResourceRepository;
 import io.sited.resource.StringResource;
 
 import javax.inject.Inject;
-import java.util.Iterator;
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -44,7 +44,7 @@ public class HtmlComponentTemplateRepository implements ResourceRepository {
     }
 
     @Override
-    public Iterator<Resource> iterator() {
-        return ImmutableList.<Resource>of().iterator();
+    public List<Resource> list(String directory) {
+        return ImmutableList.of();
     }
 }

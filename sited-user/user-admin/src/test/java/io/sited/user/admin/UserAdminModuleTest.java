@@ -2,7 +2,6 @@ package io.sited.user.admin;
 
 import io.sited.admin.AdminModule;
 import io.sited.database.DatabaseModule;
-import io.sited.email.smtp.SMTPModule;
 import io.sited.message.MessageModule;
 import io.sited.service.ServiceModule;
 import io.sited.test.AppExtension;
@@ -21,7 +20,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
  * @author chi
  */
 @ExtendWith(AppExtension.class)
-@Install({UserAdminModule.class, SMTPModule.class, UserModuleImpl.class, DatabaseModule.class, MessageModule.class, ServiceModule.class, WebModule.class, AdminModule.class})
+@Install({UserAdminModule.class, UserModuleImpl.class, DatabaseModule.class, MessageModule.class, ServiceModule.class, WebModule.class, AdminModule.class})
 class UserAdminModuleTest {
     @Inject
     MockApp app;

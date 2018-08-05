@@ -10,7 +10,7 @@ import java.util.ServiceLoader;
  */
 public class Main {
     public static void main(String[] args) {
-        Path path = Paths.get(System.getProperty("user.home")).resolve(".sited");
+        Path path = Paths.get(System.getProperty("user.dir")).resolve("sited-main/src/main/dist");
         UndertowApp app = new UndertowApp(path);
         ServiceLoader.load(AbstractModule.class).forEach(app::install);
         app.start();

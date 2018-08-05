@@ -81,12 +81,15 @@ export default class TemplateUpdate extends React.Component {
     }
 
     submit() {
+        const form = this.state.form;
+        form.type = "CUSTOMIZED";
+
         this.form.validate((valid) => {
             if (valid) {
-                if (this.state.form.id) {
-                    fetch("/admin/api/page/template/" + this.state.form.id, {
+                if (form.id) {
+                    fetch("/admin/api/page/template/" + form.id, {
                         method: "PUT",
-                        body: JSON.stringify(this.state.form)
+                        body: JSON.stringify(form)
                     }).then((response) => {
                         notification({
                             title: "Success",
@@ -98,7 +101,7 @@ export default class TemplateUpdate extends React.Component {
                 } else {
                     fetch("/admin/api/page/template", {
                         method: "POST",
-                        body: JSON.stringify(this.state.form)
+                        body: JSON.stringify(form)
                     }).then((response) => {
                         notification({
                             title: "Success",

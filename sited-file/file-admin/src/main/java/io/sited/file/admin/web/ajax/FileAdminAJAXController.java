@@ -40,6 +40,7 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 import java.io.IOException;
 import java.io.InputStream;
 import java.time.LocalDateTime;
@@ -90,11 +91,11 @@ public class FileAdminAJAXController {
     @Path("/upload")
     @POST
     @Consumes(MediaType.MULTIPART_FORM_DATA)
-    public FileAJAXResponse upload(@QueryParam("directoryId") String directoryId, @QueryParam("path") String path,
-                                   @QueryParam("directoryPath") String directoryPath,
-                                   @QueryParam("title") String title, @QueryParam("description") String description,
-                                   @FormDataParam("file") InputStream file,
-                                   @FormDataParam("file") FormDataContentDisposition fileDisposition) throws IOException {
+    public Response upload(@QueryParam("directoryId") String directoryId, @QueryParam("path") String path,
+                           @QueryParam("directoryPath") String directoryPath,
+                           @QueryParam("title") String title, @QueryParam("description") String description,
+                           @FormDataParam("file") InputStream file,
+                           @FormDataParam("file") FormDataContentDisposition fileDisposition) throws IOException {
         Resource resource = new ByteArrayResource(fileDisposition.getFileName(), ByteStreams.toByteArray(file));
         DirectoryResponse directory = directory(directoryId, directoryPath);
 
@@ -111,7 +112,7 @@ public class FileAdminAJAXController {
             createFileRequest.directoryId = directory.id;
             createFileRequest.requestBy = userInfo.username();
             FileResponse response = fileWebService.create(createFileRequest);
-            return response(response);
+            return Response.ok(response(response)).type(MediaType.APPLICATION_JSON).build();
         } else {
             FileResponse fileResponse = fileWebService.findByPath(path).orElseThrow(() -> new NotFoundException("missing file, path=" + path));
             UpdateFileRequest updateFileRequest = new UpdateFileRequest();
@@ -123,7 +124,7 @@ public class FileAdminAJAXController {
             updateFileRequest.requestBy = userInfo.username();
             FileResponse response = fileWebService.update(fileResponse.id, updateFileRequest);
             fileRepository.create(new ResourceWrapper(response.path, resource));
-            return response(response);
+            return Response.ok(response(response)).type(MediaType.APPLICATION_JSON).build();
         }
     }
 

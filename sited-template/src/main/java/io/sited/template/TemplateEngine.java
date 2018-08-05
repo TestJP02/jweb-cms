@@ -116,10 +116,6 @@ public class TemplateEngine {
     }
 
     public TemplateEngine addComponent(Component component) {
-        if (component instanceof TemplateComponent) {
-            TemplateComponent templateComponent = (TemplateComponent) component;
-            templateComponent.templateEngine = this;
-        }
         componentRegistry.put(component.name(), component);
         return this;
     }

@@ -30,6 +30,8 @@ public class AdminController extends AbstractWebController {
     App app;
     @Inject
     Console console;
+    @Inject
+    UserInfo userInfo;
 
     @GET
     public Response index() {
@@ -85,7 +87,6 @@ public class AdminController extends AbstractWebController {
         itemView.path = item.path;
         itemView.displayName = messageManager.get(item.messageKey == null ? item.displayName : item.messageKey, language).orElse(item.displayName);
         itemView.displayOrder = item.displayOrder;
-        itemView.bundleName = item.bundleName;
         itemView.rolesAllowed = item.rolesAllowed;
         return itemView;
     }

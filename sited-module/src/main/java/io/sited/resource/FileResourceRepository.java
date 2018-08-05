@@ -1,6 +1,11 @@
 package io.sited.resource;
 
 
+import com.google.common.collect.ImmutableList;
+import com.google.common.collect.Lists;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.FileVisitResult;
@@ -10,20 +15,23 @@ import java.nio.file.Path;
 import java.nio.file.SimpleFileVisitor;
 import java.nio.file.attribute.BasicFileAttributes;
 import java.util.Arrays;
-import java.util.Deque;
-import java.util.Iterator;
 import java.util.LinkedList;
-import java.util.NoSuchElementException;
+import java.util.List;
 import java.util.Optional;
 
 /**
  * @author chi
  */
 public class FileResourceRepository implements ResourceRepository {
+    private final Logger logger = LoggerFactory.getLogger(FileResourceRepository.class);
+
     final Path dir;
 
     public FileResourceRepository(Path dir) {
         this.dir = dir;
+        if (!this.dir.toFile().exists() || !this.dir.toFile().isDirectory()) {
+            logger.warn("invalid directory, path={}", dir);
+        }
     }
 
     @Override
@@ -36,25 +44,34 @@ public class FileResourceRepository implements ResourceRepository {
     }
 
     @Override
-    public boolean isReadOnly() {
-        return false;
-    }
-
-    @Override
-    public void create(Resource resource) {
-        try {
-            Path path = dir.resolve(resource.path());
-            Files.createDirectories(path.getParent());
-            Files.write(path, resource.toByteArray());
-            path.toFile().setLastModified(resource.lastModified());
-        } catch (IOException e) {
-            throw new ResourceException(e);
+    public List<Resource> list(String directory) {
+        if (!dir.toFile().exists()) {
+            return ImmutableList.of();
         }
-    }
+        List<Resource> resources = Lists.newArrayList();
 
-    @Override
-    public void delete(String path) {
-        dir.resolve(path).toFile().delete();
+        LinkedList<File> stack = Lists.newLinkedList();
+        File[] children = dir.toFile().listFiles();
+        if (children != null) {
+            stack.addAll(Arrays.asList(children));
+        }
+
+        while (!stack.isEmpty()) {
+            File current = stack.pollFirst();
+            if (current == null) {
+                break;
+            }
+            String path = dir.relativize(current.toPath()).toString().replaceAll("\\\\", "/");
+            if (current.isDirectory() && directory.startsWith(path)) {
+                File[] files = current.listFiles();
+                if (files != null) {
+                    stack.addAll(Arrays.asList(files));
+                }
+            } else if (path.startsWith(directory)) {
+                resources.add(new FileResource(path, current.toPath()));
+            }
+        }
+        return resources;
     }
 
     public void delete() {
@@ -77,44 +94,6 @@ public class FileResourceRepository implements ResourceRepository {
         } catch (IOException e) {
             throw new ResourceException("failed to delete dir, path={}", dir, e);
         }
-    }
-
-    @Override
-    public Iterator<Resource> iterator() {
-        Deque<File> stack = new LinkedList<>();
-        File[] children = dir.toFile().listFiles();
-        if (children != null) {
-            stack.addAll(Arrays.asList(children));
-        }
-
-        return new Iterator<Resource>() {
-            File current;
-
-            @Override
-            public boolean hasNext() {
-                while (!stack.isEmpty() && current == null) {
-                    File file = stack.pollLast();
-                    current = file;
-                    File[] children = file.listFiles();
-                    if (children != null && children.length != 0) {
-                        for (File f : children) {
-                            stack.addLast(f);
-                        }
-                    }
-                }
-                return current != null;
-            }
-
-            @Override
-            public Resource next() {
-                if (current == null) {
-                    throw new NoSuchElementException();
-                }
-                File next = current;
-                current = null;
-                return new FileResource(dir.relativize(next.toPath()).toString().replaceAll("\\\\", "/"), next.toPath());
-            }
-        };
     }
 
     public Path path() {

@@ -2,8 +2,9 @@ package io.sited.resource;
 
 import com.google.common.collect.ImmutableList;
 
-import java.util.Iterator;
+import java.util.List;
 import java.util.Optional;
+import java.util.regex.Pattern;
 
 /**
  * @author chi
@@ -17,24 +18,17 @@ public class SingleResourceRepository implements ResourceRepository {
 
     @Override
     public Optional<Resource> get(String path) {
-        return Optional.of(resource);
+        if (resource.path().equals(path)) {
+            return Optional.of(resource);
+        }
+        return Optional.empty();
     }
 
     @Override
-    public boolean isReadOnly() {
-        return true;
-    }
-
-    @Override
-    public void create(Resource resource) {
-    }
-
-    @Override
-    public void delete(String path) {
-    }
-
-    @Override
-    public Iterator<Resource> iterator() {
-        return ImmutableList.of(resource).iterator();
+    public List<Resource> list(String directory) {
+        if (Pattern.compile(directory).matcher(resource.path()).matches()) {
+            return ImmutableList.of(resource);
+        }
+        return ImmutableList.of();
     }
 }

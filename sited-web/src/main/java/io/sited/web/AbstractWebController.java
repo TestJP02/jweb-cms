@@ -1,11 +1,14 @@
 package io.sited.web;
 
+import com.google.common.base.Strings;
 import com.google.common.collect.Maps;
+import io.sited.template.TemplateEngine;
 
 import javax.inject.Inject;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.util.Map;
+import java.util.Optional;
 
 /**
  * @author chi
@@ -21,7 +24,10 @@ public abstract class AbstractWebController {
     protected ClientInfo clientInfo;
 
     @Inject
-    protected UserInfo userInfo;
+    WebOptions webOptions;
+
+    @Inject
+    TemplateEngine templateEngine;
 
     protected Response template(String templatePath, Map<String, Object> bindings) {
         Map<String, Object> templateBindings = Maps.newHashMapWithExpectedSize(bindings.size() + 4);
@@ -29,7 +35,17 @@ public abstract class AbstractWebController {
         templateBindings.put("app", appInfo);
         templateBindings.put("request", requestInfo);
         templateBindings.put("client", clientInfo);
-        templateBindings.put("user", userInfo);
-        return Response.ok(Template.of(templatePath, templateBindings)).type(MediaType.TEXT_HTML).build();
+        return Response.ok(new Template(themeTemplatePath(templatePath), templateBindings)).type(MediaType.TEXT_HTML).build();
+    }
+
+    protected String themeTemplatePath(String templatePath) {
+        if (!Strings.isNullOrEmpty(webOptions.theme)) {
+            String themeTemplatePath = "theme/" + webOptions.theme + '/' + templatePath;
+            Optional<io.sited.template.Template> template = templateEngine.template(themeTemplatePath);
+            if (template.isPresent()) {
+                return themeTemplatePath;
+            }
+        }
+        return templatePath;
     }
 }

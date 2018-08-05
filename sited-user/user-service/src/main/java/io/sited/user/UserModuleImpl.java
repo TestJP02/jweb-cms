@@ -27,7 +27,6 @@ import io.sited.user.domain.UserGroup;
 import io.sited.user.service.ResetPasswordTokenService;
 import io.sited.user.service.UserAutoLoginTokenService;
 import io.sited.user.service.UserGroupService;
-import io.sited.user.service.UserRegisterMessageHandler;
 import io.sited.user.service.UserService;
 import io.sited.user.web.UserAutoLoginTokenWebServiceImpl;
 import io.sited.user.web.UserGroupWebServiceImpl;
@@ -65,9 +64,7 @@ public class UserModuleImpl extends UserModule {
         bind(UserGroupService.class);
         bind(ResetPasswordTokenService.class);
         bind(UserAutoLoginTokenService.class);
-        bind(UserRegisterMessageHandler.class);
 
-        messageConfig.listen(UserRegisterMessage.class, requestInjection(new UserRegisterMessageHandler()));
         api().service(UserWebService.class, UserWebServiceImpl.class);
         api().service(UserGroupWebService.class, UserGroupWebServiceImpl.class);
         api().service(UserAutoLoginTokenWebService.class, UserAutoLoginTokenWebServiceImpl.class);

@@ -89,6 +89,7 @@ public class PageCategoryAdminController {
         createCategoryRequest.description = createCategoryAJAXRequest.description;
         createCategoryRequest.keywords = createCategoryAJAXRequest.keywords;
         createCategoryRequest.tags = createCategoryAJAXRequest.tags;
+        createCategoryRequest.fields = createCategoryAJAXRequest.fields;
         createCategoryRequest.imageURL = createCategoryAJAXRequest.imageURL;
         createCategoryRequest.requestBy = userInfo.username();
         createCategoryRequest.ownerId = createCategoryAJAXRequest.ownerId;
@@ -115,6 +116,7 @@ public class PageCategoryAdminController {
         updateCategoryRequest.displayOrder = ajaxRequest.displayOrder;
         updateCategoryRequest.keywords = ajaxRequest.keywords;
         updateCategoryRequest.tags = ajaxRequest.tags;
+        updateCategoryRequest.fields = ajaxRequest.fields;
         updateCategoryRequest.imageURL = ajaxRequest.imageURL;
         updateCategoryRequest.requestBy = userInfo.username();
         updateCategoryRequest.ownerId = ajaxRequest.ownerId;
@@ -164,6 +166,7 @@ public class PageCategoryAdminController {
         ajaxResponse.description = response.description;
         ajaxResponse.imageURL = response.imageURL;
         ajaxResponse.tags = response.tags;
+        ajaxResponse.fields = response.fields;
         ajaxResponse.status = response.status;
         ajaxResponse.createdTime = response.createdTime;
         ajaxResponse.createdBy = response.createdBy;

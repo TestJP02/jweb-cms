@@ -6,7 +6,9 @@ import io.sited.resource.ResourceRepository;
 import io.sited.template.Component;
 import io.sited.template.ElementProcessor;
 import io.sited.template.TemplateEngine;
+import io.sited.web.AbstractWebComponent;
 import io.sited.web.WebConfig;
+import io.sited.web.WebOptions;
 import org.glassfish.jersey.process.internal.RequestScoped;
 
 import javax.inject.Provider;
@@ -24,11 +26,13 @@ import javax.ws.rs.ext.WriterInterceptor;
  */
 public class WebConfigImpl implements WebConfig {
     private final Binder binder;
+    private final WebOptions webOptions;
     private final TemplateEngine templateEngine;
     private final App app;
 
-    public WebConfigImpl(Binder binder, TemplateEngine templateEngine, App app) {
+    public WebConfigImpl(Binder binder, WebOptions webOptions, TemplateEngine templateEngine, App app) {
         this.binder = binder;
+        this.webOptions = webOptions;
         this.templateEngine = templateEngine;
         this.app = app;
     }
@@ -96,6 +100,11 @@ public class WebConfigImpl implements WebConfig {
 
     @Override
     public WebConfig addComponent(Component component) {
+        if (component instanceof AbstractWebComponent) {
+            AbstractWebComponent abstractWebComponent = (AbstractWebComponent) component;
+            abstractWebComponent.setTemplateEngine(templateEngine);
+            abstractWebComponent.setTheme(webOptions.theme);
+        }
         templateEngine.addComponent(component);
         return this;
     }

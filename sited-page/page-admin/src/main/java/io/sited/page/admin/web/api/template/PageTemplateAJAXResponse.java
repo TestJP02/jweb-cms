@@ -1,6 +1,7 @@
 package io.sited.page.admin.web.api.template;
 
 import io.sited.page.api.template.TemplateStatus;
+import io.sited.page.api.template.TemplateType;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
@@ -31,6 +32,6 @@ public class PageTemplateAJAXResponse {
     public String updatedBy;
     @XmlElement(name = "updatedTime")
     public OffsetDateTime updatedTime;
-    @XmlElement(name = "readOnly")
-    public Boolean readOnly;
+    @XmlElement(name = "type")
+    public TemplateType type;
 }

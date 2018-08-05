@@ -2,6 +2,7 @@ package io.sited.page.domain;
 
 
 import io.sited.page.api.template.TemplateStatus;
+import io.sited.page.api.template.TemplateType;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -27,8 +28,9 @@ public class PageTemplate {
     @Column(name = "display_name", length = 256)
     public String displayName;
 
-    @Column(name = "read_only")
-    public Boolean readOnly;
+    @Column(name = "type", length = 32)
+    @Enumerated(EnumType.STRING)
+    public TemplateType type;
 
     @Column(name = "sections", columnDefinition = "text")
     public String sections;

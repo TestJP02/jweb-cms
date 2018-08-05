@@ -3,7 +3,7 @@ package io.sited.page.web.service.component;
 import com.google.common.collect.ImmutableList;
 import io.sited.page.web.AbstractPageComponent;
 import io.sited.template.Attributes;
-import io.sited.page.web.ComponentBindings;
+import io.sited.page.web.Bindings;
 import io.sited.template.Children;
 import io.sited.template.StringAttribute;
 import org.commonmark.ext.autolink.AutolinkExtension;
@@ -33,7 +33,7 @@ public class PageCardComponent extends AbstractPageComponent {
     }
 
     @Override
-    public void output(ComponentBindings bindings, Attributes attributes, Children children, OutputStream out) throws IOException {
+    public void output(Bindings bindings, Attributes attributes, Children children, OutputStream out) throws IOException {
         bindings.putAll(attributes);
         String content = attributes.get("content");
         Node document = parser.parse(content);

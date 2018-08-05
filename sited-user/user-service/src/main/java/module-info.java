@@ -17,7 +17,6 @@ module sited.user {
     requires sited.database;
     requires sited.message;
     requires sited.user.api;
-    requires sited.email.api;
 
     exports io.sited.user;
 }

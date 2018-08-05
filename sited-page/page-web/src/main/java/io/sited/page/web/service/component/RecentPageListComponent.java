@@ -6,7 +6,7 @@ import io.sited.page.api.PageWebService;
 import io.sited.page.api.category.CategoryResponse;
 import io.sited.page.api.page.PageQuery;
 import io.sited.page.web.AbstractPageComponent;
-import io.sited.page.web.ComponentBindings;
+import io.sited.page.web.Bindings;
 import io.sited.template.Attributes;
 import io.sited.template.Children;
 import io.sited.template.IntegerAttribute;
@@ -34,7 +34,7 @@ public class RecentPageListComponent extends AbstractPageComponent {
     }
 
     @Override
-    public void output(ComponentBindings bindings, Attributes attributes, Children children, OutputStream out) throws IOException {
+    public void output(Bindings bindings, Attributes attributes, Children children, OutputStream out) throws IOException {
         bindings.putAll(attributes);
         PageQuery query = new PageQuery();
         query.page = attributes.get("page");

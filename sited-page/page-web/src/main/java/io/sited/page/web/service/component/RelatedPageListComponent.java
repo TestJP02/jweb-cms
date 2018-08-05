@@ -3,7 +3,7 @@ package io.sited.page.web.service.component;
 import com.google.common.collect.ImmutableList;
 import io.sited.page.api.page.PageRelatedQuery;
 import io.sited.page.web.AbstractPageComponent;
-import io.sited.page.web.ComponentBindings;
+import io.sited.page.web.Bindings;
 import io.sited.page.web.PageInfo;
 import io.sited.page.web.service.PageService;
 import io.sited.template.Attributes;
@@ -29,7 +29,7 @@ public class RelatedPageListComponent extends AbstractPageComponent {
     }
 
     @Override
-    public void output(ComponentBindings bindings, Attributes attributes, Children children, OutputStream out) throws IOException {
+    public void output(Bindings bindings, Attributes attributes, Children children, OutputStream out) throws IOException {
         bindings.putAll(attributes);
         PageInfo page = bindings.page();
 

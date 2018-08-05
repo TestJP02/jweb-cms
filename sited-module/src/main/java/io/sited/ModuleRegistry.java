@@ -83,6 +83,10 @@ public class ModuleRegistry implements Iterable<AbstractModule> {
 
     @Override
     public Iterator<AbstractModule> iterator() {
+        if (graph == null) {
+            return activeModules().stream().map(this::module).collect(Collectors.toList()).iterator();
+        }
+
         Set<String> visited = Sets.newLinkedHashSet();
         Deque<String> stack = Lists.newLinkedList(activeModules());
 

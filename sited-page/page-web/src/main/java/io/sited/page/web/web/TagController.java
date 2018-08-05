@@ -3,7 +3,7 @@ package io.sited.page.web.web;
 import com.google.common.collect.ImmutableMap;
 import io.sited.page.api.PageTagWebService;
 import io.sited.page.api.tag.PageTagResponse;
-import io.sited.page.web.AbstractPageWebController;
+import io.sited.page.web.AbstractPageController;
 import io.sited.page.web.PageInfo;
 
 import javax.inject.Inject;
@@ -17,7 +17,7 @@ import javax.ws.rs.core.Response;
  * @author chi
  */
 @Path("/tag")
-public class TagController extends AbstractPageWebController {
+public class TagController extends AbstractPageController {
     @Inject
     PageTagWebService pageTagWebService;
 

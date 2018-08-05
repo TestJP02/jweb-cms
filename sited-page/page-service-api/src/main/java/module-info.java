@@ -24,6 +24,5 @@ module sited.page.api {
     exports io.sited.page.api.tag;
     exports io.sited.page.api.template;
     exports io.sited.page.api.variable;
-    exports io.sited.page.api.comment;
     exports io.sited.page.api.statistics;
 }

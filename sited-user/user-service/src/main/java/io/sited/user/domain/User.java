@@ -85,6 +85,9 @@ public class User {
     @Column(name = "tags", length = 512)
     public String tags;
 
+    @Column(name = "fields", length = 2048)
+    public String fields;
+
     @Column(name = "created_time")
     public OffsetDateTime createdTime;
 
@@ -96,7 +99,4 @@ public class User {
 
     @Column(name = "updated_by", length = 64)
     public String updatedBy;
-
-    @Column(name = "fields", length = 2048)
-    public String fields;
 }

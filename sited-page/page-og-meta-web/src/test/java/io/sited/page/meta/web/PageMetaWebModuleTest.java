@@ -1,5 +1,6 @@
 package io.sited.page.meta.web;
 
+import io.sited.page.PageModuleImpl;
 import io.sited.test.AppExtension;
 import io.sited.test.Install;
 import io.sited.test.MockApp;
@@ -15,7 +16,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
  * @author chi
  */
 @ExtendWith(AppExtension.class)
-@Install({PageMetaWebModule.class, WebModule.class})
+@Install({PageOgMetaWebModule.class, WebModule.class, PageModuleImpl.class})
 class PageMetaWebModuleTest {
     @Inject
     MockApp app;

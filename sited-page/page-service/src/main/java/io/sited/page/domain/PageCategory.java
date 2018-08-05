@@ -51,6 +51,9 @@ public class PageCategory {
     @Column(name = "tags", length = 511)
     public String tags;
 
+    @Column(name = "fields", length = 2048)
+    public String fields;
+
     @Column(name = "status", length = 16)
     @Enumerated(EnumType.STRING)
     public CategoryStatus status;

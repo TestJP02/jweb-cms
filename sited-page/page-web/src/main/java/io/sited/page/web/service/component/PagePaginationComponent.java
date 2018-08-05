@@ -7,7 +7,7 @@ import io.sited.template.Children;
 import io.sited.template.IntegerAttribute;
 import io.sited.template.ObjectAttribute;
 import io.sited.template.StringAttribute;
-import io.sited.template.TemplateComponent;
+import io.sited.web.AbstractWebComponent;
 import io.sited.util.collection.QueryResponse;
 
 import java.io.IOException;
@@ -18,7 +18,7 @@ import java.util.Map;
 /**
  * @author chi
  */
-public class PagePaginationComponent extends TemplateComponent {
+public class PagePaginationComponent extends AbstractWebComponent {
     public PagePaginationComponent() {
         super("pagination", "component/page-pagination/page-pagination.html",
             Lists.newArrayList(new StringAttribute("path", "/"),

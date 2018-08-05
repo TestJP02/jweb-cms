@@ -1,7 +1,7 @@
 package io.sited.page.service.message;
 
 import io.sited.message.MessageHandler;
-import io.sited.page.api.comment.CommentCreatedMessage;
+import io.sited.page.api.page.CommentCreatedMessage;
 import io.sited.page.service.PageStatisticsService;
 
 import javax.inject.Inject;
@@ -14,7 +14,7 @@ public class CommentCreatedMessageHandler implements MessageHandler<CommentCreat
     PageStatisticsService pageService;
 
     @Override
-    public void handle(CommentCreatedMessage message) throws Throwable {
+    public void handle(CommentCreatedMessage message) {
         pageService.commentCreated(message.pageId, 1, "SYS");
     }
 }

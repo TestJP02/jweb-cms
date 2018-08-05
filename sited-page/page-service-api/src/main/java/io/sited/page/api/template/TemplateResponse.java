@@ -19,8 +19,8 @@ public class TemplateResponse {
     public String id;
     @XmlElement(name = "path")
     public String path;
-    @XmlElement(name = "readOnly")
-    public Boolean readOnly;
+    @XmlElement(name = "type")
+    public TemplateType type;
     @XmlElement(name = "displayName")
     public String displayName;
     @XmlElementWrapper(name = "sections")

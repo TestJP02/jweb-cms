@@ -27,8 +27,23 @@ import java.nio.file.Path;
 public class LogbackModule extends AbstractModule {
     static {
         System.setProperty("org.jboss.logging.provider", "slf4j");
+
+        LoggerContext lc = (LoggerContext) LoggerFactory.getILoggerFactory();
+
+        PatternLayoutEncoder ple = new PatternLayoutEncoder();
+        ple.setPattern("%d [%thread] %-5level %logger{5} - %msg %n");
+        ple.setContext(lc);
+        ple.start();
+
+        ConsoleAppender<ILoggingEvent> appender = new ConsoleAppender<>();
+        appender.setContext(new ContextBase());
+        appender.setEncoder(ple);
+        appender.start();
+
         Logger root = (Logger) LoggerFactory.getLogger(Logger.ROOT_LOGGER_NAME);
-        root.setLevel(Level.ERROR);
+        root.detachAndStopAllAppenders();
+        root.setLevel(Level.INFO);
+        root.addAppender(appender);
     }
 
     @Override

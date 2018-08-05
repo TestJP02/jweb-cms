@@ -321,6 +321,14 @@ public class App extends Application {
         return options.imageURL;
     }
 
+    public String host(){
+        return options.host;
+    }
+
+    public String port(){
+        return options.port;
+    }
+
     public class AppEventListener implements ApplicationEventListener {
         RequestEventListener requestEventListener = event -> {
             if (event.getType() == RequestEvent.Type.ON_EXCEPTION) {

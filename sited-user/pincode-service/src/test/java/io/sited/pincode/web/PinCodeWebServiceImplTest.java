@@ -1,7 +1,6 @@
 package io.sited.pincode.web;
 
 import io.sited.database.DatabaseModule;
-import io.sited.email.smtp.SMTPModule;
 import io.sited.message.MessageModule;
 import io.sited.pincode.PinCodeModuleImpl;
 import io.sited.pincode.api.pincode.CreatePinCodeRequest;
@@ -23,7 +22,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
  * @author chi
  */
 @ExtendWith(AppExtension.class)
-@Install({PinCodeModuleImpl.class, SMTPModule.class, DatabaseModule.class, MessageModule.class,
+@Install({PinCodeModuleImpl.class, DatabaseModule.class, MessageModule.class,
     ServiceModule.class})
 public class PinCodeWebServiceImplTest {
     @Inject

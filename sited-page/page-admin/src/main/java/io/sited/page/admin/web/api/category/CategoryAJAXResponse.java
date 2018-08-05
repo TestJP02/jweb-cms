@@ -7,6 +7,7 @@ import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import java.time.OffsetDateTime;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author chi
@@ -54,4 +55,6 @@ public class CategoryAJAXResponse {
     public List<String> groupRoles;
     @XmlElement(name = "othersRoles")
     public List<String> othersRoles;
+    @XmlElement(name = "fields")
+    public Map<String, String> fields;
 }

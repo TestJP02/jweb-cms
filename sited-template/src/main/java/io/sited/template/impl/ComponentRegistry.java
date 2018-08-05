@@ -4,7 +4,6 @@ import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Maps;
 import io.sited.template.Component;
 import io.sited.template.Template;
-import io.sited.template.TemplateComponent;
 import io.sited.template.TemplateEngine;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

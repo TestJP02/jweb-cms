@@ -1,16 +1,13 @@
 package io.sited.resource;
 
+import java.util.List;
 import java.util.Optional;
 
 /**
  * @author chi
  */
-public interface ResourceRepository extends Iterable<Resource> {
+public interface ResourceRepository {
     Optional<Resource> get(String path);
 
-    boolean isReadOnly();
-
-    void create(Resource resource);
-
-    void delete(String path);
+    List<Resource> list(String directory);
 }

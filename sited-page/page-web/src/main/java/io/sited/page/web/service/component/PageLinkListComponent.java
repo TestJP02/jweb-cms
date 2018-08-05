@@ -5,7 +5,7 @@ import com.google.common.collect.Maps;
 import io.sited.template.Attributes;
 import io.sited.template.Children;
 import io.sited.template.ObjectAttribute;
-import io.sited.template.TemplateComponent;
+import io.sited.web.AbstractWebComponent;
 
 import java.io.IOException;
 import java.io.OutputStream;
@@ -14,7 +14,7 @@ import java.util.Map;
 /**
  * @author chi
  */
-public class PageLinkListComponent extends TemplateComponent {
+public class PageLinkListComponent extends AbstractWebComponent {
     public PageLinkListComponent() {
         super("page-link-list", "component/page-link-list/page-link-list.html",
             ImmutableList.of(

@@ -5,6 +5,7 @@ import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import java.time.OffsetDateTime;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author chi
@@ -33,6 +34,8 @@ public class CategoryNodeResponse {
     public String imageURL;
     @XmlElement(name = "tags")
     public List<String> tags;
+    @XmlElement(name = "fields")
+    public Map<String, String> fields;
     @XmlElement(name = "status")
     public CategoryStatus status;
     @XmlElement(name = "ownerId")

@@ -2,6 +2,7 @@ package io.sited.admin;
 
 
 import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
 
 import java.util.List;
 import java.util.Map;
@@ -16,5 +17,6 @@ public class ConsoleBundle {
     public List<String> scriptFiles = Lists.newArrayList();
     public List<String> messages = Lists.newArrayList();
     public ConsoleMenu menu;
-    public Map<String, Object> options;
+    public Map<String, Object> options = Maps.newHashMap();
+    public Map<String, String> routes = Maps.newHashMap();
 }

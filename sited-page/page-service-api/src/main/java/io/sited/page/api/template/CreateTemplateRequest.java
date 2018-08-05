@@ -12,8 +12,8 @@ import java.util.List;
 public class CreateTemplateRequest {
     @XmlElement(name = "path")
     public String path;
-    @XmlElement(name = "readOnly")
-    public Boolean readOnly;
+    @XmlElement(name = "type")
+    public TemplateType type;
     @XmlElement(name = "displayName")
     public String displayName;
     @XmlElement(name = "sections")

@@ -2,7 +2,7 @@ package io.sited.user.web.web;
 
 import com.google.common.collect.Maps;
 import io.sited.App;
-import io.sited.page.web.AbstractPageWebController;
+import io.sited.page.web.AbstractPageController;
 import io.sited.page.web.PageInfo;
 import io.sited.user.web.UserWebOptions;
 import io.sited.user.web.service.ValidationRules;
@@ -23,7 +23,7 @@ import java.util.Optional;
  * @author chi
  */
 @Path("/user")
-public class UserController extends AbstractPageWebController {
+public class UserController extends AbstractPageController {
     @Inject
     App app;
     @Inject

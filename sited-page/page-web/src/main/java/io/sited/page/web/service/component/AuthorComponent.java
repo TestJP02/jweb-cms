@@ -4,7 +4,7 @@ import com.google.common.collect.Lists;
 import io.sited.page.api.PageWebService;
 import io.sited.page.api.page.PageQuery;
 import io.sited.page.web.AbstractPageComponent;
-import io.sited.page.web.ComponentBindings;
+import io.sited.page.web.Bindings;
 import io.sited.template.Attributes;
 import io.sited.template.Children;
 import io.sited.template.StringAttribute;
@@ -27,7 +27,7 @@ public class AuthorComponent extends AbstractPageComponent {
     }
 
     @Override
-    public void output(ComponentBindings bindings, Attributes attributes, Children children, OutputStream out) throws IOException {
+    public void output(Bindings bindings, Attributes attributes, Children children, OutputStream out) throws IOException {
         bindings.putAll(attributes);
 
         String userId = attributes.get("userId");

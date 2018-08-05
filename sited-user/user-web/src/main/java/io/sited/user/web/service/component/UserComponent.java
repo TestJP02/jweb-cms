@@ -5,7 +5,7 @@ import com.google.common.collect.Maps;
 import io.sited.template.Attributes;
 import io.sited.template.Children;
 import io.sited.template.StringAttribute;
-import io.sited.template.TemplateComponent;
+import io.sited.web.AbstractWebComponent;
 import io.sited.user.web.service.UserCacheService;
 import io.sited.user.web.service.UserCacheView;
 
@@ -17,7 +17,7 @@ import java.util.Map;
 /**
  * @author chi
  */
-public class UserComponent extends TemplateComponent {
+public class UserComponent extends AbstractWebComponent {
     @Inject
     UserCacheService userCacheService;
 

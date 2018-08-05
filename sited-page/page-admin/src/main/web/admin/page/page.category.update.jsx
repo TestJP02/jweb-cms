@@ -15,6 +15,7 @@ export default class CategoryUpdate extends React.Component {
                 parentId: props.match.params.parentId,
                 tags: [],
                 keywords: [],
+                fields: {},
                 templatePath: "template/category.html",
                 displayOrder: 0
             },
@@ -46,21 +47,6 @@ export default class CategoryUpdate extends React.Component {
                             }
                             if (!isCreateRoot && value === "/") {
                                 return callback(new Error(i18n.t("page.shouldNotBeSlash")));
-                            }
-                            return callback();
-                        },
-                        trigger: "blur"
-                    }
-                ],
-                displayOrder: [
-                    {
-                        required: true,
-                        validator: (rule, value, callback) => {
-                            if (value === null) {
-                                return callback(new Error(i18n.t("page.displayOrderRequired")));
-                            }
-                            if (isNaN(Number(value)) || value % 1 !== 0) {
-                                return callback(new Error(i18n.t("page.displayOrderInteger")));
                             }
                             return callback();
                         },
@@ -211,6 +197,40 @@ export default class CategoryUpdate extends React.Component {
         this.setState({form: Object.assign({}, this.state.form, {path: path})});
     }
 
+
+    addField() {
+        const form = this.state.form;
+        const number = Object.entries(form.fields).length + 1;
+        form.fields["filed " + number] = "value " + number;
+        this.setState({form: form});
+    }
+
+    removeField(key) {
+        const form = this.state.form;
+        delete form.fields[key];
+        this.setState({form: form});
+    }
+
+    changeFieldKey(newKey, prevKey) {
+        const form = this.state.form;
+        const fields = {};
+        for (const key in form.fields) {
+            if (key === prevKey) {
+                fields[newKey] = form.fields[prevKey];
+            } else {
+                fields[key] = form.fields[key];
+            }
+        }
+        form.fields = fields;
+        this.setState({form: form});
+    }
+
+    changeFieldValue(value, key) {
+        const form = this.state.form;
+        form.fields[key] = value;
+        this.setState({form: form});
+    }
+
     cancel() {
         this.props.history.push("/admin/page/category/list");
     }
@@ -223,12 +243,12 @@ export default class CategoryUpdate extends React.Component {
                         method: "PUT",
                         body: JSON.stringify(this.state.form)
                     }).then((response) => {
-                        this.props.history.push("/admin/page/category/" + response.id + "/update");
                         notification({
                             title: "Success",
                             message: i18n.t("page.updateSuccessMessage"),
                             type: "success"
                         });
+                        this.props.history.push("/admin/page/category/list");
                     }).catch((err) => {
                         if (err.fields) {
                             notification({
@@ -361,6 +381,21 @@ export default class CategoryUpdate extends React.Component {
                             <Form.Item label={i18n.t("page.tags")}>
                                 <ElementUI.TagList list={this.state.form.tags} onChange={val => this.formChange("tags", val)}/>
                             </Form.Item>
+
+                            {
+                                this.state.form.fields && <Form.Item label={i18n.t("page.fields")}>
+                                    {Object.entries(this.state.form.fields).map((field, index) =>
+                                        <Form.Item className="page-update__field" key={field.key}>
+                                            <Input value={field[1]}
+                                                placeholder={i18n.t("page.fieldValue")}
+                                                prepend={<Input value={field[0]} placeholder={i18n.t("page.fieldName")} onChange={val => this.changeFieldKey(val, field[0])}/>}
+                                                onChange={val => this.changeFieldValue(val, field[0])}
+                                                append={<Button size="small" onClick={() => this.removeField(field[0])} icon="minus"></Button>}/>
+                                        </Form.Item>
+                                    )}
+                                    <Button onClick={() => this.addField()} icon="plus"></Button>
+                                </Form.Item>
+                            }
                         </Form>
                     </Card>
                 </div>

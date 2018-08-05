@@ -2,10 +2,10 @@ package io.sited.web.impl.processor;
 
 import io.sited.ApplicationException;
 import io.sited.resource.Resource;
+import io.sited.resource.ResourceRepository;
 import io.sited.template.Attribute;
 import io.sited.template.Element;
 import io.sited.template.ElementProcessor;
-import io.sited.web.WebRoot;
 
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -15,10 +15,10 @@ import java.util.Optional;
  * @author chi
  */
 public class SrcElementProcessor implements ElementProcessor {
-    private final WebRoot webRoot;
+    private final ResourceRepository repository;
 
-    public SrcElementProcessor(WebRoot webRoot) {
-        this.webRoot = webRoot;
+    public SrcElementProcessor(ResourceRepository repository) {
+        this.repository = repository;
     }
 
     @Override
@@ -37,7 +37,7 @@ public class SrcElementProcessor implements ElementProcessor {
             return element;
         }
         String path = normalize(resource, href);
-        if (webRoot.get(path.substring(1)).isPresent()) {
+        if (repository.get(path.substring(1)).isPresent()) {
             if (isCDNEnabled(element)) {
                 element.deleteAttribute("cdn");
 
@@ -51,9 +51,9 @@ public class SrcElementProcessor implements ElementProcessor {
         return element;
     }
 
-    private String normalize(Resource template, String src) {
+    private String normalize(Resource resource, String src) {
         try {
-            String path = new URI(template.path()).resolve(src).normalize().getPath();
+            String path = new URI(resource.path()).resolve(src).normalize().getPath();
             return path.length() > 0 && path.charAt(0) == '/' ? path : '/' + path;
         } catch (URISyntaxException e) {
             throw new ApplicationException(e);

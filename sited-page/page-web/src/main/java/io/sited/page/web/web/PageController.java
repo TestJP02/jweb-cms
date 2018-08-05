@@ -9,7 +9,7 @@ import io.sited.page.api.draft.DraftResponse;
 import io.sited.page.api.page.PageResponse;
 import io.sited.page.api.page.PageStatus;
 import io.sited.page.api.page.PageVisitedMessage;
-import io.sited.page.web.AbstractPageWebController;
+import io.sited.page.web.AbstractPageController;
 import io.sited.page.web.PageInfo;
 import io.sited.page.web.service.CategoryCacheService;
 import io.sited.page.web.service.PageService;
@@ -32,7 +32,7 @@ import java.util.Optional;
  * @author chi
  */
 @Path("/{s:.+}")
-public class PageController extends AbstractPageWebController {
+public class PageController extends AbstractPageController {
     @Inject
     MessagePublisher<PageVisitedMessage> publisher;
     @Inject
@@ -101,7 +101,7 @@ public class PageController extends AbstractPageWebController {
     }
 
     private Optional<Response> tryTemplate(String path) {
-        String templatePath = templatePath(path);
+        String templatePath = fullPath(path);
         if (templatePath.startsWith("component/") || templatePath.startsWith("template/")) {
             return Optional.empty();
         }
@@ -116,7 +116,7 @@ public class PageController extends AbstractPageWebController {
         return Optional.empty();
     }
 
-    private String templatePath(String path) {
+    private String fullPath(String path) {
         if (path.endsWith(".html")) {
             return path.substring(1);
         } else {
@@ -225,7 +225,6 @@ public class PageController extends AbstractPageWebController {
         message.categoryId = page.categoryId;
         message.timestamp = OffsetDateTime.now();
         message.clientId = clientInfo.id();
-        message.userId = userInfo.id();
         publisher.publish(message);
     }
 

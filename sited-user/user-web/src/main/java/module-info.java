@@ -18,7 +18,6 @@ module sited.user.web {
     requires sited.message;
     requires sited.cache;
     requires sited.user.api;
-    requires sited.email.api;
     requires sited.captcha.web;
     requires sited.pincode.api;
     requires sited.pincode.web;

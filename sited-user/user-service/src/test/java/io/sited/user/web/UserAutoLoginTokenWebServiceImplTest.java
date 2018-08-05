@@ -2,7 +2,6 @@ package io.sited.user.web;
 
 
 import io.sited.database.DatabaseModule;
-import io.sited.email.smtp.SMTPModule;
 import io.sited.message.MessageModule;
 import io.sited.service.ServiceModule;
 import io.sited.test.AppExtension;
@@ -31,7 +30,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
  * @author chi
  */
 @ExtendWith(AppExtension.class)
-@Install({MessageModule.class, UserModuleImpl.class, DatabaseModule.class, ServiceModule.class, SMTPModule.class})
+@Install({MessageModule.class, UserModuleImpl.class, DatabaseModule.class, ServiceModule.class})
 public class UserAutoLoginTokenWebServiceImplTest {
     @Inject
     MockApp app;

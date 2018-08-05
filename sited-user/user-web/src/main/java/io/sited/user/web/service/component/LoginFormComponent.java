@@ -4,7 +4,7 @@ import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import io.sited.template.Attributes;
 import io.sited.template.Children;
-import io.sited.template.TemplateComponent;
+import io.sited.web.AbstractWebComponent;
 
 import java.io.IOException;
 import java.io.OutputStream;
@@ -13,7 +13,7 @@ import java.util.Map;
 /**
  * @author chi
  */
-public class LoginFormComponent extends TemplateComponent {
+public class LoginFormComponent extends AbstractWebComponent {
     public LoginFormComponent() {
         super("login-form", "component/login-form/login-form.html", Lists.newArrayList());
     }

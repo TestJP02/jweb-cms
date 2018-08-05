@@ -1,6 +1,7 @@
 package io.sited.page.api;
 
 
+import io.sited.page.api.template.BatchCreateTemplateRequest;
 import io.sited.page.api.template.BatchDeletePageRequest;
 import io.sited.page.api.template.CreateTemplateRequest;
 import io.sited.page.api.template.TemplateQuery;
@@ -34,6 +35,10 @@ public interface PageTemplateWebService {
 
     @POST
     TemplateResponse create(CreateTemplateRequest request);
+
+    @Path("/batch-create")
+    @POST
+    void batchCreate(BatchCreateTemplateRequest request);
 
     @Path("/{id}")
     @PUT

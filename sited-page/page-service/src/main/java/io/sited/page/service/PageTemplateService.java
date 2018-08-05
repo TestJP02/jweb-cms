@@ -1,9 +1,11 @@
 package io.sited.page.service;
 
 import com.google.common.base.Strings;
+import com.google.common.collect.Lists;
 import io.sited.database.Query;
 import io.sited.database.Repository;
 import io.sited.message.MessagePublisher;
+import io.sited.page.api.template.BatchCreateTemplateRequest;
 import io.sited.page.api.template.CreateTemplateRequest;
 import io.sited.page.api.template.TemplateChangedMessage;
 import io.sited.page.api.template.TemplateQuery;
@@ -16,6 +18,7 @@ import io.sited.util.collection.QueryResponse;
 import javax.inject.Inject;
 import javax.transaction.Transactional;
 import java.time.OffsetDateTime;
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -60,7 +63,7 @@ public class PageTemplateService {
             template.displayName = request.displayName;
             template.updatedTime = OffsetDateTime.now();
             template.updatedBy = request.requestBy;
-            template.readOnly = request.readOnly;
+            template.type = request.type;
 
             repository.update(template.id, template);
             return template;
@@ -70,7 +73,7 @@ public class PageTemplateService {
         pageTemplate.id = UUID.randomUUID().toString();
         pageTemplate.path = request.path;
         pageTemplate.displayName = request.displayName;
-        pageTemplate.readOnly = request.readOnly;
+        pageTemplate.type = request.type;
         pageTemplate.sections = request.sections == null ? null : JSON.toJSON(request.sections);
         pageTemplate.createdTime = OffsetDateTime.now();
         pageTemplate.updatedTime = OffsetDateTime.now();
@@ -89,10 +92,33 @@ public class PageTemplateService {
     }
 
     @Transactional
+    public void batchCreate(BatchCreateTemplateRequest request) {
+        List<PageTemplate> templates = Lists.newArrayList();
+        for (BatchCreateTemplateRequest.TemplateView template : request.templates) {
+            Optional<PageTemplate> templateOptional = findByPath(template.path);
+            if (!templateOptional.isPresent()) {
+                PageTemplate pageTemplate = new PageTemplate();
+                pageTemplate.id = UUID.randomUUID().toString();
+                pageTemplate.path = template.path;
+                pageTemplate.displayName = template.displayName;
+                pageTemplate.type = template.type;
+                pageTemplate.sections = template.sections == null ? null : JSON.toJSON(template.sections);
+                pageTemplate.createdTime = OffsetDateTime.now();
+                pageTemplate.updatedTime = OffsetDateTime.now();
+                pageTemplate.createdBy = template.requestBy;
+                pageTemplate.updatedBy = template.requestBy;
+                pageTemplate.status = TemplateStatus.ACTIVE;
+                templates.add(pageTemplate);
+            }
+        }
+        repository.batchInsert(templates);
+    }
+
+    @Transactional
     public PageTemplate update(String id, UpdateTemplateRequest request) {
         PageTemplate pageTemplate = get(id);
         pageTemplate.displayName = request.displayName;
-        pageTemplate.readOnly = request.readOnly;
+        pageTemplate.type = request.type;
         pageTemplate.sections = request.sections == null ? null : JSON.toJSON(request.sections);
         pageTemplate.updatedTime = OffsetDateTime.now();
         pageTemplate.updatedBy = request.requestBy;
@@ -131,4 +157,6 @@ public class PageTemplateService {
             publisher.publish(message);
         }
     }
+
+
 }

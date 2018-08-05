@@ -5,7 +5,7 @@ import io.sited.page.api.PageCategoryWebService;
 import io.sited.page.api.category.CategoryResponse;
 import io.sited.page.web.AbstractPageComponent;
 import io.sited.template.Attributes;
-import io.sited.page.web.ComponentBindings;
+import io.sited.page.web.Bindings;
 import io.sited.page.web.PageInfo;
 import io.sited.template.Children;
 
@@ -26,7 +26,7 @@ public class BreadcrumbComponent extends AbstractPageComponent {
     }
 
     @Override
-    public void output(ComponentBindings bindings, Attributes attributes, Children children, OutputStream out) throws IOException {
+    public void output(Bindings bindings, Attributes attributes, Children children, OutputStream out) throws IOException {
         PageInfo page = bindings.page();
         if (page.categoryId() != null) {
             List<CategoryResponse> categories = Lists.newArrayList();

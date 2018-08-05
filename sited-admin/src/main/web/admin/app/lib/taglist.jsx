@@ -92,6 +92,6 @@ TagList.defaultProps = {
 TagList.propTypes = {
     label: PropTypes.string,
     list: PropTypes.array,
-    readOnly: PropTypes.boolean,
+    readOnly: PropTypes.bool,
     onChange: PropTypes.func
 };

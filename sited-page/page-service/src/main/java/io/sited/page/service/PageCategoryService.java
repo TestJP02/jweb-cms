@@ -5,6 +5,7 @@ import com.google.common.base.Joiner;
 import com.google.common.base.Splitter;
 import com.google.common.base.Strings;
 import com.google.common.collect.ImmutableList;
+import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Lists;
 import io.sited.database.Query;
 import io.sited.database.Repository;
@@ -16,6 +17,7 @@ import io.sited.page.api.category.CategoryTreeQuery;
 import io.sited.page.api.category.CreateCategoryRequest;
 import io.sited.page.api.category.UpdateCategoryRequest;
 import io.sited.page.domain.PageCategory;
+import io.sited.util.JSON;
 import io.sited.util.collection.QueryResponse;
 import io.sited.util.exception.Exceptions;
 
@@ -23,6 +25,7 @@ import javax.inject.Inject;
 import javax.transaction.Transactional;
 import java.time.OffsetDateTime;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -120,6 +123,7 @@ public class PageCategoryService {
         } else {
             pageCategory.parentIds = null;
         }
+        pageCategory.fields = request.fields == null ? null : JSON.toJSON(request.fields);
         pageCategory.templatePath = request.templatePath;
         pageCategory.path = request.path;
         pageCategory.displayName = request.displayName;
@@ -176,6 +180,7 @@ public class PageCategoryService {
         pageCategory.imageURL = request.imageURL;
         pageCategory.keywords = request.keywords == null ? null : Joiner.on(';').join(request.keywords);
         pageCategory.tags = request.tags == null ? null : Joiner.on(';').join(request.tags);
+        pageCategory.fields = request.fields == null ? null : JSON.toJSON(request.fields);
         pageCategory.ownerId = request.ownerId;
         pageCategory.ownerRoles = request.ownerRoles == null ? null : Joiner.on(';').join(request.ownerRoles);
         pageCategory.groupId = request.groupId;
@@ -201,6 +206,7 @@ public class PageCategoryService {
         message.displayOrder = pageCategory.displayOrder;
         message.keywords = pageCategory.keywords == null ? ImmutableList.of() : Splitter.on(";").splitToList(pageCategory.keywords);
         message.tags = pageCategory.tags == null ? ImmutableList.of() : Splitter.on(";").splitToList(pageCategory.tags);
+        message.fields = pageCategory.fields == null ? ImmutableMap.of() : JSON.fromJSON(pageCategory.fields, Map.class);
         message.status = pageCategory.status;
         message.ownerId = pageCategory.ownerId;
         message.ownerRoles = pageCategory.ownerRoles == null ? ImmutableList.of() : Splitter.on(";").splitToList(pageCategory.ownerRoles);

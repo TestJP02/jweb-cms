@@ -37,6 +37,7 @@ public class ConsoleScriptBuilder {
         ConsoleModuleView view = new ConsoleModuleView();
         view.name = consoleBundle.name;
         view.options = consoleBundle.options;
+        view.routes = consoleBundle.routes;
         view.scriptFile = consoleBundle.scriptFile;
         view.path = consoleBundle.path;
         view.menu = menuView(consoleBundle.menu);
@@ -64,7 +65,6 @@ public class ConsoleScriptBuilder {
         consoleMenuView.displayName = consoleMenu.displayName;
         consoleMenuView.displayOrder = consoleMenu.displayOrder;
         consoleMenuView.rolesAllowed = consoleMenu.rolesAllowed;
-        consoleMenuView.bundleName = consoleMenu.bundleName;
         return consoleMenuView;
     }
 
@@ -73,6 +73,7 @@ public class ConsoleScriptBuilder {
         public String scriptFile;
         public String path;
         public Map<String, Object> options;
+        public Map<String, String> routes;
         public ConsoleMenuView menu;
     }
 }

@@ -4,7 +4,7 @@ import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import io.sited.page.api.category.CategoryResponse;
-import io.sited.page.web.AbstractPageWebController;
+import io.sited.page.web.AbstractPageController;
 import io.sited.page.web.PageInfo;
 import io.sited.page.web.service.CategoryCacheService;
 import io.sited.web.NotFoundWebException;
@@ -20,7 +20,7 @@ import java.util.Optional;
  * @author chi
  */
 @Path("/")
-public class IndexController extends AbstractPageWebController {
+public class IndexController extends AbstractPageController {
     @Inject
     CategoryCacheService categoryService;
 

@@ -1,6 +1,5 @@
 package io.sited.page.web.service;
 
-import io.sited.file.api.FileRepository;
 import io.sited.page.api.category.CategoryResponse;
 import io.sited.page.api.page.PageResponse;
 import io.sited.resource.Resource;
@@ -15,13 +14,13 @@ import java.util.List;
  */
 public class SitemapBuilder {
     private final String baseURL;
-    private final FileRepository repository;
+    private final PageCacheRepository repository;
     private final int maxCount;
     private final StringBuilder b = new StringBuilder(128);
     private int index = 0;
     private int fileIndex = 1;
 
-    public SitemapBuilder(String baseURL, FileRepository repository, int maxCount) {
+    public SitemapBuilder(String baseURL, PageCacheRepository repository, int maxCount) {
         this.baseURL = baseURL;
         this.repository = repository;
         this.maxCount = maxCount;

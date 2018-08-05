@@ -3,11 +3,12 @@ package io.sited.page.web.service;
 import com.google.common.collect.ImmutableList;
 import io.sited.page.api.PageTemplateWebService;
 import io.sited.page.api.template.TemplateResponse;
+import io.sited.page.api.template.TemplateType;
 import io.sited.resource.Resource;
 import io.sited.resource.ResourceRepository;
 
 import javax.inject.Inject;
-import java.util.Iterator;
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -15,7 +16,7 @@ import java.util.Optional;
  */
 public class PageTemplateRepository implements ResourceRepository {
     @Inject
-    ThemeService themeService;
+    PageTemplateResourceConverter pageTemplateResourceConverter;
     @Inject
     PageTemplateWebService pageTemplateWebService;
 
@@ -24,7 +25,9 @@ public class PageTemplateRepository implements ResourceRepository {
         Optional<TemplateResponse> pageTemplateResponseOptional = pageTemplateWebService.findByTemplatePath(path);
         if (pageTemplateResponseOptional.isPresent()) {
             TemplateResponse templateResponse = pageTemplateResponseOptional.get();
-            return Optional.of(themeService.template(templateResponse));
+            if (templateResponse.type == TemplateType.CUSTOMIZED) {
+                return Optional.of(pageTemplateResourceConverter.convert(templateResponse));
+            }
         }
         return Optional.empty();
     }
@@ -43,7 +46,7 @@ public class PageTemplateRepository implements ResourceRepository {
     }
 
     @Override
-    public Iterator<Resource> iterator() {
-        return ImmutableList.<Resource>of().iterator();
+    public List<Resource> list(String directory) {
+        return ImmutableList.of();
     }
 }

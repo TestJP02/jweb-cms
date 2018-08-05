@@ -7,7 +7,6 @@ import io.sited.message.MessageConfig;
 import io.sited.message.MessageModule;
 import io.sited.message.TopicOptions;
 import io.sited.page.api.PageCategoryWebService;
-import io.sited.page.api.PageCommentWebService;
 import io.sited.page.api.PageComponentWebService;
 import io.sited.page.api.PageContentWebService;
 import io.sited.page.api.PageDraftWebService;
@@ -20,10 +19,12 @@ import io.sited.page.api.PageTemplateWebService;
 import io.sited.page.api.PageVariableWebService;
 import io.sited.page.api.PageWebService;
 import io.sited.page.api.category.CategoryChangedMessage;
-import io.sited.page.api.comment.CommentCreatedMessage;
-import io.sited.page.api.comment.CommentDeletedMessage;
+import io.sited.page.api.category.CategoryResponse;
+import io.sited.page.api.category.CreateCategoryRequest;
 import io.sited.page.api.component.SavedComponentChangedMessage;
 import io.sited.page.api.keyword.KeywordChangedMessage;
+import io.sited.page.api.page.CommentCreatedMessage;
+import io.sited.page.api.page.CommentDeletedMessage;
 import io.sited.page.api.page.PageChangedMessage;
 import io.sited.page.api.page.PageDeletedMessage;
 import io.sited.page.api.page.PageVisitedMessage;
@@ -31,8 +32,6 @@ import io.sited.page.api.template.TemplateChangedMessage;
 import io.sited.page.api.variable.VariableChangedMessage;
 import io.sited.page.domain.Page;
 import io.sited.page.domain.PageCategory;
-import io.sited.page.domain.PageComment;
-import io.sited.page.domain.PageCommentVoteTracking;
 import io.sited.page.domain.PageContent;
 import io.sited.page.domain.PageDraft;
 import io.sited.page.domain.PageKeyword;
@@ -42,8 +41,6 @@ import io.sited.page.domain.PageTag;
 import io.sited.page.domain.PageTemplate;
 import io.sited.page.domain.PageVariable;
 import io.sited.page.service.PageCategoryService;
-import io.sited.page.service.PageCommentService;
-import io.sited.page.service.PageCommentVoteTrackingService;
 import io.sited.page.service.PageComponentService;
 import io.sited.page.service.PageContentService;
 import io.sited.page.service.PageDraftService;
@@ -64,7 +61,6 @@ import io.sited.page.service.task.ResetDailyVisitedTask;
 import io.sited.page.service.task.ResetMonthlyVisitedTask;
 import io.sited.page.service.task.ResetWeeklyVisitedTask;
 import io.sited.page.web.PageCategoryWebServiceImpl;
-import io.sited.page.web.PageCommentWebServiceImpl;
 import io.sited.page.web.PageComponentWebServiceImpl;
 import io.sited.page.web.PageContentWebServiceImpl;
 import io.sited.page.web.PageDraftWebServiceImpl;
@@ -79,6 +75,7 @@ import io.sited.scheduler.SchedulerConfig;
 import io.sited.scheduler.SchedulerModule;
 
 import java.util.List;
+import java.util.Optional;
 
 /**
  * @author chi
@@ -118,9 +115,7 @@ public class PageModuleImpl extends PageModule {
             .entity(PageSavedComponent.class)
             .entity(PageTag.class)
             .entity(PageKeyword.class)
-            .entity(PageStatistics.class)
-            .entity(PageComment.class)
-            .entity(PageCommentVoteTracking.class);
+            .entity(PageStatistics.class);
 
         bind(PageKeywordService.class);
         bind(PageContentService.class);
@@ -133,8 +128,6 @@ public class PageModuleImpl extends PageModule {
         bind(PageTemplateService.class);
         bind(PageLayoutService.class);
         bind(PageTagService.class);
-        bind(PageCommentService.class);
-        bind(PageCommentVoteTrackingService.class);
         bind(PageStatisticsService.class);
 
         SchedulerConfig schedulerConfig = module(SchedulerModule.class);
@@ -152,8 +145,22 @@ public class PageModuleImpl extends PageModule {
         api().service(PageContentWebService.class, PageContentWebServiceImpl.class);
         api().service(PageKeywordWebService.class, PageKeywordWebServiceImpl.class);
         api().service(PageTagWebService.class, PageTagWebServiceImpl.class);
-        api().service(PageCommentWebService.class, PageCommentWebServiceImpl.class);
         api().service(PageStatisticsWebService.class, PageStatisticsWebServiceImpl.class);
+    }
+
+    @Override
+    protected void onStartup() {
+        PageCategoryWebService pageCategoryService = require(PageCategoryWebService.class);
+        Optional<CategoryResponse> category = pageCategoryService.findByPath("/");
+        if (!category.isPresent()) {
+            CreateCategoryRequest request = new CreateCategoryRequest();
+            request.path = "/";
+            request.templatePath = "template/index.html";
+            request.description = "/";
+            request.displayName = "/";
+            request.requestBy = "init";
+            pageCategoryService.create(request);
+        }
     }
 
     @Override

@@ -1,5 +1,0 @@
-app:
-  name: test
-
-email:
-  url: http://localhost:8080/

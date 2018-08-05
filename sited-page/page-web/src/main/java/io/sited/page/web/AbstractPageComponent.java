@@ -4,7 +4,7 @@ import com.google.common.collect.ImmutableList;
 import io.sited.template.Attributes;
 import io.sited.template.Children;
 import io.sited.template.ComponentAttribute;
-import io.sited.template.TemplateComponent;
+import io.sited.web.AbstractWebComponent;
 
 import java.io.IOException;
 import java.io.OutputStream;
@@ -15,7 +15,7 @@ import java.util.Map;
 /**
  * @author chi
  */
-public abstract class AbstractPageComponent extends TemplateComponent {
+public abstract class AbstractPageComponent extends AbstractWebComponent {
     public AbstractPageComponent(String name, String templatePath, List<ComponentAttribute<?>> componentAttributes) {
         super(name, templatePath, componentAttributes);
     }
@@ -26,9 +26,9 @@ public abstract class AbstractPageComponent extends TemplateComponent {
 
     @Override
     public final void output(Map<String, Object> bindings, Attributes attributes, Children children, OutputStream out) throws IOException {
-        ComponentBindings componentBindings = new ComponentBindings(new HashMap<>(bindings));
+        Bindings componentBindings = new Bindings(new HashMap<>(bindings));
         output(componentBindings, attributes, children, out);
     }
 
-    protected abstract void output(ComponentBindings bindings, Attributes attributes, Children children, OutputStream out) throws IOException;
+    protected abstract void output(Bindings bindings, Attributes attributes, Children children, OutputStream out) throws IOException;
 }

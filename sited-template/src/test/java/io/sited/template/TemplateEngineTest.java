@@ -7,13 +7,13 @@ import com.google.common.collect.Maps;
 import io.sited.resource.ClasspathResourceRepository;
 import io.sited.resource.SingleResourceRepository;
 import io.sited.resource.StringResource;
+import io.sited.template.impl.TemplateComponent;
 import io.sited.util.collection.QueryResponse;
 import org.junit.jupiter.api.Test;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -84,8 +84,8 @@ class TemplateEngineTest {
     @Test
     void nestComponent() throws IOException {
         TemplateEngine templateEngine = templateEngine();
-        templateEngine.addComponent(new TemplateComponentImpl("component1", "component/component1.html", ImmutableList.of()));
-        templateEngine.addComponent(new TemplateComponentImpl("component2", "component/component2.html", ImmutableList.of()));
+        templateEngine.addComponent(new TemplateComponent("component1", "component/component1.html", ImmutableList.of()));
+        templateEngine.addComponent(new TemplateComponent("component2", "component/component2.html", ImmutableList.of()));
         Template template = templateEngine.template("test-nest-component.html").orElseThrow(RuntimeException::new);
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
         Map<String, Object> bindings = Maps.newHashMap();
@@ -96,8 +96,8 @@ class TemplateEngineTest {
     @Test
     void component() throws IOException {
         TemplateEngine templateEngine = templateEngine();
-        templateEngine.addComponent(new TemplateComponentImpl("header", "component/header.html", ImmutableList.of()));
-        templateEngine.addComponent(new TemplateComponentImpl("footer", "component/footer.html", ImmutableList.of()));
+        templateEngine.addComponent(new TemplateComponent("header", "component/header.html", ImmutableList.of()));
+        templateEngine.addComponent(new TemplateComponent("footer", "component/footer.html", ImmutableList.of()));
 
         Template template = templateEngine.template("test-header.html").orElseThrow(RuntimeException::new);
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
@@ -136,11 +136,5 @@ class TemplateEngineTest {
     public static class SimpleModel {
         public QueryResponse<String> list;
         public String name = "some";
-    }
-
-    public static class TemplateComponentImpl extends TemplateComponent {
-        TemplateComponentImpl(String name, String templatePath, List<ComponentAttribute<?>> componentAttributes) {
-            super(name, templatePath, componentAttributes);
-        }
     }
 }

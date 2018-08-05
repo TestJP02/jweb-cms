@@ -30,7 +30,7 @@ public class SimpleCaptchaImpl implements CaptchaCode {
         if (Boolean.TRUE.equals(options.enabled)) {
             Optional<String> captchaCode = session.get(SESSION_KEY);
             if (!captchaCode.isPresent() || !captchaCode.get().equals(code)) {
-                throw Exceptions.badRequestException("captcha", "invalid captcha code");
+                throw Exceptions.badRequestException("captchaCode", "invalid captcha code");
             }
         }
     }

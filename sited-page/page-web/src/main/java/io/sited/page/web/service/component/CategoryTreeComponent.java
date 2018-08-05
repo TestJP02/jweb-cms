@@ -10,7 +10,7 @@ import io.sited.page.api.category.CategoryResponse;
 import io.sited.page.api.page.PageQuery;
 import io.sited.page.api.page.PageResponse;
 import io.sited.page.web.AbstractPageComponent;
-import io.sited.page.web.ComponentBindings;
+import io.sited.page.web.Bindings;
 import io.sited.page.web.PageInfo;
 import io.sited.template.Attributes;
 import io.sited.template.BooleanAttribute;
@@ -44,7 +44,7 @@ public class CategoryTreeComponent extends AbstractPageComponent {
     }
 
     @Override
-    public void output(ComponentBindings bindings, Attributes attributes, Children children, OutputStream out) throws IOException {
+    public void output(Bindings bindings, Attributes attributes, Children children, OutputStream out) throws IOException {
         String selectedCategoryId = selectedCategoryId(bindings);
         if (Strings.isNullOrEmpty(selectedCategoryId)) {
             return;
@@ -79,7 +79,7 @@ public class CategoryTreeComponent extends AbstractPageComponent {
         template().output(bindings, out);
     }
 
-    private String selectedCategoryId(ComponentBindings bindings) {
+    private String selectedCategoryId(Bindings bindings) {
         String selectedCategoryId = null;
         CategoryResponse category = category(bindings);
         if (category != null) {

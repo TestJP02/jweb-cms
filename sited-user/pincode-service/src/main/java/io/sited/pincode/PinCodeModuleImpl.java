@@ -10,6 +10,7 @@ import io.sited.pincode.api.PinCodeModule;
 import io.sited.pincode.api.PinCodeWebService;
 import io.sited.pincode.api.message.SendPinCodeMessage;
 import io.sited.pincode.domain.PinCodeTracking;
+import io.sited.pincode.service.EmailSender;
 import io.sited.pincode.service.PinCodeMessageHandler;
 import io.sited.pincode.service.PinCodeProvider;
 import io.sited.pincode.service.PinCodeService;
@@ -24,12 +25,14 @@ public class PinCodeModuleImpl extends PinCodeModule {
         DatabaseConfig databaseConfig = module(DatabaseModule.class);
         databaseConfig.entity(PinCodeTracking.class);
 
+        PinCodeOptions options = options("pincode", PinCodeOptions.class);
+        bind(PinCodeOptions.class).toInstance(options);
+        bind(EmailSender.class).toInstance(new EmailSender(options.smtp));
         bind(PinCodeMessageHandler.class);
         MessageConfig messageConfig = module(MessageModule.class);
         messageConfig.createTopic(SendPinCodeMessage.class, new TopicOptions());
         messageConfig.listen(SendPinCodeMessage.class, requestInjection(new PinCodeMessageHandler()));
 
-        bind(PinCodeOptions.class).toInstance(options("pincode", PinCodeOptions.class));
         bind(PinCodeProvider.class);
         bind(PinCodeService.class);
 

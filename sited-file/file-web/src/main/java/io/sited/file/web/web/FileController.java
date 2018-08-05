@@ -56,7 +56,7 @@ public class FileController {
     public Response createDirectory(@QueryParam("path") String path) {
         Map<String, Object> bindings = Maps.newHashMap();
         bindings.put("path", path);
-        return Response.ok(Template.of("/file/directory.create.html", bindings)).build();
+        return Response.ok(new Template("/file/directory.create.html", bindings)).build();
     }
 
     private Response directory(String uriPath, String queryPath, String query) {
@@ -71,7 +71,7 @@ public class FileController {
         if (query != null) {
             bindings.put("query", query);
         }
-        return Response.ok(Template.of("/file/file.html", bindings)).build();
+        return Response.ok(new Template("/file/file.html", bindings)).build();
     }
 
     private boolean isNumeric(String str) {

@@ -11,6 +11,7 @@ module sited.test {
     requires java.ws.rs;
     requires sited.module;
     requires sited.database;
+    requires sited.logback;
     requires java.persistence;
     requires jersey.common;
     requires jersey.server;

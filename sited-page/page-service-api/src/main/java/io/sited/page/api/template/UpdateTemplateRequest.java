@@ -12,8 +12,8 @@ import java.util.List;
 public class UpdateTemplateRequest {
     @XmlElement(name = "displayName")
     public String displayName;
-    @XmlElement(name = "readOnly")
-    public Boolean readOnly;
+    @XmlElement(name = "type")
+    public TemplateType type;
     @XmlElement(name = "sections")
     public List<TemplateSectionView> sections;
     @XmlElement(name = "requestBy")

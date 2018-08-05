@@ -4,7 +4,7 @@ import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import io.sited.template.Attributes;
 import io.sited.template.Children;
-import io.sited.template.TemplateComponent;
+import io.sited.web.AbstractWebComponent;
 import io.sited.user.web.UserWebOptions;
 
 import javax.inject.Inject;
@@ -15,7 +15,7 @@ import java.util.Map;
 /**
  * @author chi
  */
-public class RegisterFormComponent extends TemplateComponent {
+public class RegisterFormComponent extends AbstractWebComponent {
     @Inject
     UserWebOptions userWebOptions;
 

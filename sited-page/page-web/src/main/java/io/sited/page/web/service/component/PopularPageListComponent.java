@@ -6,7 +6,7 @@ import io.sited.page.api.page.PageResponse;
 import io.sited.page.api.page.PopularPageQuery;
 import io.sited.page.api.page.RankType;
 import io.sited.page.web.AbstractPageComponent;
-import io.sited.page.web.ComponentBindings;
+import io.sited.page.web.Bindings;
 import io.sited.template.Attributes;
 import io.sited.template.Children;
 import io.sited.template.IntegerAttribute;
@@ -33,7 +33,7 @@ public class PopularPageListComponent extends AbstractPageComponent {
     }
 
     @Override
-    public void output(ComponentBindings bindings, Attributes attributes, Children children, OutputStream out) throws IOException {
+    public void output(Bindings bindings, Attributes attributes, Children children, OutputStream out) throws IOException {
         String title = attributes.get("title");
         Integer limit = attributes.get("limit");
         String page = bindings.request().queryParam("page").orElse(null);

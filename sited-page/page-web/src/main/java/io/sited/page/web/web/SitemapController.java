@@ -1,7 +1,6 @@
 package io.sited.page.web.web;
 
 import io.sited.App;
-import io.sited.file.api.FileRepository;
 import io.sited.page.api.PageCategoryWebService;
 import io.sited.page.api.PageWebService;
 import io.sited.page.api.category.CategoryQuery;
@@ -10,7 +9,7 @@ import io.sited.page.api.category.CategoryStatus;
 import io.sited.page.api.page.PageQuery;
 import io.sited.page.api.page.PageResponse;
 import io.sited.page.api.page.PageStatus;
-import io.sited.page.web.PageWebOptions;
+import io.sited.page.web.service.PageCacheRepository;
 import io.sited.page.web.service.SitemapBuilder;
 import io.sited.resource.Resource;
 import io.sited.util.collection.QueryResponse;
@@ -30,18 +29,13 @@ import java.util.Optional;
 public class SitemapController {
     @Inject
     PageWebService pageWebService;
-
     @Inject
     PageCategoryWebService pageCategoryWebService;
-
     @Inject
     App app;
-
     @Inject
-    PageWebOptions pageWebOptions;
+    PageCacheRepository repository;
 
-    @Inject
-    FileRepository fileRepository;
 
     @Inject
     UriInfo uriInfo;
@@ -49,35 +43,36 @@ public class SitemapController {
     @Path("/sitemap.xml")
     @GET
     public Response index() {
-        Optional<Resource> resource = fileRepository.get("sitemap/sitemap.xml");
+        Optional<Resource> resource = repository.get("sitemap/sitemap.xml");
         if (resource.isPresent()) {
             return Response.ok(resource.get())
                 .type("text/xml").build();
         }
 
+        int maxSitemapEntries = 5000;
         CategoryQuery categoryQuery = new CategoryQuery();
         categoryQuery.page = 1;
-        categoryQuery.limit = pageWebOptions.maxSitemapEntries;
+        categoryQuery.limit = maxSitemapEntries;
         categoryQuery.status = CategoryStatus.ACTIVE;
         QueryResponse<CategoryResponse> categories = pageCategoryWebService.find(categoryQuery);
 
         PageQuery pageQuery = new PageQuery();
         pageQuery.page = 1;
-        pageQuery.limit = pageWebOptions.maxSitemapEntries;
+        pageQuery.limit = maxSitemapEntries;
         pageQuery.status = PageStatus.ACTIVE;
         QueryResponse<PageResponse> pages = pageWebService.find(pageQuery);
 
-        SitemapBuilder builder = new SitemapBuilder(app.baseURL(), fileRepository, pageWebOptions.maxSitemapEntries);
+        SitemapBuilder builder = new SitemapBuilder(app.baseURL(), repository, maxSitemapEntries);
         builder.appendCategories(categories.items);
         builder.appendPages(pages.items);
 
-        while (categories.items.size() == pageWebOptions.maxSitemapEntries) {
+        while (categories.items.size() == maxSitemapEntries) {
             categoryQuery.page = categoryQuery.page + 1;
             categories = pageCategoryWebService.find(categoryQuery);
             builder.appendCategories(categories.items);
         }
 
-        while (pages.items.size() == pageWebOptions.maxSitemapEntries) {
+        while (pages.items.size() == maxSitemapEntries) {
             pageQuery.page = pageQuery.page + 1;
             pages = pageWebService.find(pageQuery);
             builder.appendPages(pages.items);
@@ -90,7 +85,7 @@ public class SitemapController {
     @GET
     public Response sitemap() {
         String path = uriInfo.getPath();
-        Optional<Resource> resource = fileRepository.get(path);
+        Optional<Resource> resource = repository.get(path);
         if (!resource.isPresent()) {
             throw new NotFoundException("missing sitemap, path=" + path);
         }

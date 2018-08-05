@@ -80,6 +80,7 @@ public class PageTemplateAdminController {
         UpdateTemplateRequest updateRequest = new UpdateTemplateRequest();
         updateRequest.displayName = updatePageTemplateAJAXRequest.displayName;
         updateRequest.sections = updatePageTemplateAJAXRequest.sections;
+        updateRequest.type = updatePageTemplateAJAXRequest.type;
         updateRequest.requestBy = userInfo.username();
         return response(pageTemplateWebService.update(id, updateRequest));
     }
@@ -119,7 +120,7 @@ public class PageTemplateAdminController {
         PageTemplateAJAXResponse response = new PageTemplateAJAXResponse();
         response.id = templateResponse.id;
         response.path = templateResponse.path;
-        response.readOnly = templateResponse.readOnly;
+        response.type = templateResponse.type;
         response.displayName = templateResponse.displayName;
         response.sections = templateResponse.sections == null ? ImmutableList.of() : templateResponse.sections.stream().map(this::pageTemplateSectionAJAXView).collect(Collectors.toList());
         response.status = templateResponse.status;

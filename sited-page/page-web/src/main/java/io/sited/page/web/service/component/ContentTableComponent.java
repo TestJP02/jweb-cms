@@ -3,7 +3,7 @@ package io.sited.page.web.service.component;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
 import io.sited.page.web.AbstractPageComponent;
-import io.sited.page.web.ComponentBindings;
+import io.sited.page.web.Bindings;
 import io.sited.page.web.PageInfo;
 import io.sited.template.Attributes;
 import io.sited.template.Children;
@@ -38,8 +38,11 @@ public class ContentTableComponent extends AbstractPageComponent {
     }
 
     @Override
-    public void output(ComponentBindings bindings, Attributes attributes, Children children, OutputStream output) throws IOException {
+    public void output(Bindings bindings, Attributes attributes, Children children, OutputStream output) throws IOException {
         PageInfo page = bindings.page();
+        if (page.content() == null) {
+            return;
+        }
 
         Node document = parser.parse(page.content());
         Node child = document.getFirstChild();

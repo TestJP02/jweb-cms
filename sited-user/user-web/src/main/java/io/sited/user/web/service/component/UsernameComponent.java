@@ -5,7 +5,7 @@ import com.google.common.collect.Maps;
 import io.sited.template.Attributes;
 import io.sited.template.Children;
 import io.sited.template.StringAttribute;
-import io.sited.template.TemplateComponent;
+import io.sited.web.AbstractWebComponent;
 import io.sited.user.web.service.UserCacheService;
 import io.sited.user.web.service.UserCacheView;
 
@@ -17,7 +17,7 @@ import java.util.Map;
 /**
  * @author chi
  */
-public class UsernameComponent extends TemplateComponent {
+public class UsernameComponent extends AbstractWebComponent {
     @Inject
     UserCacheService userCacheService;
 
@@ -30,10 +30,12 @@ public class UsernameComponent extends TemplateComponent {
     @Override
     public void output(Map<String, Object> bindings, Attributes attributes, Children children, OutputStream out) throws IOException {
         String userId = attributes.get("userId");
-        UserCacheView user = userCacheService.get(userId);
-        Map<String, Object> componentBindings = Maps.newHashMap();
-        componentBindings.put("user", user);
-        componentBindings.putAll(attributes);
-        template().output(componentBindings, out);
+        if (userId != null) {
+            UserCacheView user = userCacheService.get(userId);
+            Map<String, Object> componentBindings = Maps.newHashMap();
+            componentBindings.put("user", user);
+            componentBindings.putAll(attributes);
+            template().output(componentBindings, out);
+        }
     }
 }

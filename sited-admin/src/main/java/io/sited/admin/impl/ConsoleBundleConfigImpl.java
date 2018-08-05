@@ -42,4 +42,10 @@ public class ConsoleBundleConfigImpl implements ConsoleBundleConfig {
         consoleBundle.menu.children.sort(Comparator.comparingInt(o -> o.displayOrder));
         return this;
     }
+
+    @Override
+    public ConsoleBundleConfig addRoute(String path, String bundleName) {
+        consoleBundle.routes.put(path, bundleName);
+        return this;
+    }
 }

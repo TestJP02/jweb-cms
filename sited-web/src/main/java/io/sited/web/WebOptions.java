@@ -15,27 +15,18 @@ import java.util.Map;
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 public class WebOptions {
+    @XmlElement(name = "theme")
+    public String theme;
     @XmlElement(name = "baseURL")
     public String baseURL;
     @XmlElement(name = "cdnBaseURLs")
     public List<String> cdnBaseURLs = Lists.newArrayList();
-    @XmlElement(name = "rootDomain")
-    public String rootDomain;
     @XmlElement(name = "roots")
     public List<String> roots = Lists.newArrayList();
-
-    @XmlElement(name = "i18nEnabled")
-    public Boolean i18nEnabled = false;
-    @XmlElement(name = "i18nSubDomainEnabled")
-    public Boolean i18nSubDomainEnabled = false;
-    @XmlElement(name = "i18nSubFolderEnabled")
-    public Boolean i18nSubFolderEnabled = true;
-
     @XmlElement(name = "session")
     public SessionOptions session = new SessionOptions();
     @XmlElement(name = "cookie")
     public CookieOptions cookie = new CookieOptions();
-
     @XmlElement(name = "cacheEnabled")
     public Boolean cacheEnabled = true;
 

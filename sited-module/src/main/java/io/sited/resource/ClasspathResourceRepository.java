@@ -5,7 +5,6 @@ import com.google.common.reflect.ClassPath;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
 
@@ -35,32 +34,20 @@ public class ClasspathResourceRepository implements ResourceRepository {
     }
 
     @Override
-    public boolean isReadOnly() {
-        return true;
-    }
-
-    @Override
-    public void create(Resource resource) {
-        throw new ResourceException("classpath resource repository is read only, path={}", basePath);
-    }
-
-    @Override
-    public void delete(String path) {
-        throw new ResourceException("classpath resource repository is read only, path={}", basePath);
-    }
-
-    @Override
-    public Iterator<Resource> iterator() {
+    public List<Resource> list(String directory) {
         try {
             ClassPath classpath = ClassPath.from(Thread.currentThread().getContextClassLoader());
             List<Resource> resources = Lists.newArrayList();
             for (ClassPath.ResourceInfo resourceInfo : classpath.getResources()) {
                 if (resourceInfo.getResourceName().startsWith(basePath)) {
                     String name = resourceInfo.getResourceName();
-                    resources.add(new ClasspathResource(name.substring(basePath.length()), name));
+                    String path = name.substring(basePath.length());
+                    if (path.startsWith(directory)) {
+                        resources.add(new ClasspathResource(path, name));
+                    }
                 }
             }
-            return resources.iterator();
+            return resources;
         } catch (IOException e) {
             throw new ResourceException(e);
         }

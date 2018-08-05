@@ -19,7 +19,6 @@ public class ConsoleMenu {
         public String path;
         public String displayName;
         public String messageKey;
-        public String bundleName;
         public Integer displayOrder = 1;
         public List<String> rolesAllowed = Lists.newArrayList();
     }

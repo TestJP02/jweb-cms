@@ -31,4 +31,8 @@ public class AppOptions {
     public String description;
     @XmlElement(name = "imageURL")
     public String imageURL;
+    @XmlElement(name = "host")
+    public String host;
+    @XmlElement(name = "port")
+    public String port;
 }

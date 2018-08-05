@@ -8,7 +8,7 @@ import io.sited.page.api.category.CategoryNodeResponse;
 import io.sited.page.api.category.CategoryResponse;
 import io.sited.page.api.category.CategoryTreeQuery;
 import io.sited.page.web.AbstractPageComponent;
-import io.sited.page.web.ComponentBindings;
+import io.sited.page.web.Bindings;
 import io.sited.template.Attributes;
 import io.sited.template.BooleanAttribute;
 import io.sited.template.Children;
@@ -30,7 +30,7 @@ public class HeaderComponent extends AbstractPageComponent {
     PageCategoryWebService pageCategoryWebService;
 
     public HeaderComponent() {
-        super("header", "component/page-header/page-header.html", ImmutableList.of(
+        super("header", "component/header/header.html", ImmutableList.of(
             new StringAttribute("logoImageURL", null),
             new StringAttribute("logoText", "Sited"),
             new ObjectAttribute<>("links", List.class, null),
@@ -40,7 +40,7 @@ public class HeaderComponent extends AbstractPageComponent {
     }
 
     @Override
-    public void output(ComponentBindings bindings, Attributes attributes, Children children, OutputStream out) throws IOException {
+    public void output(Bindings bindings, Attributes attributes, Children children, OutputStream out) throws IOException {
         bindings.putAll(attributes);
         List links = attributes.get("links");
         if (links == null || links.isEmpty()) {

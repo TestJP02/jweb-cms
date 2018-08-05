@@ -14,9 +14,7 @@ module sited.page.web {
     requires sited.module;
     requires sited.web;
     requires sited.template;
-    requires sited.file.api;
     requires sited.page.api;
-    requires sited.user.api;
     requires sited.cache;
     requires sited.message;
 

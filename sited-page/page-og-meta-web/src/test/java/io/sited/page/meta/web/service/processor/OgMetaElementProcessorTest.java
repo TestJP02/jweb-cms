@@ -2,6 +2,7 @@ package io.sited.page.meta.web.service.processor;
 
 import com.google.common.base.Charsets;
 import com.google.common.collect.Maps;
+import io.sited.page.meta.web.service.component.OgMetaComponent;
 import io.sited.page.web.PageInfo;
 import io.sited.resource.SingleResourceRepository;
 import io.sited.resource.StringResource;
@@ -39,10 +40,11 @@ public class OgMetaElementProcessorTest {
 
     @Test
     public void process() throws IOException {
-        TemplateEngine templateEngine = new TemplateEngine().addRepository(new SingleResourceRepository(new StringResource("/test.html", template())));
+        TemplateEngine templateEngine = new TemplateEngine().addRepository(new SingleResourceRepository(new StringResource("template/test.html", template())));
         templateEngine.addElementProcessor(new OgMetaElementProcessor());
+        templateEngine.addComponent(new OgMetaComponent());
 
-        Template template = templateEngine.template("/test.html").orElseThrow(RuntimeException::new);
+        Template template = templateEngine.template("template/test.html").orElseThrow(RuntimeException::new);
         ByteArrayOutputStream out = new ByteArrayOutputStream();
 
         PageInfo pageInfo = PageInfo.builder()
@@ -58,7 +60,7 @@ public class OgMetaElementProcessorTest {
         bindings.put("request", request);
         bindings.put("app", app);
         template.output(bindings, out);
-        assertEquals("<!doctype html><html lang=\"en-US\" xmlns:j=\"http://www.w3.org/1999/xhtml\"><head><meta property=\"og:type\" content=\"recipe\"/><meta property=\"og:locale\" content=\"en\"/><meta property=\"og:url\" content=\"http://localhost/test\"/><meta property=\"og:title\" content=\"title\"/><meta property=\"og:description\" content=\"description\"/><meta property=\"og:image\" content=\"http://localhost/image.jpg\"/></head><body></body></html>", new String(out.toByteArray(), Charsets.UTF_8));
+        assertEquals("<!doctype html><html lang=\"en-US\" xmlns:j=\"http://www.w3.org/1999/xhtml\"><head><meta property=\"og:title\" content=\"title\"/><meta property=\"og:type\" content=\"recipe\"/><meta property=\"og:image\" content=\"http://localhost/image.jpg\"/><meta property=\"og:url\" content=\"http://localhost/test\"/><meta property=\"og:description\" content=\"description\"/></head><body></body></html>", new String(out.toByteArray(), Charsets.UTF_8));
     }
 
     private String template() {

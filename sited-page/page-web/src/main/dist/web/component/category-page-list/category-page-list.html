@@ -10,7 +10,7 @@
     <div class="panel-heading" j:text="title" j:if="title != null">title</div>
     <div class="panel-body">
         <j:page-list j:pages="pages"/>
-        <j:pagination j:items="pages" j:path="path" j:display="display"></j:pagination>
+        <j:pagination j:items="pages" j:path="path" j:display="display" j:if="paginationEnabled"></j:pagination>
     </div>
 </div>
 </body>
