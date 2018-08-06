@@ -2,11 +2,13 @@ package io.sited.web.impl;
 
 import io.sited.App;
 import io.sited.Binder;
+import io.sited.Names;
 import io.sited.resource.ResourceRepository;
 import io.sited.template.Component;
 import io.sited.template.ElementProcessor;
 import io.sited.template.TemplateEngine;
 import io.sited.web.AbstractWebComponent;
+import io.sited.web.WebCache;
 import io.sited.web.WebConfig;
 import io.sited.web.WebOptions;
 import org.glassfish.jersey.process.internal.RequestScoped;
@@ -119,5 +121,12 @@ public class WebConfigImpl implements WebConfig {
     public WebConfig addElementProcessor(ElementProcessor processor) {
         templateEngine.addElementProcessor(processor);
         return this;
+    }
+
+    @Override
+    public WebCache createCache(String name) {
+        WebCacheImpl cache = new WebCacheImpl(app.dir().resolve("cache").resolve(name));
+        binder.bind(WebCache.class).annotatedWith(Names.named(name)).toInstance(cache);
+        return cache;
     }
 }

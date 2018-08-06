@@ -5,6 +5,8 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -16,10 +18,12 @@ class FileResourceRepositoryTest {
     FileResourceRepository repository;
 
     @BeforeEach
-    public void setup() {
-        repository = new FileResourceRepository(Files.createTempDir().toPath());
-        repository.create(new StringResource("template/1.html", "1"));
-        repository.create(new StringResource("template/2.html", "2"));
+    public void setup() throws IOException {
+        File dir = Files.createTempDir();
+        new File(dir, "template").mkdir();
+        new File(dir, "template/1.html").createNewFile();
+        new File(dir, "template/2.html").createNewFile();
+        repository = new FileResourceRepository(dir.toPath());
     }
 
     @AfterEach

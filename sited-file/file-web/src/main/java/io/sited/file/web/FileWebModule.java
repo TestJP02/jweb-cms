@@ -1,7 +1,6 @@
 package io.sited.file.web;
 
 import io.sited.file.web.service.FileService;
-import io.sited.file.web.service.ImageResourceRepository;
 import io.sited.file.web.service.ImageScalar;
 import io.sited.file.web.service.ImageScalarImpl;
 import io.sited.file.web.web.FileController;
@@ -30,7 +29,7 @@ public class FileWebModule extends AbstractWebModule {
             return;
         }
 
-        bind(ImageResourceRepository.class).toInstance(new ImageResourceRepository(app().dir().resolve("cache")));
+        web().createCache("image");
         bind(FileService.class);
 
         web().controller(ImageController.class);

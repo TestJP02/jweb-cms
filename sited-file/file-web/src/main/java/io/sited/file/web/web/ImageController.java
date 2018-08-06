@@ -1,13 +1,14 @@
 package io.sited.file.web.web;
 
 import io.sited.file.api.FileRepository;
-import io.sited.file.web.service.ImageResourceRepository;
 import io.sited.file.web.service.ImageScalar;
 import io.sited.file.web.service.ImageSize;
 import io.sited.resource.ByteArrayResource;
 import io.sited.resource.Resource;
+import io.sited.web.WebCache;
 
 import javax.inject.Inject;
+import javax.inject.Named;
 import javax.ws.rs.GET;
 import javax.ws.rs.NotFoundException;
 import javax.ws.rs.Path;
@@ -30,10 +31,12 @@ public class ImageController {
     ImageScalar imageScalar;
 
     @Inject
-    FileRepository fileRepository;
+    @Named("image")
+    WebCache cache;
 
     @Inject
-    ImageResourceRepository repository;
+    FileRepository fileRepository;
+
     @Inject
     UriInfo uriInfo;
 
@@ -41,12 +44,14 @@ public class ImageController {
     @GET
     public Response image() throws IOException {
         String path = uriInfo.getPath();
-        Optional<Resource> resource = repository.get(path);
         CacheControl cacheControl = new CacheControl();
         cacheControl.setMaxAge(Integer.MAX_VALUE);
+
+        Optional<Resource> resource = cache.get(path);
         if (resource.isPresent()) {
             return Response.ok(resource.get()).cacheControl(cacheControl).build();
         }
+
         Matcher matcher = IMAGE_PATTERN.matcher(path);
         if (!matcher.matches()) {
             throw new NotFoundException(path);
@@ -54,7 +59,7 @@ public class ImageController {
         Resource file = fileRepository.get(matcher.group(2)).orElseThrow(() -> new NotFoundException("missing file, path=" + matcher.group(2)));
         byte[] scaled = imageScalar.scale(file, new ImageSize(matcher.group(1)));
         ByteArrayResource image = new ByteArrayResource(path, scaled, file.lastModified());
-        repository.create(image);
+        cache.create(image);
         return Response.ok(image).cacheControl(cacheControl).build();
     }
 }

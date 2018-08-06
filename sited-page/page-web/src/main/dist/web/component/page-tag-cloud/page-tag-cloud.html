@@ -8,7 +8,7 @@
 </head>
 <body>
 <div class="panel panel-default page-tag-cloud">
-    <div class="panel-heading" j:text="title">{{i18n('page.tagCloudTitle',client.language())}}</div>
+    <div class="panel-heading" j:text="title" j:if="title!=null"></div>
     <div class="panel-body">
         <a j:href="tag.path == null? '/tag/' + tag.name : tag.path" class="page-tag-cloud__link" j:rel="tag.totalTagged" j:for="tag:tags" j:text="tag.name"></a>
     </div>

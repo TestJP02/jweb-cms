@@ -31,19 +31,6 @@ public class HtmlComponentTemplateRepository implements ResourceRepository {
     }
 
     @Override
-    public boolean isReadOnly() {
-        return true;
-    }
-
-    @Override
-    public void create(Resource resource) {
-    }
-
-    @Override
-    public void delete(String s) {
-    }
-
-    @Override
     public List<Resource> list(String directory) {
         return ImmutableList.of();
     }

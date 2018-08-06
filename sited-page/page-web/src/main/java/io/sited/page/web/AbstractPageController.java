@@ -37,6 +37,6 @@ public abstract class AbstractPageController extends AbstractWebController {
 
         templateBindings.put("page", page);
         templateBindings.put("template", templateService.template(page.templatePath()));
-        return Response.ok(new Template(themeTemplatePath(page.templatePath()), templateBindings)).type(MediaType.TEXT_HTML).build();
+        return Response.ok(new Template(page.templatePath(), templateBindings)).type(MediaType.TEXT_HTML).build();
     }
 }

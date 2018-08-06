@@ -4,6 +4,7 @@ import io.sited.page.api.category.CategoryResponse;
 import io.sited.page.api.page.PageResponse;
 import io.sited.resource.Resource;
 import io.sited.resource.StringResource;
+import io.sited.web.WebCache;
 
 import java.time.OffsetDateTime;
 import java.time.format.DateTimeFormatter;
@@ -14,13 +15,13 @@ import java.util.List;
  */
 public class SitemapBuilder {
     private final String baseURL;
-    private final PageCacheRepository repository;
+    private final WebCache repository;
     private final int maxCount;
     private final StringBuilder b = new StringBuilder(128);
     private int index = 0;
     private int fileIndex = 1;
 
-    public SitemapBuilder(String baseURL, PageCacheRepository repository, int maxCount) {
+    public SitemapBuilder(String baseURL, WebCache repository, int maxCount) {
         this.baseURL = baseURL;
         this.repository = repository;
         this.maxCount = maxCount;
@@ -49,7 +50,7 @@ public class SitemapBuilder {
     }
 
     public Resource build() {
-        String path = "sitemap/sitemap.xml";
+        String path = "sitemap.xml";
         if (fileIndex == 1) {
             Resource resource = new StringResource(path, "<?xml version=\"1.0\" encoding=\"UTF-8\"?><urlset xmlns=\"http://www.sitemaps.org/schemas/sitemap/0.9\">" + b.toString() + "</urlset>");
             repository.create(resource);
@@ -69,7 +70,7 @@ public class SitemapBuilder {
     }
 
     private void flush() {
-        String path = "sitemap/sitemap" + fileIndex + ".xml";
+        String path = "sitemap" + fileIndex + ".xml";
         Resource resource = new StringResource(path, "<?xml version=\"1.0\" encoding=\"UTF-8\"?><urlset xmlns=\"http://www.sitemaps.org/schemas/sitemap/0.9\">" + b.toString() + "</urlset>");
         repository.create(resource);
         b.delete(0, b.length());

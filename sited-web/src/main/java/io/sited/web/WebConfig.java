@@ -42,4 +42,6 @@ public interface WebConfig {
     WebConfig addRepository(ResourceRepository repository);
 
     WebConfig addElementProcessor(ElementProcessor processor);
+
+    WebCache createCache(String name);
 }

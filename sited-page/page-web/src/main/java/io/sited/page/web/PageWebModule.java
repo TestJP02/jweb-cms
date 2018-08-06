@@ -28,10 +28,10 @@ import io.sited.page.api.variable.VariableChangedMessage;
 import io.sited.page.web.service.CategoryCacheService;
 import io.sited.page.web.service.HtmlComponentTemplateRepository;
 import io.sited.page.web.service.KeywordManager;
-import io.sited.page.web.service.PageCacheRepository;
 import io.sited.page.web.service.PageService;
 import io.sited.page.web.service.PageTemplateRepository;
 import io.sited.page.web.service.PageTemplateResourceConverter;
+import io.sited.page.web.service.SitemapService;
 import io.sited.page.web.service.TemplateCacheService;
 import io.sited.page.web.service.VariableCacheService;
 import io.sited.page.web.service.component.AuthorComponent;
@@ -92,13 +92,14 @@ public class PageWebModule extends AbstractWebModule {
         cacheConfig.create(TemplateResponse.class, new CacheOptions());
 
         bind(PageService.class);
+        bind(SitemapService.class);
         bind(CategoryCacheService.class);
         bind(VariableCacheService.class);
         bind(KeywordManager.class).toInstance(new KeywordManager());
         bind(TemplateCacheService.class);
         bind(PageTemplateResourceConverter.class);
-        bind(PageCacheRepository.class).toInstance(new PageCacheRepository(app().dir().resolve("cache/page")));
 
+        web().createCache("sitemap");
         web().addRepository(requestInjection(new HtmlComponentTemplateRepository()));
         web().addRepository(requestInjection(new PageTemplateRepository()));
 
