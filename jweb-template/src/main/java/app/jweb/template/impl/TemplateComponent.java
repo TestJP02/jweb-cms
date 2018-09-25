@@ -1,5 +1,6 @@
 package app.jweb.template.impl;
 
+import app.jweb.ApplicationException;
 import app.jweb.template.AbstractComponent;
 import app.jweb.template.Attributes;
 import app.jweb.template.Children;
@@ -12,7 +13,6 @@ import app.jweb.template.TemplateEngine;
 import app.jweb.template.TemplateException;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Maps;
-import app.jweb.ApplicationException;
 
 import java.io.IOException;
 import java.io.OutputStream;
@@ -78,6 +78,6 @@ public class TemplateComponent extends AbstractComponent {
     }
 
     protected Template template() {
-        return templateEngine.template(templatePath, true).orElseThrow(() -> new TemplateException("missing template, path={}", templatePath));
+        return templateEngine().template(templatePath, true).orElseThrow(() -> new TemplateException("missing template, path={}", templatePath));
     }
 }

@@ -30,14 +30,16 @@ public class ComponentRegistry {
     }
 
     public void put(String name, Component component) {
-        if (components.containsKey(name)) {
-            logger.info("override component, name={}, component={}, original={}", name, component.getClass().getCanonicalName(), components.get(name).getClass().getCanonicalName());
+        String componentName = name.toLowerCase();
+        if (components.containsKey(componentName)) {
+            logger.info("override component, name={}, component={}, original={}", componentName, component.getClass().getCanonicalName(), components.get(componentName).getClass().getCanonicalName());
         }
-        components.put(name, component);
+        components.put(componentName, component);
     }
 
     public Optional<Component> component(String name) {
-        Component component = components.get(name);
+        String componentName = name.toLowerCase();
+        Component component = components.get(componentName);
         if (component == null && autoComponentEnabled) {
             String templatePath = "component/" + name + "/" + name + ".html";
             Optional<Template> template = templateEngine.template(templatePath);

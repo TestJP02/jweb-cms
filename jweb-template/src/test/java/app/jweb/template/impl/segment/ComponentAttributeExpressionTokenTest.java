@@ -17,7 +17,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 /**
  * @author chi
  */
-public class ComponentAttributeExpressionSegmentTest {
+public class ComponentAttributeExpressionTokenTest {
     @Test
     public void escape() throws IOException {
         TemplateEngine templateEngine = new TemplateEngine().addRepository(new SingleResourceRepository(new StringResource("/test.html", template())));

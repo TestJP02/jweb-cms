@@ -1,14 +1,14 @@
 package app.jweb.template;
 
+import app.jweb.resource.ClasspathResourceRepository;
+import app.jweb.resource.SingleResourceRepository;
+import app.jweb.resource.StringResource;
 import app.jweb.template.impl.TemplateComponent;
+import app.jweb.util.collection.QueryResponse;
 import com.google.common.base.Charsets;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
-import app.jweb.resource.ClasspathResourceRepository;
-import app.jweb.resource.SingleResourceRepository;
-import app.jweb.resource.StringResource;
-import app.jweb.util.collection.QueryResponse;
 import org.junit.jupiter.api.Test;
 
 import java.io.ByteArrayOutputStream;
@@ -38,7 +38,7 @@ class TemplateEngineTest {
         bindings.put("disabled", true);
         bindings.put("active", true);
         template.output(bindings, outputStream);
-        assertEquals("<!doctype html><html lang=\"en-US\" xmlns:j=\"http://www.w3.org/1999/xhtml\"><head><meta charset=\"UTF-8\"/></head><body><div><p>1</p></div><div>&lt;p&gt;1&lt;/p&gt;</div><ul disabled class=\"active list\"><li>1</li><li>2</li><li>3</li></ul></body></html>", new String(outputStream.toByteArray(), Charsets.UTF_8));
+        assertEquals("<!doctype html><html lang=\"en-US\" xmlns:j=\"http://www.w3.org/1999/xhtml\"><head><meta charset=\"UTF-8\"/></head><body><div><p>1</p></div><div></div><ul disabled class=\"active\"><li>1</li><li>2</li><li>3</li></ul></body></html>", new String(outputStream.toByteArray(), Charsets.UTF_8));
     }
 
     @Test
@@ -122,6 +122,31 @@ class TemplateEngineTest {
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
         template.output(Maps.newHashMap(), outputStream);
         assertEquals("<!doctype html><html lang=\"en-US\" xmlns:j=\"\"><head></head><body>value</body></html>", new String(outputStream.toByteArray(), Charsets.UTF_8));
+    }
+
+    @Test
+    void componentWithoutPrefix() throws IOException {
+        TemplateEngine templateEngine = templateEngine();
+        templateEngine.addComponent(new TemplateComponent("Header", "component/header.html", ImmutableList.of()));
+
+        Template template = templateEngine.template("test-component.html").orElseThrow(RuntimeException::new);
+        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+        Map<String, Object> bindings = Maps.newHashMap();
+        bindings.put("selected", "home");
+        bindings.put("name", "hello");
+        template.output(bindings, outputStream);
+        assertEquals("<!doctype html><html lang=\"en-US\"><head></head><body><ul><li class=\"active\">Home</li><li class=\"\">About</li></ul></body></html>", new String(outputStream.toByteArray(), Charsets.UTF_8));
+    }
+
+    @Test
+    void attributeWithoutPrefix() throws IOException {
+        TemplateEngine templateEngine = templateEngine();
+        Template template = templateEngine.template("test-attribute.html").orElseThrow(RuntimeException::new);
+        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+        Map<String, Object> bindings = Maps.newHashMap();
+        bindings.put("class", "class");
+        template.output(bindings, outputStream);
+        assertEquals("<!doctype html><html lang=\"en-US\"><head></head><body><div class=\"class some\"></div></body></html>", new String(outputStream.toByteArray(), Charsets.UTF_8));
     }
 
 

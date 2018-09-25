@@ -1,5 +1,7 @@
 package app.jweb.template.impl;
 
+import app.jweb.resource.Resource;
+import app.jweb.resource.ResourceRepository;
 import app.jweb.template.Attribute;
 import app.jweb.template.Comment;
 import app.jweb.template.Component;
@@ -14,13 +16,6 @@ import app.jweb.template.StyleSheet;
 import app.jweb.template.TemplateException;
 import app.jweb.template.TemplateResourceException;
 import app.jweb.template.Text;
-import com.google.common.base.Charsets;
-import com.google.common.base.Predicate;
-import com.google.common.base.Strings;
-import com.google.common.collect.Lists;
-import com.google.common.collect.Sets;
-import app.jweb.resource.Resource;
-import app.jweb.resource.ResourceRepository;
 import app.jweb.template.impl.segment.AttributeExpressionSegment;
 import app.jweb.template.impl.segment.ComponentSegment;
 import app.jweb.template.impl.segment.CompositeSegment;
@@ -28,6 +23,11 @@ import app.jweb.template.impl.segment.ElementSegment;
 import app.jweb.template.impl.segment.ExpressionSegment;
 import app.jweb.template.impl.segment.IfSegment;
 import app.jweb.template.impl.segment.StaticSegment;
+import com.google.common.base.Charsets;
+import com.google.common.base.Predicate;
+import com.google.common.base.Strings;
+import com.google.common.collect.Lists;
+import com.google.common.collect.Sets;
 import org.apache.commons.jexl3.JexlEngine;
 
 import java.io.IOException;
@@ -260,62 +260,6 @@ public class TemplateParser {
         }
     }
 
-    @SuppressWarnings("checkstyle:NestedIfDepth")
-    private List<Segment> parseText(String template, Integer row, Integer column, String source) {
-        List<Segment> segments = new ArrayList<>();
-
-        StringBuilder b = new StringBuilder();
-        char[] text = template.toCharArray();
-
-        int state = 0;
-        for (int i = 0; i < text.length; i++) {
-            char c = text[i];
-            if (c == '\n') {
-                b.append(c);
-            } else if (c == '{' && state == 0) {
-                if (i - 1 > 0 && text[i - 1] == '\\') {
-                    b.append(c);
-                } else if (i + 1 < text.length && text[i + 1] == '{') {
-                    state = 1;
-                    i++;
-
-                    if (b.length() > 0) {
-                        Segment segment = new StaticSegment(b.toString());
-                        b.delete(0, b.length());
-                        segments.add(segment);
-                    }
-                } else {
-                    b.append(c);
-                }
-            } else if (c == '}' && state == 1) {
-                if (i - 1 > 0 && text[i - 1] == '\\') {
-                    b.append(c);
-                } else if (i + 1 < text.length && text[i + 1] == '}') {
-                    state = 0;
-                    i++;
-
-                    if (b.length() > 0) {
-                        String content = b.toString();
-
-                        Expression textExpression = templateModel.add(content, null, row, column, source);
-                        Segment segment = new ExpressionSegment(textExpression);
-                        b.delete(0, b.length());
-                        segments.add(segment);
-                    }
-                } else {
-                    b.append(c);
-                }
-            } else {
-                b.append(c);
-            }
-        }
-
-        if (b.length() > 0) {
-            segments.add(new StaticSegment(b.toString()));
-        }
-        return segments;
-    }
-
     private Optional<Element> html(List<Node> nodes) {
         for (Node node : nodes) {
             if ("html".equalsIgnoreCase(node.name())) {
@@ -346,11 +290,22 @@ public class TemplateParser {
     @SuppressWarnings("checkstyle:NestedIfDepth")
     private Segment segment(Node node) {
         if (node.isText()) {
-            CompositeSegment composite = new CompositeSegment();
-            for (Segment segment : parseText(((Text) node).innerText(), node.row(), node.column(), node.source())) {
-                composite.addChild(segment);
+            String text = ((Text) node).innerText();
+            TemplateLiteral literal = new TemplateLiteral(text);
+            if (literal.isDynamic()) {
+                CompositeSegment segment = new CompositeSegment();
+                for (TemplateLiteral.Token token : literal.tokens()) {
+                    if (token.dynamic) {
+                        Expression textExpression = templateModel.add(token.content(), null, node.row(), node.column(), node.source());
+                        segment.addChild(new ExpressionSegment(textExpression));
+                    } else {
+                        segment.addChild(new StaticSegment(token.content()));
+                    }
+                }
+                return segment;
+            } else {
+                return new StaticSegment(text);
             }
-            return composite;
         }
 
         if (node.isComment()) {
@@ -369,66 +324,91 @@ public class TemplateParser {
         }
 
         Element element = (Element) node;
-        if (element.isDynamic()) {
-            String componentName = element.name();
-            Map<String, Expression> attributeExpressions = new HashMap<>();
-            element.attributes().forEach(attribute -> {
-                if (attribute.isDynamic()) {
-                    attributeExpressions.put(attribute.name(), parseExpression(element, attribute.value(), attribute.defaultValue(), element.source()));
-                } else {
-                    attributeExpressions.put(attribute.name(), new ConstantExpression(attribute.value()));
-                }
-            });
-            Component component = componentRegistry.component(componentName).orElseThrow(() -> new TemplateException("missing component, name={}, template={}", element.name(), resource.path()));
-            for (ComponentAttribute<?> attribute : component.attributes().values()) {
-                if (!attributeExpressions.containsKey(attribute.name())) {
-                    attributeExpressions.put(attribute.name(), new ConstantExpression(attribute.defaultValue()));
-                }
-            }
-            List<Segment> children = Lists.newArrayList();
-            for (Node child : element.children()) {
-                children.add(segment(child));
-            }
-            return new ComponentSegment(component, children.isEmpty() ? new EmptyChildren() : new ChildrenImpl(children), attributeExpressions);
+        if (isDynamicSegment(element)) {
+            return dynamicSegment(element);
         } else {
-            List<Segment> start = new ArrayList<>();
-            List<Segment> end = new ArrayList<>();
-            start.add(new StaticSegment("<" + element.name()));
-            element.attributes().forEach(attribute -> {
-                if (isBoolAttribute(attribute.name())) {
-                    if (attribute.isDynamic()) {
-                        IfSegment attributeIfSegment = new IfSegment(parseExpression(element, attribute.value(), attribute.defaultValue(), attribute.source()));
-                        attributeIfSegment.addChild(new StaticSegment(' ' + attribute.name()));
-                        start.add(attributeIfSegment);
-                    } else {
-                        start.add(new StaticSegment(' ' + attribute.name()));
-                    }
-                } else {
-                    if (attribute.isDynamic()) {
-                        start.add(new StaticSegment(' ' + attribute.name() + "=\""));
-                        if (!Strings.isNullOrEmpty(attribute.value())) {
-                            start.add(new AttributeExpressionSegment(parseExpression(element, attribute.value(), attribute.defaultValue(), attribute.source())));
-                        }
-                        start.add(new StaticSegment("\""));
-                    } else {
-                        start.add(new StaticSegment(' ' + attribute.name() + "=\"" + attribute.value() + "\""));
-                    }
-                }
-            });
-
-            if (isSelfClosedElement(element.name())) {
-                start.add(new StaticSegment("/>"));
-            } else {
-                start.add(new StaticSegment(">"));
-                end.add(new StaticSegment("</" + element.name() + ">"));
-            }
-
-            ElementSegment segment = new ElementSegment(start, end);
-            for (Node child : element.children()) {
-                segment.addChild(segment(child));
-            }
-            return segment;
+            return staticSegment(element);
         }
+    }
+
+    private Segment staticSegment(Element element) {
+        List<Segment> start = new ArrayList<>();
+        List<Segment> end = new ArrayList<>();
+        start.add(new StaticSegment("<" + element.name()));
+        element.attributes().forEach(attribute -> {
+            TemplateLiteral literal = new TemplateLiteral(attribute.value());
+
+            if (isBoolAttribute(attribute.name())) {
+                if (attribute.isDynamic()) {
+                    IfSegment attributeIfSegment = new IfSegment(parseExpression(element, attribute.value(), attribute.source()));
+                    attributeIfSegment.addChild(new StaticSegment(' ' + attribute.name()));
+                    start.add(attributeIfSegment);
+                } else if (literal.isDynamic()) {
+                    IfSegment attributeIfSegment = new IfSegment(parseExpression(element, literal.expr(), attribute.source()));
+                    attributeIfSegment.addChild(new StaticSegment(' ' + attribute.name()));
+                    start.add(attributeIfSegment);
+                } else {
+                    start.add(new StaticSegment(' ' + attribute.name()));
+                }
+            } else {
+                if (attribute.isDynamic()) {
+                    start.add(new StaticSegment(' ' + attribute.name() + "=\""));
+                    if (!Strings.isNullOrEmpty(attribute.value())) {
+                        start.add(new AttributeExpressionSegment(parseExpression(element, attribute.value(), attribute.source())));
+                    }
+                    start.add(new StaticSegment("\""));
+                } else if (literal.isDynamic()) {
+                    start.add(new StaticSegment(' ' + attribute.name() + "=\""));
+                    start.add(new AttributeExpressionSegment(parseExpression(element, literal.expr(), attribute.source())));
+                    start.add(new StaticSegment("\""));
+                } else {
+                    start.add(new StaticSegment(' ' + attribute.name() + "=\"" + attribute.value() + "\""));
+                }
+            }
+        });
+
+        if (isSelfClosedElement(element.name())) {
+            start.add(new StaticSegment("/>"));
+        } else {
+            start.add(new StaticSegment(">"));
+            end.add(new StaticSegment("</" + element.name() + ">"));
+        }
+
+        ElementSegment segment = new ElementSegment(start, end);
+        for (Node child : element.children()) {
+            segment.addChild(segment(child));
+        }
+        return segment;
+    }
+
+    private boolean isDynamicSegment(Element element) {
+        return element.isDynamic() || componentRegistry.component(element.name()).isPresent();
+    }
+
+    private Segment dynamicSegment(Element element) {
+        String componentName = element.name();
+        Map<String, Expression> attributeExpressions = new HashMap<>();
+        element.attributes().forEach(attribute -> {
+            TemplateLiteral literal = new TemplateLiteral(attribute.value());
+            if (attribute.isDynamic()) {
+                attributeExpressions.put(attribute.name(), parseExpression(element, attribute.value(), element.source()));
+            } else if (literal.isDynamic()) {
+                attributeExpressions.put(attribute.name(), parseExpression(element, literal.expr(), element.source()));
+            } else {
+                attributeExpressions.put(attribute.name(), new ConstantExpression(attribute.value()));
+            }
+        });
+        Component component = componentRegistry.component(componentName).orElseThrow(() -> new TemplateException("missing component, name={}, template={}", element.name(), resource.path()));
+        for (ComponentAttribute<?> attribute : component.attributes().values()) {
+            if (!attributeExpressions.containsKey(attribute.name())) {
+                attributeExpressions.put(attribute.name(), new ConstantExpression(attribute.defaultValue()));
+            }
+        }
+        List<Segment> children = Lists.newArrayList();
+        for (Node child : element.children()) {
+            children.add(segment(child));
+        }
+        return new ComponentSegment(component, children.isEmpty() ? new EmptyChildren() : new ChildrenImpl(children), attributeExpressions);
     }
 
     private boolean isMSComment(Comment comment) {
@@ -436,24 +416,8 @@ public class TemplateParser {
         return html.startsWith("<!--[if") || html.startsWith("<!--<![");
     }
 
-    private Expression parseExpression(Element element, String content, Object defaultValue, String source) {
-        if (defaultValue == null) {
-            return templateModel.add(content, null, element.row(), element.column(), source);
-        } else if (isExpression(defaultValue)) {
-            String expr = (String) defaultValue;
-            Expression defaultExpr = templateModel.add(expr.substring(2, expr.length() - 2), null, element.row(), element.column(), source);
-            return templateModel.add(content, defaultExpr, element.row(), element.column(), source);
-        } else {
-            return templateModel.add(content, new ConstantExpression(defaultValue), element.row(), element.column(), source);
-        }
-    }
-
-    private boolean isExpression(Object value) {
-        if (value instanceof String) {
-            String expr = (String) value;
-            return expr.startsWith("{{") && expr.endsWith("}}");
-        }
-        return false;
+    private Expression parseExpression(Element element, String content, String source) {
+        return templateModel.add(content, null, element.row(), element.column(), source);
     }
 
     private boolean isSelfClosedElement(String tagName) {

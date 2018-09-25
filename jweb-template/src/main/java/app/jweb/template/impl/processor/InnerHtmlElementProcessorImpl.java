@@ -1,18 +1,18 @@
 package app.jweb.template.impl.processor;
 
+import app.jweb.resource.Resource;
 import app.jweb.template.Attribute;
 import app.jweb.template.Element;
 import app.jweb.template.ElementProcessor;
 import com.google.common.collect.Lists;
-import app.jweb.resource.Resource;
 
 import java.util.Optional;
 
 /**
  * @author chi
  */
-public class HtmlElementProcessorImpl implements ElementProcessor {
-    private static final String HTML = "html";
+public class InnerHtmlElementProcessorImpl implements ElementProcessor {
+    private static final String HTML = "innerHtml";
 
     @Override
     public int priority() {

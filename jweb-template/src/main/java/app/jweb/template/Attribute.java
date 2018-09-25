@@ -7,7 +7,6 @@ package app.jweb.template;
 public class Attribute {
     private final String name;
     private String value;
-    private String defaultValue;
     private final Boolean dynamic;
     private final Integer row;
     private final Integer column;
@@ -33,10 +32,6 @@ public class Attribute {
         return dynamic;
     }
 
-    public String defaultValue() {
-        return defaultValue;
-    }
-
     public Integer row() {
         return row;
     }
@@ -47,10 +42,6 @@ public class Attribute {
 
     public String source() {
         return source;
-    }
-
-    public void setDefaultValue(String defaultValue) {
-        this.defaultValue = defaultValue;
     }
 
     public void setValue(String value) {

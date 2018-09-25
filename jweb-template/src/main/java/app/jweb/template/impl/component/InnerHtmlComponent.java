@@ -6,7 +6,6 @@ import app.jweb.template.Children;
 import app.jweb.template.ObjectAttribute;
 import com.google.common.base.Charsets;
 import com.google.common.collect.Lists;
-import com.google.common.html.HtmlEscapers;
 
 import java.io.IOException;
 import java.io.OutputStream;
@@ -15,9 +14,9 @@ import java.util.Map;
 /**
  * @author chi
  */
-public class TextComponent extends AbstractComponent {
-    public TextComponent() {
-        super("text", Lists.newArrayList(new ObjectAttribute<>("content", Object.class, null)));
+public class InnerHtmlComponent extends AbstractComponent {
+    public InnerHtmlComponent() {
+        super("innerHtml", Lists.newArrayList(new ObjectAttribute<>("content", Object.class, null)));
     }
 
     @Override
@@ -26,7 +25,7 @@ public class TextComponent extends AbstractComponent {
         if (content == null) {
             children.output(bindings, out);
         } else {
-            out.write(HtmlEscapers.htmlEscaper().escape(content.toString()).getBytes(Charsets.UTF_8));
+            out.write(content.toString().getBytes(Charsets.UTF_8));
         }
     }
 }

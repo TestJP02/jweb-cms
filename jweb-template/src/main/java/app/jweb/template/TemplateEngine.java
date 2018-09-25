@@ -1,22 +1,20 @@
 package app.jweb.template;
 
-import com.google.common.collect.Maps;
 import app.jweb.resource.CompositeResourceRepository;
 import app.jweb.resource.Resource;
 import app.jweb.resource.ResourceRepository;
 import app.jweb.template.impl.ComponentRegistry;
 import app.jweb.template.impl.ElementProcessorRegistry;
+import app.jweb.template.impl.TemplateComponent;
 import app.jweb.template.impl.TemplateImpl;
 import app.jweb.template.impl.TemplateParser;
 import app.jweb.template.impl.component.ForComponent;
-import app.jweb.template.impl.component.HtmlComponent;
 import app.jweb.template.impl.component.IfComponent;
-import app.jweb.template.impl.component.TextComponent;
-import app.jweb.template.impl.processor.ClassElementProcessorImpl;
+import app.jweb.template.impl.component.InnerHtmlComponent;
 import app.jweb.template.impl.processor.ForElementProcessorImpl;
-import app.jweb.template.impl.processor.HtmlElementProcessorImpl;
 import app.jweb.template.impl.processor.IfElementProcessorImpl;
-import app.jweb.template.impl.processor.TextElementProcessorImpl;
+import app.jweb.template.impl.processor.InnerHtmlElementProcessorImpl;
+import com.google.common.collect.Maps;
 import org.apache.commons.jexl3.JexlBuilder;
 import org.apache.commons.jexl3.JexlEngine;
 import org.slf4j.Logger;
@@ -45,14 +43,11 @@ public class TemplateEngine {
     public TemplateEngine() {
         elementProcessorRegistry.add(new IfElementProcessorImpl());
         elementProcessorRegistry.add(new ForElementProcessorImpl());
-        elementProcessorRegistry.add(new TextElementProcessorImpl());
-        elementProcessorRegistry.add(new HtmlElementProcessorImpl());
-        elementProcessorRegistry.add(new ClassElementProcessorImpl());
+        elementProcessorRegistry.add(new InnerHtmlElementProcessorImpl());
 
         addComponent(new ForComponent());
         addComponent(new IfComponent());
-        addComponent(new TextComponent());
-        addComponent(new HtmlComponent());
+        addComponent(new InnerHtmlComponent());
 
         functions.put(null, new TemplateFunctions());
     }
@@ -116,6 +111,9 @@ public class TemplateEngine {
     }
 
     public TemplateEngine addComponent(Component component) {
+        if (component instanceof TemplateComponent) {
+            ((TemplateComponent) component).setTemplateEngine(this);
+        }
         componentRegistry.put(component.name(), component);
         return this;
     }

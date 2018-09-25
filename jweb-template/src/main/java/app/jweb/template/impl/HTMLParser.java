@@ -1,5 +1,8 @@
 package app.jweb.template.impl;
 
+import app.jweb.resource.Resource;
+import app.jweb.template.Attribute;
+import app.jweb.template.Comment;
 import app.jweb.template.DocType;
 import app.jweb.template.Element;
 import app.jweb.template.Node;
@@ -8,9 +11,6 @@ import com.google.common.base.Charsets;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
-import app.jweb.resource.Resource;
-import app.jweb.template.Attribute;
-import app.jweb.template.Comment;
 import net.htmlparser.jericho.RowColumnVector;
 import net.htmlparser.jericho.Source;
 
@@ -122,9 +122,6 @@ public class HTMLParser {
             Attribute attribute = new Attribute(attributeName(attributeName), dynamic, position.getRow(), position.getColumn(), resource.path());
             String attributeValue = htmlAttribute.getValue();
             attribute.setValue(attributeValue);
-            if (dynamic) {
-                attribute.setDefaultValue(htmlElement.getAttributeValue(attribute.name()));
-            }
             Attribute exist = attributes.get(attribute.name());
             if (exist == null) {
                 attributes.put(attribute.name(), attribute);
