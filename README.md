@@ -1,83 +1,15 @@
-<img src="doc/img/sited-logo.png" align="right" />
+<img src="doc/img/sited-logo.png" align="left" />
 
-# Sited CMS
+# Sited Framework
 
-A developer friendly Java CMS based on Java 10 micro service modules with full API access to contents, users and files. 
+A developer friendly module based JAX-RS micro service framework. 
 
 - **Built for startup, provides well designed quick prototyping code base.**
 - Supports template editing, perfect for building landing pages.
-- More modules are coming...
-
-
-[![Edit Template](doc/img/edit-template.png)](https://github.com/sited-io/sited-project/raw/master/doc/img/edit-template.png) | [![Edit Page](doc/img/edit-page.png)](https://github.com/sited-io/sited-project/raw/master/doc/img/edit-page.png) |
-|:---:|:---:|
-[Edit Template](doc/img/edit-template.png) | [Edit Page](doc/img/edit-page.png) |
-| [![Index Page](doc/img/index.png)](https://github.com/sited-io/sited-project/raw/master/doc/img/index.png)  |  [![Post Page](doc/img/page.png)](https://github.com/sited-io/sited-project/raw/master/doc/img/page.png) |
-| [Index Page](http://) | [Post Page](http://) |
-
-## Features
-
-|Platform| Windows/Linux/Mac OS|
-|:---:|:---:|
-|Database|MySQL and HSQL are tested. For other databases, need to manually install drivers|
-|Hardware|AWS micro instance is tested (1 core, 1G mem)|
-|Frontend Browser Compatibility|Build with jQuery and bootstrap, requires IE8+|
-|Admin Browser Compatibility|Build with React, requires IE11+|
-|Deployment|Standalone instance or deploy API/Web/Admin separately|
-
-Sited CMS includes a light JAX-RS module framework and basic CMS modules. 
-
-* JAX-RS module framework
+- JAX-RS module framework
   * Enhancements to Jersey
   * Supports Guice style DI/AOP 
   * Embedded HTTP server with undertow
-
-- Content Management
-  * Full API for Page/Page Category/Template/Template components/Variables/Tag
-  * Edit templates by drag&drop template components
-  * Support drafts
-  * Use markdown as default editor
-  * Supports dynamic fields
-  * OG meta supports
-  * Baidu, addthis social share supports
-  * Baidu, GA statistics supports
-  * Web pages
-    * Index Page
-    * Post category page
-    * Post pages
-    * Tag page list
-   * Web components
-     * Header
-     * Footer 
-     * Category page list with pagination support
-     * Recently page list
-     * Popular page list
-     * Related page list
-     * Next/Pre pages
-     * Breadcrumb
-     * Card for any content
-     * Html for any content
-     * Content table
-     * Category Tree
-     * Banner
-     * Social share
- 
-- User management
-   * Full API for User/Role/Permission.
-   * Declarative permission validation.
-   * Supports dynamic fields. 
-   * Email pincode
-   * Simple captcha code
-   * Web pages
-     * Login
-     * Register
-     * Forget password
-     * Reset password
-   
-- File management
-   * Create database record for upload file for file access permission(Not quite ready yet)
-   * File browser
- 
 
 ## Getting Started
 

@@ -4,7 +4,7 @@ def repo = System.getProperty("user.home")
 def guavaVersion = '25.0-jre'
 def jacksonVersion = '2.8.10'
 def jerseyVersion = '2.27'
-def sitedVersion = '0.9.0'
+def jwebVersion = '0.9.0'
 
 subprojects {
     apply plugin: 'maven-publish'
@@ -20,7 +20,7 @@ subprojects {
     publishing {
         publications {
             mavenJava(MavenPublication) {
-                artifactId project.name.startsWith("sited-") ? project.name.substring("sited-".length()) : project.name
+                artifactId project.name.startsWith("jweb-") ? project.name.substring("jweb-".length()) : project.name
                 from components.java
             }
         }
@@ -32,13 +32,13 @@ subprojects {
         }
     }
 
-    group = 'io.sited'
-    version = "${sitedVersion}"
+    group = 'io.jweb'
+    version = "${jwebVersion}"
 }
 
 
 
-project(':sited-module') {
+project(':jweb-module') {
     apply from: file("${rootDir}/gradle/module.gradle")
 
     dependencies {
@@ -92,20 +92,20 @@ project(':sited-module') {
 }
 
 
-project(':sited-logback') {
+project(':jweb-logback') {
     apply from: file("${rootDir}/gradle/module.gradle")
 
     dependencies {
-        api project(':sited-module')
+        api project(':jweb-module')
         compile group: 'ch.qos.logback', name: 'logback-classic', version: '1.2.3'
     }
 }
 
-project(':sited-service') {
+project(':jweb-service') {
     apply from: file("${rootDir}/gradle/module.gradle")
 
     dependencies {
-        api project(':sited-module')
+        api project(':jweb-module')
         implementation group: 'org.glassfish.jersey.core', name: 'jersey-client', version: '2.27'
         implementation "com.fasterxml.jackson.module:jackson-module-jaxb-annotations:${jacksonVersion}"
         implementation "com.fasterxml.jackson.datatype:jackson-datatype-jsr310:${jacksonVersion}"
@@ -124,88 +124,88 @@ project(':sited-service') {
         implementation(group: 'org.hibernate.validator', name: 'hibernate-validator', version: '6.0.9.Final') {
             exclude group: 'org.jboss.logging'
         }
-        testImplementation project(':sited-test')
-        testImplementation project(':sited-undertow')
+        testImplementation project(':jweb-test')
+        testImplementation project(':jweb-undertow')
     }
 }
 
-project(':sited-admin') {
+project(':jweb-admin') {
     apply from: file("${rootDir}/gradle/module.gradle")
 
 
     dependencies {
-        api project(':sited-module')
-        api project(':sited-web')
-        testImplementation project(':sited-test')
+        api project(':jweb-module')
+        api project(':jweb-web')
+        testImplementation project(':jweb-test')
     }
 }
 
-project(':sited-redis') {
+project(':jweb-redis') {
     apply from: file("${rootDir}/gradle/module.gradle")
 
 
     dependencies {
-        api project(':sited-module')
-        api project(':sited-cache')
+        api project(':jweb-module')
+        api project(':jweb-cache')
         implementation 'redis.clients:jedis:2.9.0'
         implementation 'org.apache.commons:commons-pool2:2.5.0'
-        testImplementation project(':sited-test')
+        testImplementation project(':jweb-test')
     }
 }
 
-project(':sited-cache') {
+project(':jweb-cache') {
     apply from: file("${rootDir}/gradle/module.gradle")
 
 
     dependencies {
-        api project(':sited-module')
-        testImplementation project(':sited-test')
+        api project(':jweb-module')
+        testImplementation project(':jweb-test')
     }
 }
 
-project(':sited-scheduler') {
+project(':jweb-scheduler') {
     apply from: file("${rootDir}/gradle/module.gradle")
 
 
     dependencies {
-        api project(':sited-module')
+        api project(':jweb-module')
         implementation(group: 'org.quartz-scheduler', name: 'quartz', version: '2.3.0') {
             exclude group: 'com.mchange'
             exclude group: 'com.zaxxer'
         }
-        testImplementation project(':sited-test')
+        testImplementation project(':jweb-test')
     }
 }
 
-project(':sited-message') {
+project(':jweb-message') {
     apply from: file("${rootDir}/gradle/module.gradle")
 
 
     dependencies {
-        api project(':sited-module')
-        testImplementation project(':sited-test')
+        api project(':jweb-module')
+        testImplementation project(':jweb-test')
     }
 }
 
-project(':sited-rabbitmq') {
+project(':jweb-rabbitmq') {
     apply from: file("${rootDir}/gradle/module.gradle")
 
 
     dependencies {
-        api project(':sited-module')
-        api project(':sited-message')
+        api project(':jweb-module')
+        api project(':jweb-message')
         implementation group: 'org.apache.commons', name: 'commons-pool2', version: '2.4.2'
         implementation group: 'com.rabbitmq', name: 'amqp-client', version: '5.0.0'
-        testImplementation project(':sited-test')
+        testImplementation project(':jweb-test')
     }
 }
 
-project(':sited-database') {
+project(':jweb-database') {
     apply from: file("${rootDir}/gradle/module.gradle")
 
 
     dependencies {
-        api project(':sited-module')
+        api project(':jweb-module')
         api "javax.persistence:javax.persistence-api:2.2"
         api group: 'javax.transaction', name: 'javax.transaction-api', version: '1.3'
 
@@ -214,78 +214,78 @@ project(':sited-database') {
             exclude group: "org.jboss.spec.javax.transaction"
             exclude group: 'org.jboss.logging'
         }
-        testImplementation project(':sited-test')
+        testImplementation project(':jweb-test')
     }
 }
 
-project(':sited-undertow') {
+project(':jweb-undertow') {
     apply from: file("${rootDir}/gradle/module.gradle")
 
 
     dependencies {
-        api project(':sited-module')
+        api project(':jweb-module')
         implementation('io.undertow:undertow-core:2.0.3.Final') {
             exclude group: 'org.jboss.logging'
         }
         implementation(group: 'org.glassfish.jersey.core', name: 'jersey-server', version: "${jerseyVersion}") {
             exclude group: 'javax.validation'
         }
-        testImplementation project(':sited-test')
+        testImplementation project(':jweb-test')
     }
 }
 
-project(':sited-template') {
+project(':jweb-template') {
     apply from: file("${rootDir}/gradle/module.gradle")
 
     dependencies {
-        api project(':sited-module')
+        api project(':jweb-module')
         implementation group: 'org.apache.commons', name: 'commons-jexl3', version: '3.1'
         implementation 'net.htmlparser.jericho:jericho-html:3.4'
         implementation 'org.javassist:javassist:3.22.0-GA'
-        testImplementation project(':sited-test')
+        testImplementation project(':jweb-test')
     }
 }
 
-project(':sited-web') {
+project(':jweb-web') {
     apply from: file("${rootDir}/gradle/module.gradle")
 
     dependencies {
-        api project(':sited-module')
-        api project(':sited-template')
+        api project(':jweb-module')
+        api project(':jweb-template')
         implementation(group: 'org.glassfish.jersey.core', name: 'jersey-common', version: "${jerseyVersion}")
         implementation(group: 'org.hibernate.validator', name: 'hibernate-validator', version: '6.0.9.Final') {
             exclude group: 'org.jboss.logging'
         }
         implementation 'redis.clients:jedis:2.9.0'
         implementation 'org.apache.commons:commons-pool2:2.5.0'
-        testImplementation project(':sited-test')
+        testImplementation project(':jweb-test')
     }
 }
 
-project(':sited-test') {
+project(':jweb-test') {
     apply from: file("${rootDir}/gradle/module.gradle")
 
 
     dependencies {
-        api project(':sited-module')
+        api project(':jweb-module')
         api group: 'org.junit.jupiter', name: 'junit-jupiter-api', version: '5.2.0'
         api 'org.mockito:mockito-core:2.17.0'
         api(group: 'org.glassfish.jersey.core', name: 'jersey-server', version: '2.27') {
             exclude group: 'javax.validation'
         }
         implementation 'org.hsqldb:hsqldb:2.4.0'
-        implementation project(':sited-database')
-        implementation project(':sited-logback')
+        implementation project(':jweb-database')
+        implementation project(':jweb-logback')
         implementation group: 'org.glassfish.jersey.core', name: 'jersey-common', version: '2.27'
         implementation "org.junit.jupiter:junit-jupiter-engine:5.2.0"
 
-        testImplementation project(':sited-web')
-        testImplementation project(':sited-service')
+        testImplementation project(':jweb-web')
+        testImplementation project(':jweb-service')
     }
 }
 
 
-project(':sited-main') {
+project(':jweb-main') {
     apply from: file("${rootDir}/gradle/app.gradle")
 
     dependencies {
@@ -293,344 +293,16 @@ project(':sited-main') {
             exclude group: 'javax.inject'
             exclude group: 'org.glassfish.hk2.external', module: 'javax.inject'
         }
-        compile project(':sited-module')
-        compile project(':sited-web')
-        compile project(':sited-logback')
-        compile project(':sited-admin')
-        compile project(':sited-service')
-        compile project(':sited-database')
-        compile project(':sited-undertow')
-        compile project(':sited-user:captcha-web-simple')
-        compile project(':sited-user:pincode-web')
-        compile project(':sited-user:pincode-service')
-        compile project(':sited-file:file-web')
-        compile project(':sited-file:file-admin')
-        compile project(':sited-file:file-service')
-        compile project(':sited-user:user-service')
-        compile project(':sited-user:user-web')
-        compile project(':sited-user:user-admin')
-        compile project(':sited-page:page-service')
-        compile project(':sited-page:page-web')
-        compile project(':sited-page:page-admin')
-        compile project(':sited-comment:comment-admin')
-        compile project(':sited-comment:comment-web')
-        compile project(':sited-comment:comment-service')
+        compile project(':jweb-module')
+        compile project(':jweb-web')
+        compile project(':jweb-logback')
+        compile project(':jweb-admin')
+        compile project(':jweb-service')
+        compile project(':jweb-database')
+        compile project(':jweb-undertow')
 
         compile group: 'ch.qos.logback', name: 'logback-classic', version: '1.2.3'
         compile 'mysql:mysql-connector-java:8.0.11'
         compile 'org.hsqldb:hsqldb:2.4.0'
-    }
-}
-
-project(':sited-user:pincode-service-api') {
-    apply from: file("${rootDir}/gradle/module.gradle")
-
-    dependencies {
-        api project(':sited-service')
-        testImplementation project(':sited-test')
-    }
-}
-
-project(':sited-user:pincode-service') {
-    apply from: file("${rootDir}/gradle/module.gradle")
-
-    dependencies {
-        api project(':sited-user:pincode-service-api')
-        api project(':sited-database')
-        api project(':sited-message')
-        api('javax.mail:mail:1.4.7') {
-            exclude group: 'javax.activation'
-        }
-        testImplementation project(':sited-test')
-    }
-}
-
-project(':sited-user:pincode-web') {
-    apply from: file("${rootDir}/gradle/module.gradle")
-
-    dependencies {
-        api project(':sited-user:pincode-service-api')
-        implementation "com.github.cage:cage:1.0"
-        implementation project(':sited-web')
-        testImplementation project(':sited-user:pincode-service')
-        testImplementation project(':sited-test')
-        testImplementation project(':sited-database')
-    }
-}
-
-
-project(':sited-user:captcha-web') {
-
-    apply from: file("${rootDir}/gradle/module.gradle")
-
-    dependencies {
-        api project(':sited-web')
-        testImplementation project(':sited-test')
-    }
-}
-
-
-project(':sited-user:captcha-web-simple') {
-    apply from: file("${rootDir}/gradle/module.gradle")
-
-    dependencies {
-        api project(':sited-user:captcha-web')
-        api project(':sited-web')
-        implementation files("${rootDir}/libs/simplecaptcha-1.2.1.jar")
-        testImplementation project(':sited-test')
-    }
-
-    jar {
-        from(zipTree("${rootDir}/libs/simplecaptcha-1.2.1.jar"))
-    }
-}
-
-project(':sited-file:file-service-api') {
-    apply from: file("${rootDir}/gradle/module.gradle")
-
-    dependencies {
-        api project(':sited-service')
-        testImplementation project(':sited-test')
-    }
-
-}
-
-project(':sited-file:file-service') {
-    apply from: file("${rootDir}/gradle/module.gradle")
-
-    dependencies {
-        api project(':sited-file:file-service-api')
-        api project(':sited-database')
-        implementation project(':sited-service')
-        testImplementation project(':sited-test')
-    }
-}
-
-project(':sited-file:file-web') {
-    apply from: file("${rootDir}/gradle/module.gradle")
-
-    dependencies {
-        api project(':sited-file:file-service-api')
-        implementation project(':sited-web')
-        implementation "org.imgscalr:imgscalr-lib:4.2"
-        implementation(group: 'org.glassfish.jersey.media', name: 'jersey-media-multipart', version: "${jerseyVersion}")
-        testImplementation project(':sited-file:file-service')
-        testImplementation project(':sited-test')
-    }
-}
-project(':sited-file:file-admin') {
-    apply from: file("${rootDir}/gradle/module.gradle")
-
-    dependencies {
-        api project(':sited-file:file-service-api')
-        implementation project(":sited-admin")
-        implementation(group: 'org.glassfish.jersey.media', name: 'jersey-media-multipart', version: "${jerseyVersion}")
-        testImplementation project(':sited-file:file-service')
-        testImplementation project(':sited-file:file-web')
-        testImplementation project(':sited-test')
-        testImplementation project(':sited-database')
-        testImplementation project(':sited-undertow')
-    }
-}
-
-
-
-project(':sited-user:user-service-api') {
-    apply from: file("${rootDir}/gradle/module.gradle")
-
-    dependencies {
-        api project(':sited-service')
-        testImplementation project(':sited-test')
-    }
-}
-
-project(':sited-user:user-service') {
-    apply from: file("${rootDir}/gradle/module.gradle")
-
-    dependencies {
-        api project(':sited-user:user-service-api')
-        api project(':sited-database')
-        api project(':sited-message')
-        testImplementation project(':sited-test')
-    }
-}
-
-project(':sited-user:user-admin') {
-    apply from: file("${rootDir}/gradle/module.gradle")
-
-    dependencies {
-        api project(':sited-user:user-service-api')
-        api project(':sited-admin')
-        implementation project(':sited-user:captcha-web')
-        testImplementation project(':sited-test')
-        testImplementation project(':sited-user:user-service')
-    }
-}
-
-project(':sited-user:user-web') {
-    apply from: file("${rootDir}/gradle/module.gradle")
-
-    dependencies {
-        api project(':sited-user:user-service-api')
-        api project(':sited-web')
-        api project(':sited-page:page-web')
-        api project(':sited-message')
-        api project(':sited-cache')
-        implementation project(':sited-user:captcha-web')
-        implementation project(':sited-user:pincode-web')
-        implementation project(':sited-page:page-service-api')
-        testImplementation project(':sited-test')
-    }
-}
-
-project(':sited-page:page-service-api') {
-    apply from: file("${rootDir}/gradle/module.gradle")
-
-    dependencies {
-        api project(':sited-service')
-        testImplementation project(':sited-test')
-    }
-}
-
-project(':sited-page:page-service') {
-    apply from: file("${rootDir}/gradle/module.gradle")
-
-    dependencies {
-        api project(':sited-page:page-service-api')
-        implementation project(':sited-database')
-        implementation project(':sited-message')
-        implementation project(':sited-scheduler')
-        implementation 'com.atlassian.commonmark:commonmark:0.11.0'
-        implementation 'com.atlassian.commonmark:commonmark-ext-gfm-tables:0.11.0'
-        implementation 'com.atlassian.commonmark:commonmark-ext-gfm-strikethrough:0.11.0'
-        implementation 'com.atlassian.commonmark:commonmark-ext-autolink:0.11.0'
-        implementation 'com.atlassian.commonmark:commonmark-ext-ins:0.11.0'
-        implementation 'com.atlassian.commonmark:commonmark-ext-heading-anchor:0.11.0'
-        testImplementation project(':sited-test')
-    }
-}
-
-project(':sited-page:page-web') {
-    apply from: file("${rootDir}/gradle/module.gradle")
-
-    dependencies {
-        api project(':sited-page:page-service-api')
-        api project(':sited-web')
-        implementation project(':sited-cache')
-        implementation project(':sited-message')
-        implementation project(':sited-file:file-service-api')
-        implementation 'com.atlassian.commonmark:commonmark:0.11.0'
-        implementation 'com.atlassian.commonmark:commonmark-ext-gfm-tables:0.11.0'
-        implementation 'com.atlassian.commonmark:commonmark-ext-gfm-strikethrough:0.11.0'
-        implementation 'com.atlassian.commonmark:commonmark-ext-autolink:0.11.0'
-        implementation 'com.atlassian.commonmark:commonmark-ext-ins:0.11.0'
-        implementation 'com.atlassian.commonmark:commonmark-ext-heading-anchor:0.11.0'
-        testImplementation project(':sited-test')
-    }
-}
-
-project(':sited-page:page-admin') {
-    apply from: file("${rootDir}/gradle/module.gradle")
-
-    dependencies {
-        api project(':sited-page:page-service-api')
-        api project(':sited-admin')
-        implementation project(':sited-file:file-service-api')
-        testImplementation project(':sited-test')
-    }
-}
-
-project(':sited-page:page-og-meta-web') {
-    apply from: file("${rootDir}/gradle/module.gradle")
-
-    dependencies {
-        api project(':sited-web')
-        api project(':sited-page:page-web')
-        testImplementation project(':sited-test')
-        testImplementation project(':sited-page:page-service')
-    }
-}
-
-project(':sited-page:page-share-baidu-web') {
-    apply from: file("${rootDir}/gradle/module.gradle")
-
-    dependencies {
-        api project(':sited-web')
-        api project(':sited-page:page-web')
-        testImplementation project(':sited-test')
-        testImplementation project(':sited-page:page-service')
-    }
-}
-
-project(':sited-page:page-share-addthis-web') {
-    apply from: file("${rootDir}/gradle/module.gradle")
-
-    dependencies {
-        api project(':sited-web')
-        api project(':sited-page:page-web')
-        testImplementation project(':sited-test')
-        testImplementation project(':sited-page:page-service')
-    }
-}
-
-project(':sited-page:page-tracking-baidu-web') {
-    apply from: file("${rootDir}/gradle/module.gradle")
-
-    dependencies {
-        api project(':sited-web')
-        testImplementation project(':sited-test')
-    }
-}
-
-project(':sited-page:page-tracking-ga-web') {
-    apply from: file("${rootDir}/gradle/module.gradle")
-
-    dependencies {
-        api project(':sited-web')
-        testImplementation project(':sited-test')
-    }
-}
-project(':sited-comment:comment-service-api') {
-    apply from: file("${rootDir}/gradle/module.gradle")
-
-    dependencies {
-        api project(':sited-service')
-        testImplementation project(':sited-test')
-    }
-}
-
-project(':sited-comment:comment-service') {
-    apply from: file("${rootDir}/gradle/module.gradle")
-
-    dependencies {
-        api project(':sited-service')
-        api project(':sited-database')
-        api project(':sited-message')
-        api project(':sited-page:page-service-api')
-        api project(':sited-comment:comment-service-api')
-        testImplementation project(':sited-test')
-    }
-}
-
-project(':sited-comment:comment-web') {
-    apply from: file("${rootDir}/gradle/module.gradle")
-
-    dependencies {
-        api project(':sited-web')
-        api project(':sited-comment:comment-service-api')
-        api project(':sited-user:user-service-api')
-        api project(':sited-page:page-web')
-        testImplementation project(':sited-test')
-    }
-}
-
-project(':sited-comment:comment-admin') {
-    apply from: file("${rootDir}/gradle/module.gradle")
-
-    dependencies {
-        api project(':sited-admin')
-        api project(':sited-comment:comment-service-api')
-        implementation project(':sited-page:page-admin')
-        testImplementation project(':sited-test')
     }
 }
