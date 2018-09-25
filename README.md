@@ -1,6 +1,6 @@
-<img src="doc/img/sited-logo.png" align="left" />
+<img src="doc/img/jweb-logo.png" align="left" />
 
-# Sited Framework
+# JWeb Framework
 
 A developer friendly module based JAX-RS micro service framework. 
 
@@ -13,12 +13,12 @@ A developer friendly module based JAX-RS micro service framework.
 
 ## Getting Started
 
-These instructions will get you a copy of the Sited CMS up and running on your local machine.<br>
+These instructions will get you a copy of the JWeb CMS up and running on your local machine.<br>
 
 ### Prerequisites
 
 1. Download and install [Open JDK 10](http://jdk.java.net/10/) or [Oracle JDK 10](http://www.oracle.com/technetwork/java/javase/downloads/jdk10-downloads-4416644.html)
-2. If you want to use MySQL as database. (***Optional, Sited default embeds HSQL***)
+2. If you want to use MySQL as database. (***Optional, JWeb default embeds HSQL***)
    1. Download and install [MySQL](https://dev.mysql.com/downloads/mysql/). 
    2. Create a database. <br>
    ```CREATE DATABASE main CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;```
@@ -27,18 +27,18 @@ These instructions will get you a copy of the Sited CMS up and running on your l
 
 ### Installing
 
-1. Download the package file [sited-v0.9.0-beta.zip](https://github.com/sited-io/sited-project/releases/download/v0.9.0/sited-v0.9.0-beta.zip) (***For all platform***)
+1. Download the package file [JWeb-v0.9.0-beta.zip](https://github.com/JWeb-io/JWeb-project/releases/download/v0.9.0/JWeb-v0.9.0-beta.zip) (***For all platform***)
 2. Unzip the package
-3. Run `./bin/sited`
+3. Run `./bin/JWeb`
 4. Use a browser(IE11+) to open ```http://localhost:8080```
-5. Fill in the require information to setup sited. 
+5. Fill in the require information to setup JWeb. 
    1. Choose language. 
    2. Input app name, the name will be displayed in page title. 
    3. Select database. 
       1. If you want to use MySQL, input the info of database and user you created.
    4. Input SMTP settings. 
       > Optional, if you skip the SMTP settings, user register will be disabled.
-   5. Click install button. Sited will restart.
+   5. Click install button. JWeb will restart.
 6. Open ```http://localhost:8080/admin/```
 
 
@@ -46,7 +46,7 @@ These instructions will get you a copy of the Sited CMS up and running on your l
 
 1. Clone the repo
 2. Import as a Gradle project to Intellij IDEA or Eclipse.
-3. Run sited-main/src/java/Main.java 
+3. Run JWeb-main/src/java/Main.java 
 
 ### Known issues
 
@@ -68,7 +68,7 @@ To start an `App`:
 ```
 public class Main {
     public static void main(String[] args) throws InterruptedException {
-        Path dir = Paths.get(System.getProperty("user.home")).resolve(".sited");
+        Path dir = Paths.get(System.getProperty("user.home")).resolve(".JWeb");
         App app = new UndertowApp(dir);
         ServiceLoader.load(AbstractModule.class).forEach(app::install);
         app.start();
