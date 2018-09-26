@@ -1,10 +1,10 @@
 /**
  * @author chi
  */
-module jweb.scheduler {
+module app.jweb.scheduler {
     requires com.google.common;
     requires slf4j.api;
     requires quartz;
-   requires jweb.module;
+    requires app.jweb.module;
     exports app.jweb.scheduler;
 }

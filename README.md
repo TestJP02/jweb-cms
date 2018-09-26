@@ -17,7 +17,7 @@ These instructions will get you a copy of the JWeb CMS up and running on your lo
 
 ### Prerequisites
 
-1. Download and install [Open JDK 10](http://jdk.java.net/10/) or [Oracle JDK 10](http://www.oracle.com/technetwork/java/javase/downloads/jdk10-downloads-4416644.html)
+1. Download and install [Open JDK 11](http://jdk.java.net/11/) or [Oracle JDK 11](http://www.oracle.com/technetwork/java/javase/downloads/jdk11-downloads-4416644.html)
 2. If you want to use MySQL as database. (***Optional, JWeb default embeds HSQL***)
    1. Download and install [MySQL](https://dev.mysql.com/downloads/mysql/). 
    2. Create a database. <br>

@@ -1,7 +1,7 @@
 /**
  * @author chi
  */
-module jweb.rabbitmq {
+module app.jweb.rabbitmq {
     requires com.google.common;
     requires java.xml.bind;
     requires javax.annotation.api;
@@ -9,9 +9,9 @@ module jweb.rabbitmq {
     requires slf4j.api;
     requires java.validation;
     requires java.ws.rs;
-   requires jweb.module;
-   requires jweb.message;
-    requires amqp.client;
+    requires app.jweb.module;
+    requires app.jweb.message;
+    requires com.rabbitmq.client;
     requires commons.pool2;
 
     exports app.jweb.rabbitmq;

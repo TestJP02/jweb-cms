@@ -1,7 +1,7 @@
 /**
  * @author chi
  */
-module jweb.redis {
+module app.jweb.redis {
     requires com.google.common;
     requires java.xml.bind;
     requires javax.annotation.api;
@@ -9,8 +9,8 @@ module jweb.redis {
     requires slf4j.api;
     requires java.validation;
     requires java.ws.rs;
-   requires jweb.module;
-   requires jweb.cache;
+    requires app.jweb.module;
+    requires app.jweb.cache;
     requires jedis;
 
     exports app.jweb.redis;

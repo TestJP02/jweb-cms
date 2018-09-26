@@ -1,7 +1,7 @@
 /**
  * @author chi
  */
-module jweb.service {
+module app.jweb.service {
     requires com.google.common;
     requires java.xml.bind;
     requires javax.annotation.api;
@@ -9,7 +9,7 @@ module jweb.service {
     requires slf4j.api;
     requires java.validation;
     requires java.ws.rs;
-   requires jweb.module;
+    requires app.jweb.module;
     requires jersey.client;
     requires javassist;
     requires jersey.bean.validation;

@@ -1,7 +1,7 @@
 /**
  * @author chi
  */
-module jweb.undertow {
+module app.jweb.undertow {
     requires com.google.common;
     requires java.xml.bind;
     requires aopalliance.repackaged;
@@ -10,7 +10,7 @@ module jweb.undertow {
     requires slf4j.api;
     requires java.validation;
     requires java.ws.rs;
-   requires jweb.module;
+    requires app.jweb.module;
     requires undertow.core;
     requires xnio.nio;
     requires xnio.api;

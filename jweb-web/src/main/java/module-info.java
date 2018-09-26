@@ -4,7 +4,7 @@ import app.jweb.web.WebModule;
 /**
  * @author chi
  */
-module jweb.web {
+module app.jweb.web {
     requires com.google.common;
     requires java.xml.bind;
     requires slf4j.api;
@@ -15,8 +15,8 @@ module jweb.web {
     requires java.ws.rs;
     requires jedis;
     requires jersey.common;
-   requires jweb.template;
-   requires jweb.module;
+    requires app.jweb.template;
+    requires app.jweb.module;
 
     exports app.jweb.web;
 

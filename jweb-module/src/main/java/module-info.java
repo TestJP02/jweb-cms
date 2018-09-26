@@ -1,23 +1,22 @@
 /**
  * @author chi
  */
-module jweb.module {
-    requires transitive com.google.common;
-    requires transitive java.xml.bind;
-    requires transitive aopalliance.repackaged;
-    requires transitive javax.annotation.api;
-    requires transitive javax.inject;
-    requires transitive slf4j.api;
-    requires transitive java.validation;
-    requires transitive java.ws.rs;
-    requires java.activation;
+module app.jweb.module {
+    requires com.google.common;
+    requires java.xml.bind;
+    requires aopalliance.repackaged;
+    requires javax.annotation.api;
+    requires javax.inject;
+    requires slf4j.api;
+    requires java.validation;
+    requires java.ws.rs;
 
     requires jul.to.slf4j;
     requires jackson.annotations;
-    requires jackson.dataformat.yaml;
-    requires jackson.core;
-    requires jackson.databind;
-    requires jackson.datatype.jsr310;
+    requires com.fasterxml.jackson.dataformat.yaml;
+    requires com.fasterxml.jackson.core;
+    requires com.fasterxml.jackson.databind;
+    requires com.fasterxml.jackson.datatype.jsr310;
     requires jersey.media.json.jackson;
 
     requires javassist;

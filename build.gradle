@@ -1,10 +1,16 @@
 apply from: file("${rootDir}/gradle/project.gradle")
 def repo = System.getProperty("user.home")
 
-def guavaVersion = '25.0-jre'
-def jacksonVersion = '2.8.10'
-def jerseyVersion = '2.27'
-def jwebVersion = '0.9.0'
+def guavaVersion = '26.0-jre'
+def jacksonVersion = '2.9.7'
+def jerseyVersion = "2.27"
+def jwebVersion = '1.0.0'
+def jedisVersion = '2.9.0'
+def commonPoolVersion = '2.6.0'
+def hibernateVersion = '6.0.9.Final'
+def hibernateValidatorVersion = '6.0.13.Final'
+def asmVersion = '6.2.1'
+
 
 subprojects {
     apply plugin: 'maven-publish'
@@ -37,7 +43,6 @@ subprojects {
 }
 
 
-
 project(':jweb-module') {
     apply from: file("${rootDir}/gradle/module.gradle")
 
@@ -59,23 +64,29 @@ project(':jweb-module') {
 
         implementation(group: 'org.glassfish.jersey.core', name: 'jersey-server', version: "${jerseyVersion}") {
             exclude group: 'javax.validation'
+            exclude group: 'org.glassfish.hk2.external', module: 'javax.inject'
+        }
+        implementation(group: 'org.glassfish.jersey.core', name: 'jersey-common', version: "${jerseyVersion}") {
+            exclude group: 'org.glassfish.hk2.external', module: 'javax.inject'
         }
         implementation(group: 'org.glassfish.jersey.inject', name: 'jersey-hk2', version: "${jerseyVersion}") {
             exclude group: 'javax.inject'
             exclude group: 'org.glassfish.hk2.external', module: 'javax.inject'
         }
-        compile(group: 'org.glassfish.jersey.media', name: 'jersey-media-json-jackson', version: '2.27') {
+        implementation(group: 'org.glassfish.jersey.media', name: 'jersey-media-json-jackson', version: "${jerseyVersion}") {
             exclude group: 'com.fasterxml.jackson.core'
             exclude group: 'com.fasterxml.jackson.module'
+            exclude group: 'org.glassfish.hk2.external', module: 'javax.inject'
         }
         implementation(group: 'org.glassfish.jersey.ext', name: 'jersey-bean-validation', version: "${jerseyVersion}") {
             exclude group: 'org.hibernate'
             exclude group: 'javax.el'
             exclude group: 'org.glassfish.web', module: 'javax.el'
+            exclude group: 'org.glassfish.hk2.external', module: 'javax.inject'
         }
-        implementation group: 'org.ow2.asm', name: 'asm', version: '6.1.1'
+        implementation group: 'org.ow2.asm', name: 'asm', version: "${asmVersion}"
 
-        implementation(group: 'org.hibernate.validator', name: 'hibernate-validator', version: '6.0.9.Final') {
+        implementation(group: 'org.hibernate.validator', name: 'hibernate-validator', version: "${hibernateValidatorVersion}") {
             exclude group: 'org.jboss.logging'
         }
 
@@ -106,22 +117,29 @@ project(':jweb-service') {
 
     dependencies {
         api project(':jweb-module')
-        implementation group: 'org.glassfish.jersey.core', name: 'jersey-client', version: '2.27'
         implementation "com.fasterxml.jackson.module:jackson-module-jaxb-annotations:${jacksonVersion}"
         implementation "com.fasterxml.jackson.datatype:jackson-datatype-jsr310:${jacksonVersion}"
         implementation "com.fasterxml.jackson.datatype:jackson-datatype-jdk8:${jacksonVersion}"
         implementation "com.fasterxml.jackson.dataformat:jackson-dataformat-yaml:${jacksonVersion}"
         implementation 'org.javassist:javassist:3.22.0-GA'
+        implementation(group: 'org.glassfish.jersey.core', name: 'jersey-client', version: "${jacksonVersion}") {
+            exclude group: 'org.glassfish.hk2.external', module: 'javax.inject'
+        }
         implementation(group: 'org.glassfish.jersey.ext', name: 'jersey-bean-validation', version: "${jerseyVersion}") {
             exclude group: 'org.hibernate'
             exclude group: 'javax.el'
             exclude group: 'org.glassfish.web', module: 'javax.el'
+            exclude group: 'org.glassfish.hk2.external', module: 'javax.inject'
         }
-        compile(group: 'org.glassfish.jersey.media', name: 'jersey-media-json-jackson', version: '2.27') {
+        compile(group: 'org.glassfish.jersey.media', name: 'jersey-media-json-jackson', version: "${jerseyVersion}") {
             exclude group: 'com.fasterxml.jackson.core'
             exclude group: 'com.fasterxml.jackson.module'
+            exclude group: 'org.glassfish.hk2.external', module: 'javax.inject'
         }
-        implementation(group: 'org.hibernate.validator', name: 'hibernate-validator', version: '6.0.9.Final') {
+        compile(group: 'org.glassfish.jersey.core', name: 'jersey-common', version: "${jerseyVersion}") {
+            exclude group: 'org.glassfish.hk2.external', module: 'javax.inject'
+        }
+        implementation(group: 'org.hibernate.validator', name: 'hibernate-validator', version: "${hibernateValidatorVersion}") {
             exclude group: 'org.jboss.logging'
         }
         testImplementation project(':jweb-test')
@@ -147,8 +165,8 @@ project(':jweb-redis') {
     dependencies {
         api project(':jweb-module')
         api project(':jweb-cache')
-        implementation 'redis.clients:jedis:2.9.0'
-        implementation 'org.apache.commons:commons-pool2:2.5.0'
+        implementation "redis.clients:jedis:${jedisVersion}"
+        implementation "org.apache.commons:commons-pool2:${commonPoolVersion}"
         testImplementation project(':jweb-test')
     }
 }
@@ -194,8 +212,8 @@ project(':jweb-rabbitmq') {
     dependencies {
         api project(':jweb-module')
         api project(':jweb-message')
-        implementation group: 'org.apache.commons', name: 'commons-pool2', version: '2.4.2'
-        implementation group: 'com.rabbitmq', name: 'amqp-client', version: '5.0.0'
+        implementation group: 'org.apache.commons', name: 'commons-pool2', version: "${commonPoolVersion}"
+        implementation group: 'com.rabbitmq', name: 'amqp-client', version: '5.4.1'
         testImplementation project(':jweb-test')
     }
 }
@@ -209,8 +227,8 @@ project(':jweb-database') {
         api "javax.persistence:javax.persistence-api:2.2"
         api group: 'javax.transaction', name: 'javax.transaction-api', version: '1.3'
 
-        implementation 'org.apache.commons:commons-dbcp2:2.2.0'
-        implementation(group: 'org.hibernate', name: 'hibernate-core', version: '5.3.1.Final') {
+        implementation 'org.apache.commons:commons-dbcp2:2.5.0'
+        implementation(group: 'org.hibernate', name: 'hibernate-core', version: '5.3.6.Final') {
             exclude group: "org.jboss.spec.javax.transaction"
             exclude group: 'org.jboss.logging'
         }
@@ -224,11 +242,12 @@ project(':jweb-undertow') {
 
     dependencies {
         api project(':jweb-module')
-        implementation('io.undertow:undertow-core:2.0.3.Final') {
+        implementation('io.undertow:undertow-core:2.0.13.Final') {
             exclude group: 'org.jboss.logging'
         }
         implementation(group: 'org.glassfish.jersey.core', name: 'jersey-server', version: "${jerseyVersion}") {
             exclude group: 'javax.validation'
+            exclude group: 'org.glassfish.hk2.external', module: 'javax.inject'
         }
         testImplementation project(':jweb-test')
     }
@@ -241,7 +260,7 @@ project(':jweb-template') {
         api project(':jweb-module')
         implementation group: 'org.apache.commons', name: 'commons-jexl3', version: '3.1'
         implementation 'net.htmlparser.jericho:jericho-html:3.4'
-        implementation 'org.javassist:javassist:3.22.0-GA'
+        implementation 'org.javassist:javassist:3.23.1-GA'
         testImplementation project(':jweb-test')
     }
 }
@@ -252,12 +271,14 @@ project(':jweb-web') {
     dependencies {
         api project(':jweb-module')
         api project(':jweb-template')
-        implementation(group: 'org.glassfish.jersey.core', name: 'jersey-common', version: "${jerseyVersion}")
-        implementation(group: 'org.hibernate.validator', name: 'hibernate-validator', version: '6.0.9.Final') {
+        implementation(group: 'org.glassfish.jersey.core', name: 'jersey-common', version: "${jerseyVersion}") {
+            exclude group: 'org.glassfish.hk2.external', module: 'javax.inject'
+        }
+        implementation(group: 'org.hibernate.validator', name: 'hibernate-validator', version: "${hibernateVersion}") {
             exclude group: 'org.jboss.logging'
         }
-        implementation 'redis.clients:jedis:2.9.0'
-        implementation 'org.apache.commons:commons-pool2:2.5.0'
+        implementation "redis.clients:jedis:${jedisVersion}"
+        implementation 'org.apache.commons:commons-pool2:${commonPoolVersion}'
         testImplementation project(':jweb-test')
     }
 }
@@ -270,13 +291,16 @@ project(':jweb-test') {
         api project(':jweb-module')
         api group: 'org.junit.jupiter', name: 'junit-jupiter-api', version: '5.2.0'
         api 'org.mockito:mockito-core:2.17.0'
-        api(group: 'org.glassfish.jersey.core', name: 'jersey-server', version: '2.27') {
+        api(group: 'org.glassfish.jersey.core', name: 'jersey-server', version: "${jerseyVersion}") {
             exclude group: 'javax.validation'
+            exclude group: 'org.glassfish.hk2.external', module: 'javax.inject'
         }
         implementation 'org.hsqldb:hsqldb:2.4.0'
         implementation project(':jweb-database')
         implementation project(':jweb-logback')
-        implementation group: 'org.glassfish.jersey.core', name: 'jersey-common', version: '2.27'
+        implementation(group: 'org.glassfish.jersey.core', name: 'jersey-common', version: "${jerseyVersion}") {
+            exclude group: 'org.glassfish.hk2.external', module: 'javax.inject'
+        }
         implementation "org.junit.jupiter:junit-jupiter-engine:5.2.0"
 
         testImplementation project(':jweb-web')

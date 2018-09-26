@@ -1,7 +1,7 @@
 /**
  * @author chi
  */
-module jweb.database {
+module app.jweb.database {
     requires java.xml.bind;
     requires java.transaction;
     requires javax.annotation.api;
@@ -11,7 +11,7 @@ module jweb.database {
     requires java.validation;
     requires java.ws.rs;
     requires com.google.common;
-   requires jweb.module;
+    requires app.jweb.module;
     requires java.sql;
     requires aopalliance.repackaged;
 

@@ -1,7 +1,7 @@
 /**
  * @author chi
  */
-module jweb.cache {
+module app.jweb.cache {
     requires com.google.common;
     requires java.xml.bind;
     requires javax.annotation.api;
@@ -9,7 +9,7 @@ module jweb.cache {
     requires slf4j.api;
     requires java.validation;
     requires java.ws.rs;
-   requires jweb.module;
+   requires app.jweb.module;
 
     exports app.jweb.cache;
 }
