@@ -99,13 +99,13 @@ public class LogbackModule extends AbstractModule {
         appender.setFile(logFile.toFile().getAbsolutePath());
 
         if (options.rollingPolicy == LogbackOptions.RollingPolicy.DAILY) {
-            TimeBasedRollingPolicy<ILoggingEvent> policy = policy(dir, lc, 7, "sited.%d{yyyy-MM-dd}.log");
+            TimeBasedRollingPolicy<ILoggingEvent> policy = policy(dir, lc, 7, "jweb.%d{yyyy-MM-dd}.log");
             policy.setParent(appender);
             appender.setRollingPolicy(policy);
             appender.setTriggeringPolicy(policy);
             policy.start();
         } else if (options.rollingPolicy == LogbackOptions.RollingPolicy.HOURLY) {
-            TimeBasedRollingPolicy<ILoggingEvent> policy = policy(dir, lc, 24 * 7, "sited.%d{yyyy-MM-dd-hh}.log");
+            TimeBasedRollingPolicy<ILoggingEvent> policy = policy(dir, lc, 24 * 7, "jweb.%d{yyyy-MM-dd-hh}.log");
             policy.setParent(appender);
             appender.setRollingPolicy(policy);
             appender.setTriggeringPolicy(policy);

@@ -30,12 +30,13 @@ subprojects {
                 copy.setCanBeResolved(true)
                 def dependencies = copy.resolvedConfiguration.resolvedArtifacts.collect { artifact ->
                     def dependency = artifact.getModuleVersion().getId();
-                    return dependency.getGroup() + ":" + (dependency.getName().startsWith("sited-") ? dependency.getName().substring("sited-".length()) : dependency.getName()) + ":" + dependency.getVersion()
+                    return dependency.getGroup() + ":" + (dependency.getName().startsWith("jweb-") ? dependency.getName().substring("jweb-".length()) : dependency.getName()) + ":" + dependency
+                            .getVersion()
                 }.join(';');
 
                 attributes 'Implementation-Title': project.name,
                         'Implementation-Version': project.version,
-                        'Created-By': "Sited.io",
+                        'Created-By': "jweb.app",
                         'Built-With': "gradle-${project.gradle.gradleVersion}",
                         'Build-Time': Instant.now().toString(),
                         "Dependencies": dependencies
@@ -58,7 +59,7 @@ allprojects {
 apply from: file("${rootDir}/gradle/quality.gradle")
 
 task wrapper(type: Wrapper) {
-    gradleVersion = '4.5.1'
+    gradleVersion = '4.10'
 }
 
 buildscript {

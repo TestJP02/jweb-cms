@@ -22,18 +22,18 @@ email:
 web:
   cacheEnabled: false
   roots:
-  - ../../../../sited-admin/src/main/dist/web
-  - ../../../../sited-email/email-admin/src/main/dist/web
-  - ../../../../sited-user/user-admin/src/main/dist/web
-  - ../../../../sited-user/user-web/src/main/web
-  - ../../../../sited-user/captcha-web-simple/src/main/web
-  - ../../../../sited-user/pincode-web/src/main/web
-  - ../../../../sited-file/file-admin/src/main/dist/web
-  - ../../../../sited-page/page-web/src/main/web
-  - ../../../../sited-page/page-admin/src/main/dist/web
-  - ../../../../sited-web/src/main/web
-  - ../../../../sited-comment/comment-admin/src/main/dist/web
-  - ../../../../sited-comment/comment-web/src/main/web
+  - ../../../../jweb-admin/src/main/dist/web
+  - ../../../../jweb-email/email-admin/src/main/dist/web
+  - ../../../../jweb-user/user-admin/src/main/dist/web
+  - ../../../../jweb-user/user-web/src/main/web
+  - ../../../../jweb-user/captcha-web-simple/src/main/web
+  - ../../../../jweb-user/pincode-web/src/main/web
+  - ../../../../jweb-file/file-admin/src/main/dist/web
+  - ../../../../jweb-page/page-web/src/main/web
+  - ../../../../jweb-page/page-admin/src/main/dist/web
+  - ../../../../jweb-web/src/main/web
+  - ../../../../jweb-comment/comment-admin/src/main/dist/web
+  - ../../../../jweb-comment/comment-web/src/main/web
 
 user:
   defaultAdminUser:

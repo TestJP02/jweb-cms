@@ -48,7 +48,7 @@ export class Bundle extends Component {
     render() {
         return this.state.mod
             ? React.createElement(this.state.mod)
-            : <Loading className="sited-loading" fullscreen={true}/>;
+            : <Loading className="loading" fullscreen={true}/>;
     }
 }
 

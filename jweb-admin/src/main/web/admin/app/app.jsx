@@ -107,7 +107,7 @@ class App extends React.Component {
                 <div className={(this.state.shownMenu ? "nav--fixed " : "") + "nav"}>
                     <div className="nav__header">
                         <Button className="nav__toggle" type="text" icon="menu" onClick={() => this.toggleMenu()}></Button>
-                        <div className="logo">Sited</div>
+                        <div className="logo">jWeb</div>
                         <Button className={"nav__fix" + (this.state.fixedMenu ? " nav__fix--fixed" : "")} type="text" onClick={() => this.fixMenu()}><i className="fa fa-thumb-tack"></i></Button>
                     </div>
                     <div className="menu">
@@ -123,8 +123,8 @@ class App extends React.Component {
                             <Menu.SubMenu index="user" key="user" className="submenu-fixed"
                                 title={
                                     <span>
-                                        <div className="sited-menu-user__image">
-                                            {window.app.user.imageURL ? <img src={window.app.user.imageURL}/> : <i className="fa fa-user" />}
+                                        <div className="menu-user__image">
+                                            {window.app.user.imageURL ? <img src={window.app.user.imageURL}/> : <i className="fa fa-user"/>}
                                         </div>
                                         {window.app.user.nickname}
                                     </span>
@@ -148,7 +148,8 @@ class App extends React.Component {
                                     if (this.hasRoles(menu.rolesAllowed)) {
                                         if (menu.children) {
                                             return (
-                                                <Menu.SubMenu index={menu.path} title={menu.displayName} key={menu.path} className={(this.isActive(menu.path) ? "is-active" : "") + (menu.path === "/admin/setting" ? " submenu-fixed" : "")}>
+                                                <Menu.SubMenu index={menu.path} title={menu.displayName} key={menu.path}
+                                                    className={(this.isActive(menu.path) ? "is-active" : "") + (menu.path === "/admin/setting" ? " submenu-fixed" : "")}>
                                                     {menu.children.map((item, j) => {
                                                         if (this.hasRoles(item.rolesAllowed)) {
                                                             return (
@@ -162,7 +163,8 @@ class App extends React.Component {
                                             );
                                         }
                                         return (
-                                            <Menu.Item index={menu.path} key={"item-" + i} className={(this.isItemActive(menu.path) ? "is-active" : "") + (menu.path === "/admin/setting" ? " submenu-fixed" : "")}>
+                                            <Menu.Item index={menu.path} key={"item-" + i}
+                                                className={(this.isItemActive(menu.path) ? "is-active" : "") + (menu.path === "/admin/setting" ? " submenu-fixed" : "")}>
                                                 {menu.displayName}
                                             </Menu.Item>
                                         );

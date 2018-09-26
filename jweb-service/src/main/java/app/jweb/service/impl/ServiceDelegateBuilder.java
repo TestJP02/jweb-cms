@@ -82,7 +82,7 @@ public class ServiceDelegateBuilder<T> {
             for (Method method : serviceClass.getMethods()) {
                 addMethod(method, classBuilder);
             }
-            return classBuilder.toClass();
+            return (Class<? extends T>) classBuilder.toClass();
         } catch (CannotCompileException e) {
             throw new ApplicationException("failed to generate delegate, type={}", serviceClass, e);
         }

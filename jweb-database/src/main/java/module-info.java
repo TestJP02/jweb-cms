@@ -4,9 +4,9 @@
 module app.jweb.database {
     requires java.xml.bind;
     requires java.transaction;
+    requires java.management;
     requires javax.annotation.api;
     requires javax.inject;
-    requires java.management;
     requires slf4j.api;
     requires java.validation;
     requires java.ws.rs;

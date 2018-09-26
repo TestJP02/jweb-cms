@@ -1,5 +1,5 @@
 {
-    "name": "sited-admin",
+    "name": "admin",
     "version": "1.0.0",
     "description": "",
     "main": "main.jsx",
@@ -13,7 +13,7 @@
         "watch-dashboard": "npm run build-dashboard -- --mode=development --watch",
         "watch-setting": "npm run build-setting -- --mode=development --watch"
     },
-    "author": "sited.io",
+    "author": "jweb.app",
     "license": "AGPL",
     "dependencies": {
         "babel-polyfill": "^6.26.0",

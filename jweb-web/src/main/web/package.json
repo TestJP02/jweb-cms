@@ -6,7 +6,7 @@
     "scripts": {
         "release": "gulp release"
     },
-    "author": "sited.io",
+    "author": "jweb.app",
     "license": "AGLP",
     "dependencies": {
         "respond.js": "^1.4.2",
