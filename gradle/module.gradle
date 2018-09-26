@@ -45,23 +45,12 @@ processResources {
 
 afterEvaluate {
     def moduleName = project.name.replaceAll("-", ".")
-    def transactionJar = project.configurations.compileClasspath.copyRecursive().files.find {
-        it.name.startsWith('javax.transaction-api')
-    }
-
-    def jaxbJar = project.configurations.compileClasspath.copyRecursive().files.find {
-        it.name.startsWith('jaxb-api')
-    }
 
     compileJava {
         inputs.property("moduleName", moduleName)
         doFirst {
             options.compilerArgs = [
-                    '--module-path', classpath.asPath,
-                    '--add-modules', 'java.xml.bind',
-                    '--add-modules', 'java.transaction',
-                    '--patch-module', "java.transaction=${transactionJar}",
-                    '--patch-module', "java.xml.bind=${jaxbJar}",
+                    '--module-path', classpath.asPath
             ]
             classpath = files()
         }

@@ -1,13 +1,14 @@
 apply from: file("${rootDir}/gradle/project.gradle")
 def repo = System.getProperty("user.home")
 
+def jwebVersion = '1.0.0'
 def guavaVersion = '26.0-jre'
 def jacksonVersion = '2.9.7'
 def jerseyVersion = "2.27"
-def jwebVersion = '1.0.0'
 def jedisVersion = '2.9.0'
 def commonPoolVersion = '2.6.0'
-def hibernateVersion = '6.0.9.Final'
+def commonDBCPVersion = '2.5.0'
+def hibernateVersion = '5.3.6.Final'
 def hibernateValidatorVersion = '6.0.13.Final'
 def asmVersion = '6.2.1'
 
@@ -18,9 +19,6 @@ subprojects {
         maven { url 'http://maven.aliyun.com/nexus/content/groups/public/' }
         mavenCentral()
         mavenLocal()
-        flatDir {
-            dirs "${rootDir}/libs"
-        }
     }
 
     publishing {
@@ -57,6 +55,7 @@ project(':jweb-module') {
         api 'org.glassfish.hk2.external:aopalliance-repackaged:2.5.0-b42'
         api 'javax.ws.rs:javax.ws.rs-api:2.1'
         api 'javax.annotation:javax.annotation-api:1.2'
+        api 'com.sun.activation:javax.activation:1.2.0'
         api group: 'javax.xml.bind', name: 'jaxb-api', version: '2.3.0'
 
         implementation group: 'org.jboss.logging', name: 'jboss-logging', version: '3.3.2.Final'
@@ -227,8 +226,8 @@ project(':jweb-database') {
         api "javax.persistence:javax.persistence-api:2.2"
         api group: 'javax.transaction', name: 'javax.transaction-api', version: '1.3'
 
-        implementation 'org.apache.commons:commons-dbcp2:2.5.0'
-        implementation(group: 'org.hibernate', name: 'hibernate-core', version: '5.3.6.Final') {
+        implementation "org.apache.commons:commons-dbcp2:${commonDBCPVersion}"
+        implementation(group: 'org.hibernate', name: 'hibernate-core', version: "${hibernateVersion}") {
             exclude group: "org.jboss.spec.javax.transaction"
             exclude group: 'org.jboss.logging'
         }
@@ -274,7 +273,7 @@ project(':jweb-web') {
         implementation(group: 'org.glassfish.jersey.core', name: 'jersey-common', version: "${jerseyVersion}") {
             exclude group: 'org.glassfish.hk2.external', module: 'javax.inject'
         }
-        implementation(group: 'org.hibernate.validator', name: 'hibernate-validator', version: "${hibernateVersion}") {
+        implementation(group: 'org.hibernate.validator', name: 'hibernate-validator', version: "${hibernateValidatorVersion}") {
             exclude group: 'org.jboss.logging'
         }
         implementation "redis.clients:jedis:${jedisVersion}"
