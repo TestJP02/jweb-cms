@@ -1,11 +1,11 @@
 package app.jweb;
 
-import com.google.common.collect.Iterators;
-import com.google.common.collect.Lists;
-import com.google.common.io.ByteStreams;
 import app.jweb.inject.ModuleBinder;
 import app.jweb.resource.Resource;
 import app.jweb.util.i18n.ResourceMessageBundle;
+import com.google.common.collect.Iterators;
+import com.google.common.collect.Lists;
+import com.google.common.io.ByteStreams;
 import org.aopalliance.intercept.MethodInterceptor;
 import org.objectweb.asm.ClassReader;
 import org.objectweb.asm.ClassVisitor;
@@ -28,6 +28,8 @@ import static com.google.common.base.Preconditions.checkNotNull;
 public abstract class AbstractModule {
     private final String name;
     private final List<String> dependencies;
+    private final List<Runnable> startupHooks = Lists.newArrayList();
+    private final List<Runnable> shutdownHooks = Lists.newArrayList();
 
     private App app;
     ModuleBinder binder;
@@ -69,10 +71,24 @@ public abstract class AbstractModule {
         return Lists.newArrayList("LIST", "GET", "CREATE", "UPDATE", "DELETE", "AUDIT");
     }
 
-    protected void onStartup() {
+    void start() {
+        for (Runnable startupHook : startupHooks) {
+            startupHook.run();
+        }
     }
 
-    protected void onShutdown() {
+    protected void onStartup(Runnable hook) {
+        startupHooks.add(hook);
+    }
+
+    void shutdown() {
+        for (Runnable shutdownHook : shutdownHooks) {
+            shutdownHook.run();
+        }
+    }
+
+    protected void onShutdown(Runnable hook) {
+        shutdownHooks.add(hook);
     }
 
     protected <T> T options(String name, Class<T> optionClass) {

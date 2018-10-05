@@ -1,10 +1,10 @@
 package app.jweb.scheduler;
 
-import app.jweb.scheduler.impl.SchedulerConfigImpl;
-import app.jweb.scheduler.impl.SchedulerService;
 import app.jweb.AbstractModule;
 import app.jweb.Binder;
 import app.jweb.Configurable;
+import app.jweb.scheduler.impl.SchedulerConfigImpl;
+import app.jweb.scheduler.impl.SchedulerService;
 
 /**
  * @author chi
@@ -14,20 +14,12 @@ public class SchedulerModule extends AbstractModule implements Configurable<Sche
 
     @Override
     protected void configure() {
+        onStartup(schedulerService::start);
+        onShutdown(schedulerService::stop);
     }
 
     @Override
     public SchedulerConfig configurator(AbstractModule module, Binder binder) {
         return new SchedulerConfigImpl(schedulerService);
-    }
-
-    @Override
-    protected void onStartup() {
-        schedulerService.start();
-    }
-
-    @Override
-    protected void onShutdown() {
-        schedulerService.stop();
     }
 }

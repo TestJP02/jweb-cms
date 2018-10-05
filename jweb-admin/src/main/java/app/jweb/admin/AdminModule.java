@@ -1,15 +1,13 @@
 package app.jweb.admin;
 
-import com.google.common.collect.Lists;
-import com.google.common.collect.Maps;
 import app.jweb.AbstractModule;
 import app.jweb.App;
 import app.jweb.Binder;
 import app.jweb.Configurable;
 import app.jweb.admin.impl.AdminConfigImpl;
 import app.jweb.admin.impl.service.Console;
-import app.jweb.admin.impl.web.AdminStaticResourceController;
 import app.jweb.admin.impl.web.AdminController;
+import app.jweb.admin.impl.web.AdminStaticResourceController;
 import app.jweb.admin.impl.web.api.BundleMessageAdminController;
 import app.jweb.admin.impl.web.api.RoleAdminController;
 import app.jweb.admin.impl.web.api.SwitchLanguageAdminController;
@@ -17,6 +15,8 @@ import app.jweb.util.i18n.MessageBundle;
 import app.jweb.util.i18n.ResourceMessageBundle;
 import app.jweb.web.AbstractWebModule;
 import app.jweb.web.WebModule;
+import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -43,10 +43,11 @@ public final class AdminModule extends AbstractWebModule implements Configurable
         adminConfig.controller(RoleAdminController.class);
         adminConfig.controller(BundleMessageAdminController.class);
         adminConfig.controller(SwitchLanguageAdminController.class);
+        onStartup(this::start);
     }
 
-    @Override
-    protected void onStartup() {
+
+    private void start() {
         App app = app();
         Console console = require(Console.class);
         console.bundles().forEach(scriptModule -> {

@@ -5,10 +5,10 @@ import app.jweb.ApplicationException;
 import app.jweb.Binder;
 import app.jweb.Configurable;
 import app.jweb.Environment;
-import com.google.common.collect.ImmutableList;
 import app.jweb.database.impl.DatabaseConfigImpl;
 import app.jweb.database.impl.DatabaseImpl;
 import app.jweb.database.impl.TransactionalInterceptor;
+import com.google.common.collect.ImmutableList;
 
 import javax.transaction.Transactional;
 import java.util.List;
@@ -28,13 +28,8 @@ public class DatabaseModule extends AbstractModule implements Configurable<Datab
         this.database = new DatabaseImpl(options, app().dir());
         bind(Database.class).toInstance(this.database);
         bindInterceptor(Transactional.class, new TransactionalInterceptor(this.database));
-    }
 
-    @Override
-    protected void onStartup() {
-        if (database != null) {
-            database.start();
-        }
+        onStartup(database::start);
     }
 
     @Override

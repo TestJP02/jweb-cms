@@ -1,11 +1,5 @@
 package app.jweb;
 
-import com.google.common.base.Stopwatch;
-import com.google.common.collect.ImmutableList;
-import com.google.common.collect.ImmutableMap;
-import com.google.common.collect.ImmutableSet;
-import com.google.common.collect.Lists;
-import com.google.common.collect.Maps;
 import app.jweb.inject.ModuleBinder;
 import app.jweb.resource.ClasspathResourceRepository;
 import app.jweb.resource.CompositeResourceRepository;
@@ -16,6 +10,12 @@ import app.jweb.util.exception.Exceptions;
 import app.jweb.util.i18n.CompositeMessageBundle;
 import app.jweb.util.i18n.MessageBundle;
 import app.jweb.util.type.Types;
+import com.google.common.base.Stopwatch;
+import com.google.common.collect.ImmutableList;
+import com.google.common.collect.ImmutableMap;
+import com.google.common.collect.ImmutableSet;
+import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
 import org.glassfish.hk2.api.ServiceLocator;
 import org.glassfish.hk2.utilities.general.internal.MessageInterpolatorImpl;
 import org.glassfish.jersey.jackson.JacksonFeature;
@@ -274,14 +274,14 @@ public class App extends Application {
                 module.inject(instance);
             }
             module.binder = null;
-            module.onStartup();
+            module.start();
         } catch (Throwable e) {
             throw new ApplicationException("failed to start module, name={}, type={}", module.name(), module.getClass().getCanonicalName(), e);
         }
     }
 
     final void onShutdown() {
-        moduleRegistry.forEach(AbstractModule::onShutdown);
+        moduleRegistry.forEach(AbstractModule::shutdown);
         logger.info("app stopped");
     }
 
@@ -321,11 +321,11 @@ public class App extends Application {
         return options.imageURL;
     }
 
-    public String host(){
+    public String host() {
         return options.host;
     }
 
-    public String port(){
+    public String port() {
         return options.port;
     }
 

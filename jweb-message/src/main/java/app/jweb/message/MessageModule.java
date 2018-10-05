@@ -3,10 +3,10 @@ package app.jweb.message;
 import app.jweb.AbstractModule;
 import app.jweb.Binder;
 import app.jweb.Configurable;
-import com.google.common.collect.ImmutableList;
 import app.jweb.message.impl.LocalMessageVendor;
 import app.jweb.message.impl.MessageConfigImpl;
 import app.jweb.message.impl.MessageManager;
+import com.google.common.collect.ImmutableList;
 
 import java.util.List;
 
@@ -20,20 +20,13 @@ public class MessageModule extends AbstractModule implements Configurable<Messag
     protected void configure() {
         messageManager = new MessageManager(vendor());
         bind(MessageManager.class).toInstance(messageManager);
+
+        onStartup(messageManager::start);
+        onShutdown(messageManager::stop);
     }
 
     protected MessageVendor vendor() {
         return new LocalMessageVendor();
-    }
-
-    @Override
-    protected void onStartup() {
-        messageManager.start();
-    }
-
-    @Override
-    protected void onShutdown() {
-        messageManager.stop();
     }
 
     @Override
