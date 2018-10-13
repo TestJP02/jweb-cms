@@ -71,7 +71,7 @@ public abstract class AbstractModule {
         return Lists.newArrayList("LIST", "GET", "CREATE", "UPDATE", "DELETE", "AUDIT");
     }
 
-    void start() {
+    void onStartup() {
         for (Runnable startupHook : startupHooks) {
             startupHook.run();
         }

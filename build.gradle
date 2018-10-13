@@ -49,15 +49,17 @@ project(':jweb-module') {
         api("com.google.guava:guava:${guavaVersion}") {
             exclude group: 'com.google.code.findbugs'
         }
-        api 'org.glassfish.hk2:hk2-api:2.5.0-b42'
+        api('org.glassfish.hk2:hk2-api:2.5.0-b42') {
+            exclude group: 'javax.inject'
+        }
         api 'org.slf4j:slf4j-api:1.7.25'
         api 'javax.inject:javax.inject:1'
-        api 'javax.validation:validation-api:2.0.1.Final'
-        api 'org.glassfish.hk2.external:aopalliance-repackaged:2.5.0-b42'
-        api 'javax.ws.rs:javax.ws.rs-api:2.1'
         api 'javax.annotation:javax.annotation-api:1.2'
+        api 'javax.validation:validation-api:2.0.1.Final'
+        api 'javax.ws.rs:javax.ws.rs-api:2.1'
         api 'javax.activation:javax.activation-api:1.2.0'
         api group: 'javax.xml.bind', name: 'jaxb-api', version: '2.3.0'
+        api 'org.glassfish.hk2.external:aopalliance-repackaged:2.5.0-b42'
 
         implementation group: 'org.jboss.logging', name: 'jboss-logging', version: '3.3.2.Final'
         implementation group: 'org.slf4j', name: 'jul-to-slf4j', version: '1.7.25'

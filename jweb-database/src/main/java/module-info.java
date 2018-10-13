@@ -2,22 +2,14 @@
  * @author chi
  */
 module app.jweb.database {
-    requires java.xml.bind;
-    requires java.transaction;
-    requires java.management;
-    requires javax.annotation.api;
-    requires javax.inject;
-    requires slf4j.api;
-    requires java.validation;
-    requires java.ws.rs;
-    requires com.google.common;
-    requires app.jweb.module;
-    requires java.sql;
-    requires aopalliance.repackaged;
+    requires transitive java.transaction;
+    requires transitive java.persistence;
+    requires transitive java.sql;
+    requires transitive java.management;
+    requires transitive app.jweb.module;
 
     requires org.hibernate.orm.core;
     requires commons.dbcp2;
-    requires java.persistence;
 
     exports app.jweb.database;
 }

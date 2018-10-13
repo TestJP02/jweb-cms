@@ -239,7 +239,7 @@ public class App extends Application {
         register(new AppEventListener());
         register(DefaultExceptionMapper.class);
 
-        moduleRegistry.createGraph();
+        moduleRegistry.validate();
         moduleRegistry.forEach(this::configure);
     }
 
@@ -274,7 +274,7 @@ public class App extends Application {
                 module.inject(instance);
             }
             module.binder = null;
-            module.start();
+            module.onStartup();
         } catch (Throwable e) {
             throw new ApplicationException("failed to start module, name={}, type={}", module.name(), module.getClass().getCanonicalName(), e);
         }
@@ -287,7 +287,7 @@ public class App extends Application {
 
     @SuppressWarnings("unchecked")
     public <K, T extends AbstractModule & Configurable<K>> K config(AbstractModule module, Class<T> type) {
-        List<String> candidates = Lists.newArrayList(moduleRegistry.dependencies(module.name()));
+        List<String> candidates = Lists.newArrayList(moduleRegistry.recursiveDependencies(module.name()));
         candidates.add(module.name());
         for (String dependency : candidates) {
             AbstractModule m = module(dependency);

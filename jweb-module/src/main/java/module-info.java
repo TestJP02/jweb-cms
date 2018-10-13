@@ -2,14 +2,14 @@
  * @author chi
  */
 module app.jweb.module {
-    requires com.google.common;
-    requires java.xml.bind;
-    requires aopalliance.repackaged;
-    requires javax.annotation.api;
-    requires javax.inject;
-    requires slf4j.api;
-    requires java.validation;
-    requires java.ws.rs;
+    requires transitive com.google.common;
+    requires transitive java.xml.bind;
+    requires transitive aopalliance.repackaged;
+    requires transitive javax.annotation.api;
+    requires transitive javax.inject;
+    requires transitive slf4j.api;
+    requires transitive java.validation;
+    requires transitive java.ws.rs;
 
     requires jul.to.slf4j;
     requires jackson.annotations;

@@ -2,9 +2,7 @@
  * @author chi
  */
 module app.jweb.scheduler {
-    requires com.google.common;
-    requires slf4j.api;
+    requires transitive app.jweb.module;
     requires quartz;
-    requires app.jweb.module;
     exports app.jweb.scheduler;
 }

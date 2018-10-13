@@ -1,13 +1,8 @@
 module app.jweb.logback {
-    requires java.xml.bind;
-    requires javax.inject;
-    requires java.validation;
-    requires java.ws.rs;
-    requires app.jweb.module;
-    requires javax.annotation.api;
+    requires transitive app.jweb.module;
+
     requires logback.core;
     requires logback.classic;
-    requires slf4j.api;
 
     exports app.jweb.log;
 }

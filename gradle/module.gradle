@@ -44,10 +44,7 @@ processResources {
 }
 
 afterEvaluate {
-    def moduleName = project.name.replaceAll("-", ".")
-
     compileJava {
-        inputs.property("moduleName", moduleName)
         doFirst {
             options.compilerArgs = [
                     '--module-path', classpath.asPath

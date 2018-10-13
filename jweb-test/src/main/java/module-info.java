@@ -4,21 +4,14 @@ import app.jweb.AbstractModule;
  * @author chi
  */
 module app.jweb.test {
-    requires com.google.common;
-    requires java.xml.bind;
-    requires javax.annotation.api;
-    requires javax.inject;
-    requires slf4j.api;
-    requires java.validation;
-    requires java.ws.rs;
-    requires app.jweb.module;
-    requires app.jweb.database;
-    requires app.jweb.logback;
-    requires java.persistence;
+    requires transitive app.jweb.module;
+    requires transitive app.jweb.database;
+    requires transitive app.jweb.logback;
+    requires transitive org.mockito;
+    requires transitive org.junit.jupiter.api;
+
     requires jersey.common;
     requires jersey.server;
-    requires org.mockito;
-    requires org.junit.jupiter.api;
 
     exports app.jweb.test;
     uses AbstractModule;
