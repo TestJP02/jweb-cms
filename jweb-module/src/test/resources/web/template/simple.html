@@ -5,10 +5,10 @@
     <title></title>
 </head>
 <body>
-<div j:html="html"></div>
-<div j:text="html"></div>
+<div j:innerHtml="html"></div>
+<div j:innerText="html"></div>
 <ul j:if="model.list != null" j:disabled="disabled" class="list" j:class="active?'active':''">
-    <li j:for="item:model.list.items" j:text="item">
+    <li j:for="item:model.list.items" j:innerText="item">
     </li>
 </ul>
 </body>

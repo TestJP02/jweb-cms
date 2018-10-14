@@ -33,7 +33,7 @@ class ModuleRegistryTest {
         registry.install(new TestModule3());
         registry.install(new TestModule4());
 
-        registry.init();
+        registry.validate();
 
         ArrayList<AbstractModule> modules = Lists.newArrayList(registry);
         assertEquals(3, modules.size());
@@ -44,7 +44,7 @@ class ModuleRegistryTest {
         Assertions.assertThrows(ApplicationException.class, () -> {
             ModuleRegistry registry = new ModuleRegistry();
             registry.install(new TestModule5());
-            registry.init();
+            registry.validate();
         });
     }
 

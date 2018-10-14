@@ -11,9 +11,11 @@ import app.jweb.template.impl.TemplateParser;
 import app.jweb.template.impl.component.ForComponent;
 import app.jweb.template.impl.component.IfComponent;
 import app.jweb.template.impl.component.InnerHtmlComponent;
+import app.jweb.template.impl.component.InnerTextComponent;
 import app.jweb.template.impl.processor.ForElementProcessorImpl;
 import app.jweb.template.impl.processor.IfElementProcessorImpl;
 import app.jweb.template.impl.processor.InnerHtmlElementProcessorImpl;
+import app.jweb.template.impl.processor.InnerTextElementProcessorImpl;
 import com.google.common.collect.Maps;
 import org.apache.commons.jexl3.JexlBuilder;
 import org.apache.commons.jexl3.JexlEngine;
@@ -44,10 +46,12 @@ public class TemplateEngine {
         elementProcessorRegistry.add(new IfElementProcessorImpl());
         elementProcessorRegistry.add(new ForElementProcessorImpl());
         elementProcessorRegistry.add(new InnerHtmlElementProcessorImpl());
+        elementProcessorRegistry.add(new InnerTextElementProcessorImpl());
 
         addComponent(new ForComponent());
         addComponent(new IfComponent());
         addComponent(new InnerHtmlComponent());
+        addComponent(new InnerTextComponent());
 
         functions.put(null, new TemplateFunctions());
     }
