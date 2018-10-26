@@ -4,7 +4,6 @@ import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 
-import java.util.Collection;
 import java.util.Deque;
 import java.util.Iterator;
 import java.util.List;
@@ -21,7 +20,7 @@ public class ModuleRegistry implements Iterable<AbstractModule> {
 
     public void validate() {
         Map<String, Set<String>> dependencies = Maps.newHashMap();
-        for (String moduleName : exposedModules()) {
+        for (String moduleName : modules.keySet()) {
             if (!dependencies.containsKey(moduleName)) {
                 dependencies.put(moduleName, Sets.newHashSet());
             }
@@ -46,87 +45,55 @@ public class ModuleRegistry implements Iterable<AbstractModule> {
         if (module == null) {
             throw new ApplicationException("module can't be null");
         }
-        ModuleEntry current = new ModuleEntry();
-        current.module = module;
-        current.overrided = false;
-        current.exposed = true;
-
         if (isInstalled(module.name())) {
             throw new ApplicationException("module installed, name={}, type={}, installed={}", module.name(), module.getClass(), module(module.name()).getClass());
         }
 
-        Collection<ModuleEntry> entries = modules.values();
-        for (ModuleEntry entry : entries) {
+        boolean installed = false;
+        for (ModuleEntry entry : modules.values()) {
             if (module.getClass().isAssignableFrom(entry.module.getClass())) {
-                entry.exposed = false;
-
-                current.overrided = true;
-                current.implementation = entry.module.name();
-
-                current.implementation = entry.module.name();
+                ModuleEntry moduleEntry = new ModuleEntry();
+                moduleEntry.module = module;
+                moduleEntry.implementation = entry.module;
+                modules.remove(entry.module.name());
+                modules.put(module.name(), moduleEntry);
+                installed = true;
             } else if (entry.module.getClass().isAssignableFrom(module.getClass())) {
-                current.exposed = false;
-
-                entry.overrided = true;
-                entry.implementation = module.name();
+                entry.implementation = module;
+                installed = true;
             }
         }
-        modules.put(module.name(), current);
+
+        if (!installed) {
+            ModuleEntry moduleEntry = new ModuleEntry();
+            moduleEntry.module = module;
+            modules.put(module.name(), moduleEntry);
+        }
     }
 
     @Override
     public Iterator<AbstractModule> iterator() {
         Set<String> visited = Sets.newLinkedHashSet();
-        Deque<String> stack = Lists.newLinkedList(exposedModules());
+        Deque<String> stack = Lists.newLinkedList(modules.keySet());
 
         while (!stack.isEmpty()) {
             String moduleName = stack.pollFirst();
 
-            if (isOverrided(moduleName)) {
-                AbstractModule implementation = module(moduleName);
-                if (visited.contains(implementation.name())) {
-                    visited.add(moduleName);
-                } else {
-                    stack.addLast(implementation.name());
-                    stack.addLast(moduleName);
-                }
-            } else {
-                List<String> dependencies = dependencies(moduleName);
-                boolean satisfied = true;
-
-                for (String dependency : dependencies) {
-                    if (isOverrided(dependency)) {
-                        AbstractModule implementation = module(moduleName);
-                        if (visited.contains(implementation.name())) {
-                            visited.add(moduleName);
-                        } else {
-                            stack.addLast(implementation.name());
-                            stack.addLast(moduleName);
-                        }
-                    } else {
-                        if (!visited.contains(module(dependency).name())) {
-                            satisfied = false;
-                            break;
-                        }
-                    }
-                }
-                if (satisfied) {
-                    visited.add(moduleName);
-                } else {
-                    stack.addLast(moduleName);
+            List<String> dependencies = dependencies(moduleName);
+            boolean satisfied = true;
+            for (String dependency : dependencies) {
+                if (!visited.contains(dependency)) {
+                    satisfied = false;
+                    break;
                 }
             }
-
+            if (satisfied) {
+                visited.add(moduleName);
+            } else {
+                stack.addLast(moduleName);
+            }
         }
-        return visited.stream().filter(this::isExposed).map(this::module).collect(Collectors.toList()).iterator();
-    }
-
-    private boolean isOverrided(String moduleName) {
-        return modules.get(moduleName).overrided;
-    }
-
-    private boolean isExposed(String moduleName) {
-        return modules.get(moduleName).exposed;
+        return visited.stream().map(this::module).collect(Collectors.toList()).iterator();
     }
 
     private List<String> dependencies(String moduleName) {
@@ -159,20 +126,29 @@ public class ModuleRegistry implements Iterable<AbstractModule> {
         if (moduleEntry == null) {
             throw new ApplicationException("missing module, name={}", moduleName);
         }
-        if (moduleEntry.overrided) {
-            return module(moduleEntry.implementation);
-        }
-        return moduleEntry.module;
+        return moduleEntry.module();
     }
 
-    private List<String> exposedModules() {
-        return modules.values().stream().filter(module -> module.exposed).map(module -> module.module.name()).collect(Collectors.toList());
-    }
-
-    private static class ModuleEntry {
+    static class ModuleEntry {
         public AbstractModule module;
-        public Boolean overrided;
-        public Boolean exposed;
-        public String implementation;
+        public AbstractModule implementation;
+
+        public String name() {
+            return module.name();
+        }
+
+        public AbstractModule module() {
+            if (implementation == null) {
+                return module;
+            }
+            return implementation;
+        }
+
+        public List<String> dependencies() {
+            if (implementation == null) {
+                return module.dependencies();
+            }
+            return implementation.dependencies();
+        }
     }
 }

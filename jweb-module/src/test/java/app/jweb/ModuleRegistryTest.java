@@ -26,7 +26,7 @@ class ModuleRegistryTest {
     }
 
     @Test
-    void exposed() {
+    void install() {
         ModuleRegistry registry = new ModuleRegistry();
         registry.install(new TestModule1());
         registry.install(new TestModule2());
@@ -44,6 +44,7 @@ class ModuleRegistryTest {
         Assertions.assertThrows(ApplicationException.class, () -> {
             ModuleRegistry registry = new ModuleRegistry();
             registry.install(new TestModule5());
+            registry.install(new TestModule6());
             registry.validate();
         });
     }
@@ -98,9 +99,20 @@ class ModuleRegistryTest {
         }
     }
 
-    static class TestModule5 extends TestModule1 {
+    static class TestModule5 extends AbstractModule {
         protected TestModule5() {
-            super("test5", Lists.newArrayList("test5"));
+            super("test5", Lists.newArrayList("test6"));
+        }
+
+        @Override
+        protected void configure() {
+
+        }
+    }
+
+    static class TestModule6 extends AbstractModule {
+        protected TestModule6() {
+            super("test6", Lists.newArrayList("test5"));
         }
 
         @Override
