@@ -1,5 +1,6 @@
 package app.jweb;
 
+import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
@@ -50,7 +51,7 @@ public class ModuleRegistry implements Iterable<AbstractModule> {
         }
 
         boolean installed = false;
-        for (ModuleEntry entry : modules.values()) {
+        for (ModuleEntry entry : ImmutableList.copyOf(modules.values())) {
             if (module.getClass().isAssignableFrom(entry.module.getClass())) {
                 ModuleEntry moduleEntry = new ModuleEntry();
                 moduleEntry.module = module;
@@ -75,7 +76,6 @@ public class ModuleRegistry implements Iterable<AbstractModule> {
     public Iterator<AbstractModule> iterator() {
         Set<String> visited = Sets.newLinkedHashSet();
         Deque<String> stack = Lists.newLinkedList(modules.keySet());
-
         while (!stack.isEmpty()) {
             String moduleName = stack.pollFirst();
 
