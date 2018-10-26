@@ -291,10 +291,10 @@ public class TemplateParser {
     private Segment segment(Node node) {
         if (node.isText()) {
             String text = ((Text) node).innerText();
-            TemplateLiteral literal = new TemplateLiteral(text);
+            TemplateText literal = new TemplateText(text);
             if (literal.isDynamic()) {
                 CompositeSegment segment = new CompositeSegment();
-                for (TemplateLiteral.Token token : literal.tokens()) {
+                for (TemplateText.Token token : literal.tokens()) {
                     if (token.dynamic) {
                         Expression textExpression = templateModel.add(token.content(), null, node.row(), node.column(), node.source());
                         segment.addChild(new ExpressionSegment(textExpression));
@@ -336,7 +336,7 @@ public class TemplateParser {
         List<Segment> end = new ArrayList<>();
         start.add(new StaticSegment("<" + element.name()));
         element.attributes().forEach(attribute -> {
-            TemplateLiteral literal = new TemplateLiteral(attribute.value());
+            TemplateText literal = new TemplateText(attribute.value());
 
             if (isBoolAttribute(attribute.name())) {
                 if (attribute.isDynamic()) {
@@ -389,7 +389,7 @@ public class TemplateParser {
         String componentName = element.name();
         Map<String, Expression> attributeExpressions = new HashMap<>();
         element.attributes().forEach(attribute -> {
-            TemplateLiteral literal = new TemplateLiteral(attribute.value());
+            TemplateText literal = new TemplateText(attribute.value());
             if (attribute.isDynamic()) {
                 attributeExpressions.put(attribute.name(), parseExpression(element, attribute.value(), element.source()));
             } else if (literal.isDynamic()) {

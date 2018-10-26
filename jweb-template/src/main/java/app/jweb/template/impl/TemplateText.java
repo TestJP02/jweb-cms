@@ -9,11 +9,11 @@ import java.util.List;
 /**
  * @author chi
  */
-public class TemplateLiteral {
+public class TemplateText {
     private final String text;
     private final List<Token> tokens;
 
-    public TemplateLiteral(String text) {
+    public TemplateText(String text) {
         this.text = text;
         tokens = parse(text);
     }
@@ -49,8 +49,20 @@ public class TemplateLiteral {
                     token.dynamic = true;
                     tokens.add(token);
                 }
-                state = 1;
+                state = 0;
                 p = i + 2;
+            } else if (c == '\'' && (i == 0 || text.charAt(i - 1) != '\\')) {
+                if (state == 0) {
+                    state = state | 4;
+                } else {
+                    state = state ^ 4;
+                }
+            } else if (c == '\"' && (i == 0 || text.charAt(i - 1) != '\\')) {
+                if (state == 0) {
+                    state = state | 8;
+                } else {
+                    state = state ^ 8;
+                }
             }
         }
 
