@@ -32,10 +32,8 @@ import org.apache.commons.jexl3.JexlEngine;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Deque;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -47,10 +45,12 @@ import java.util.stream.Collectors;
  * @author chi
  */
 public class TemplateParser {
-    private static final Set<String> SELF_CLOSED_ELEMENTS = new HashSet<>(Arrays.asList("area", "base", "br", "col", "embed", "hr", "img", "input",
-        "keygen", "link", "meta", "param", "source", "track", "wbr"));
-    private static final Set<String> BOOL_ATTRIBUTES = new HashSet<>(Arrays.asList("checked", "selected", "disabled", "readonly", "multiple",
-        "ismap", "defer", "declare", "noresize", "nowrap", "noshade", "compact", "itemscope", "async"));
+    private static final Set<String> SELF_CLOSED_ELEMENTS = Sets.newHashSet("area", "base", "br", "col", "embed", "hr", "img", "input",
+        "keygen", "link", "meta", "param", "source", "track", "wbr");
+    static final Set<String> BOOL_ATTRIBUTES = Sets.newHashSet("defer", "formNoValidate", "nowrap", "contenteditable", "controls", "compact",
+        "hidden", "declare", "indeterminate", "required", "translate", "ismap", "noshade", "default", "scrolling", "itemscope", "novalidate",
+        "readonly", "loop", "noresize", "checked", "disabled", "frameborder", "muted", "selected", "border", "seamless", "autocomplete",
+        "multiple", "sortable", "autofocus", "autoplay", "nohref", "async", "scoped", "spellcheck", "challenge", "open", "reversed");
 
     private final Resource resource;
     private final boolean parseBody;

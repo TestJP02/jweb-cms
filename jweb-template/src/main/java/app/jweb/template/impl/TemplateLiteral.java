@@ -1,5 +1,7 @@
 package app.jweb.template.impl;
 
+import com.google.common.base.Strings;
+import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
 
 import java.util.List;
@@ -17,6 +19,9 @@ public class TemplateLiteral {
     }
 
     private List<Token> parse(String text) {
+        if (Strings.isNullOrEmpty(text)) {
+            return ImmutableList.of();
+        }
         List<Token> tokens = Lists.newArrayList();
         int state = 0;
         int p = 0;
