@@ -17,11 +17,12 @@ import java.util.stream.Collectors;
  * @author chi
  */
 public class ModuleRegistry implements Iterable<AbstractModule> {
-    private final Map<String, ModuleEntry> modules = Maps.newHashMap();
+    private final Map<String, RuntimeModule> modules = Maps.newHashMap();
 
     public void validate() {
         Map<String, Set<String>> dependencies = Maps.newHashMap();
-        for (String moduleName : modules.keySet()) {
+        Set<String> moduleNames = modules.values().stream().map(RuntimeModule::name).collect(Collectors.toSet());
+        for (String moduleName : moduleNames) {
             if (!dependencies.containsKey(moduleName)) {
                 dependencies.put(moduleName, Sets.newHashSet());
             }
@@ -51,34 +52,34 @@ public class ModuleRegistry implements Iterable<AbstractModule> {
         }
 
         boolean installed = false;
-        for (ModuleEntry entry : ImmutableList.copyOf(modules.values())) {
-            if (module.getClass().isAssignableFrom(entry.module.getClass())) {
-                ModuleEntry moduleEntry = new ModuleEntry();
-                moduleEntry.module = module;
-                moduleEntry.implementation = entry.module;
-                modules.remove(entry.module.name());
-                modules.put(module.name(), moduleEntry);
+        for (RuntimeModule installedModule : ImmutableList.copyOf(modules.values())) {
+            if (module.getClass().isAssignableFrom(installedModule.module.getClass())) {
+                RuntimeModule runtimeModule = new RuntimeModule();
+                runtimeModule.module = module;
+                runtimeModule.implementation = installedModule.module;
+                modules.put(module.name(), runtimeModule);
                 installed = true;
-            } else if (entry.module.getClass().isAssignableFrom(module.getClass())) {
-                entry.implementation = module;
+            } else if (installedModule.module.getClass().isAssignableFrom(module.getClass())) {
+                installedModule.implementation = module;
                 installed = true;
+                modules.put(module.name(), installedModule);
             }
         }
 
         if (!installed) {
-            ModuleEntry moduleEntry = new ModuleEntry();
-            moduleEntry.module = module;
-            modules.put(module.name(), moduleEntry);
+            RuntimeModule runtimeModule = new RuntimeModule();
+            runtimeModule.module = module;
+            modules.put(module.name(), runtimeModule);
         }
     }
 
     @Override
     public Iterator<AbstractModule> iterator() {
         Set<String> visited = Sets.newLinkedHashSet();
-        Deque<String> stack = Lists.newLinkedList(modules.keySet());
+        Set<String> moduleNames = modules.values().stream().map(RuntimeModule::name).collect(Collectors.toSet());
+        Deque<String> stack = Lists.newLinkedList(moduleNames);
         while (!stack.isEmpty()) {
             String moduleName = stack.pollFirst();
-
             List<String> dependencies = dependencies(moduleName);
             boolean satisfied = true;
             for (String dependency : dependencies) {
@@ -93,12 +94,12 @@ public class ModuleRegistry implements Iterable<AbstractModule> {
                 stack.addLast(moduleName);
             }
         }
-        return visited.stream().map(this::module).collect(Collectors.toList()).iterator();
+        return visited.stream().map(name -> module(name).module()).collect(Collectors.toList()).iterator();
     }
 
     private List<String> dependencies(String moduleName) {
-        AbstractModule module = module(moduleName);
-        return module.dependencies().stream().filter(name -> isInstalled(name) && !Objects.equals(name, moduleName)).collect(Collectors.toList());
+        RuntimeModule module = module(moduleName);
+        return module.dependencies().stream().filter(name -> !Objects.equals(name, moduleName)).collect(Collectors.toList());
     }
 
     public List<String> recursiveDependencies(String moduleName) {
@@ -121,17 +122,17 @@ public class ModuleRegistry implements Iterable<AbstractModule> {
     }
 
     @SuppressWarnings("unchecked")
-    public AbstractModule module(String moduleName) {
-        ModuleEntry moduleEntry = modules.get(moduleName);
-        if (moduleEntry == null) {
+    public RuntimeModule module(String moduleName) {
+        RuntimeModule runtimeModule = modules.get(moduleName);
+        if (runtimeModule == null) {
             throw new ApplicationException("missing module, name={}", moduleName);
         }
-        return moduleEntry.module();
+        return runtimeModule;
     }
 
-    static class ModuleEntry {
-        public AbstractModule module;
-        public AbstractModule implementation;
+    public static class RuntimeModule {
+        AbstractModule module;
+        AbstractModule implementation;
 
         public String name() {
             return module.name();

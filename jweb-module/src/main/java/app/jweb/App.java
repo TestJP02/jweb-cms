@@ -213,7 +213,7 @@ public class App extends Application {
 
     @SuppressWarnings("unchecked")
     public AbstractModule module(String moduleName) {
-        return moduleRegistry.module(moduleName);
+        return moduleRegistry.module(moduleName).module();
     }
 
     protected void configure() {

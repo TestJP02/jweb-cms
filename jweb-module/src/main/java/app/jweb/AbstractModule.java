@@ -26,6 +26,7 @@ import static com.google.common.base.Preconditions.checkNotNull;
  * @author chi
  */
 public abstract class AbstractModule {
+    private static final String MODULE_NAMESPACE = "app.jweb";
     private final String name;
     private final List<String> dependencies;
     private final List<Runnable> startupHooks = Lists.newArrayList();
@@ -218,7 +219,9 @@ public abstract class AbstractModule {
             return new ModuleVisitor(Opcodes.ASM6) {
                 @Override
                 public void visitRequire(String module, int access, String version) {
-                    requires.add(module);
+                    if (module.startsWith(MODULE_NAMESPACE)) {
+                        requires.add(module);
+                    }
                 }
             };
         }
