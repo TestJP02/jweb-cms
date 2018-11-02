@@ -28,7 +28,6 @@ class TempDirectoryTest {
     @Test
     void test() throws IOException {
         tempDirectory.delete();
-
         Path root = tempDirectory.root();
         assertFalse(root.toFile().exists());
     }
