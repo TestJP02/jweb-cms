@@ -12,10 +12,12 @@ import java.nio.file.Path;
  * @author chi
  */
 public interface Resource {
+    @Deprecated
     static Resource classpath(String path) {
         return new ClasspathResource(path, path);
     }
 
+    @Deprecated
     static Resource file(Path path) {
         return new FileResource(path.toString(), path);
     }

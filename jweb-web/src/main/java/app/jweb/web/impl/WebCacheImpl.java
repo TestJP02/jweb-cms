@@ -19,6 +19,11 @@ public class WebCacheImpl implements WebCache {
     }
 
     @Override
+    public Path path() {
+        return dir;
+    }
+
+    @Override
     public Optional<Resource> get(String path) {
         File file = dir.resolve(path).toFile();
         if (file.exists() && file.isFile()) {
