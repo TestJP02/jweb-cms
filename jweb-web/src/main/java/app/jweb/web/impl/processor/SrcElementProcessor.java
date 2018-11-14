@@ -27,14 +27,13 @@ public class SrcElementProcessor implements ElementProcessor {
 
     @Override
     public Element process(Element element, Resource resource) {
-        if (!isScriptNode(element)) {
+        if (!isScriptNode(element) && !isImageNode(element)) {
             return element;
         }
         Optional<Attribute> attributeOptional = element.attribute("src");
         if (!attributeOptional.isPresent() || attributeOptional.get().isDynamic()) {
             return element;
         }
-
         Attribute attribute = attributeOptional.get();
         String href = attribute.value();
         if (!isRelativeURL(href)) {
@@ -74,6 +73,10 @@ public class SrcElementProcessor implements ElementProcessor {
 
     private boolean isScriptNode(Element node) {
         return "script".equalsIgnoreCase(node.name());
+    }
+
+    private boolean isImageNode(Element node) {
+        return "img".equalsIgnoreCase(node.name());
     }
 
     private boolean isCDNEnabled(Resource resource) {
