@@ -53,7 +53,7 @@ public class TemplateParser {
         "multiple", "sortable", "autofocus", "autoplay", "nohref", "async", "scoped", "spellcheck", "challenge", "open", "reversed");
 
     private final Resource resource;
-    private final boolean parseBody;
+    private final boolean asComponent;
     private final boolean parseComment;
     private final ElementProcessorRegistry elementProcessorRegistry;
     private final ComponentRegistry componentRegistry;
@@ -64,10 +64,10 @@ public class TemplateParser {
     private final List<Component> componentRefs = Lists.newArrayList();
     private final TemplateModel templateModel;
 
-    public TemplateParser(Resource resource, boolean parseBody, boolean parseComment, ResourceRepository resourceRepository, ComponentRegistry componentRegistry,
+    public TemplateParser(Resource resource, boolean asComponent, boolean parseComment, ResourceRepository resourceRepository, ComponentRegistry componentRegistry,
                           ElementProcessorRegistry elementProcessorRegistry, JexlEngine jexlEngine) {
         this.resource = resource;
-        this.parseBody = parseBody;
+        this.asComponent = asComponent;
         this.parseComment = parseComment;
         this.resourceRepository = resourceRepository;
         this.elementProcessorRegistry = elementProcessorRegistry;
@@ -92,21 +92,22 @@ public class TemplateParser {
                         parseScript(child);
                     }
                 });
-                parseAllComponentRefs();
-                head(html).ifPresent(element -> appendStyleElement(element, inlineStyles(componentRefs)));
-                body(html).ifPresent(element -> appendScriptElement(element, inlineScripts(componentRefs)));
+                parseComponents();
 
-                if (parseBody) {
+                if (asComponent) {
                     Optional<Element> body = body(html);
                     if (!body.isPresent()) {
                         throw new TemplateResourceException("missing tag <body>, path={}", resource.path());
                     }
                     body.get().children().forEach(element -> segments.add(segment(element)));
                 } else {
+                    head(html).ifPresent(element -> appendStyleElement(element, inlineStyles(componentRefs)));
+                    body(html).ifPresent(element -> appendScriptElement(element, inlineScripts(componentRefs)));
+
                     segments.addAll(elements.stream().map(this::segment).collect(Collectors.toList()));
                 }
             } else {
-                if (parseBody) {
+                if (asComponent) {
                     throw new TemplateResourceException("missing tag <html>, path={}", resource.path());
                 } else {
                     segments.addAll(elements.stream().map(this::segment).collect(Collectors.toList()));
@@ -247,7 +248,7 @@ public class TemplateParser {
         }
     }
 
-    private void parseAllComponentRefs() {
+    private void parseComponents() {
         Deque<Component> stack = Lists.newLinkedList(componentRefs);
         Set<String> visited = Sets.newHashSet();
         while (!stack.isEmpty()) {
