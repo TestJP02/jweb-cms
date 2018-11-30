@@ -44,8 +44,8 @@ class HrefElementProcessorTest {
         Template template = templateEngine.template("template/href-element-processor.html").orElseThrow(() -> new TemplateResourceException("missing template"));
         ByteArrayOutputStream out = new ByteArrayOutputStream();
         template.output(Maps.newHashMap(), out);
-        assertEquals("<!doctype html><html lang=\"en-US\"><head><link rel=\"stylesheet\" type=\"text/css\"/>body {\n" +
+        assertEquals("<!doctype html><html lang=\"en-US\"><head><style>body {\n" +
             "    background: black;\n" +
-            "}</head><body></body></html>", new String(out.toByteArray(), Charsets.UTF_8));
+            "}</style></head><body></body></html>", new String(out.toByteArray(), Charsets.UTF_8));
     }
 }

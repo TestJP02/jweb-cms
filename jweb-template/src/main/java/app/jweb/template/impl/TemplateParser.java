@@ -292,6 +292,11 @@ public class TemplateParser {
     private Segment segment(Node node) {
         if (node.isText()) {
             String text = ((Text) node).innerText();
+            boolean resourceText = isResourceElement(node.parent());
+            if (resourceText) {
+                return new StaticSegment(text);
+            }
+
             TemplateText literal = new TemplateText(text);
             if (literal.isDynamic()) {
                 CompositeSegment segment = new CompositeSegment();
@@ -380,6 +385,17 @@ public class TemplateParser {
             segment.addChild(segment(child));
         }
         return segment;
+    }
+
+    private boolean isResourceElement(Element element) {
+        if (element.name().equals("script")) {
+            return true;
+        }
+        if (element.name().equals("link")) {
+            Optional<Attribute> attribute = element.attribute("rel");
+            return attribute.isPresent() && attribute.get().value().equals("stylesheet");
+        }
+        return false;
     }
 
     private boolean isDynamicSegment(Element element) {

@@ -46,7 +46,7 @@ public class SrcElementProcessor implements ElementProcessor {
         String path = normalize(resource, src);
         Optional<Resource> script = repository.get(path);
         if (script.isPresent()) {
-            if (inlineEnabled) {
+            if (inlineEnabled && isScriptNode(element)) {
                 element.deleteAttribute("src");
                 Text text = new Text(script.get().toText(Charsets.UTF_8), element.row(), element.column(), element.source());
                 element.addChild(text);

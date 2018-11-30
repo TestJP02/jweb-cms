@@ -47,10 +47,11 @@ public class HrefElementProcessor implements ElementProcessor {
         String path = normalize(resource, href);
         Optional<Resource> style = repository.get(path);
         if (style.isPresent()) {
-            if (inlineEnabled) {
-                element.deleteAttribute("href");
+            if (inlineEnabled && isCSSElement(element)) {
+                Element styleElement = new Element("style", false, element.row(), element.column(), element.source());
                 Text text = new Text(style.get().toText(Charsets.UTF_8), element.row(), element.column(), element.source());
-                element.addChild(text);
+                styleElement.addChild(text);
+                element.parent().replaceChild(element, styleElement);
             } else if (isCDNEnabled(resource)) {
                 attribute.setValue(cdnURL(path));
             } else {
@@ -87,5 +88,13 @@ public class HrefElementProcessor implements ElementProcessor {
 
     private boolean isCDNEnabled(Resource resource) {
         return cdnBaseURLs != null && !cdnBaseURLs.isEmpty() && resource.path().startsWith("template/");
+    }
+
+    private boolean isCSSElement(Element element) {
+        if (element.name().equals("link")) {
+            Optional<Attribute> attribute = element.attribute("rel");
+            return attribute.isPresent() && attribute.get().value().equals("stylesheet");
+        }
+        return false;
     }
 }
