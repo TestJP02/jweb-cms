@@ -6,7 +6,6 @@ import app.jweb.Configurable;
 import app.jweb.resource.ClasspathResourceRepository;
 import app.jweb.resource.FileResourceRepository;
 import app.jweb.template.TemplateEngine;
-import com.google.common.base.Strings;
 import app.jweb.web.impl.AppInfoContextProvider;
 import app.jweb.web.impl.ClientInfoContextProvider;
 import app.jweb.web.impl.LocalSessionRepository;
@@ -42,6 +41,7 @@ import app.jweb.web.impl.exception.ValidationWebExceptionMapper;
 import app.jweb.web.impl.processor.HrefElementProcessor;
 import app.jweb.web.impl.processor.SrcElementProcessor;
 import app.jweb.web.impl.processor.ThemeProcessor;
+import com.google.common.base.Strings;
 
 /**
  * @author chi
@@ -68,8 +68,8 @@ public final class WebModule extends AbstractModule implements Configurable<WebC
         templateEngine = new TemplateEngine().setCacheEnabled(webOptions.cacheEnabled);
         templateEngine.addRepository(webRoot);
 
-        templateEngine.addElementProcessor(new HrefElementProcessor(webOptions.cdnBaseURLs, webRoot));
-        templateEngine.addElementProcessor(new SrcElementProcessor(webOptions.cdnBaseURLs, webRoot));
+        templateEngine.addElementProcessor(new HrefElementProcessor(webOptions.cdnBaseURLs, webRoot, webOptions.inlineResourceEnabled));
+        templateEngine.addElementProcessor(new SrcElementProcessor(webOptions.cdnBaseURLs, webRoot, webOptions.inlineResourceEnabled));
         templateEngine.addFunctions(null, new WebTemplateFunctions(app().message()));
         bind(TemplateEngine.class).toInstance(templateEngine);
         if (webOptions.session.redis == null) {

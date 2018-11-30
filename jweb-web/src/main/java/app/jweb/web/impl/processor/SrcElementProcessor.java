@@ -6,7 +6,9 @@ import app.jweb.resource.ResourceRepository;
 import app.jweb.template.Attribute;
 import app.jweb.template.Element;
 import app.jweb.template.ElementProcessor;
+import app.jweb.template.Text;
 import app.jweb.web.impl.ThemedResource;
+import com.google.common.base.Charsets;
 
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -19,10 +21,12 @@ import java.util.Optional;
 public class SrcElementProcessor implements ElementProcessor {
     private final List<String> cdnBaseURLs;
     private final ResourceRepository repository;
+    private final boolean inlineEnabled;
 
-    public SrcElementProcessor(List<String> cdnBaseURLs, ResourceRepository repository) {
+    public SrcElementProcessor(List<String> cdnBaseURLs, ResourceRepository repository, boolean inlineEnabled) {
         this.cdnBaseURLs = cdnBaseURLs;
         this.repository = repository;
+        this.inlineEnabled = inlineEnabled;
     }
 
     @Override
@@ -35,13 +39,18 @@ public class SrcElementProcessor implements ElementProcessor {
             return element;
         }
         Attribute attribute = attributeOptional.get();
-        String href = attribute.value();
-        if (!isRelativeURL(href)) {
+        String src = attribute.value();
+        if (!isRelativeURL(src)) {
             return element;
         }
-        String path = normalize(resource, href);
-        if (repository.get(path).isPresent()) {
-            if (isCDNEnabled(resource)) {
+        String path = normalize(resource, src);
+        Optional<Resource> script = repository.get(path);
+        if (script.isPresent()) {
+            if (inlineEnabled) {
+                element.deleteAttribute("src");
+                Text text = new Text(script.get().toText(Charsets.UTF_8), element.row(), element.column(), element.source());
+                element.addChild(text);
+            } else if (isCDNEnabled(resource)) {
                 attribute.setValue(cdnURL(path));
             } else {
                 attribute.setValue('/' + path);

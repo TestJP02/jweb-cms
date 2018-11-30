@@ -1,14 +1,14 @@
 package app.jweb.web.impl;
 
-import com.google.common.base.Charsets;
-import com.google.common.collect.Lists;
-import com.google.common.collect.Maps;
 import app.jweb.ApplicationException;
 import app.jweb.resource.ClasspathResourceRepository;
 import app.jweb.template.Template;
 import app.jweb.template.TemplateEngine;
 import app.jweb.web.impl.processor.HrefElementProcessor;
 import app.jweb.web.impl.processor.SrcElementProcessor;
+import com.google.common.base.Charsets;
+import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -29,8 +29,8 @@ class ThemedResourceRepositoryTest {
         templateEngine = new TemplateEngine();
         ClasspathResourceRepository repository = new ClasspathResourceRepository("web");
         templateEngine.addRepository(repository);
-        templateEngine.addElementProcessor(new HrefElementProcessor(Lists.newArrayList(), repository));
-        templateEngine.addElementProcessor(new SrcElementProcessor(Lists.newArrayList(), repository));
+        templateEngine.addElementProcessor(new HrefElementProcessor(Lists.newArrayList(), repository, false));
+        templateEngine.addElementProcessor(new SrcElementProcessor(Lists.newArrayList(), repository, false));
         templateEngine.addRepository(new ThemedResourceRepository("test", repository));
     }
 

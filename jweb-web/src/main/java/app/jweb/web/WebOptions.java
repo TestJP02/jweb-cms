@@ -27,6 +27,8 @@ public class WebOptions {
     public CookieOptions cookie = new CookieOptions();
     @XmlElement(name = "cacheEnabled")
     public Boolean cacheEnabled = true;
+    @XmlElement(name = "inlineResourceEnabled")
+    public Boolean inlineResourceEnabled = false;
 
     @XmlElement(name = "errorPages")
     public Map<Integer, String> errorPages = ImmutableMap.<Integer, String>builder()

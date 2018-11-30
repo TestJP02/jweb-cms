@@ -6,7 +6,9 @@ import app.jweb.resource.ResourceRepository;
 import app.jweb.template.Attribute;
 import app.jweb.template.Element;
 import app.jweb.template.ElementProcessor;
+import app.jweb.template.Text;
 import app.jweb.web.impl.ThemedResource;
+import com.google.common.base.Charsets;
 
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -19,10 +21,12 @@ import java.util.Optional;
 public class HrefElementProcessor implements ElementProcessor {
     private final List<String> cdnBaseURLs;
     private final ResourceRepository repository;
+    private final boolean inlineEnabled;
 
-    public HrefElementProcessor(List<String> cdnBaseURLs, ResourceRepository repository) {
+    public HrefElementProcessor(List<String> cdnBaseURLs, ResourceRepository repository, boolean inlineEnabled) {
         this.cdnBaseURLs = cdnBaseURLs;
         this.repository = repository;
+        this.inlineEnabled = inlineEnabled;
     }
 
     @Override
@@ -41,8 +45,13 @@ public class HrefElementProcessor implements ElementProcessor {
             return element;
         }
         String path = normalize(resource, href);
-        if (repository.get(path).isPresent()) {
-            if (isCDNEnabled(resource)) {
+        Optional<Resource> style = repository.get(path);
+        if (style.isPresent()) {
+            if (inlineEnabled) {
+                element.deleteAttribute("href");
+                Text text = new Text(style.get().toText(Charsets.UTF_8), element.row(), element.column(), element.source());
+                element.addChild(text);
+            } else if (isCDNEnabled(resource)) {
                 attribute.setValue(cdnURL(path));
             } else {
                 attribute.setValue('/' + path);
