@@ -388,10 +388,10 @@ public class TemplateParser {
     }
 
     private boolean isResourceElement(Element element) {
-        if (element.name().equals("script")) {
+        if ("script".equals(element.name())) {
             return true;
         }
-        if (element.name().equals("link")) {
+        if ("link".equals(element.name())) {
             Optional<Attribute> attribute = element.attribute("rel");
             return attribute.isPresent() && attribute.get().value().equals("stylesheet");
         }
