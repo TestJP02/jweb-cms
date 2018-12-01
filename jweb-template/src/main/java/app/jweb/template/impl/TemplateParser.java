@@ -388,6 +388,9 @@ public class TemplateParser {
     }
 
     private boolean isResourceElement(Element element) {
+        if (element == null) {
+            return false;
+        }
         if ("script".equals(element.name())) {
             return true;
         }
