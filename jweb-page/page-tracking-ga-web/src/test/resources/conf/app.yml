@@ -1,0 +1,5 @@
+app:
+  env: DEV
+
+ga:
+  id: xxxx

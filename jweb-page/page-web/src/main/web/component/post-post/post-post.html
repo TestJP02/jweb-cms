@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:j="http://www.w3.org/1999/xhtml">
+<head>
+    <link rel="stylesheet" href="post-post.css">
+</head>
+<body>
+<article class="page" itemscope itemtype="http://schema.org/Article">
+    <meta itemprop="url" j:content="post.path()"/>
+    <meta itemprop="mainEntityOfPage" j:content="post.path()"/>
+    <meta itemprop="dateModified" j:content="format(post.createdTime(),'yyyy-MM-dd hh:mm')"/>
+    <meta itemprop="headline" j:content="post.title()"/>
+    <meta itemprop="description" j:content="post.description()"/>
+    <meta itemprop="image" j:content="post.imageURL()"/>
+    <div itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+        <meta itemprop="name" j:content=""/>
+        <meta itemprop="logo" j:content="">
+    </div>
+    <div class="page__title">
+        <h1 class="page__title-text" j:innerText="post.title()">Title</h1>
+        <div class="page__title-info">
+            <span itemprop="datePublished" class="page__title-info-item">{{fromNow(post.createdTime(), client.language())}}</span>
+            <span class="page__title-info-item"><i class="fa fa-eye"></i>&nbsp;{{i18n('post.visited',client.language())}} ({{statistics.totalVisited}})</span>
+            <span class="page__title-info-item"><i class="fa fa-comment"></i>&nbsp;{{i18n('post.commented',client.language())}} ({{statistics.totalCommented}})</span>
+            <span class="page__title-info-item"><i class="fa fa-thumbs-up"></i>&nbsp;{{i18n('post.liked',client.language())}} ({{statistics.totalLiked}})</span>
+        </div>
+    </div>
+    <div class="page-content" j:innerHtml="content">
+    </div>
+</article>
+</body>
+</html>

@@ -1,0 +1,6 @@
+app:
+  env: DEV
+
+database:
+  url: jdbc:hsqldb:mem:db;sql.syntax_mys=true
+  createTableEnabled: true

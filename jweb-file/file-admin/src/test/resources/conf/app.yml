@@ -1,0 +1,21 @@
+template:
+  cacheEnabled: false
+
+app:
+  apiEnabled: true
+  env: DEV
+
+database:
+  url: jdbc:hsqldb:mem:db;sql.syntax_mys=true
+  createTableEnabled: true
+  showSQLEnabled: true
+  dialect: org.hibernate.dialect.HSQLDialect
+  driver: org.hsqldb.jdbc.JDBCDriver
+
+web:
+  roots:
+    - ./sited-admin/src/main/dist/web
+    - ./sited-email/email-admin/src/main/dist/web
+
+user-api:
+  url: http://localhost:8080

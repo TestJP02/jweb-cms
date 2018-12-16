@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:j="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" type="text/css" href="post-list.css">
+</head>
+<body>
+<div class="page-list" j:class="class">
+    <ul class="media-list page-list__list">
+        <li class="media page-list__item" j:for="post:posts">
+            <div class="media-left">
+                <a j:href="post.path" class="page-list__item-image" j:if="post.imageURL!=null">
+                    <img j:src="post.imageURL==null?'/static/img/default-post.png':'/image/242x150' +post.imageURL" j:alt="post.title">
+                </a>
+            </div>
+            <div class="media-body">
+                <h3 class="media-heading">
+                    <a class="page-list__item-title" j:href="post.path" j:title="post.title" j:innerText="post.title">
+                        title
+                    </a>
+                </h3>
+                <p class="page-list__item-description" j:innerText="ellipsis(post.description, 100)">Description</p>
+                <div class="media-bottom page-list__item-bottom">
+                    <span j:innerText="fromNow(post.updatedTime,client.language())">12:00</span>
+                </div>
+            </div>
+        </li>
+    </ul>
+</div>
+</body>
+</html>

@@ -1,0 +1,20 @@
+.username {
+    display: inline-block;
+    height: 15px;
+    line-height: 15px;
+}
+
+.username__image {
+    display: inline-block;
+}
+
+.username__nickname {
+    display: inline-block;
+}
+
+.username__image-image {
+    height: 20px;
+    width: 20px;
+    border-radius: 10px;
+    margin-right: 3px;
+}

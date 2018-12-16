@@ -1,0 +1,12 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:j="http://www.w3.org/1999/xhtml">
+    <head>
+        <link rel="stylesheet" href="content-table.css">
+    </head>
+    <body>
+        <div class="panel panel-default content-table" j:if="!isNullOrEmpty(content)">
+            <div class="panel-heading" j:innerText="title">{{i18n('page.contentTable', client.language())}}</div>
+            <div class="panel-body" j:innerHtml="content"></div>
+        </div>
+    </body>
+</html>

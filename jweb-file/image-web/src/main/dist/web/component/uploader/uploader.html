@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en-US" xmlns:j="http://www.w3.org/1999/xhtml">
+    <head>
+        <link rel="stylesheet" href="uploader.0660.css">
+    </head>
+    <body>
+
+        <a href="javascript:void(0)" class="sited-file__button sited-file__button--primary ">
+            <label for="file" j:innerText="i18n('file.upload')"></label>
+            <input id="file" type="file" class="sited-file-upload-handler" multiple="true">
+        </a>
+
+        <div class="sited-file-uploader">
+            <div class="sited-file-uploader__head">
+                <div class="sited-file-uploader__title">
+                    <div><span id="uploaded_number">5</span> <span j:innerText="i18n('file.uploadSuccessContent')"></span></div>
+                    <div j:innerText="i18n('file.uploadFile')"></div>
+                </div>
+                <a href="javascript:void(0)" class="sited-file-uploader__head-button sited-file-uploader__toggle sited-file-uploader__toggle--open">
+                    <i class="iconfont icon-dms_open"></i>
+                </a>
+                <a href="javascript:void(0)" class="sited-file-uploader__head-button sited-file-uploader__close ">
+                    <i class="iconfont icon-dms_close"></i>
+                </a>
+            </div>
+            <div class="sited-file-uploader__body">
+                <div class="sited-file-uploader__message--success">
+                    <i class="iconfont icon-zhengque"></i>
+                    <span class="success_number">0</span> <span j:innerText="i18n('file.uploadSuccessContent')"></span>
+                </div>
+                <div class="sited-file-uploader__message">
+                    <div class="sited-file-uploader__message-inner">
+                        <div><span id="uploading_number">12</span> <span j:innerText="i18n('file.uploadingContent')"></span></div>
+                        <div class="sited-file-uploader__message-inner-fail">
+                            <i class="iconfont icon-tishi"></i>
+                            <span class="failed_number">0</span> <span j:innerText="i18n('file.uploadFailureContent')"></span>，
+                            <span class="success_number">0</span> <span j:innerText="i18n('file.uploadSuccessContent')"></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="sited-file-uploader__table-head-container">
+                    <table class="sited-file-uploader__table">
+                        <thead class="sited-file-uploader__table-head">
+                            <tr class="sited-file-uploader__row">
+                                <th class="sited-file-uploader__col" width="210" j:innerText="i18n('file.file')"></th>
+                                <th class="sited-file-uploader__col" width="100" j:innerText="i18n('file.size')"></th>
+                                <th class="sited-file-uploader__col" width="100" j:innerText="i18n('file.path')"></th>
+                                <th class="sited-file-uploader__col" width="50" j:innerText="i18n('file.status')"></th>
+                            </tr>
+                        </thead>
+                    </table>
+                </div>
+                <div class="sited-file-uploader__table-body-container">
+                    <table class="sited-file-uploader__table">
+                        <tbody class="sited-file-uploader__table-body"></tbody>
+                    </table>
+                    <div class='sited-file-uploader__row-progress'></div>
+                </div>
+            </div>
+            <div class="sited-file-uploader__foot">
+                <a href="javascript:void(0)" class="sited-file__button sited-file-uploader__close" j:innerText="i18n('file.close')"></a>
+                <a href="javascript:void(0)" class="sited-file__button sited-file__button--primary">
+                    <label for="file2" j:innerText="i18n('file.goOn')"></label>
+                    <input id="file2" type="file" class="sited-file-upload-handler" multiple="true">
+                </a>
+            </div>
+        </div>
+        <script src="../../node_modules/jquery/dist/jquery.min.4f25.js"></script>
+        <script src="../../static/js/file.uploader.ad22.js"></script>
+    </body>
+</html>

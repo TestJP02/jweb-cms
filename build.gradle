@@ -333,3 +333,511 @@ project(':jweb-main') {
         compile 'org.hsqldb:hsqldb:2.4.0'
     }
 }
+
+project(':jweb-file:file-service-api') {
+    apply from: file("${rootDir}/gradle/module.gradle")
+
+    dependencies {
+        api project(':jweb-service')
+        testImplementation project(':jweb-test')
+    }
+
+}
+
+project(':jweb-file:file-service') {
+    apply from: file("${rootDir}/gradle/module.gradle")
+
+    dependencies {
+        api project(':jweb-file:file-service-api')
+        implementation project(':jweb-database')
+        testImplementation project(':jweb-test')
+    }
+}
+
+project(':jweb-file:file-web') {
+    apply from: file("${rootDir}/gradle/module.gradle")
+
+    dependencies {
+        api project(':jweb-file:file-service-api')
+        implementation project(':jweb-web')
+        implementation "org.imgscalr:imgscalr-lib:4.2"
+        implementation(group: 'org.glassfish.jersey.media', name: 'jersey-media-multipart', version: "${jerseyVersion}") {
+            exclude group: 'org.glassfish.hk2.external', module: 'javax.inject'
+        }
+        testImplementation project(':jweb-file:file-service')
+        testImplementation project(':jweb-test')
+    }
+}
+
+project(':jweb-file:file-admin') {
+    apply from: file("${rootDir}/gradle/module.gradle")
+
+    dependencies {
+        api project(':jweb-file:file-service-api')
+        implementation project(':jweb-admin')
+        implementation(group: 'org.glassfish.jersey.media', name: 'jersey-media-multipart', version: "${jerseyVersion}") {
+            exclude group: 'org.glassfish.hk2.external', module: 'javax.inject'
+        }
+        testImplementation project(':jweb-file:file-service')
+        testImplementation project(':jweb-file:file-web')
+        testImplementation project(':jweb-test')
+    }
+}
+
+project(':jweb-user:pincode-service-api') {
+    apply from: file("${rootDir}/gradle/module.gradle")
+
+    dependencies {
+        api project(':jweb-service')
+        testImplementation project(':jweb-test')
+    }
+}
+
+project(':jweb-user:pincode-service') {
+    apply from: file("${rootDir}/gradle/module.gradle")
+
+    dependencies {
+        api project(':jweb-user:pincode-service-api')
+        implementation project(':jweb-database')
+        implementation project(':jweb-message')
+        api('javax.mail:mail:1.4.7') {
+            exclude group: 'javax.activation'
+        }
+        testImplementation project(':jweb-test')
+    }
+}
+
+project(':jweb-user:pincode-web') {
+    apply from: file("${rootDir}/gradle/module.gradle")
+
+    dependencies {
+        api project(':jweb-user:pincode-service-api')
+        implementation "com.github.cage:cage:1.0"
+        implementation project(':jweb-web')
+        testImplementation project(':jweb-user:pincode-service')
+        testImplementation project(':jweb-test')
+    }
+}
+
+
+project(':jweb-user:captcha-web') {
+    apply from: file("${rootDir}/gradle/module.gradle")
+
+    dependencies {
+        implementation project(':jweb-web')
+        testImplementation project(':jweb-test')
+    }
+}
+
+
+project(':jweb-user:captcha-web-simple') {
+    apply from: file("${rootDir}/gradle/module.gradle")
+
+    dependencies {
+        api project(':jweb-user:captcha-web')
+        implementation project(':jweb-web')
+        implementation files("${rootDir}/libs/simplecaptcha-1.2.1.jar")
+        testImplementation project(':jweb-test')
+    }
+
+    jar {
+        from(zipTree("${rootDir}/libs/simplecaptcha-1.2.1.jar"))
+    }
+}
+
+project(':jweb-user:user-service-api') {
+    apply from: file("${rootDir}/gradle/module.gradle")
+
+    dependencies {
+        api project(':jweb-service')
+        testImplementation project(':jweb-test')
+    }
+}
+
+project(':jweb-user:user-service') {
+    apply from: file("${rootDir}/gradle/module.gradle")
+
+    dependencies {
+        api project(':jweb-user:user-service-api')
+        implementation project(':jweb-database')
+        implementation project(':jweb-message')
+
+        testImplementation project(':jweb-test')
+    }
+}
+
+project(':jweb-user:user-admin') {
+    apply from: file("${rootDir}/gradle/module.gradle")
+
+    dependencies {
+        api project(':jweb-user:user-service-api')
+        implementation project(':jweb-admin')
+        implementation project(':jweb-user:captcha-web')
+        implementation project(':jweb-message')
+        testImplementation project(':jweb-test')
+        testImplementation project(':jweb-user:user-service')
+    }
+}
+
+project(':jweb-user:user-web') {
+    apply from: file("${rootDir}/gradle/module.gradle")
+
+    dependencies {
+        api project(':jweb-user:user-service-api')
+        implementation project(':jweb-web')
+        api project(':jweb-page:page-web')
+        implementation project(':jweb-message')
+        implementation project(':jweb-cache')
+        implementation project(':jweb-user:captcha-web')
+        implementation project(':jweb-user:pincode-web')
+        implementation project(':jweb-page:page-service-api')
+        implementation "com.github.scribejava:scribejava-apis:5.5.0"
+        testImplementation project(':jweb-test')
+    }
+}
+
+project(':jweb-post:post-service-api') {
+    apply from: file("${rootDir}/gradle/module.gradle")
+
+    dependencies {
+        api project(':jweb-service')
+        testImplementation project(':jweb-test')
+    }
+}
+
+project(':jweb-post:post-service') {
+    apply from: file("${rootDir}/gradle/module.gradle")
+
+    dependencies {
+        api project(':jweb-post:post-service-api')
+        implementation project(':jweb-database')
+        implementation project(':jweb-message')
+        implementation project(':jweb-scheduler')
+        implementation 'com.atlassian.commonmark:commonmark:0.11.0'
+        implementation 'com.atlassian.commonmark:commonmark-ext-gfm-tables:0.11.0'
+        implementation 'com.atlassian.commonmark:commonmark-ext-gfm-strikethrough:0.11.0'
+        implementation 'com.atlassian.commonmark:commonmark-ext-autolink:0.11.0'
+        implementation 'com.atlassian.commonmark:commonmark-ext-ins:0.11.0'
+        implementation 'com.atlassian.commonmark:commonmark-ext-heading-anchor:0.11.0'
+        testImplementation project(':jweb-test')
+    }
+}
+
+project(':jweb-post:post-admin') {
+    apply from: file("${rootDir}/gradle/module.gradle")
+
+    dependencies {
+        api project(':jweb-post:post-service-api')
+        implementation project(':jweb-admin')
+        testImplementation project(':jweb-test')
+    }
+}
+
+project(':jweb-page:page-service-api') {
+    apply from: file("${rootDir}/gradle/module.gradle")
+
+    dependencies {
+        api project(':jweb-service')
+        testImplementation project(':jweb-test')
+    }
+}
+
+project(':jweb-page:page-service') {
+    apply from: file("${rootDir}/gradle/module.gradle")
+
+    dependencies {
+        api project(':jweb-page:page-service-api')
+        implementation project(':jweb-database')
+        implementation project(':jweb-message')
+        implementation project(':jweb-scheduler')
+        implementation 'com.atlassian.commonmark:commonmark:0.11.0'
+        implementation 'com.atlassian.commonmark:commonmark-ext-gfm-tables:0.11.0'
+        implementation 'com.atlassian.commonmark:commonmark-ext-gfm-strikethrough:0.11.0'
+        implementation 'com.atlassian.commonmark:commonmark-ext-autolink:0.11.0'
+        implementation 'com.atlassian.commonmark:commonmark-ext-ins:0.11.0'
+        implementation 'com.atlassian.commonmark:commonmark-ext-heading-anchor:0.11.0'
+        testImplementation project(':jweb-test')
+    }
+}
+
+project(':jweb-page:page-admin') {
+    apply from: file("${rootDir}/gradle/module.gradle")
+
+    dependencies {
+        api project(':jweb-page:page-service-api')
+        implementation project(':jweb-admin')
+        testImplementation project(':jweb-test')
+    }
+}
+
+project(':jweb-page:page-web') {
+    apply from: file("${rootDir}/gradle/module.gradle")
+
+    dependencies {
+        implementation project(':jweb-post:post-service-api')
+        api project(':jweb-page:page-service-api')
+        implementation project(':jweb-web')
+        implementation project(':jweb-cache')
+        implementation project(':jweb-message')
+        implementation 'com.atlassian.commonmark:commonmark:0.11.0'
+        implementation 'com.atlassian.commonmark:commonmark-ext-gfm-tables:0.11.0'
+        implementation 'com.atlassian.commonmark:commonmark-ext-gfm-strikethrough:0.11.0'
+        implementation 'com.atlassian.commonmark:commonmark-ext-autolink:0.11.0'
+        implementation 'com.atlassian.commonmark:commonmark-ext-ins:0.11.0'
+        implementation 'com.atlassian.commonmark:commonmark-ext-heading-anchor:0.11.0'
+        testImplementation project(':jweb-test')
+    }
+}
+
+project(':jweb-page-search:page-search-service-api') {
+    apply from: file("${rootDir}/gradle/module.gradle")
+
+    dependencies {
+        api project(':jweb-service')
+        api project(":jweb-post:post-service-api")
+        testImplementation project(':jweb-test')
+    }
+}
+
+project(':jweb-page-search:page-search-service') {
+    apply plugin: 'java-library'
+    apply plugin: 'signing'
+    apply plugin: 'maven-publish'
+
+    sourceSets {
+        test.compileClasspath += configurations.compileOnly
+        test.runtimeClasspath += configurations.compileOnly
+    }
+
+    task sourcesJar(type: Jar, dependsOn: classes) {
+        from sourceSets.main.allSource
+        classifier 'sources'
+    }
+
+    artifacts {
+        archives sourcesJar
+    }
+
+    dependencies {
+        api project(':jweb-page-search:page-search-service-api')
+        api project(":jweb-post:post-service-api")
+        implementation 'org.apache.lucene:lucene-core:7.1.0'
+        implementation 'org.apache.lucene:lucene-queryparser:7.1.0'
+        implementation 'org.apache.lucene:lucene-analyzers-smartcn:7.1.0'
+        implementation 'org.apache.lucene:lucene-highlighter:7.1.0'
+
+        api project(':jweb-service')
+        api project(':jweb-database')
+        api project(':jweb-message')
+
+        testImplementation project(':jweb-test')
+        testImplementation project(':jweb-database')
+        testImplementation project(":jweb-post:post-service")
+    }
+}
+
+project(':jweb-page-search:page-search-web') {
+    apply from: file("${rootDir}/gradle/module.gradle")
+
+    dependencies {
+        api project(":jweb-page:page-web")
+        implementation project(':jweb-page-search:page-search-service-api')
+        implementation project(':jweb-web')
+        testImplementation project(':jweb-test')
+    }
+}
+
+project(":jweb-page-search:page-search-admin") {
+    apply from: file("${rootDir}/gradle/module.gradle")
+    dependencies {
+        api project(':jweb-page-search:page-search-service-api')
+        api project(":jweb-page:page-admin")
+        implementation project(':jweb-admin')
+        testImplementation project(':jweb-test')
+    }
+}
+
+project(':jweb-page:page-og-meta-web') {
+    apply from: file("${rootDir}/gradle/module.gradle")
+
+    dependencies {
+        implementation project(':jweb-web')
+        api project(':jweb-page:page-web')
+        testImplementation project(':jweb-test')
+        testImplementation project(':jweb-page:page-service')
+    }
+}
+
+project(':jweb-page:page-share-baidu-web') {
+    apply from: file("${rootDir}/gradle/module.gradle")
+
+    dependencies {
+        implementation project(':jweb-web')
+        api project(':jweb-page:page-web')
+        testImplementation project(':jweb-test')
+        testImplementation project(':jweb-page:page-service')
+    }
+}
+
+project(':jweb-page:page-share-addthis-web') {
+    apply from: file("${rootDir}/gradle/module.gradle")
+
+    dependencies {
+        implementation project(':jweb-web')
+        api project(':jweb-page:page-web')
+        testImplementation project(':jweb-test')
+        testImplementation project(':jweb-page:page-service')
+    }
+}
+
+project(':jweb-page:page-tracking-baidu-web') {
+    apply from: file("${rootDir}/gradle/module.gradle")
+
+    dependencies {
+        implementation project(':jweb-web')
+        testImplementation project(':jweb-test')
+    }
+}
+
+project(':jweb-page:page-tracking-ga-web') {
+    apply from: file("${rootDir}/gradle/module.gradle")
+
+    dependencies {
+        implementation project(':jweb-web')
+        testImplementation project(':jweb-test')
+    }
+}
+
+project(':jweb-comment:comment-service-api') {
+    apply from: file("${rootDir}/gradle/module.gradle")
+
+    dependencies {
+        api project(':jweb-service')
+        testImplementation project(':jweb-test')
+    }
+}
+
+project(':jweb-comment:comment-service') {
+    apply from: file("${rootDir}/gradle/module.gradle")
+
+    dependencies {
+        implementation project(':jweb-service')
+        implementation project(':jweb-database')
+        implementation project(':jweb-message')
+        api project(':jweb-page:page-service-api')
+        api project(':jweb-post:post-service-api')
+        api project(':jweb-comment:comment-service-api')
+        testImplementation project(':jweb-test')
+    }
+}
+
+project(':jweb-comment:comment-web') {
+    apply from: file("${rootDir}/gradle/module.gradle")
+
+    dependencies {
+        implementation project(':jweb-web')
+        api project(':jweb-comment:comment-service-api')
+        api project(':jweb-user:user-service-api')
+        api project(':jweb-page:page-web')
+        testImplementation project(':jweb-test')
+    }
+}
+
+project(':jweb-comment:comment-admin') {
+    apply from: file("${rootDir}/gradle/module.gradle")
+
+    dependencies {
+        implementation project(':jweb-admin')
+        api project(':jweb-comment:comment-service-api')
+        implementation project(':jweb-page:page-admin')
+        testImplementation project(':jweb-test')
+    }
+}
+
+project(':jweb-geo:geo-service-api') {
+    apply from: file("${rootDir}/gradle/module.gradle")
+
+    dependencies {
+        api project(':jweb-service')
+        testImplementation project(':jweb-test')
+    }
+}
+
+project(':jweb-geo:geo-service') {
+    apply from: file("${rootDir}/gradle/module.gradle")
+
+    dependencies {
+        api project(':jweb-geo:geo-service-api')
+        api project(':jweb-service')
+        implementation(group: 'com.maxmind.geoip2', name: 'geoip2', version: '2.12.0') {
+            exclude group: "com.fasterxml.jackson.core"
+        }
+
+        testImplementation project(':jweb-test')
+    }
+}
+
+project(':jweb-page-rating:page-rating-service-api') {
+    apply from: file("${rootDir}/gradle/module.gradle")
+
+    dependencies {
+        api project(':jweb-service')
+        testImplementation project(':jweb-test')
+    }
+}
+
+project(':jweb-page-rating:page-rating-service') {
+    apply from: file("${rootDir}/gradle/module.gradle")
+
+    dependencies {
+        api project(':jweb-page-rating:page-rating-service-api')
+        implementation project(':jweb-service')
+        implementation project(':jweb-database')
+        testImplementation project(':jweb-test')
+    }
+}
+
+project(':jweb-page-rating:page-rating-web') {
+    apply from: file("${rootDir}/gradle/module.gradle")
+
+    dependencies {
+        implementation project(':jweb-page-rating:page-rating-service-api')
+        implementation project(':jweb-page:page-service-api')
+        implementation project(':jweb-post:post-service-api')
+        implementation project(':jweb-page:page-web')
+        implementation project(':jweb-web')
+        testImplementation project(':jweb-test')
+    }
+}
+
+project(':jweb-page-main') {
+    apply from: file("${rootDir}/gradle/app.gradle")
+
+    dependencies {
+        compile group: 'javax.activation', name: 'activation', version: '1.1.1'
+
+        // https://mvnrepository.com/artifact/org.snmp4j/snmp4j
+        compile group: 'org.snmp4j', name: 'snmp4j', version: '2.6.3'
+
+        compile project(':jweb-page:page-service')
+        compile project(':jweb-page:page-web')
+        compile project(':jweb-page:page-admin')
+        compile project(':jweb-post:post-service')
+        compile project(':jweb-post:post-admin')
+        compile project(':jweb-user:user-service')
+        compile project(':jweb-user:user-web')
+        compile project(':jweb-user:user-admin')
+        compile project(':jweb-file:file-service')
+        compile project(':jweb-file:file-web')
+        compile project(':jweb-file:file-admin')
+        compile project(':jweb-user:pincode-service')
+        compile project(':jweb-user:pincode-web')
+        compile project(':jweb-user:captcha-web-simple')
+        compile project(':jweb-undertow')
+        compile project(':jweb-logback')
+        compile project(':jweb-web')
+        compile group: 'ch.qos.logback', name: 'logback-classic', version: '1.2.3'
+        compile 'mysql:mysql-connector-java:8.0.11'
+        compile 'org.hsqldb:hsqldb:2.4.0'
+    }
+}

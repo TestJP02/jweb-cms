@@ -1,0 +1,21 @@
+app:
+  env: DEV
+
+database:
+  url: jdbc:hsqldb:mem:db;sql.syntax_mys=true
+  createTableEnabled: true
+
+ses:
+  region: US_EAST_1
+  accessKey: AKIAJO7SN62ETOALLPHA
+  secretKey: 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
+
+user:
+  needVerify: false
+  verifyDomain: www.jweb.app
+
+smtp:
+  host: test.jweb.app
+  port: 587
+  username: notification@jweb.app
+  password: password

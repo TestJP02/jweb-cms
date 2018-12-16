@@ -1,0 +1,15 @@
+app:
+  apiEnabled: true
+  env: DEV
+database:
+  url: jdbc:hsqldb:mem:db;sql.syntax_mys=true
+  createTableEnabled: true
+  showSQLEnabled: true
+  dialect: org.hibernate.dialect.HSQLDialect
+  driver: org.hsqldb.jdbc.JDBCDriver
+
+smtp:
+  host: 127.0.0.1
+  port: 25
+  username: email
+  password: email

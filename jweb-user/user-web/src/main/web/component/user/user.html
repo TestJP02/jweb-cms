@@ -1,0 +1,17 @@
+<!doctype html>
+<html lang="en-US" xmlns:j="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" type="text/css" href="user.css"/>
+</head>
+<body>
+<div class="user" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <div class="user__avatar">
+        <img j:src="user.imageURL == null?'/static/img/default-avatar.png':'/image/80x80' + user.imageURL" class="user__avatar-image">
+    </div>
+    <div class="user__sign">
+        <span class="user__nickname" j:innerText="user.nickname" itemprop="name">name</span> <span class="user__description" j:innerText="user.description">description</span>
+    </div>
+</div>
+</body>
+</html>

@@ -1,0 +1,74 @@
+.react-grid-layout {}
+
+.react-grid-placeholder {
+    background: #ccc !important;
+}
+
+.page-grid-editor {}
+
+.page-grid-editor__header {
+    background: #fafafa;
+    height: 72px;
+    padding: 18px 30px;
+    box-sizing: border-box;
+}
+
+.page-grid-editor__grid {
+    position: relative;
+    border: 1px solid #e5e5e5;
+    overflow: hidden;
+    background: #fff;
+}
+
+.page-grid-editor__ruler {
+    position: absolute;
+    top: 40px;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background: red;
+    z-index: 1;
+}
+
+.page-grid-editor__ruler::before {
+    content: attr(data-width);
+    position: absolute;
+    top: -10px;
+    left: 50px;
+    font-size: 16px;
+    line-height: 20px;
+    padding: 0 5px;
+    color: #333;
+    background: #fff;
+    z-index: 1;
+}
+
+.react-grid-item.react-draggable-dragging {
+    background: rgba(255, 255, 255, 0.5);
+}
+
+.page-grid-editor__grid-header {
+    width: 100%;
+    height: 24px;
+    line-height: 24px;
+    background: #f4f4f4;
+    border-bottom: 1px solid #e5e5e5;
+    text-align: right;
+    top: -24px;
+    transition: all 0.2s ease;
+    z-index: 100;
+}
+
+.page-grid-editor__grid-header-title {
+    float: left;
+    margin-left: 15px;
+}
+
+.page-grid-editor__grid-operation {
+    font-size: 16px;
+    color: #999;
+}
+
+.el-button--text+.el-button--text.page-grid-editor__grid-operation {
+    border: 0;
+}

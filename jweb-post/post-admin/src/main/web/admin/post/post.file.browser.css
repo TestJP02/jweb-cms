@@ -1,0 +1,25 @@
+.page-file-browser .el-dialog__header {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+}
+
+.page-file-browser .el-dialog__body {
+    position: absolute;
+    top: 37px;
+    bottom: 61px;
+}
+
+.page-file-browser__container {
+    height: 100%;
+}
+
+.page-file-browser__container>.el-row,
+.page-file-browser__container>.el-row>.el-col {
+    height: 100%;
+}
+
+.page-file-browser__container .el-col {
+    overflow: auto;
+}
