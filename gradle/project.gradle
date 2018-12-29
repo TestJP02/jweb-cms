@@ -50,17 +50,12 @@ subprojects {
 }
 
 
-
 allprojects {
     apply plugin: 'idea'
     idea.module.inheritOutputDirs = true
 }
 
 apply from: file("${rootDir}/gradle/quality.gradle")
-
-task wrapper(type: Wrapper) {
-    gradleVersion = '4.10'
-}
 
 buildscript {
     repositories {
@@ -70,3 +65,8 @@ buildscript {
         classpath 'net.sf.proguard:proguard-gradle:5.3.3'
     }
 }
+
+wrapper {
+    gradleVersion = '5.0'
+}
+

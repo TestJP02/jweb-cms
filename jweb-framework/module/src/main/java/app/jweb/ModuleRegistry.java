@@ -99,7 +99,7 @@ public class ModuleRegistry implements Iterable<AbstractModule> {
 
     private List<String> dependencies(String moduleName) {
         RuntimeModule module = module(moduleName);
-        return module.dependencies().stream().filter(name -> !Objects.equals(name, moduleName)).collect(Collectors.toList());
+        return module.dependencies().stream().filter(name -> !Objects.equals(name, moduleName) && isInstalled(name)).collect(Collectors.toList());
     }
 
     public List<String> recursiveDependencies(String moduleName) {

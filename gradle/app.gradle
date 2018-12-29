@@ -49,7 +49,7 @@ startScripts {
 
     doLast {
         windowsScript.text = windowsScript.text.replaceFirst('APP_DIR_VAR', '%APP_HOME%')
-        windowsScript.text = windowsScript.text.replaceFirst('CLASSPATH=%APP_HOME%', 'CLASSPATH=%APP_HOME%\\\\lib\\\\*:%APP_HOME%')
+        windowsScript.text = windowsScript.text.replaceFirst('CLASSPATH=%APP_HOME%', 'CLASSPATH=%APP_HOME%\\\\lib\\\\*;%APP_HOME%')
         unixScript.text = unixScript.text.replaceFirst('APP_DIR_VAR', '\\$APP_HOME')
         unixScript.text = unixScript.text.replaceFirst('CLASSPATH=\\$APP_HOME', 'CLASSPATH=\\$APP_HOME/lib/*:\\$APP_HOME')
     }

@@ -3,7 +3,7 @@ buildscript {
         gradlePluginPortal()
     }
     dependencies {
-        classpath "gradle.plugin.com.github.spotbugs:spotbugs-gradle-plugin:1.6.3"
+        classpath 'gradle.plugin.com.github.spotbugs:spotbugs-gradle-plugin:1.6.8'
     }
 }
 
@@ -15,7 +15,7 @@ subprojects {
 
     checkstyle {
         dependencies {
-            checkstyle 'com.puppycrawl.tools:checkstyle:8.12'
+            checkstyle 'com.puppycrawl.tools:checkstyle:8.15'
             checkstyle 'com.github.sevntu-checkstyle:sevntu-checks:1.32.0'
         }
 
@@ -26,18 +26,21 @@ subprojects {
     pmd {
         ruleSets = []
         ruleSetFiles = rootProject.files('gradle/check/pmd.xml')
-        toolVersion = '6.7.0'
+        toolVersion = '6.10.0'
         consoleOutput = true
     }
 
     spotbugs {
-        effort = 'max'
         reportLevel = 'low'
-        excludeFilter = rootProject.file('gradle/check/spotbugs-filter.xml')
-        toolVersion = '3.1.7'
+        includeFilter = rootProject.file('gradle/check/spotbugs.xml')
+        toolVersion = '3.1.10'
     }
 
-    tasks.withType(com.github.spotbugs.SpotBugsTask) {
+    dependencies {
+        spotbugsPlugins 'com.mebigfatguy.fb-contrib:fb-contrib:7.4.3.sb'
+    }
+
+    tasks.withType(com.github.spotbugs.SpotBugsTask).configureEach {
         reports {
             xml.enabled = false
             html.enabled = true
@@ -50,7 +53,7 @@ subprojects {
 
     jacocoTestReport {
         // to generate cross sub project report, run: gradlew test && gradlew jacocoTestReport
-        executionData = fileTree(rootDir).include('build/**/jacoco/test.exec')
+        executionData.setFrom(fileTree(rootDir).include('build/**/jacoco/test.exec'))
 
         reports {
             xml.enabled = true
