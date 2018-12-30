@@ -1,7 +1,7 @@
 /**
  * @author chi
  */
-module app.jweb.post {
+module app.jweb.post.api.impl {
     requires app.jweb.service;
     requires app.jweb.post.api;
     requires app.jweb.database;

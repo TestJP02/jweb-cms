@@ -1,4 +1,4 @@
-module app.jweb.pincode {
+module app.jweb.pincode.api.impl {
     requires app.jweb.service;
     requires app.jweb.message;
     requires app.jweb.pincode.api;

@@ -22,7 +22,7 @@ import com.google.common.collect.Lists;
  */
 public class PageSearchModuleImpl extends PageSearchModule {
     public PageSearchModuleImpl() {
-        super("app.jweb.page.search", Lists.newArrayList("app.jweb.service", "app.jweb.message", "app.jweb.database", "app.jweb.page.search.api", "app.jwebk.page.api"));
+        super("app.jweb.page.search.api.impl", Lists.newArrayList("app.jweb.service", "app.jweb.message", "app.jweb.database", "app.jweb.page.search.api", "app.jwebk.page.api"));
     }
 
     @Override

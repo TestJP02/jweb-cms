@@ -1,7 +1,7 @@
 /**
  * @author chi
  */
-module app.jweb.page.rating {
+module app.jweb.page.rating.api.impl {
     requires app.jweb.service;
     requires app.jweb.page.rating.api;
     requires app.jweb.database;
