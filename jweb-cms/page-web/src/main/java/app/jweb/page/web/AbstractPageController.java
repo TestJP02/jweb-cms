@@ -1,5 +1,6 @@
 package app.jweb.page.web;
 
+import app.jweb.page.api.page.PageResponse;
 import app.jweb.page.web.service.TemplateCacheService;
 import app.jweb.page.web.service.VariableCacheService;
 import app.jweb.web.AbstractWebController;
@@ -22,11 +23,15 @@ public abstract class AbstractPageController extends AbstractWebController {
     @Inject
     VariableCacheService variableService;
 
-    protected Response post(PostInfo post) {
-        return post(post, ImmutableMap.of());
+    protected Response page(PageResponse page) {
+        return page(page, ImmutableMap.of());
     }
 
-    protected Response post(PostInfo post, Map<String, Object> bindings) {
+    protected Response page(PageInfo post) {
+        return page(post, ImmutableMap.of());
+    }
+
+    protected Response page(PageInfo post, Map<String, Object> bindings) {
         Map<String, Object> variables = variableService.variables();
         Map<String, Object> templateBindings = Maps.newHashMapWithExpectedSize(bindings.size() + variables.size() + 6);
         templateBindings.putAll(bindings);
@@ -38,5 +43,38 @@ public abstract class AbstractPageController extends AbstractWebController {
         templateBindings.put("post", post);
         templateBindings.put("template", templateService.template(post.templatePath()));
         return Response.ok(new Template(post.templatePath(), templateBindings)).type(MediaType.TEXT_HTML).build();
+    }
+
+    protected Response page(PageResponse page, Map<String, Object> bindings) {
+        Map<String, Object> variables = variableService.variables();
+        Map<String, Object> templateBindings = Maps.newHashMapWithExpectedSize(bindings.size() + variables.size() + 6);
+        templateBindings.putAll(bindings);
+        templateBindings.putAll(variables);
+        templateBindings.put("app", appInfo);
+        templateBindings.put("request", requestInfo);
+        templateBindings.put("client", clientInfo);
+        templateBindings.put("page", page);
+        templateBindings.put("template", templateService.template(page.templatePath));
+        return Response.ok(new Template(page.templatePath, templateBindings)).type(MediaType.TEXT_HTML).build();
+    }
+
+    protected Response page(String title, String templatePath) {
+        return page(title, null, templatePath);
+    }
+
+    protected Response page(String title, String description, String templatePath) {
+        Map<String, Object> globalVariables = variableService.variables();
+        Map<String, Object> bindings = Maps.newHashMapWithExpectedSize(globalVariables.size() + 6);
+        bindings.putAll(globalVariables);
+
+        PageResponse page = new PageResponse();
+        page.title = title;
+        page.templatePath = templatePath;
+        bindings.put("page", page);
+        bindings.put("app", appInfo);
+        bindings.put("request", requestInfo);
+        bindings.put("client", clientInfo);
+        bindings.put("template", templateService.template(page.templatePath));
+        return Response.ok(new Template(page.templatePath, bindings)).type(MediaType.TEXT_HTML).build();
     }
 }

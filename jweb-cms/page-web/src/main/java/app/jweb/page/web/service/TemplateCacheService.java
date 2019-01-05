@@ -1,8 +1,8 @@
 package app.jweb.page.web.service;
 
 import app.jweb.cache.Cache;
-import app.jweb.page.api.PageTemplateWebService;
-import app.jweb.page.api.template.TemplateResponse;
+import app.jweb.page.api.PageWebService;
+import app.jweb.page.api.page.PageResponse;
 import com.google.common.base.Strings;
 
 import javax.inject.Inject;
@@ -14,22 +14,22 @@ import java.util.Optional;
  * @author chi
  */
 public class TemplateCacheService {
-    private static final TemplateResponse NONE = new TemplateResponse();
+    private static final PageResponse NONE = new PageResponse();
     @Inject
-    Cache<TemplateResponse> cache;
+    Cache<PageResponse> cache;
 
     @Inject
-    PageTemplateWebService pageTemplateWebService;
+    PageWebService pageWebService;
 
-    public TemplateResponse template(String path) {
+    public PageResponse template(String path) {
         if (Strings.isNullOrEmpty(path)) {
             return NONE;
         }
-        Optional<TemplateResponse> cached = cache.get(path);
+        Optional<PageResponse> cached = cache.get(path);
         if (cached.isPresent()) {
             return cached.get();
         }
-        Optional<TemplateResponse> response = pageTemplateWebService.findByTemplatePath(path);
+        Optional<PageResponse> response = pageWebService.findByTemplatePath(path);
         response.ifPresent(templateResponse -> cache.put(path, templateResponse));
         return response.orElse(NONE);
     }

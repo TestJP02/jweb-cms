@@ -471,43 +471,6 @@ project(':jweb-cms:user-web') {
     }
 }
 
-project(':jweb-cms:post-service-api') {
-    apply from: file("${rootDir}/gradle/module.gradle")
-
-    dependencies {
-        api project(':jweb-framework:service')
-        testImplementation project(':jweb-framework:test')
-    }
-}
-
-project(':jweb-cms:post-service') {
-    apply from: file("${rootDir}/gradle/module.gradle")
-
-    dependencies {
-        api project(':jweb-cms:post-service-api')
-        implementation project(':jweb-framework:database')
-        implementation project(':jweb-framework:message')
-        implementation project(':jweb-framework:scheduler')
-        implementation 'com.atlassian.commonmark:commonmark:0.11.0'
-        implementation 'com.atlassian.commonmark:commonmark-ext-gfm-tables:0.11.0'
-        implementation 'com.atlassian.commonmark:commonmark-ext-gfm-strikethrough:0.11.0'
-        implementation 'com.atlassian.commonmark:commonmark-ext-autolink:0.11.0'
-        implementation 'com.atlassian.commonmark:commonmark-ext-ins:0.11.0'
-        implementation 'com.atlassian.commonmark:commonmark-ext-heading-anchor:0.11.0'
-        testImplementation project(':jweb-framework:test')
-    }
-}
-
-project(':jweb-cms:post-admin') {
-    apply from: file("${rootDir}/gradle/module.gradle")
-
-    dependencies {
-        api project(':jweb-cms:post-service-api')
-        implementation project(':jweb-framework:admin')
-        testImplementation project(':jweb-framework:test')
-    }
-}
-
 project(':jweb-cms:page-service-api') {
     apply from: file("${rootDir}/gradle/module.gradle")
 
@@ -549,7 +512,6 @@ project(':jweb-cms:page-web') {
     apply from: file("${rootDir}/gradle/module.gradle")
 
     dependencies {
-        implementation project(':jweb-cms:post-service-api')
         api project(':jweb-cms:page-service-api')
         implementation project(':jweb-framework:web')
         implementation project(':jweb-framework:cache')
@@ -564,124 +526,6 @@ project(':jweb-cms:page-web') {
     }
 }
 
-project(':jweb-cms:page-search-service-api') {
-    apply from: file("${rootDir}/gradle/module.gradle")
-
-    dependencies {
-        api project(':jweb-framework:service')
-        api project(":jweb-cms:post-service-api")
-        testImplementation project(':jweb-framework:test')
-    }
-}
-
-project(':jweb-cms:page-search-service') {
-    apply plugin: 'java-library'
-    apply plugin: 'signing'
-    apply plugin: 'maven-publish'
-
-    sourceSets {
-        test.compileClasspath += configurations.compileOnly
-        test.runtimeClasspath += configurations.compileOnly
-    }
-
-    task sourcesJar(type: Jar, dependsOn: classes) {
-        from sourceSets.main.allSource
-        classifier 'sources'
-    }
-
-    artifacts {
-        archives sourcesJar
-    }
-
-    dependencies {
-        api project(':jweb-cms:page-search-service-api')
-        api project(":jweb-cms:post-service-api")
-        implementation 'org.apache.lucene:lucene-core:7.1.0'
-        implementation 'org.apache.lucene:lucene-queryparser:7.1.0'
-        implementation 'org.apache.lucene:lucene-analyzers-smartcn:7.1.0'
-        implementation 'org.apache.lucene:lucene-highlighter:7.1.0'
-
-        api project(':jweb-framework:service')
-        api project(':jweb-framework:database')
-        api project(':jweb-framework:message')
-
-        testImplementation project(':jweb-framework:test')
-        testImplementation project(':jweb-framework:database')
-        testImplementation project(":jweb-cms:post-service")
-    }
-}
-
-project(':jweb-cms:page-search-web') {
-    apply from: file("${rootDir}/gradle/module.gradle")
-
-    dependencies {
-        api project(":jweb-cms:page-web")
-        implementation project(':jweb-cms:page-search-service-api')
-        implementation project(':jweb-framework:web')
-        testImplementation project(':jweb-framework:test')
-    }
-}
-
-project(":jweb-cms:page-search-admin") {
-    apply from: file("${rootDir}/gradle/module.gradle")
-    dependencies {
-        api project(':jweb-cms:page-search-service-api')
-        api project(":jweb-cms:page-admin")
-        implementation project(':jweb-framework:admin')
-        testImplementation project(':jweb-framework:test')
-    }
-}
-
-project(':jweb-cms:page-og-meta-web') {
-    apply from: file("${rootDir}/gradle/module.gradle")
-
-    dependencies {
-        implementation project(':jweb-framework:web')
-        api project(':jweb-cms:page-web')
-        testImplementation project(':jweb-framework:test')
-        testImplementation project(':jweb-cms:page-service')
-    }
-}
-
-project(':jweb-cms:page-share-baidu-web') {
-    apply from: file("${rootDir}/gradle/module.gradle")
-
-    dependencies {
-        implementation project(':jweb-framework:web')
-        api project(':jweb-cms:page-web')
-        testImplementation project(':jweb-framework:test')
-        testImplementation project(':jweb-cms:page-service')
-    }
-}
-
-project(':jweb-cms:page-share-addthis-web') {
-    apply from: file("${rootDir}/gradle/module.gradle")
-
-    dependencies {
-        implementation project(':jweb-framework:web')
-        api project(':jweb-cms:page-web')
-        testImplementation project(':jweb-framework:test')
-        testImplementation project(':jweb-cms:page-service')
-    }
-}
-
-project(':jweb-cms:page-tracking-baidu-web') {
-    apply from: file("${rootDir}/gradle/module.gradle")
-
-    dependencies {
-        implementation project(':jweb-framework:web')
-        testImplementation project(':jweb-framework:test')
-    }
-}
-
-project(':jweb-cms:page-tracking-ga-web') {
-    apply from: file("${rootDir}/gradle/module.gradle")
-
-    dependencies {
-        implementation project(':jweb-framework:web')
-        testImplementation project(':jweb-framework:test')
-    }
-}
 
 project(':jweb-cms:comment-service-api') {
     apply from: file("${rootDir}/gradle/module.gradle")
@@ -700,7 +544,6 @@ project(':jweb-cms:comment-service') {
         implementation project(':jweb-framework:database')
         implementation project(':jweb-framework:message')
         api project(':jweb-cms:page-service-api')
-        api project(':jweb-cms:post-service-api')
         api project(':jweb-cms:comment-service-api')
         testImplementation project(':jweb-framework:test')
     }
@@ -729,61 +572,6 @@ project(':jweb-cms:comment-admin') {
     }
 }
 
-project(':jweb-cms:geo-service-api') {
-    apply from: file("${rootDir}/gradle/module.gradle")
-
-    dependencies {
-        api project(':jweb-framework:service')
-        testImplementation project(':jweb-framework:test')
-    }
-}
-
-project(':jweb-cms:geo-service') {
-    apply from: file("${rootDir}/gradle/module.gradle")
-
-    dependencies {
-        api project(':jweb-cms:geo-service-api')
-        api project(':jweb-framework:service')
-        implementation(group: 'com.maxmind.geoip2', name: 'geoip2', version: '2.12.0') {
-            exclude group: "com.fasterxml.jackson.core"
-        }
-
-        testImplementation project(':jweb-framework:test')
-    }
-}
-
-project(':jweb-cms:page-rating-service-api') {
-    apply from: file("${rootDir}/gradle/module.gradle")
-
-    dependencies {
-        api project(':jweb-framework:service')
-        testImplementation project(':jweb-framework:test')
-    }
-}
-
-project(':jweb-cms:page-rating-service') {
-    apply from: file("${rootDir}/gradle/module.gradle")
-
-    dependencies {
-        api project(':jweb-cms:page-rating-service-api')
-        implementation project(':jweb-framework:service')
-        implementation project(':jweb-framework:database')
-        testImplementation project(':jweb-framework:test')
-    }
-}
-
-project(':jweb-cms:page-rating-web') {
-    apply from: file("${rootDir}/gradle/module.gradle")
-
-    dependencies {
-        implementation project(':jweb-cms:page-rating-service-api')
-        implementation project(':jweb-cms:page-service-api')
-        implementation project(':jweb-cms:post-service-api')
-        implementation project(':jweb-cms:page-web')
-        implementation project(':jweb-framework:web')
-        testImplementation project(':jweb-framework:test')
-    }
-}
 
 project(':jweb-main') {
     apply from: file("${rootDir}/gradle/app.gradle")
@@ -797,8 +585,6 @@ project(':jweb-main') {
         compile project(':jweb-cms:page-service')
         compile project(':jweb-cms:page-web')
         compile project(':jweb-cms:page-admin')
-        compile project(':jweb-cms:post-service')
-        compile project(':jweb-cms:post-admin')
         compile project(':jweb-cms:user-service')
         compile project(':jweb-cms:user-web')
         compile project(':jweb-cms:user-admin')

@@ -1,6 +1,6 @@
 package app.jweb.page.web.service;
 
-import app.jweb.post.api.keyword.KeywordResponse;
+import app.jweb.page.api.keyword.KeywordResponse;
 import com.google.common.base.Strings;
 
 import java.util.Map;

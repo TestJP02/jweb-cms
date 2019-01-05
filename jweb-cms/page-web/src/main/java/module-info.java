@@ -4,7 +4,6 @@
 module app.jweb.page.web {
     requires app.jweb.web;
     requires app.jweb.page.api;
-    requires app.jweb.post.api;
     requires app.jweb.cache;
     requires app.jweb.message;
 

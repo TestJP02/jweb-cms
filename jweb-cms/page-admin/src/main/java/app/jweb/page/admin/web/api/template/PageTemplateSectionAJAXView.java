@@ -1,7 +1,7 @@
 package app.jweb.page.admin.web.api.template;
 
 import app.jweb.page.admin.web.api.component.PageComponentAJAXView;
-import app.jweb.page.api.template.TemplateSectionWidthView;
+import app.jweb.page.api.page.PageSectionWidthView;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
@@ -22,7 +22,7 @@ public class PageTemplateSectionAJAXView {
     @XmlElement(name = "children")
     public List<PageTemplateSectionAJAXView> children;
     @XmlElement(name = "widths")
-    public List<TemplateSectionWidthView> widths;
+    public List<PageSectionWidthView> widths;
     @XmlElement(name = "wrapper")
     public Boolean wrapper;
 }

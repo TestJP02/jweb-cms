@@ -1,8 +1,8 @@
 package app.jweb.page.web.service;
 
 import app.jweb.cache.Cache;
-import app.jweb.post.api.PostCategoryWebService;
-import app.jweb.post.api.category.CategoryResponse;
+import app.jweb.page.api.PageCategoryWebService;
+import app.jweb.page.api.category.CategoryResponse;
 
 import javax.inject.Inject;
 import java.util.Optional;
@@ -14,7 +14,7 @@ public class CategoryCacheService {
     @Inject
     Cache<CategoryResponse> cache;
     @Inject
-    PostCategoryWebService postCategoryWebService;
+    PageCategoryWebService postCategoryWebService;
 
     public Optional<CategoryResponse> findByPath(String path) {
         String cacheKey = path;

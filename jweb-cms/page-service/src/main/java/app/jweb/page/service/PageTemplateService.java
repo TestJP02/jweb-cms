@@ -3,13 +3,13 @@ package app.jweb.page.service;
 import app.jweb.database.Query;
 import app.jweb.database.Repository;
 import app.jweb.message.MessagePublisher;
-import app.jweb.page.api.template.BatchCreateTemplateRequest;
-import app.jweb.page.api.template.CreateTemplateRequest;
-import app.jweb.page.api.template.TemplateChangedMessage;
-import app.jweb.page.api.template.TemplateQuery;
-import app.jweb.page.api.template.TemplateSectionView;
-import app.jweb.page.api.template.TemplateStatus;
-import app.jweb.page.api.template.UpdateTemplateRequest;
+import app.jweb.page.api.page.BatchCreatePageRequest;
+import app.jweb.page.api.page.CreatePageRequest;
+import app.jweb.page.api.page.PageChangedMessage;
+import app.jweb.page.api.page.PageQuery;
+import app.jweb.page.api.page.PageSectionView;
+import app.jweb.page.api.page.PageStatus;
+import app.jweb.page.api.page.UpdatePageRequest;
 import app.jweb.page.domain.PageTemplate;
 import app.jweb.util.JSON;
 import app.jweb.util.collection.QueryResponse;
@@ -34,7 +34,7 @@ public class PageTemplateService {
     @Inject
     Repository<PageTemplate> repository;
     @Inject
-    MessagePublisher<TemplateChangedMessage> publisher;
+    MessagePublisher<PageChangedMessage> publisher;
 
     public PageTemplate get(String id) {
         return repository.get(id);
@@ -48,18 +48,18 @@ public class PageTemplateService {
         return repository.query("SELECT t FROM PageTemplate t WHERE t.path=?0", path).findOne();
     }
 
-    public QueryResponse<PageTemplate> find(TemplateQuery templateQuery) {
+    public QueryResponse<PageTemplate> find(PageQuery pageQuery) {
         Query<PageTemplate> query = repository.query("SELECT t FROM PageTemplate t WHERE 1=1");
         int index = 0;
-        if (!Strings.isNullOrEmpty(templateQuery.templatePath)) {
-            query.append("AND t.path LIKE ?" + index++, "%" + templateQuery.templatePath + "%");
+        if (!Strings.isNullOrEmpty(pageQuery.templatePath)) {
+            query.append("AND t.path LIKE ?" + index++, "%" + pageQuery.templatePath + "%");
         }
-        if (templateQuery.status != null) {
-            query.append("AND t.status=?" + index, templateQuery.status);
+        if (pageQuery.status != null) {
+            query.append("AND t.status=?" + index, pageQuery.status);
         }
-        query.limit(templateQuery.page, templateQuery.limit);
-        if (templateQuery.sortingField != null) {
-            query.sort("t." + templateQuery.sortingField, templateQuery.desc);
+        query.limit(pageQuery.page, pageQuery.limit);
+        if (pageQuery.sortingField != null) {
+            query.sort("t." + pageQuery.sortingField, pageQuery.desc);
         } else {
             query.sort("t.updatedTime", true);
         }
@@ -67,7 +67,7 @@ public class PageTemplateService {
     }
 
     @Transactional
-    public PageTemplate create(CreateTemplateRequest request) {
+    public PageTemplate create(CreatePageRequest request) {
         Optional<PageTemplate> templateOptional = findByTemplatePath(request.templatePath);
         if (templateOptional.isPresent()) {
             PageTemplate template = templateOptional.get();
@@ -96,7 +96,7 @@ public class PageTemplateService {
         pageTemplate.updatedTime = OffsetDateTime.now();
         pageTemplate.createdBy = request.requestBy;
         pageTemplate.updatedBy = request.requestBy;
-        pageTemplate.status = TemplateStatus.ACTIVE;
+        pageTemplate.status = PageStatus.ACTIVE;
         repository.insert(pageTemplate);
 
         notifyChangedMessage(pageTemplate);
@@ -105,9 +105,9 @@ public class PageTemplateService {
     }
 
     @Transactional
-    public void batchCreate(BatchCreateTemplateRequest request) {
+    public void batchCreate(BatchCreatePageRequest request) {
         List<PageTemplate> templates = Lists.newArrayList();
-        for (BatchCreateTemplateRequest.TemplateView template : request.templates) {
+        for (BatchCreatePageRequest.TemplateView template : request.templates) {
             Optional<PageTemplate> templateOptional = findByTemplatePath(template.templatePath);
             if (!templateOptional.isPresent()) {
                 PageTemplate pageTemplate = new PageTemplate();
@@ -124,7 +124,7 @@ public class PageTemplateService {
                 pageTemplate.updatedTime = OffsetDateTime.now();
                 pageTemplate.createdBy = template.requestBy;
                 pageTemplate.updatedBy = template.requestBy;
-                pageTemplate.status = TemplateStatus.ACTIVE;
+                pageTemplate.status = PageStatus.ACTIVE;
                 templates.add(pageTemplate);
             }
         }
@@ -132,7 +132,7 @@ public class PageTemplateService {
     }
 
     @Transactional
-    public PageTemplate update(String id, UpdateTemplateRequest request) {
+    public PageTemplate update(String id, UpdatePageRequest request) {
         PageTemplate pageTemplate = get(id);
         pageTemplate.path = request.path;
         pageTemplate.templatePath = request.templatePath;
@@ -151,7 +151,7 @@ public class PageTemplateService {
     }
 
     private void notifyChangedMessage(PageTemplate template) {
-        TemplateChangedMessage message = new TemplateChangedMessage();
+        PageChangedMessage message = new PageChangedMessage();
         message.id = template.id;
         message.userId = template.userId;
         message.path = template.path;
@@ -160,7 +160,7 @@ public class PageTemplateService {
         message.description = template.description;
         message.tags = template.tags == null ? ImmutableList.of() : Splitter.on(';').splitToList(template.tags);
         message.type = template.type;
-        message.sections = template.sections == null ? null : JSON.fromJSON(template.sections, Types.generic(List.class, TemplateSectionView.class));
+        message.sections = template.sections == null ? null : JSON.fromJSON(template.sections, Types.generic(List.class, PageSectionView.class));
         message.status = template.status;
         message.createdTime = OffsetDateTime.now();
         message.createdBy = template.createdBy;
@@ -172,10 +172,10 @@ public class PageTemplateService {
     @Transactional
     public void delete(String id, String requestBy) {
         PageTemplate pageTemplate = repository.get(id);
-        if (pageTemplate.status == TemplateStatus.INACTIVE) {
+        if (pageTemplate.status == PageStatus.INACTIVE) {
             repository.delete(id);
         } else {
-            pageTemplate.status = TemplateStatus.INACTIVE;
+            pageTemplate.status = PageStatus.INACTIVE;
             pageTemplate.updatedTime = OffsetDateTime.now();
             pageTemplate.updatedBy = requestBy;
             repository.update(id, pageTemplate);

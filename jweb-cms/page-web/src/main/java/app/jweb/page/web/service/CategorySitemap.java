@@ -1,8 +1,8 @@
 package app.jweb.page.web.service;
 
-import app.jweb.post.api.PostCategoryWebService;
-import app.jweb.post.api.category.CategoryQuery;
-import app.jweb.post.api.category.CategoryResponse;
+import app.jweb.page.api.PageCategoryWebService;
+import app.jweb.page.api.category.CategoryQuery;
+import app.jweb.page.api.category.CategoryResponse;
 import app.jweb.util.collection.QueryResponse;
 import app.jweb.web.Sitemap;
 import app.jweb.web.WebLink;
@@ -15,7 +15,7 @@ import java.util.Iterator;
  */
 public class CategorySitemap implements Sitemap {
     @Inject
-    PostCategoryWebService categoryWebService;
+    PageCategoryWebService categoryWebService;
 
     @Override
     public long totalLinks() {
@@ -31,11 +31,11 @@ public class CategorySitemap implements Sitemap {
     }
 
     static class CategoryIterator implements Iterator<WebLink> {
-        private final PostCategoryWebService categoryWebService;
+        private final PageCategoryWebService categoryWebService;
         Iterator<CategoryResponse> iterator;
         private int page = 1;
 
-        CategoryIterator(PostCategoryWebService categoryWebService) {
+        CategoryIterator(PageCategoryWebService categoryWebService) {
             this.categoryWebService = categoryWebService;
         }
 

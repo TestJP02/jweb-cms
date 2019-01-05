@@ -1,6 +1,6 @@
 package app.jweb.page.admin.web.api.template;
 
-import app.jweb.page.api.template.TemplateStatus;
+import app.jweb.page.api.page.PageStatus;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
@@ -27,5 +27,5 @@ public class PageTemplateAJAXQuery {
     public String sortingField;
 
     @XmlElement(name = "status")
-    public TemplateStatus status;
+    public PageStatus status;
 }

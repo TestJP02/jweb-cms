@@ -2,7 +2,7 @@ package app.jweb.user.web.web;
 
 import app.jweb.App;
 import app.jweb.page.web.AbstractPageController;
-import app.jweb.page.web.PostInfo;
+import app.jweb.page.web.PageInfo;
 import app.jweb.user.api.OauthUserWebService;
 import app.jweb.user.api.oauth.OauthLoginRequest;
 import app.jweb.user.api.oauth.OauthLoginResponse;
@@ -68,13 +68,13 @@ public class UserController extends AbstractPageController {
     public Response login() {
         Map<String, Object> bindings = Maps.newHashMap();
         String title = messageBundle.get("user.login", clientInfo.language()).orElse("Login");
-        PostInfo page = PostInfo.builder()
+        PageInfo page = PageInfo.builder()
             .setTitle(title)
             .setDescription(title)
             .setTemplatePath("template/login.html")
             .build();
 
-        return post(page, bindings);
+        return page(page, bindings);
     }
 
     @Path("/login/{provider}")
@@ -140,13 +140,13 @@ public class UserController extends AbstractPageController {
         }
 
         String title = messageBundle.get("user.register", clientInfo.language()).orElse("Register");
-        PostInfo page = PostInfo.builder()
+        PageInfo page = PageInfo.builder()
             .setTitle(title)
             .setDescription(title)
             .setTemplatePath("template/register.html")
             .build();
 
-        return post(page, bindings);
+        return page(page, bindings);
     }
 
     @Path("/password/reset")
@@ -155,13 +155,13 @@ public class UserController extends AbstractPageController {
         Map<String, Object> bindings = Maps.newHashMap();
         bindings.put("baseURL", app.baseURL());
         String title = messageBundle.get("user.resetPassword", clientInfo.language()).orElse("Reset Password");
-        PostInfo page = PostInfo.builder()
+        PageInfo page = PageInfo.builder()
             .setTitle(title)
             .setDescription(title)
             .setTemplatePath("template/reset-password.html")
             .build();
 
-        return post(page, bindings);
+        return page(page, bindings);
     }
 
     @Path("/password/forget")
@@ -170,13 +170,13 @@ public class UserController extends AbstractPageController {
         Map<String, Object> bindings = Maps.newHashMap();
         bindings.put("baseURL", app.baseURL());
         String title = messageBundle.get("user.forgetPassword", clientInfo.language()).orElse("Forget Password");
-        PostInfo page = PostInfo.builder()
+        PageInfo page = PageInfo.builder()
             .setTitle(title)
             .setTemplatePath("template/forget-password.html")
             .setDescription(title)
             .build();
 
-        return post(page, bindings);
+        return page(page, bindings);
     }
 
     private OauthResponse auth(Provider provider, String oauthVerifier) {

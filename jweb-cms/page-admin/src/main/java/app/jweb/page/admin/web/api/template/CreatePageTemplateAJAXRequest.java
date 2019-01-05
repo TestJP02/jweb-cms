@@ -1,6 +1,6 @@
 package app.jweb.page.admin.web.api.template;
 
-import app.jweb.page.api.template.TemplateSectionView;
+import app.jweb.page.api.page.PageSectionView;
 
 import javax.validation.constraints.NotNull;
 import javax.xml.bind.annotation.XmlAccessType;
@@ -26,5 +26,5 @@ public class CreatePageTemplateAJAXRequest {
     @XmlElement(name = "tags")
     public List<String> tags;
     @XmlElement(name = "sections")
-    public List<TemplateSectionView> sections;
+    public List<PageSectionView> sections;
 }

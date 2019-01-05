@@ -1,7 +1,8 @@
 package app.jweb.page.web.service;
 
-import app.jweb.post.api.PostKeywordWebService;
-import app.jweb.post.api.keyword.KeywordResponse;
+
+import app.jweb.page.api.PageKeywordWebService;
+import app.jweb.page.api.keyword.KeywordResponse;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import org.slf4j.Logger;
@@ -17,10 +18,10 @@ import java.util.concurrent.atomic.AtomicInteger;
  * @author chi
  */
 public class KeywordService {
-    PostKeywordWebService postKeywordWebService;
+    PageKeywordWebService postKeywordWebService;
     volatile KeywordTrie trie;
 
-    public KeywordService setPostKeywordWebService(PostKeywordWebService postKeywordWebService) {
+    public KeywordService setPageKeywordWebService(PageKeywordWebService postKeywordWebService) {
         this.postKeywordWebService = postKeywordWebService;
         return this;
     }

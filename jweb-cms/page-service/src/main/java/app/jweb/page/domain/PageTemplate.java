@@ -1,8 +1,8 @@
 package app.jweb.page.domain;
 
 
-import app.jweb.page.api.template.TemplateStatus;
-import app.jweb.page.api.template.TemplateType;
+import app.jweb.page.api.page.PageStatus;
+import app.jweb.page.api.page.PageType;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -42,14 +42,14 @@ public class PageTemplate {
 
     @Column(name = "type", length = 32)
     @Enumerated(EnumType.STRING)
-    public TemplateType type;
+    public PageType type;
 
     @Column(name = "sections", columnDefinition = "text")
     public String sections;
 
     @Column(name = "status", length = 16)
     @Enumerated(EnumType.STRING)
-    public TemplateStatus status;
+    public PageStatus status;
 
     @Column(name = "created_time")
     public OffsetDateTime createdTime;

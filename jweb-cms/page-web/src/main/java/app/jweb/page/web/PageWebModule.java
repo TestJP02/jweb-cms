@@ -7,50 +7,34 @@ import app.jweb.cache.CacheOptions;
 import app.jweb.message.MessageConfig;
 import app.jweb.message.MessageModule;
 import app.jweb.page.api.PageComponentWebService;
+import app.jweb.page.api.PageKeywordWebService;
 import app.jweb.page.api.PageSavedComponentWebService;
-import app.jweb.page.api.PageTemplateWebService;
+import app.jweb.page.api.PageWebService;
+import app.jweb.page.api.category.CategoryCreatedMessage;
+import app.jweb.page.api.category.CategoryDeletedMessage;
+import app.jweb.page.api.category.CategoryResponse;
+import app.jweb.page.api.category.CategoryUpdatedMessage;
 import app.jweb.page.api.component.CreateComponentRequest;
 import app.jweb.page.api.component.SavedComponentChangedMessage;
-import app.jweb.page.api.template.BatchCreateTemplateRequest;
-import app.jweb.page.api.template.TemplateChangedMessage;
-import app.jweb.page.api.template.TemplateResponse;
-import app.jweb.page.api.template.TemplateType;
+import app.jweb.page.api.keyword.KeywordChangedMessage;
+import app.jweb.page.api.page.BatchCreatePageRequest;
+import app.jweb.page.api.page.PageChangedMessage;
+import app.jweb.page.api.page.PageResponse;
+import app.jweb.page.api.page.PageType;
 import app.jweb.page.api.variable.VariableChangedMessage;
 import app.jweb.page.web.service.CategoryCacheService;
 import app.jweb.page.web.service.CategorySitemap;
 import app.jweb.page.web.service.HtmlComponentTemplateRepository;
-import app.jweb.page.web.service.HtmlContentEngine;
 import app.jweb.page.web.service.KeywordService;
-import app.jweb.page.web.service.MarkdownContentEngine;
 import app.jweb.page.web.service.PageSitemap;
 import app.jweb.page.web.service.PageTemplateRepository;
 import app.jweb.page.web.service.PageTemplateResourceConverter;
-import app.jweb.page.web.service.PostService;
 import app.jweb.page.web.service.TemplateCacheService;
 import app.jweb.page.web.service.VariableCacheService;
-import app.jweb.page.web.service.component.AuthorComponent;
-import app.jweb.page.web.service.component.BannerComponent;
-import app.jweb.page.web.service.component.BreadcrumbComponent;
-import app.jweb.page.web.service.component.CategoryListComponent;
-import app.jweb.page.web.service.component.CategoryPostListComponent;
-import app.jweb.page.web.service.component.CategoryTreeComponent;
-import app.jweb.page.web.service.component.ContentTableComponent;
-import app.jweb.page.web.service.component.FooterComponent;
-import app.jweb.page.web.service.component.HeaderComponent;
-import app.jweb.page.web.service.component.PopularPostListComponent;
-import app.jweb.page.web.service.component.PostCardComponent;
-import app.jweb.page.web.service.component.PostComponent;
 import app.jweb.page.web.service.component.PostLinkListComponent;
 import app.jweb.page.web.service.component.PostListComponent;
-import app.jweb.page.web.service.component.PostNavigationComponent;
 import app.jweb.page.web.service.component.PostPaginationComponent;
-import app.jweb.page.web.service.component.RecentPostListComponent;
-import app.jweb.page.web.service.component.RelatedPostListComponent;
 import app.jweb.page.web.service.component.SavedComponent;
-import app.jweb.page.web.service.component.TagCloudComponent;
-import app.jweb.page.web.service.component.TagPostListComponent;
-import app.jweb.page.web.service.component.TrendingPostListComponent;
-import app.jweb.page.web.service.component.UserPostLinkListComponent;
 import app.jweb.page.web.service.message.CategoryCreatedMessageHandler;
 import app.jweb.page.web.service.message.CategoryDeletedMessageHandler;
 import app.jweb.page.web.service.message.CategoryUpdatedMessageHandler;
@@ -60,15 +44,6 @@ import app.jweb.page.web.service.message.TemplateChangedMessageHandler;
 import app.jweb.page.web.service.message.VariableChangedMessageHandler;
 import app.jweb.page.web.web.IndexController;
 import app.jweb.page.web.web.PageController;
-import app.jweb.page.web.web.TagController;
-import app.jweb.post.api.PostKeywordWebService;
-import app.jweb.post.api.category.CategoryCreatedMessage;
-import app.jweb.post.api.category.CategoryDeletedMessage;
-import app.jweb.post.api.category.CategoryResponse;
-import app.jweb.post.api.category.CategoryUpdatedMessage;
-import app.jweb.post.api.content.PostContentResponse;
-import app.jweb.post.api.keyword.KeywordChangedMessage;
-import app.jweb.post.api.post.PostResponse;
 import app.jweb.resource.Resource;
 import app.jweb.resource.ResourceRepository;
 import app.jweb.template.Component;
@@ -93,16 +68,9 @@ public class PageWebModule extends AbstractWebModule {
         message("conf/messages/page-web");
 
         CacheConfig cacheConfig = module(CacheModule.class);
-        cacheConfig.create(PostResponse.class, new CacheOptions());
         cacheConfig.create(CategoryResponse.class, new CacheOptions());
         cacheConfig.create(VariableCacheService.VariableWrapper.class, new CacheOptions());
-        cacheConfig.create(PostContentResponse.class, new CacheOptions());
-        cacheConfig.create(TemplateResponse.class, new CacheOptions());
-
-        PostService postService = requestInjection(new PostService());
-        postService.add("markdown", requestInjection(new MarkdownContentEngine()));
-        postService.add("html", requestInjection(new HtmlContentEngine()));
-        bind(PostService.class).toInstance(postService);
+        cacheConfig.create(PageResponse.class, new CacheOptions());
 
         bind(CategoryCacheService.class);
         bind(VariableCacheService.class);
@@ -118,29 +86,29 @@ public class PageWebModule extends AbstractWebModule {
         web().addComponent(requestInjection(new PostLinkListComponent()));
         web().addComponent(requestInjection(new PostLinkListComponent()));
 
-        web().addComponent(requestInjection(new AuthorComponent()));
-        web().addComponent(requestInjection(new BannerComponent()));
-        web().addComponent(requestInjection(new BreadcrumbComponent()));
-        web().addComponent(requestInjection(new CategoryPostListComponent()));
-        web().addComponent(requestInjection(new RecentPostListComponent()));
-        web().addComponent(requestInjection(new PostComponent()));
-        web().addComponent(requestInjection(new PostCardComponent()));
-        web().addComponent(requestInjection(new ContentTableComponent()));
-        web().addComponent(requestInjection(new FooterComponent()));
-        web().addComponent(requestInjection(new HeaderComponent()));
-        web().addComponent(requestInjection(new PostNavigationComponent()));
-        web().addComponent(requestInjection(new RelatedPostListComponent()));
-        web().addComponent(requestInjection(new CategoryTreeComponent()));
-        web().addComponent(requestInjection(new TagCloudComponent()));
-        web().addComponent(requestInjection(new TagPostListComponent()));
-        web().addComponent(requestInjection(new PopularPostListComponent()));
-        web().addComponent(requestInjection(new TrendingPostListComponent()));
-        web().addComponent(requestInjection(new UserPostLinkListComponent()));
-        web().addComponent(requestInjection(new CategoryListComponent()));
+//        web().addComponent(requestInjection(new AuthorComponent()));
+//        web().addComponent(requestInjection(new BannerComponent()));
+//        web().addComponent(requestInjection(new BreadcrumbComponent()));
+//        web().addComponent(requestInjection(new CategoryPostListComponent()));
+//        web().addComponent(requestInjection(new RecentPostListComponent()));
+//        web().addComponent(requestInjection(new PostComponent()));
+//        web().addComponent(requestInjection(new PostCardComponent()));
+//        web().addComponent(requestInjection(new ContentTableComponent()));
+//        web().addComponent(requestInjection(new FooterComponent()));
+//        web().addComponent(requestInjection(new HeaderComponent()));
+//        web().addComponent(requestInjection(new CategoryTreeComponent()));
+//        web().addComponent(requestInjection(new TagPostListComponent()));
+//        web().addComponent(requestInjection(new TrendingPostListComponent()));
+//        web().addComponent(requestInjection(new CategoryListComponent()));
         web().addComponent(requestInjection(new PostPaginationComponent()));
+//        web().addComponent(requestInjection(new PostNavigationComponent()));
+//        web().addComponent(requestInjection(new RelatedPostListComponent()));
+//        web().addComponent(requestInjection(new TagCloudComponent()));
+//        web().addComponent(requestInjection(new PopularPostListComponent()));
+//        web().addComponent(requestInjection(new UserPostLinkListComponent()));
 
         MessageConfig messageConfig = module(MessageModule.class);
-        messageConfig.listen(TemplateChangedMessage.class, requestInjection(new TemplateChangedMessageHandler()));
+        messageConfig.listen(PageChangedMessage.class, requestInjection(new TemplateChangedMessageHandler()));
         messageConfig.listen(VariableChangedMessage.class, requestInjection(new VariableChangedMessageHandler()));
         messageConfig.listen(SavedComponentChangedMessage.class, requestInjection(new SavedComponentChangedMessageHandler()));
         messageConfig.listen(CategoryCreatedMessage.class, requestInjection(new CategoryCreatedMessageHandler()));
@@ -150,7 +118,6 @@ public class PageWebModule extends AbstractWebModule {
 
         web().controller(PageController.class);
         web().controller(IndexController.class);
-        web().controller(TagController.class);
 
         web().addSiteMap(requestInjection(new PageSitemap()));
         web().addSiteMap(requestInjection(new CategorySitemap()));
@@ -160,7 +127,7 @@ public class PageWebModule extends AbstractWebModule {
 
     public void start() {
         require(KeywordService.class)
-            .setPostKeywordWebService(require(PostKeywordWebService.class))
+            .setPageKeywordWebService(require(PageKeywordWebService.class))
             .start();
         initTemplates();
         initComponents();
@@ -168,9 +135,9 @@ public class PageWebModule extends AbstractWebModule {
 
     private void initTemplates() {
         WebRoot webRoot = require(WebRoot.class);
-        PageTemplateWebService pageTemplateWebService = require(PageTemplateWebService.class);
+        PageWebService pageWebService = require(PageWebService.class);
 
-        BatchCreateTemplateRequest request = new BatchCreateTemplateRequest();
+        BatchCreatePageRequest request = new BatchCreatePageRequest();
         request.templates = Lists.newArrayList();
         Set<String> visited = Sets.newHashSet();
         for (ResourceRepository repository : webRoot.repositories()) {
@@ -178,16 +145,16 @@ public class PageWebModule extends AbstractWebModule {
             for (Resource resource : resources) {
                 if (!visited.contains(resource.path())) {
                     visited.add(resource.path());
-                    BatchCreateTemplateRequest.TemplateView templateView = new BatchCreateTemplateRequest.TemplateView();
+                    BatchCreatePageRequest.TemplateView templateView = new BatchCreatePageRequest.TemplateView();
                     templateView.templatePath = resource.path();
                     templateView.title = resource.path();
-                    templateView.type = TemplateType.DEFAULT;
+                    templateView.type = PageType.DEFAULT;
                     templateView.requestBy = "SYS";
                     request.templates.add(templateView);
                 }
             }
         }
-        pageTemplateWebService.batchCreate(request);
+        pageWebService.batchCreate(request);
     }
 
     private void initComponents() {
@@ -195,7 +162,7 @@ public class PageWebModule extends AbstractWebModule {
         PageComponentWebService pageComponentWebService = require(PageComponentWebService.class);
         List<CreateComponentRequest> request = Lists.newArrayList();
         for (Component component : templateEngine.components()) {
-            if (component instanceof AbstractPostComponent) {
+            if (component instanceof AbstractPageComponent) {
                 CreateComponentRequest createComponentRequest = new CreateComponentRequest();
                 createComponentRequest.name = component.name();
                 createComponentRequest.attributes = attributes(component.attributes());

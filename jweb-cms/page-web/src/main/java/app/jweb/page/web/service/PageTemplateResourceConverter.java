@@ -4,9 +4,9 @@ import app.jweb.ApplicationException;
 import app.jweb.page.api.PageSavedComponentWebService;
 import app.jweb.page.api.component.PostComponentView;
 import app.jweb.page.api.component.SavedComponentResponse;
-import app.jweb.page.api.template.TemplateResponse;
-import app.jweb.page.api.template.TemplateSectionView;
-import app.jweb.page.api.template.TemplateSectionWidthView;
+import app.jweb.page.api.page.PageResponse;
+import app.jweb.page.api.page.PageSectionView;
+import app.jweb.page.api.page.PageSectionWidthView;
 import app.jweb.resource.Resource;
 import app.jweb.resource.StringResource;
 import app.jweb.template.Component;
@@ -33,9 +33,9 @@ public class PageTemplateResourceConverter {
     @Inject
     WebRoot webRoot;
 
-    public Resource convert(TemplateResponse template) {
+    public Resource convert(PageResponse template) {
         StringBuilder b = new StringBuilder();
-        for (TemplateSectionView section : template.sections) {
+        for (PageSectionView section : template.sections) {
             appendSection(section, b, 0);
         }
         Resource resource = webRoot.get(TEMPLATE_PATH).orElseThrow(() -> new ApplicationException("missing template, path={}", TEMPLATE_PATH));
@@ -46,7 +46,7 @@ public class PageTemplateResourceConverter {
     }
 
     @SuppressWarnings("checkstyle:NestedIfDepth")
-    private void appendSection(TemplateSectionView section, StringBuilder b, int depth) {
+    private void appendSection(PageSectionView section, StringBuilder b, int depth) {
         if (hasComponents(section)) {
             if (depth == 0) {
                 b.append("<div class=\"container");
@@ -75,7 +75,7 @@ public class PageTemplateResourceConverter {
             if (gridNeeded) {
                 b.append("<div class=\"row\">");
             }
-            for (TemplateSectionView child : section.children) {
+            for (PageSectionView child : section.children) {
                 if (gridNeeded) {
                     b.append("<div class=\"").append(classNames(child.widths, section.widths)).append("\">");
                 }
@@ -93,12 +93,12 @@ public class PageTemplateResourceConverter {
         }
     }
 
-    private boolean hasComponents(TemplateSectionView templateSectionView) {
-        return templateSectionView.children == null || templateSectionView.children.isEmpty();
+    private boolean hasComponents(PageSectionView pageSectionView) {
+        return pageSectionView.children == null || pageSectionView.children.isEmpty();
     }
 
-    private boolean isGridNeeded(List<TemplateSectionView> sections, List<TemplateSectionWidthView> parentWidths) {
-        for (TemplateSectionView section : sections) {
+    private boolean isGridNeeded(List<PageSectionView> sections, List<PageSectionWidthView> parentWidths) {
+        for (PageSectionView section : sections) {
             if (!isSameWidth(section.widths, parentWidths)) {
                 return true;
             }
@@ -106,10 +106,10 @@ public class PageTemplateResourceConverter {
         return false;
     }
 
-    private boolean isSameWidth(List<TemplateSectionWidthView> widths, List<TemplateSectionWidthView> parentWidths) {
+    private boolean isSameWidth(List<PageSectionWidthView> widths, List<PageSectionWidthView> parentWidths) {
         for (int i = 0; i < widths.size(); i++) {
-            TemplateSectionWidthView width = widths.get(i);
-            TemplateSectionWidthView parentWidth = parentWidths.get(i);
+            PageSectionWidthView width = widths.get(i);
+            PageSectionWidthView parentWidth = parentWidths.get(i);
             if (!Objects.equals(width.width, parentWidth.width)) {
                 return false;
             }
@@ -117,17 +117,17 @@ public class PageTemplateResourceConverter {
         return true;
     }
 
-    private String classNames(List<TemplateSectionWidthView> widths, List<TemplateSectionWidthView> parentWidths) {
+    private String classNames(List<PageSectionWidthView> widths, List<PageSectionWidthView> parentWidths) {
         if (widths == null) {
             return "";
         }
 
         StringBuilder b = new StringBuilder();
         for (int i = 0; i < widths.size(); i++) {
-            TemplateSectionWidthView width = widths.get(i);
+            PageSectionWidthView width = widths.get(i);
 
             if (width.width != null) {
-                TemplateSectionWidthView parentWidth = parentWidths.get(i);
+                PageSectionWidthView parentWidth = parentWidths.get(i);
                 int columns = columns(width.width, parentWidth.width);
                 switch (width.screenWidth) {
                     case "xs":

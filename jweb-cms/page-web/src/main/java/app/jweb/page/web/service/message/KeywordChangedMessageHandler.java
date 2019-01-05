@@ -1,9 +1,9 @@
 package app.jweb.page.web.service.message;
 
 import app.jweb.message.MessageHandler;
+import app.jweb.page.api.keyword.KeywordChangedMessage;
+import app.jweb.page.api.keyword.KeywordResponse;
 import app.jweb.page.web.service.KeywordService;
-import app.jweb.post.api.keyword.KeywordChangedMessage;
-import app.jweb.post.api.keyword.KeywordResponse;
 import com.google.common.collect.Sets;
 
 import javax.inject.Inject;

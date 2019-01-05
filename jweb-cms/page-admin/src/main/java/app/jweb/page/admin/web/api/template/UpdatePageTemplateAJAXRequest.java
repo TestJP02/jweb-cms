@@ -1,7 +1,7 @@
 package app.jweb.page.admin.web.api.template;
 
-import app.jweb.page.api.template.TemplateSectionView;
-import app.jweb.page.api.template.TemplateType;
+import app.jweb.page.api.page.PageSectionView;
+import app.jweb.page.api.page.PageType;
 
 import javax.validation.constraints.NotNull;
 import javax.xml.bind.annotation.XmlAccessType;
@@ -31,9 +31,9 @@ public class UpdatePageTemplateAJAXRequest {
     public List<String> tags;
 
     @XmlElement(name = "type")
-    public TemplateType type;
+    public PageType type;
 
     @XmlElement(name = "sections")
-    public List<TemplateSectionView> sections;
+    public List<PageSectionView> sections;
 
 }

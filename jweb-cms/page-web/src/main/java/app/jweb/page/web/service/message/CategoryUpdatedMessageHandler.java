@@ -1,8 +1,8 @@
 package app.jweb.page.web.service.message;
 
 import app.jweb.message.MessageHandler;
+import app.jweb.page.api.category.CategoryUpdatedMessage;
 import app.jweb.page.web.service.CategoryCacheService;
-import app.jweb.post.api.category.CategoryUpdatedMessage;
 
 import javax.inject.Inject;
 

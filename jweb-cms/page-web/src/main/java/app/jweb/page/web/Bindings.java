@@ -1,9 +1,7 @@
 package app.jweb.page.web;
 
 import app.jweb.web.AppInfo;
-import app.jweb.web.ClientInfo;
 import app.jweb.web.RequestInfo;
-import app.jweb.web.UserInfo;
 
 import java.util.Collection;
 import java.util.Map;
@@ -23,16 +21,8 @@ public class Bindings implements Map<String, Object> {
         return (AppInfo) bindings.get("app");
     }
 
-    public UserInfo user() {
-        return (UserInfo) bindings.get("user");
-    }
-
-    public ClientInfo client() {
-        return (ClientInfo) bindings.get("client");
-    }
-
-    public PostInfo post() {
-        return (PostInfo) bindings.get("page");
+    public PageInfo page() {
+        return (PageInfo) bindings.get("page");
     }
 
     public RequestInfo request() {

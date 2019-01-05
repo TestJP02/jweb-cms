@@ -1,7 +1,7 @@
 package app.jweb.page.admin.web.api.template;
 
-import app.jweb.page.api.template.TemplateStatus;
-import app.jweb.page.api.template.TemplateType;
+import app.jweb.page.api.page.PageStatus;
+import app.jweb.page.api.page.PageType;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
@@ -31,7 +31,7 @@ public class PageTemplateAJAXResponse {
     @XmlElement(name = "sections")
     public List<PageTemplateSectionAJAXView> sections;
     @XmlElement(name = "status")
-    public TemplateStatus status;
+    public PageStatus status;
     @XmlElement(name = "createdBy")
     public String createdBy;
     @XmlElement(name = "createdTime")
@@ -41,5 +41,5 @@ public class PageTemplateAJAXResponse {
     @XmlElement(name = "updatedTime")
     public OffsetDateTime updatedTime;
     @XmlElement(name = "type")
-    public TemplateType type;
+    public PageType type;
 }

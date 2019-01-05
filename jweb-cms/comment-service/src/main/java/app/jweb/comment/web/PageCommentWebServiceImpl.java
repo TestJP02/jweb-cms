@@ -14,9 +14,6 @@ import app.jweb.comment.domain.PageComment;
 import app.jweb.comment.domain.PageCommentVoteTracking;
 import app.jweb.comment.service.PageCommentService;
 import app.jweb.comment.service.PageCommentVoteTrackingService;
-import app.jweb.message.MessagePublisher;
-import app.jweb.post.api.post.CommentCreatedMessage;
-import app.jweb.post.api.post.CommentDeletedMessage;
 import app.jweb.util.collection.QueryResponse;
 
 import javax.inject.Inject;
@@ -30,10 +27,6 @@ public class PageCommentWebServiceImpl implements PageCommentWebService {
     PageCommentService pageCommentService;
     @Inject
     PageCommentVoteTrackingService pageCommentVoteTrackingService;
-    @Inject
-    MessagePublisher<CommentCreatedMessage> commentCreatedMessageMessagePublisher;
-    @Inject
-    MessagePublisher<CommentDeletedMessage> commentDeletedMessageMessagePublisher;
 
     @Override
     public CommentResponse get(String id) {
@@ -53,12 +46,6 @@ public class PageCommentWebServiceImpl implements PageCommentWebService {
     @Override
     public CommentResponse create(CreateCommentRequest request) {
         PageComment comment = pageCommentService.create(request);
-
-        CommentCreatedMessage message = new CommentCreatedMessage();
-        message.postId = request.pageId;
-        message.commentId = comment.id;
-        commentCreatedMessageMessagePublisher.publish(message);
-
         return response(comment);
     }
 
@@ -81,24 +68,12 @@ public class PageCommentWebServiceImpl implements PageCommentWebService {
     public void delete(String id, String requestBy) {
         PageComment comment = pageCommentService.get(id);
         pageCommentService.delete(id, requestBy);
-
-        CommentDeletedMessage message = new CommentDeletedMessage();
-        message.postId = comment.pageId;
-        message.commentId = comment.id;
-        commentDeletedMessageMessagePublisher.publish(message);
     }
 
     @Override
     public void batchDelete(BatchDeleteCommentRequest request) {
         List<PageComment> comments = pageCommentService.batchGet(request.ids);
         request.ids.forEach(id -> pageCommentService.delete(id, request.requestBy));
-
-        for (PageComment comment : comments) {
-            CommentDeletedMessage message = new CommentDeletedMessage();
-            message.postId = comment.pageId;
-            message.commentId = comment.id;
-            commentDeletedMessageMessagePublisher.publish(message);
-        }
     }
 
     private CommentResponse response(PageComment comment) {
