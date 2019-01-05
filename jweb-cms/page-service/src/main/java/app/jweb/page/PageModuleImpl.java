@@ -18,6 +18,7 @@ import app.jweb.page.api.category.CategoryUpdatedMessage;
 import app.jweb.page.api.component.SavedComponentChangedMessage;
 import app.jweb.page.api.keyword.KeywordChangedMessage;
 import app.jweb.page.api.page.PageChangedMessage;
+import app.jweb.page.api.statistics.PageVisitedMessage;
 import app.jweb.page.api.variable.VariableChangedMessage;
 import app.jweb.page.domain.PageCategory;
 import app.jweb.page.domain.PageKeyword;
@@ -56,6 +57,7 @@ public class PageModuleImpl extends PageModule {
         messageConfig.createTopic(CategoryCreatedMessage.class, new TopicOptions());
         messageConfig.createTopic(CategoryUpdatedMessage.class, new TopicOptions());
         messageConfig.createTopic(CategoryDeletedMessage.class, new TopicOptions());
+        messageConfig.createTopic(PageVisitedMessage.class, new TopicOptions());
 
         DatabaseConfig databaseConfig = module(DatabaseModule.class);
         databaseConfig

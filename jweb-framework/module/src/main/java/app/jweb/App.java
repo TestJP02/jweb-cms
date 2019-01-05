@@ -367,8 +367,8 @@ public class App extends Application {
                             break;
                         }
                     }
-                    if (ready) {
-                        visited.add(successor);
+                    if (ready && !visited.contains(successor)) {
+                        readyModules.add(successor);
                     }
                 }
             }

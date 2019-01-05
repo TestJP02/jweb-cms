@@ -7,6 +7,9 @@ import TemplateUpdate from "./template.update";
 import ComponentList from "./page.component.list";
 import ComponentUpdate from "./page.component.update";
 
+import CategoryList from "./page.category.list";
+import CategoryUpdate from "./page.category.update";
+
 import PageDownloadComponent from "./component.download";
 import PageImageComponent from "./component.image";
 import PageCodeComponent from "./component.code";
@@ -32,6 +35,7 @@ import PageBannerSingleComponent from "./component.banner-single";
 import PageBreadcrumbComponent from "./component.breadcrumb";
 import PageCategoryTreeComponent from "./component.categoryTree";
 import PageCardComponent from "./component.card";
+
 
 import "./page-edit.css";
 import "./page.css";
@@ -176,6 +180,9 @@ export default function Page() {
             <Route path="/admin/page/variable/list" component={VariableList}/>
             <Route path="/admin/page/variable/create" component={VariableUpdate}/>
             <Route path="/admin/page/variable/:id/update" component={VariableUpdate}/>
+            <Route path="/admin/page/category/list" component={CategoryList}/>
+            <Route path="/admin/page/category/create/parent/:parentId" component={CategoryUpdate}/>
+            <Route path="/admin/page/category/:id/update" component={CategoryUpdate}/>
             <Route path="/admin/page/template/list" component={TemplateList}/>
             <Route path="/admin/page/template/create" component={TemplateUpdate}/>
             <Route path="/admin/page/template/:id/update" component={TemplateUpdate}/>

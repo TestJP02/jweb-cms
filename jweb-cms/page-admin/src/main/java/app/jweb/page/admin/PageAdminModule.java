@@ -4,6 +4,7 @@ package app.jweb.page.admin;
 import app.jweb.admin.AbstractAdminModule;
 import app.jweb.admin.ConsoleBundle;
 import app.jweb.admin.ConsoleMenu;
+import app.jweb.page.admin.web.api.PageCategoryAdminController;
 import app.jweb.page.admin.web.api.PageComponentAdminController;
 import app.jweb.page.admin.web.api.PageSavedComponentAdminController;
 import app.jweb.page.admin.web.api.PageTemplateAdminController;
@@ -25,6 +26,7 @@ public class PageAdminModule extends AbstractAdminModule {
         admin().controller(PageTemplateAdminController.class);
         admin().controller(PageSavedComponentAdminController.class);
         admin().controller(PageComponentAdminController.class);
+        admin().controller(PageCategoryAdminController.class);
 
         admin().install(scriptModule());
     }
@@ -33,6 +35,16 @@ public class PageAdminModule extends AbstractAdminModule {
         ConsoleMenu menu = new ConsoleMenu();
         menu.displayName = "page.menu";
         menu.path = "/admin/page/";
+
+        ConsoleMenu.ConsoleMenuItem layoutItem = new ConsoleMenu.ConsoleMenuItem();
+        layoutItem.displayName = "page.templates";
+        layoutItem.path = "/admin/page/template/list";
+        layoutItem.rolesAllowed = Lists.newArrayList("page.LIST");
+
+        ConsoleMenu.ConsoleMenuItem categoryItem = new ConsoleMenu.ConsoleMenuItem();
+        categoryItem.displayName = "page.category";
+        categoryItem.path = "/admin/page/category/list";
+        categoryItem.rolesAllowed = Lists.newArrayList("page.LIST");
 
         ConsoleMenu.ConsoleMenuItem componentItem = new ConsoleMenu.ConsoleMenuItem();
         componentItem.displayName = "page.components";
@@ -44,12 +56,7 @@ public class PageAdminModule extends AbstractAdminModule {
         variableItem.path = "/admin/page/variable/list";
         variableItem.rolesAllowed = Lists.newArrayList("page.LIST");
 
-        ConsoleMenu.ConsoleMenuItem layoutItem = new ConsoleMenu.ConsoleMenuItem();
-        layoutItem.displayName = "page.templates";
-        layoutItem.path = "/admin/page/template/list";
-        layoutItem.rolesAllowed = Lists.newArrayList("page.LIST");
-
-        menu.children = Lists.newArrayList(componentItem, variableItem, layoutItem);
+        menu.children = Lists.newArrayList(layoutItem, categoryItem, componentItem, variableItem);
 
         ConsoleBundle consoleModule = new ConsoleBundle();
         consoleModule.name = "pageBundle";
