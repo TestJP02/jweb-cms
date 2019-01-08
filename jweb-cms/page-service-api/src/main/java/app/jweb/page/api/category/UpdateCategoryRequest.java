@@ -16,14 +16,8 @@ public class UpdateCategoryRequest {
     @XmlElement(name = "parentId")
     public String parentId;
     @NotNull
-    @XmlElement(name = "path")
-    public String path;
-    @NotNull
     @XmlElement(name = "displayName")
     public String displayName;
-    @NotNull
-    @XmlElement(name = "templatePath")
-    public String templatePath;
     @NotNull
     @XmlElement(name = "keywords")
     public List<String> keywords;

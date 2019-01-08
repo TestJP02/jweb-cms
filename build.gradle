@@ -540,11 +540,11 @@ project(':jweb-cms:comment-service') {
     apply from: file("${rootDir}/gradle/module.gradle")
 
     dependencies {
+        api project(':jweb-cms:comment-service-api')
+        api project(':jweb-cms:page-service-api')
         implementation project(':jweb-framework:service')
         implementation project(':jweb-framework:database')
         implementation project(':jweb-framework:message')
-        api project(':jweb-cms:page-service-api')
-        api project(':jweb-cms:comment-service-api')
         testImplementation project(':jweb-framework:test')
     }
 }

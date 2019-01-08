@@ -1,7 +1,7 @@
 import React from "react";
 import PropTypes from "prop-types";
 import {Link} from "react-router-dom";
-import {Breadcrumb, Button, Card, Form, Input, Layout, Message as notification} from "element-react";
+import {Breadcrumb, Button, Cascader, Form, Input, Layout, Message as notification} from "element-react";
 import LayoutGridSection from "./template.grid";
 
 const i18n = window.i18n;
@@ -10,6 +10,8 @@ export default class TemplateUpdate extends React.Component {
         super(props);
         this.state = {
             layoutOptions: [],
+            categoryCascade: [],
+            categoryList: [],
             path: null,
             form: {
                 id: props.match.params.id,
@@ -61,8 +63,64 @@ export default class TemplateUpdate extends React.Component {
                 this.setState({
                     templatePath: templatePath,
                     form: response
+                }, () => {
+                    this.setCategory();
                 });
             });
+    }
+
+    setCategory() {
+        fetch("/admin/api/page/category/tree", {
+            method: "PUT",
+            body: JSON.stringify({})
+        }).then((response) => {
+            const cascade = response;
+            this.trimCascade(cascade);
+            const form = this.state.form;
+            const categorySelected = [];
+            if (form.categoryId) {
+                this.traversal(cascade, form.categoryId, categorySelected);
+            }
+            this.setState({
+                categoryList: cascade,
+                categorySelected: categorySelected,
+                form: form
+            });
+        });
+    }
+
+    trimCascade(cascade) {
+        for (let i = 0; i < cascade.length; i += 1) {
+            if (cascade[i].children.length === 0) {
+                cascade[i].children = null;
+            } else {
+                this.trimCascade(cascade[i].children);
+            }
+        }
+    }
+
+    traversal(list, id, categorySelected) {
+        for (let i = 0; i < list.length; i += 1) {
+            const node = list[i];
+            if (node.id === id) {
+                categorySelected.push(id);
+                return true;
+            }
+            if (node.children !== null && this.traversal(node.children, id, categorySelected)) {
+                categorySelected.splice(0, 0, node.id);
+                return true;
+            }
+        }
+        return false;
+    }
+
+    selectCategory(value) {
+        const form = this.state.form;
+        form.categoryId = value[value.length - 1];
+        this.setState({
+            form: form,
+            categorySelected: value
+        });
     }
 
     cancel() {
@@ -146,55 +204,50 @@ export default class TemplateUpdate extends React.Component {
                 </div>
                 <div className="body">
                     <Layout.Row className="el-form-group" gutter="30">
-                        <Layout.Col span="16">
+                        <Layout.Col span="18">
                             {this.state.form.sections &&
-                            <Card>
-                                <LayoutGridSection sections={this.state.form.sections}
-                                    onChange={(sections) => {
-                                        const form = this.state.form;
-                                        form.sections = sections;
-                                        this.setState({form});
-                                    }}/>
-                            </Card>
+                            <LayoutGridSection sections={this.state.form.sections}
+                                onChange={(sections) => {
+                                    const form = this.state.form;
+                                    form.sections = sections;
+                                    this.setState({form});
+                                }}/>
                             }
                         </Layout.Col>
-                        <Layout.Col span="8">
+                        <Layout.Col span="6">
                             <Form className="page-update-form" ref={(form) => {
                                 this.form = form;
                             }} model={this.state.form} labelPosition="top" rules={this.state.formRules}>
-                                <Layout.Row className="el-form-group" gutter="80">
-                                    <Layout.Col span="24">
-                                        <Form.Item label={i18n.t("page.title")} prop="title">
-                                            <Input value={this.state.form.title} onChange={val => this.formChange("title", val)}/>
-                                        </Form.Item>
-                                    </Layout.Col>
-                                    <Layout.Col span="24">
-                                        <Form.Item label={i18n.t("page.description")} prop="description">
-                                            <Input type="textarea" value={this.state.form.description} onChange={val => this.formChange("description", val)} autosize={{
-                                                minRows: 3,
-                                                maxRows: 5
-                                            }}/>
-                                        </Form.Item>
-                                    </Layout.Col>
-                                    <Layout.Col span="24">
-                                        <Form.Item label={i18n.t("page.tags")} prop="tags">
-                                            <ElementUI.TagList list={this.state.form.tags} onChange={val => this.formChange("tags", val)}/>
-                                        </Form.Item>
-                                    </Layout.Col>
-                                    <Layout.Col span="24">
-                                        <Form.Item label={i18n.t("page.path")} prop="path">
-                                            <Input value={this.state.form.path} onChange={val => this.formChange("path", val)}/>
-                                        </Form.Item>
-                                    </Layout.Col>
-                                    <Layout.Col span="24">
-                                        <Form.Item label={i18n.t("page.templatePath")} prop="templatePath">
-                                            {
-                                                this.state.form.id ? <Input value={this.state.templatePath} prepend="template/" append=".html" onChange={val => this.pathChange(val)} disabled/>
-                                                    : <Input value={this.state.templatePath} prepend="template/" append=".html" onChange={val => this.pathChange(val)}/>
-                                            }
-                                        </Form.Item>
-                                    </Layout.Col>
-                                </Layout.Row>
+                                <Form.Item label={i18n.t("page.category")} prop="categoryId" labelPosition="top">
+                                    <Cascader
+                                        options={this.state.categoryList ? this.state.categoryList : []}
+                                        value={this.state.categorySelected}
+                                        changeOnSelect={false}
+                                        onChange={value => this.selectCategory(value)}
+                                        props={{
+                                            value: "id",
+                                            label: "displayName"
+                                        }}
+                                        showAllLevels={true}
+                                        clearable={true}
+                                    />
+                                </Form.Item>
+                                <Form.Item label={i18n.t("page.path")} prop="path">
+                                    <Input value={this.state.form.path} onChange={val => this.formChange("path", val)}/>
+                                </Form.Item>
+
+                                <Form.Item label={i18n.t("page.title")} prop="title">
+                                    <Input value={this.state.form.title} onChange={val => this.formChange("title", val)}/>
+                                </Form.Item>
+                                <Form.Item label={i18n.t("page.description")} prop="description">
+                                    <Input type="textarea" value={this.state.form.description} onChange={val => this.formChange("description", val)} autosize={{
+                                        minRows: 3,
+                                        maxRows: 5
+                                    }}/>
+                                </Form.Item>
+                                <Form.Item label={i18n.t("page.tags")} prop="tags">
+                                    <ElementUI.TagList list={this.state.form.tags} onChange={val => this.formChange("tags", val)}/>
+                                </Form.Item>
                             </Form>
                         </Layout.Col>
                     </Layout.Row>

@@ -1,6 +1,9 @@
 package app.jweb.page.admin.web.api;
 
 
+import app.jweb.page.admin.web.api.category.CategoryAJAXResponse;
+import app.jweb.page.admin.web.api.category.CreateCategoryAJAXRequest;
+import app.jweb.page.admin.web.api.category.DeleteCategoryAJAXRequest;
 import app.jweb.page.api.PageCategoryWebService;
 import app.jweb.page.api.category.CategoryNodeResponse;
 import app.jweb.page.api.category.CategoryResponse;
@@ -8,11 +11,8 @@ import app.jweb.page.api.category.CategoryTreeQuery;
 import app.jweb.page.api.category.CreateCategoryRequest;
 import app.jweb.page.api.category.DeleteCategoryRequest;
 import app.jweb.page.api.category.UpdateCategoryRequest;
-import com.google.common.collect.Lists;
-import app.jweb.page.admin.web.api.category.CategoryAJAXResponse;
-import app.jweb.page.admin.web.api.category.CreateCategoryAJAXRequest;
-import app.jweb.page.admin.web.api.category.DeleteCategoryAJAXRequest;
 import app.jweb.web.UserInfo;
+import com.google.common.collect.Lists;
 
 import javax.annotation.security.RolesAllowed;
 import javax.inject.Inject;
@@ -89,9 +89,7 @@ public class PageCategoryAdminController {
     @POST
     public CategoryAJAXResponse create(CreateCategoryAJAXRequest createCategoryAJAXRequest) throws IOException {
         CreateCategoryRequest createCategoryRequest = new CreateCategoryRequest();
-        createCategoryRequest.templatePath = createCategoryAJAXRequest.templatePath;
         createCategoryRequest.parentId = createCategoryAJAXRequest.parentId;
-        createCategoryRequest.path = createCategoryAJAXRequest.path;
         createCategoryRequest.displayName = createCategoryAJAXRequest.displayName;
         createCategoryRequest.displayOrder = createCategoryAJAXRequest.displayOrder;
         createCategoryRequest.description = createCategoryAJAXRequest.description;
@@ -117,8 +115,6 @@ public class PageCategoryAdminController {
     public CategoryResponse update(@PathParam("id") String id, UpdateCategoryRequest ajaxRequest) throws IOException {
         UpdateCategoryRequest updateCategoryRequest = new UpdateCategoryRequest();
         updateCategoryRequest.parentId = ajaxRequest.parentId;
-        updateCategoryRequest.path = ajaxRequest.path;
-        updateCategoryRequest.templatePath = ajaxRequest.templatePath;
         updateCategoryRequest.displayName = ajaxRequest.displayName;
         updateCategoryRequest.description = ajaxRequest.description;
         updateCategoryRequest.displayOrder = ajaxRequest.displayOrder;
@@ -166,8 +162,6 @@ public class PageCategoryAdminController {
         CategoryAJAXResponse ajaxResponse = new CategoryAJAXResponse();
         ajaxResponse.id = response.id;
         ajaxResponse.parentId = response.parentId;
-        ajaxResponse.templatePath = response.templatePath;
-        ajaxResponse.path = response.path;
         ajaxResponse.displayName = response.displayName;
         ajaxResponse.keywords = response.keywords;
         ajaxResponse.displayOrder = response.displayOrder;

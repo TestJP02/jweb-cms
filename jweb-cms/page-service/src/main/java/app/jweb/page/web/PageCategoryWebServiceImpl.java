@@ -1,12 +1,6 @@
 package app.jweb.page.web;
 
 
-import com.google.common.base.Splitter;
-import com.google.common.base.Strings;
-import com.google.common.collect.ImmutableList;
-import com.google.common.collect.ImmutableMap;
-import com.google.common.collect.Lists;
-import com.google.common.collect.Maps;
 import app.jweb.page.api.PageCategoryWebService;
 import app.jweb.page.api.category.CategoryNodeResponse;
 import app.jweb.page.api.category.CategoryQuery;
@@ -19,12 +13,17 @@ import app.jweb.page.domain.PageCategory;
 import app.jweb.page.service.PageCategoryService;
 import app.jweb.util.JSON;
 import app.jweb.util.collection.QueryResponse;
+import com.google.common.base.Splitter;
+import com.google.common.base.Strings;
+import com.google.common.collect.ImmutableList;
+import com.google.common.collect.ImmutableMap;
+import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
 
 import javax.inject.Inject;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 /**
@@ -66,11 +65,6 @@ public class PageCategoryWebServiceImpl implements PageCategoryWebService {
     @Override
     public QueryResponse<CategoryResponse> find(CategoryQuery query) {
         return pageCategoryService.find(query).map(this::response);
-    }
-
-    @Override
-    public Optional<CategoryResponse> findByPath(String path) {
-        return pageCategoryService.findByPath(path).map(this::response);
     }
 
     @Override
@@ -158,8 +152,6 @@ public class PageCategoryWebServiceImpl implements PageCategoryWebService {
         response.id = pageCategory.id;
         response.parentId = pageCategory.parentId;
         response.parentIds = pageCategory.parentIds == null ? ImmutableList.of() : Splitter.on(";").splitToList(pageCategory.parentIds);
-        response.templatePath = pageCategory.templatePath;
-        response.path = pageCategory.path;
         response.level = pageCategory.level;
         response.displayName = pageCategory.displayName;
         response.description = pageCategory.description;
@@ -196,8 +188,6 @@ public class PageCategoryWebServiceImpl implements PageCategoryWebService {
         node.id = pageCategory.id;
         node.parentId = pageCategory.parentId;
         node.parentIds = pageCategory.parentIds == null ? Lists.newArrayList() : Splitter.on(";").splitToList(pageCategory.parentIds);
-        node.templatePath = pageCategory.templatePath;
-        node.path = pageCategory.path;
         node.level = pageCategory.level;
         node.description = pageCategory.description;
         node.imageURL = pageCategory.imageURL;

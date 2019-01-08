@@ -18,10 +18,6 @@ public class CategoryAJAXResponse {
     public String id;
     @XmlElement(name = "parentId")
     public String parentId;
-    @XmlElement(name = "templatePath")
-    public String templatePath;
-    @XmlElement(name = "path")
-    public String path;
     @XmlElement(name = "displayName")
     public String displayName;
     @XmlElement(name = "displayOrder")

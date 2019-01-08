@@ -1,8 +1,7 @@
 package app.jweb.page.api;
 
 
-import app.jweb.page.api.page.BatchCreatePageRequest;
-import app.jweb.page.api.page.BatchDeletePageRequest;
+import app.jweb.page.api.page.DeletePageRequest;
 import app.jweb.page.api.page.CreatePageRequest;
 import app.jweb.page.api.page.PageQuery;
 import app.jweb.page.api.page.PageResponse;
@@ -19,15 +18,11 @@ import java.util.Optional;
 /**
  * @author chi
  */
-@Path("/api/page/template")
+@Path("/api/page/")
 public interface PageWebService {
     @Path("/{id}")
     @GET
     PageResponse get(@PathParam("id") String id);
-
-    @Path("/template-path/{templatePath}")
-    @GET
-    Optional<PageResponse> findByTemplatePath(@PathParam("templatePath") String templatePath);
 
     @Path("/path/{path}")
     @GET
@@ -40,15 +35,11 @@ public interface PageWebService {
     @POST
     PageResponse create(CreatePageRequest request);
 
-    @Path("/batch-create")
-    @POST
-    void batchCreate(BatchCreatePageRequest request);
-
     @Path("/{id}")
     @PUT
     PageResponse update(@PathParam("id") String id, UpdatePageRequest request);
 
     @Path("/delete")
     @POST
-    void batchDelete(BatchDeletePageRequest request);
+    void delete(DeletePageRequest request);
 }

@@ -5,7 +5,7 @@ import com.google.common.collect.Maps;
 import app.jweb.file.api.FileRepository;
 import app.jweb.resource.Resource;
 import app.jweb.util.MediaTypes;
-import app.jweb.web.Template;
+import app.jweb.web.TemplateEntity;
 
 import javax.inject.Inject;
 import javax.ws.rs.GET;
@@ -53,7 +53,7 @@ public class FileController {
     public Response createDirectory(@QueryParam("path") String path) {
         Map<String, Object> bindings = Maps.newHashMap();
         bindings.put("path", path);
-        return Response.ok(new Template("/file/directory.create.html", bindings)).build();
+        return Response.ok(new TemplateEntity("/file/directory.create.html", bindings)).build();
     }
 
     private Response directory(String uriPath, String queryPath, String query) {
@@ -68,7 +68,7 @@ public class FileController {
         if (query != null) {
             bindings.put("query", query);
         }
-        return Response.ok(new Template("/file/file.html", bindings)).build();
+        return Response.ok(new TemplateEntity("/file/file.html", bindings)).build();
     }
 
     private boolean isNumeric(String str) {

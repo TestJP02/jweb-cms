@@ -1,7 +1,6 @@
 package app.jweb.page.web;
 
 import app.jweb.page.api.page.PageStatus;
-import app.jweb.page.web.service.PageInfoImpl;
 
 import java.time.OffsetDateTime;
 import java.util.List;
@@ -10,88 +9,36 @@ import java.util.Map;
 /**
  * @author chi
  */
-public interface PageInfo {
-    static Builder builder() {
-        return new PageInfoImpl();
-    }
+public class PageInfo {
+    public String id;
 
-    String id();
+    public String userId;
 
-    String userId();
+    public String categoryId;
 
-    String categoryId();
+    public String path;
 
-    String path();
+    public String title;
 
-    String templatePath();
+    public String description;
 
-    Integer version();
+    public List<String> tags;
 
-    String title();
+    public List<String> keywords;
 
-    String description();
+    public String imageURL;
 
-    String content();
+    public List<String> imageURLs;
 
-    List<String> tags();
+    public Map<String, String> fields;
 
-    List<String> keywords();
+    public PageStatus status;
 
-    String imageURL();
+    public OffsetDateTime createdTime;
 
-    List<String> imageURLs();
+    public OffsetDateTime updatedTime;
 
-    Map<String, String> fields();
+    public String createdBy;
 
-    PageStatus status();
-
-    OffsetDateTime createdTime();
-
-    OffsetDateTime updatedTime();
-
-    String createdBy();
-
-    String updatedBy();
-
-    interface Builder {
-        PageInfo build();
-
-        Builder setId(String id);
-
-        Builder setUserId(String userId);
-
-        Builder setCategoryId(String categoryId);
-
-        Builder setPath(String path);
-
-        Builder setTemplatePath(String templatePath);
-
-        Builder setVersion(Integer version);
-
-        Builder setTitle(String title);
-
-        Builder setDescription(String description);
-
-        Builder setContent(String content);
-
-        Builder setTags(List<String> tags);
-
-        Builder setKeywords(List<String> keywords);
-
-        Builder setImageURL(String imageURL);
-
-        Builder setImageURLs(List<String> imageURLs);
-
-        Builder setFields(Map<String, String> fields);
-
-        Builder setStatus(PageStatus status);
-
-        Builder setCreatedTime(OffsetDateTime createdTime);
-
-        Builder setCreatedBy(String createdBy);
-
-        Builder setUpdatedTime(OffsetDateTime updatedTime);
-
-        Builder setUpdatedBy(String updatedBy);
-    }
+    public String updatedBy;
 }

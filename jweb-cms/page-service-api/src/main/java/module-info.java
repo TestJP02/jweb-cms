@@ -11,4 +11,5 @@ module app.jweb.page.api {
     exports app.jweb.page.api.keyword;
     exports app.jweb.page.api.category;
     exports app.jweb.page.api.statistics;
+    exports app.jweb.page.api.template;
 }

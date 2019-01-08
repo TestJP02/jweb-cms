@@ -7,7 +7,7 @@ import app.jweb.comment.api.comment.CommentTreeQuery;
 import app.jweb.comment.web.CommentWebOptions;
 import app.jweb.comment.web.service.UserCommentNodeService;
 import app.jweb.page.web.AbstractPageComponent;
-import app.jweb.page.web.Bindings;
+import app.jweb.page.web.PageBindings;
 import app.jweb.page.web.PageInfo;
 import app.jweb.template.Attributes;
 import app.jweb.template.Children;
@@ -35,11 +35,11 @@ public class CommentListComponent extends AbstractPageComponent {
     }
 
     @Override
-    public void output(Bindings bindings, Attributes attributes, Children children, OutputStream out) throws IOException {
+    public void output(PageBindings bindings, Attributes attributes, Children children, OutputStream out) throws IOException {
         PageInfo page = bindings.page();
 
         CommentTreeQuery query = new CommentTreeQuery();
-        query.pageId = page.id();
+        query.pageId = page.id;
         query.limit = 20;
         query.status = CommentStatus.ACTIVE;
         QueryResponse<CommentNodeResponse> comments = pageCommentWebService.tree(query);

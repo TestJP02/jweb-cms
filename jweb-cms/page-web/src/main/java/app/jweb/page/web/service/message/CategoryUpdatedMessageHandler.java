@@ -15,6 +15,6 @@ public class CategoryUpdatedMessageHandler implements MessageHandler<CategoryUpd
 
     @Override
     public void handle(CategoryUpdatedMessage message) {
-        categoryService.reload(message.path);
+        categoryService.reload(message.id);
     }
 }

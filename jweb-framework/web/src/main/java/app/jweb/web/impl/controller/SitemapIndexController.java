@@ -31,7 +31,7 @@ public class SitemapIndexController extends AbstractWebController {
             sitemapService.build();
             sitemap = sitemapService.sitemap(resourcePath);
             if (!sitemap.isPresent()) {
-                throw new NotFoundWebException(appInfo, requestInfo, clientInfo, uriInfo.getPath());
+                throw new NotFoundWebException(uriInfo.getPath());
             }
         }
         return Response.ok(sitemap.get())

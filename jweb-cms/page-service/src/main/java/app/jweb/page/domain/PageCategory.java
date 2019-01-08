@@ -27,14 +27,8 @@ public class PageCategory {
     @Column(name = "parent_ids", length = 512)
     public String parentIds;
 
-    @Column(name = "template_path")
-    public String templatePath;
-
     @Column(name = "level")
     public Integer level;
-
-    @Column(name = "path", length = 511)
-    public String path;
 
     @Column(name = "display_name", length = 127)
     public String displayName;

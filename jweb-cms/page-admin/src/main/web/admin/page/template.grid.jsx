@@ -1,5 +1,5 @@
 import React from "react";
-import {Button, MessageBox} from "element-react";
+import {Button, Card, Layout, MessageBox} from "element-react";
 import ReactGridLayout from "react-grid-layout";
 import PropTypes from "prop-types";
 import uuid from "react-native-uuid";
@@ -10,7 +10,7 @@ import "../../node_modules/react-grid-layout/css/styles.css";
 import "../../node_modules/react-resizable/css/styles.css";
 
 import "./template.grid.css";
-import ComponentSelector from "./component-selector";
+import ComponentMenu from "./component-menu";
 
 const bundle = window.app.bundle("pageBundle");
 
@@ -487,76 +487,86 @@ export default class LayoutGridEditor extends React.Component {
 
     render() {
         return (
-            <div ref={dom => !this.state.dom && this.setState({dom})}>
-                <div className="page-grid-editor__component-container">
-                    {this.state.editingComponentId && this.state.editingSectionId &&
-                    this.editComponent()
-                    }
-                </div>
-                <div className="page-grid-editor__header">
-                    <ComponentSelector componentOptions={this.state.componentOptions}
-                        onSelect={component => this.selectComponent(component)}/>
-                </div>
-                {
-                    this.state.componentOptions.length &&
-                    <ReactGridLayout
-                        verticalCompact={true}
-                        className="layout"
-                        layout={this.state.layout}
-                        containerPadding={[0, 10]}
-                        rowHeight={this.state.rowHeight}
-                        width={this.state.dom && this.state.dom.offsetWidth}
-                        onLayoutChange={layout => this.onLayoutChange(layout)}
-                        onResize={(layout, oldItem, newItem) => this.onResize(layout, oldItem, newItem)}
-                        onResizeStop={() => this.onResizeStop()}
-                        cols={12}>
-                        {this.state.layout.map((section, index) =>
-                            <div key={section.i} className="page-grid-editor__grid">
-                                {this.state.currentI === section.i &&
-                                <div className="page-grid-editor__ruler" data-width={this.state.currentWidth}></div>
-                                }
-                                <div ref={(dom) => {
-                                    if (!dom) {
-                                        return;
+            <Layout.Row className="el-form-group" gutter="30">
+                <Layout.Col span="6">
+                    <div className="page-grid-editor__header">
+                        <ComponentMenu componentOptions={this.state.componentOptions}
+                            onSelect={component => this.selectComponent(component)}/>
+                    </div>
+                </Layout.Col>
+                <Layout.Col span="18">
+                    <div className="page-grid-editor__body">
+                        <Card>
+                            <div ref={dom => !this.state.dom && this.setState({dom})}>
+                                <div className="page-grid-editor__component-container">
+                                    {this.state.editingComponentId && this.state.editingSectionId &&
+                                    this.editComponent()
                                     }
-                                    if (!this.state.domHeights[section.i]) {
-                                        const domHeights = this.state.domHeights;
-                                        domHeights[section.i] = dom.offsetHeight;
-                                        this.setState({domHeights});
-                                    }
-                                }}
-                                >
-                                    <div className="page-grid-editor__grid-header">
-                                        <span className="page-grid-editor__grid-header-title">{this.componentDisplayName(this.state.layoutComponents[section.i][0])}</span>
-                                        {this.isComponentEditable(this.state.layoutComponents[section.i][0].name) &&
-                                        <Button className="page-grid-editor__grid-operation" type="text" icon="edit"
-                                            onClick={() => {
-                                                this.setState({
-                                                    editingComponentId: this.state.layoutComponents[section.i][0].id,
-                                                    editingSectionId: section.i
-                                                });
-                                            }}></Button>
-                                        }
-                                        <Button className="page-grid-editor__grid-operation" type="text"
-                                            onClick={() => this.setState({updatingSectionId: section.i})}><i className="fa fa-gear"/></Button>
-                                        <Button className="page-grid-editor__grid-operation" type="text" icon="close"
-                                            onClick={() => this.removeSection(section.i)}></Button>
-                                    </div>
-                                    {this.state.layoutComponents[section.i] &&
-                                    this.state.layoutComponents[section.i][0] &&
-                                    this.renderComponent(this.state.layoutComponents[section.i][0], section)}
                                 </div>
+                                {
+                                    this.state.componentOptions.length &&
+                                    <ReactGridLayout
+                                        verticalCompact={true}
+                                        className="layout"
+                                        layout={this.state.layout}
+                                        containerPadding={[0, 10]}
+                                        rowHeight={this.state.rowHeight}
+                                        width={this.state.dom && this.state.dom.offsetWidth}
+                                        onLayoutChange={layout => this.onLayoutChange(layout)}
+                                        onResize={(layout, oldItem, newItem) => this.onResize(layout, oldItem, newItem)}
+                                        onResizeStop={() => this.onResizeStop()}
+                                        cols={12}>
+                                        {this.state.layout.map((section, index) =>
+                                            <div key={section.i} className="page-grid-editor__grid">
+                                                {this.state.currentI === section.i &&
+                                                <div className="page-grid-editor__ruler" data-width={this.state.currentWidth}></div>
+                                                }
+                                                <div ref={(dom) => {
+                                                    if (!dom) {
+                                                        return;
+                                                    }
+                                                    if (!this.state.domHeights[section.i]) {
+                                                        const domHeights = this.state.domHeights;
+                                                        domHeights[section.i] = dom.offsetHeight;
+                                                        this.setState({domHeights});
+                                                    }
+                                                }}
+                                                >
+                                                    <div className="page-grid-editor__grid-header">
+                                                        <span className="page-grid-editor__grid-header-title">{this.componentDisplayName(this.state.layoutComponents[section.i][0])}</span>
+                                                        {this.isComponentEditable(this.state.layoutComponents[section.i][0].name) &&
+                                                        <Button className="page-grid-editor__grid-operation" type="text" icon="edit"
+                                                            onClick={() => {
+                                                                this.setState({
+                                                                    editingComponentId: this.state.layoutComponents[section.i][0].id,
+                                                                    editingSectionId: section.i
+                                                                });
+                                                            }}></Button>
+                                                        }
+                                                        <Button className="page-grid-editor__grid-operation" type="text"
+                                                            onClick={() => this.setState({updatingSectionId: section.i})}><i className="fa fa-gear"/></Button>
+                                                        <Button className="page-grid-editor__grid-operation" type="text" icon="close"
+                                                            onClick={() => this.removeSection(section.i)}></Button>
+                                                    </div>
+                                                    {this.state.layoutComponents[section.i] &&
+                                                    this.state.layoutComponents[section.i][0] &&
+                                                    this.renderComponent(this.state.layoutComponents[section.i][0], section)}
+                                                </div>
+                                            </div>
+                                        )}
+                                    </ReactGridLayout>
+                                }
+                                {this.state.updatingSectionId &&
+                                <TemplateGridEditor section={this.getSection(this.state.updatingSectionId)}
+                                    onChange={section => this.updateSection(section)}
+                                    onCancel={() => this.cancelCreate()}
+                                    template={this.state.template}/>
+                                }
                             </div>
-                        )}
-                    </ReactGridLayout>
-                }
-                {this.state.updatingSectionId &&
-                <TemplateGridEditor section={this.getSection(this.state.updatingSectionId)}
-                    onChange={section => this.updateSection(section)}
-                    onCancel={() => this.cancelCreate()}
-                    template={this.state.template}/>
-                }
-            </div>
+                        </Card>
+                    </div>
+                </Layout.Col>
+            </Layout.Row>
         );
     }
 }

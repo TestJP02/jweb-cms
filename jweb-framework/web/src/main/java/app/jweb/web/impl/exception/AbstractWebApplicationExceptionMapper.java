@@ -35,9 +35,6 @@ public abstract class AbstractWebApplicationExceptionMapper<T extends WebExcepti
         if (template.isPresent()) {
             Map<String, Object> bindings = Maps.newHashMap();
             bindings.put("e", exception);
-            bindings.put("app", exception.app);
-            bindings.put("request", exception.request);
-            bindings.put("client", exception.client);
             bindings.put("page", null);
             ByteArrayOutputStream out = new ByteArrayOutputStream();
             try {

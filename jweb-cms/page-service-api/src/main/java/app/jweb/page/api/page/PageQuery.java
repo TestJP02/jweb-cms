@@ -9,10 +9,10 @@ import javax.xml.bind.annotation.XmlElement;
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 public class PageQuery {
-    @XmlElement(name = "templatePath")
-    public String templatePath;
-    @XmlElement(name = "path")
-    public String path;
+    @XmlElement(name = "query")
+    public String query;
+    @XmlElement(name = "categoryId")
+    public String categoryId;
     @XmlElement(name = "page")
     public Integer page = 1;
     @XmlElement(name = "limit")

@@ -1,14 +1,11 @@
 //package app.jweb.page.web.service.component;
 //
+//import app.jweb.page.api.PageCategoryWebService;
+//import app.jweb.page.api.category.CategoryNodeResponse;
+//import app.jweb.page.api.category.CategoryResponse;
 //import app.jweb.page.web.AbstractPageComponent;
 //import app.jweb.page.web.Bindings;
 //import app.jweb.page.web.PageInfo;
-//import app.jweb.post.api.PageCategoryWebService;
-//import app.jweb.post.api.PostWebService;
-//import app.jweb.post.api.category.CategoryNodeResponse;
-//import app.jweb.post.api.category.CategoryResponse;
-//import app.jweb.post.api.post.PostQuery;
-//import app.jweb.post.api.post.PostResponse;
 //import app.jweb.template.Attributes;
 //import app.jweb.template.BooleanAttribute;
 //import app.jweb.template.Children;

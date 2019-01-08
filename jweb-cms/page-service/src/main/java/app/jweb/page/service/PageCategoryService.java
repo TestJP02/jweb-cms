@@ -1,13 +1,6 @@
 package app.jweb.page.service;
 
 
-import app.jweb.page.domain.PageCategory;
-import com.google.common.base.Joiner;
-import com.google.common.base.Splitter;
-import com.google.common.base.Strings;
-import com.google.common.collect.ImmutableList;
-import com.google.common.collect.ImmutableMap;
-import com.google.common.collect.Lists;
 import app.jweb.database.Query;
 import app.jweb.database.Repository;
 import app.jweb.message.MessagePublisher;
@@ -19,9 +12,16 @@ import app.jweb.page.api.category.CategoryTreeQuery;
 import app.jweb.page.api.category.CategoryUpdatedMessage;
 import app.jweb.page.api.category.CreateCategoryRequest;
 import app.jweb.page.api.category.UpdateCategoryRequest;
+import app.jweb.page.domain.PageCategory;
 import app.jweb.util.JSON;
 import app.jweb.util.collection.QueryResponse;
 import app.jweb.util.exception.Exceptions;
+import com.google.common.base.Joiner;
+import com.google.common.base.Splitter;
+import com.google.common.base.Strings;
+import com.google.common.collect.ImmutableList;
+import com.google.common.collect.ImmutableMap;
+import com.google.common.collect.Lists;
 
 import javax.inject.Inject;
 import javax.transaction.Transactional;
@@ -109,7 +109,7 @@ public class PageCategoryService {
     public PageCategory create(CreateCategoryRequest request) {
         if (request.parentId != null) {
             Optional<PageCategory> category = findById(request.parentId);
-            if (!category.isPresent()) {
+            if (category.isEmpty()) {
                 throw Exceptions.badRequestException("parentId", "parent category doesn't exist");
             }
         }
@@ -125,8 +125,6 @@ public class PageCategoryService {
             pageCategory.level = 1;
         }
         pageCategory.fields = request.fields == null ? null : JSON.toJSON(request.fields);
-        pageCategory.templatePath = request.templatePath;
-        pageCategory.path = request.path;
         pageCategory.displayName = request.displayName;
         pageCategory.description = request.description;
         pageCategory.imageURL = request.imageURL;
@@ -175,8 +173,6 @@ public class PageCategoryService {
             pageCategory.parentIds = null;
             pageCategory.level = 1;
         }
-        pageCategory.path = request.path;
-        pageCategory.templatePath = request.templatePath;
         pageCategory.displayName = request.displayName;
         pageCategory.displayOrder = request.displayOrder;
         pageCategory.description = request.description;
@@ -201,8 +197,6 @@ public class PageCategoryService {
         message.id = pageCategory.id;
         message.parentId = pageCategory.parentId;
         message.parentIds = pageCategory.parentIds == null ? Lists.newArrayList() : Splitter.on(";").splitToList(pageCategory.parentIds);
-        message.templatePath = pageCategory.templatePath;
-        message.path = pageCategory.path;
         message.displayName = pageCategory.displayName;
         message.description = pageCategory.description;
         message.imageURL = pageCategory.imageURL;
@@ -228,8 +222,6 @@ public class PageCategoryService {
         message.id = pageCategory.id;
         message.parentId = pageCategory.parentId;
         message.parentIds = pageCategory.parentIds == null ? Lists.newArrayList() : Splitter.on(";").splitToList(pageCategory.parentIds);
-        message.templatePath = pageCategory.templatePath;
-        message.path = pageCategory.path;
         message.displayName = pageCategory.displayName;
         message.description = pageCategory.description;
         message.imageURL = pageCategory.imageURL;
@@ -255,8 +247,6 @@ public class PageCategoryService {
         message.id = pageCategory.id;
         message.parentId = pageCategory.parentId;
         message.parentIds = pageCategory.parentIds == null ? Lists.newArrayList() : Splitter.on(";").splitToList(pageCategory.parentIds);
-        message.templatePath = pageCategory.templatePath;
-        message.path = pageCategory.path;
         message.displayName = pageCategory.displayName;
         message.description = pageCategory.description;
         message.imageURL = pageCategory.imageURL;

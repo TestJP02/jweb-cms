@@ -17,12 +17,6 @@ public class CreateCategoryRequest {
     @XmlElement(name = "parentId")
     public String parentId;
     @NotNull
-    @XmlElement(name = "templatePath")
-    public String templatePath;
-    @NotNull
-    @XmlElement(name = "path")
-    public String path;
-    @NotNull
     @XmlElement(name = "displayName")
     public String displayName;
     @NotNull

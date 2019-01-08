@@ -1,9 +1,7 @@
 package app.jweb.admin.impl.web;
 
-import app.jweb.admin.ConsoleMenu;
-import com.google.common.collect.Lists;
-import com.google.common.collect.Maps;
 import app.jweb.App;
+import app.jweb.admin.ConsoleMenu;
 import app.jweb.admin.impl.service.Console;
 import app.jweb.admin.impl.service.ConsoleMessageBundle;
 import app.jweb.admin.impl.service.ConsoleMessageBundleBuilder;
@@ -11,7 +9,10 @@ import app.jweb.admin.impl.service.ConsoleScriptBuilder;
 import app.jweb.util.JSON;
 import app.jweb.util.i18n.MessageBundle;
 import app.jweb.web.AbstractWebController;
+import app.jweb.web.ClientInfo;
 import app.jweb.web.UserInfo;
+import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
 
 import javax.inject.Inject;
 import javax.ws.rs.GET;
@@ -32,6 +33,8 @@ public class AdminController extends AbstractWebController {
     Console console;
     @Inject
     UserInfo userInfo;
+    @Inject
+    ClientInfo clientInfo;
 
     @GET
     public Response index() {
@@ -44,7 +47,7 @@ public class AdminController extends AbstractWebController {
         HashMap<String, Object> bindings = Maps.newHashMap();
         bindings.put("baseURL", "/");
         bindings.put("script", script(clientInfo.language(), userInfo));
-        return template("admin/index.html", bindings);
+        return template("admin/index.html", bindings).build();
     }
 
     private String script(String locale, UserInfo userInfo) {

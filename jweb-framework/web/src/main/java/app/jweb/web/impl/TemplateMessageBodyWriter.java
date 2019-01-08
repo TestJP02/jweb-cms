@@ -1,7 +1,7 @@
 package app.jweb.web.impl;
 
 import app.jweb.template.TemplateEngine;
-import app.jweb.web.Template;
+import app.jweb.web.TemplateEntity;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -31,13 +31,13 @@ public class TemplateMessageBodyWriter implements MessageBodyWriter<Object> {
 
     @Override
     public boolean isWriteable(Class type, Type genericType, Annotation[] annotations, MediaType mediaType) {
-        return Template.class.isAssignableFrom(type);
+        return TemplateEntity.class.isAssignableFrom(type);
     }
 
     @Override
     @SuppressWarnings("unchecked")
     public void writeTo(Object o, Class type, Type genericType, Annotation[] annotations, MediaType mediaType, MultivaluedMap httpHeaders, OutputStream entityStream) throws IOException, WebApplicationException {
-        Template view = (Template) o;
+        TemplateEntity view = (TemplateEntity) o;
         app.jweb.template.Template template = templateEngine.template(view.path).orElseThrow(() -> new NotFoundException(String.format("missing template, path=%s", view.path)));
         template.output(view.bindings, entityStream);
 

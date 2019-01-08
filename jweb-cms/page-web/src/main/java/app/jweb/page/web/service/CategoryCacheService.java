@@ -14,29 +14,19 @@ public class CategoryCacheService {
     @Inject
     Cache<CategoryResponse> cache;
     @Inject
-    PageCategoryWebService postCategoryWebService;
-
-    public Optional<CategoryResponse> findByPath(String path) {
-        String cacheKey = path;
-        Optional<CategoryResponse> category = cache.get(cacheKey);
-        if (!category.isPresent()) {
-            category = postCategoryWebService.findByPath(path);
-            category.ifPresent(categoryVariableResponse -> cache.put(cacheKey, categoryVariableResponse));
-        }
-        return category;
-    }
+    PageCategoryWebService pageCategoryWebService;
 
     public CategoryResponse get(String id) {
         Optional<CategoryResponse> categoryOptional = cache.get(id);
         if (categoryOptional.isPresent()) {
             return categoryOptional.get();
         }
-        CategoryResponse category = postCategoryWebService.get(id);
+        CategoryResponse category = pageCategoryWebService.get(id);
         cache.put(id, category);
         return category;
     }
 
-    public void reload(String path) {
-        cache.delete(path);
+    public void reload(String id) {
+        cache.delete(id);
     }
 }

@@ -2,7 +2,6 @@ package app.jweb.user.web.web;
 
 import app.jweb.App;
 import app.jweb.page.web.AbstractPageController;
-import app.jweb.page.web.PageInfo;
 import app.jweb.user.api.OauthUserWebService;
 import app.jweb.user.api.oauth.OauthLoginRequest;
 import app.jweb.user.api.oauth.OauthLoginResponse;
@@ -16,6 +15,7 @@ import app.jweb.user.web.service.UserInfoContextProvider;
 import app.jweb.user.web.service.ValidationRules;
 import app.jweb.util.JSON;
 import app.jweb.util.i18n.MessageBundle;
+import app.jweb.web.ClientInfo;
 import app.jweb.web.Cookies;
 import app.jweb.web.SessionInfo;
 import com.github.scribejava.core.model.OAuth1RequestToken;
@@ -62,19 +62,13 @@ public class UserController extends AbstractPageController {
     OauthUserWebService oauthUserWebService;
     @Inject
     ContainerRequestContext requestContext;
+    @Inject
+    ClientInfo clientInfo;
 
     @Path("/login")
     @GET
     public Response login() {
-        Map<String, Object> bindings = Maps.newHashMap();
-        String title = messageBundle.get("user.login", clientInfo.language()).orElse("Login");
-        PageInfo page = PageInfo.builder()
-            .setTitle(title)
-            .setDescription(title)
-            .setTemplatePath("template/login.html")
-            .build();
-
-        return page(page, bindings);
+        return template("template/login.html").build();
     }
 
     @Path("/login/{provider}")
@@ -138,15 +132,7 @@ public class UserController extends AbstractPageController {
         } else {
             bindings.put("countDown", 0);
         }
-
-        String title = messageBundle.get("user.register", clientInfo.language()).orElse("Register");
-        PageInfo page = PageInfo.builder()
-            .setTitle(title)
-            .setDescription(title)
-            .setTemplatePath("template/register.html")
-            .build();
-
-        return page(page, bindings);
+        return template("template/register.html", bindings).build();
     }
 
     @Path("/password/reset")
@@ -154,14 +140,7 @@ public class UserController extends AbstractPageController {
     public Response resetPassword() {
         Map<String, Object> bindings = Maps.newHashMap();
         bindings.put("baseURL", app.baseURL());
-        String title = messageBundle.get("user.resetPassword", clientInfo.language()).orElse("Reset Password");
-        PageInfo page = PageInfo.builder()
-            .setTitle(title)
-            .setDescription(title)
-            .setTemplatePath("template/reset-password.html")
-            .build();
-
-        return page(page, bindings);
+        return template("template/reset-password.html", bindings).build();
     }
 
     @Path("/password/forget")
@@ -169,19 +148,12 @@ public class UserController extends AbstractPageController {
     public Response forgetPassword() {
         Map<String, Object> bindings = Maps.newHashMap();
         bindings.put("baseURL", app.baseURL());
-        String title = messageBundle.get("user.forgetPassword", clientInfo.language()).orElse("Forget Password");
-        PageInfo page = PageInfo.builder()
-            .setTitle(title)
-            .setTemplatePath("template/forget-password.html")
-            .setDescription(title)
-            .build();
-
-        return page(page, bindings);
+        return template("template/forget-password.html", bindings).build();
     }
 
     private OauthResponse auth(Provider provider, String oauthVerifier) {
         Optional<String> optional = sessionInfo.get(REQUEST_TOKEN_PREFIX + provider.name());
-        if (!optional.isPresent()) throw new NotFoundException("missing request token,provider=" + provider.name());
+        if (optional.isEmpty()) throw new NotFoundException("missing request token,provider=" + provider.name());
         RequestTokenModel model = JSON.fromJSON(optional.get(), RequestTokenModel.class);
         OAuth1RequestToken requestToken = new OAuth1RequestToken(model.token, model.tokenSecret, model.oauthCallbackConfirmed, model.rawResponse);
         return oauth10aService.auth(provider, oauthVerifier, requestToken);

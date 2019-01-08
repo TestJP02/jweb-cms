@@ -1,7 +1,7 @@
 package app.jweb.page.admin.web.api.template;
 
 import app.jweb.page.admin.web.api.component.PageComponentAJAXView;
-import app.jweb.page.api.page.PageSectionWidthView;
+import app.jweb.page.api.template.PageSectionWidthView;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;

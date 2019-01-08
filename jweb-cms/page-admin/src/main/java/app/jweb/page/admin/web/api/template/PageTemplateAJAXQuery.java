@@ -11,8 +11,8 @@ import javax.xml.bind.annotation.XmlElement;
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 public class PageTemplateAJAXQuery {
-    @XmlElement(name = "path")
-    public String path;
+    @XmlElement(name = "query")
+    public String query;
 
     @XmlElement(name = "page")
     public Integer page;

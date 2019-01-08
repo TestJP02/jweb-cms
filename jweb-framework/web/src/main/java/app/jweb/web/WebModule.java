@@ -6,7 +6,6 @@ import app.jweb.Configurable;
 import app.jweb.resource.ClasspathResourceRepository;
 import app.jweb.resource.FileResourceRepository;
 import app.jweb.template.TemplateEngine;
-import app.jweb.web.impl.AppInfoContextProvider;
 import app.jweb.web.impl.ClientInfoContextProvider;
 import app.jweb.web.impl.LocalSessionRepository;
 import app.jweb.web.impl.RedisSessionRepository;
@@ -102,7 +101,6 @@ public final class WebModule extends AbstractModule implements Configurable<WebC
 //        webConfig.bind(UserInfo.class, UserInfoContextProvider.class);
         webConfig.bind(ClientInfo.class, ClientInfoContextProvider.class);
         webConfig.bind(SessionInfo.class, SessionInfoContextProvider.class);
-        webConfig.bind(AppInfo.class, AppInfoContextProvider.class);
         webConfig.bind(RequestInfo.class, RequestInfoContextProvider.class);
 
         webConfig.bindResponseFilter(requestInjection(new WebFilter()));

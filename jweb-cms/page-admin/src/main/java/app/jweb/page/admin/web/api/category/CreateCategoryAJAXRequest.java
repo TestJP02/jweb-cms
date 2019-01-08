@@ -15,16 +15,9 @@ import java.util.Map;
 public class CreateCategoryAJAXRequest {
     @XmlElement(name = "parentId")
     public String parentId;
-    @XmlElement(name = "templatePath")
-    @NotNull
-    public String templatePath;
-    @XmlElement(name = "path")
-    @NotNull
-    public String path;
     @XmlElement(name = "displayName")
     @NotNull
     public String displayName;
-
     @XmlElement(name = "displayOrder")
     @NotNull
     public Integer displayOrder;

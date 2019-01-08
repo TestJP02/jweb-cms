@@ -1,23 +1,20 @@
 package app.jweb.web;
 
 import java.util.List;
-import java.util.Map;
 
 /**
  * @author chi
  */
-public interface AppInfo {
-    String name();
+public class AppInfo {
+    public String name;
 
-    String baseURL();
+    public String baseURL;
 
-    String language();
+    public String language;
 
-    List<String> supportLanguages();
+    public List<String> supportLanguages;
 
-    String description();
+    public String description;
 
-    String imageURL();
-
-    Map<String, Object> properties();
+    public String imageURL;
 }

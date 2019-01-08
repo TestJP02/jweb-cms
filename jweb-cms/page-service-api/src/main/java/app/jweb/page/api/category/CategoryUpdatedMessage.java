@@ -19,10 +19,6 @@ public class CategoryUpdatedMessage {
     public String parentId;
     @XmlElement(name = "parentIds")
     public List<String> parentIds;
-    @XmlElement(name = "templatePath")
-    public String templatePath;
-    @XmlElement(name = "path")
-    public String path;
     @XmlElement(name = "displayName")
     public String displayName;
     @XmlElement(name = "keywords")

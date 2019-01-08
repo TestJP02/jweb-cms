@@ -16,7 +16,6 @@ import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import java.util.List;
-import java.util.Optional;
 
 /**
  * @author chi
@@ -42,10 +41,6 @@ public interface PageCategoryWebService {
     @Path("/find")
     @PUT
     QueryResponse<CategoryResponse> find(CategoryQuery query);
-
-    @Path("/path/{path}")
-    @GET
-    Optional<CategoryResponse> findByPath(@PathParam("path") String path);
 
     @POST
     CategoryResponse create(CreateCategoryRequest request);

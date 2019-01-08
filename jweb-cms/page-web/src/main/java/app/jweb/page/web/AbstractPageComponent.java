@@ -26,9 +26,9 @@ public abstract class AbstractPageComponent extends AbstractWebComponent {
 
     @Override
     public final void output(Map<String, Object> bindings, Attributes attributes, Children children, OutputStream out) throws IOException {
-        Bindings pageBindings = new Bindings(new HashMap<>(bindings));
+        PageBindings pageBindings = new PageBindings(new HashMap<>(bindings));
         output(pageBindings, attributes, children, out);
     }
 
-    protected abstract void output(Bindings bindings, Attributes attributes, Children children, OutputStream out) throws IOException;
+    protected abstract void output(PageBindings bindings, Attributes attributes, Children children, OutputStream out) throws IOException;
 }

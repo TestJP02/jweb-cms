@@ -28,8 +28,8 @@ public class SitemapController extends AbstractWebController {
     public Response index() {
         String resourcePath = uriInfo.getPath();
         Optional<Resource> sitemap = sitemapService.sitemap(resourcePath);
-        if (!sitemap.isPresent()) {
-            throw new NotFoundWebException(appInfo, requestInfo, clientInfo, uriInfo.getPath());
+        if (sitemap.isEmpty()) {
+            throw new NotFoundWebException(uriInfo.getPath());
         }
         return Response.ok(sitemap.get())
             .type("text/xml").build();

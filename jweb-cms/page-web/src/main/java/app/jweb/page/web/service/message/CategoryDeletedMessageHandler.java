@@ -15,6 +15,6 @@ public class CategoryDeletedMessageHandler implements MessageHandler<CategoryDel
 
     @Override
     public void handle(CategoryDeletedMessage message) {
-        categoryService.reload(message.path);
+        categoryService.reload(message.id);
     }
 }
