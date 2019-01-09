@@ -77,6 +77,7 @@ public class PageAdminController {
         createPageRequest.description = createPageAJAXRequest.description;
         createPageRequest.sections = createPageAJAXRequest.sections;
         createPageRequest.requestBy = userInfo.username();
+        createPageRequest.status = createPageAJAXRequest.status;
         return response(pageWebService.create(createPageRequest));
     }
 
@@ -93,6 +94,7 @@ public class PageAdminController {
         updatePageRequest.keywords = updatePageAJAXRequest.keywords;
         updatePageRequest.sections = updatePageAJAXRequest.sections;
         updatePageRequest.requestBy = userInfo.username();
+        updatePageRequest.status = updatePageAJAXRequest.status;
         return response(pageWebService.update(id, updatePageRequest));
     }
 

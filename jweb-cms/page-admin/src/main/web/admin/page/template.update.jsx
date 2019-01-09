@@ -19,6 +19,7 @@ export default class TemplateUpdate extends React.Component {
                 path: null,
                 sections: null
             },
+            formChanged: false,
             formRules: {
                 title: [
                     {
@@ -45,6 +46,54 @@ export default class TemplateUpdate extends React.Component {
         } else if (!form.sections) {
             form.sections = [];
             this.setState({form});
+        }
+        setTimeout(() => this.autoSave(), 10000);
+    }
+
+    autoSave() {
+        this.savePage((response) => {
+            const form = this.state.form;
+            if (!form.id) {
+                form.id = response.id;
+                this.setState({form});
+            }
+            notification({
+                title: "Success",
+                message: i18n.t("page.autoSaved"),
+                type: "success"
+            });
+        });
+        setTimeout(() => this.autoSave(), 30000);
+    }
+
+    savePage(callback, failedCallback) {
+        if (this.form) {
+            const form = this.state.form;
+            this.form.validate((valid) => {
+                if (valid) {
+                    if (form.id) {
+                        fetch("/admin/api/page/template/" + form.id, {
+                            method: "PUT",
+                            body: JSON.stringify(form)
+                        }).then((response) => {
+                            if (callback) {
+                                return callback(response);
+                            }
+                        });
+                    } else {
+                        fetch("/admin/api/page/template", {
+                            method: "POST",
+                            body: JSON.stringify(form)
+                        }).then((response) => {
+                            if (callback) {
+                                return callback(response);
+                            }
+                        });
+                    }
+                } else if (failedCallback) {
+                    failedCallback();
+                }
+            });
         }
     }
 
@@ -126,17 +175,25 @@ export default class TemplateUpdate extends React.Component {
         };
     }
 
-    submit() {
-        const form = this.state.form;
-        form.type = "CUSTOMIZED";
+    preview() {
+        const newTab = window.open("about:blank", "_blank");
+        this.savePage((response) => {
+            newTab.location.href = response.path + "?draft=true";
+        }, () => {
+            newTab.close();
+        });
+    }
 
+    publish() {
+        const form = this.state.form;
         this.form.validate((valid) => {
             if (valid) {
+                form.status = "ACTIVE";
                 if (form.id) {
                     fetch("/admin/api/page/template/" + form.id, {
                         method: "PUT",
                         body: JSON.stringify(form)
-                    }).then((response) => {
+                    }).then(() => {
                         notification({
                             title: "Success",
                             message: i18n.t("page.updateSuccessMessage"),
@@ -148,7 +205,7 @@ export default class TemplateUpdate extends React.Component {
                     fetch("/admin/api/page/template", {
                         method: "POST",
                         body: JSON.stringify(form)
-                    }).then((response) => {
+                    }).then(() => {
                         notification({
                             title: "Success",
                             message: i18n.t("page.createSuccessMessage"),
@@ -177,7 +234,9 @@ export default class TemplateUpdate extends React.Component {
                     </div>
                     <div className="toolbar-buttons">
                         <Button className="toolbar-button" type="primary" nativeType="button"
-                            onClick={() => this.submit()}>{i18n.t("page.save")}</Button>
+                            onClick={() => this.preview()}>{i18n.t("page.preview")}</Button>
+                        <Button className="toolbar-button" type="primary" nativeType="button"
+                            onClick={() => this.publish()}>{i18n.t("page.publish")}</Button>
                         <Button className="toolbar-button" nativeType="button"
                             onClick={() => this.cancel()}>{i18n.t("page.cancel")}</Button>
                     </div>

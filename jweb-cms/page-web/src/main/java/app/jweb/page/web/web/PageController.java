@@ -52,7 +52,7 @@ public class PageController extends AbstractPageController {
             return tryTemplate(path).orElseThrow(() -> new NotFoundWebException("missing page, path={}", path));
         }
         PageResponse page = pageOptional.get();
-        if (page.status == PageStatus.NEW && !Boolean.TRUE.equals(draft)) {
+        if (page.status == PageStatus.DRAFT && !Boolean.TRUE.equals(draft)) {
             return tryTemplate(path).orElseThrow(() -> new NotFoundWebException("missing page, path={}", path));
         }
         Map<String, Object> bindings = Maps.newHashMap();

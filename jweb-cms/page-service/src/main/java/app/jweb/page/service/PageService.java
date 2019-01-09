@@ -94,6 +94,7 @@ public class PageService {
             }
             page.updatedTime = OffsetDateTime.now();
             page.updatedBy = request.requestBy;
+            page.status = request.status == null ? PageStatus.DRAFT : request.status;
             repository.update(page.id, page);
             pageTemplateService.update(page.id, request.sections, request.requestBy);
             notifyPageUpdated(page);
@@ -116,7 +117,7 @@ public class PageService {
         page.updatedTime = OffsetDateTime.now();
         page.createdBy = request.requestBy;
         page.updatedBy = request.requestBy;
-        page.status = PageStatus.ACTIVE;
+        page.status = request.status == null ? PageStatus.DRAFT : request.status;
         repository.insert(page);
         pageTemplateService.create(page.id, request.sections, request.requestBy);
         notifyPageCreated(page);
@@ -144,6 +145,7 @@ public class PageService {
         page.tags = request.tags == null ? null : Joiner.on(';').join(request.tags);
         page.updatedTime = OffsetDateTime.now();
         page.updatedBy = request.requestBy;
+        page.status = request.status == null ? PageStatus.DRAFT : request.status;
         repository.update(id, page);
         pageTemplateService.update(page.id, request.sections, request.requestBy);
         notifyPageUpdated(page);
