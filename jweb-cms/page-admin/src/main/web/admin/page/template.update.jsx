@@ -17,7 +17,6 @@ export default class TemplateUpdate extends React.Component {
                 id: props.match.params.id,
                 title: null,
                 path: null,
-                templatePath: null,
                 sections: null
             },
             formRules: {
@@ -29,13 +28,6 @@ export default class TemplateUpdate extends React.Component {
                     }
                 ],
                 path: [
-                    {
-                        required: true,
-                        message: i18n.t("page.pathRequired"),
-                        trigger: "blur"
-                    }
-                ],
-                templatePath: [
                     {
                         required: true,
                         message: i18n.t("page.pathRequired"),
@@ -59,11 +51,7 @@ export default class TemplateUpdate extends React.Component {
     get() {
         fetch("/admin/api/page/template/" + this.state.form.id, {method: "GET"})
             .then((response) => {
-                const templatePath = response.templatePath.substring(9).substring(0, response.templatePath.length - 5);
-                this.setState({
-                    templatePath: templatePath,
-                    form: response
-                }, () => {
+                this.setState({form: response}, () => {
                     this.setCategory();
                 });
             });
@@ -125,14 +113,6 @@ export default class TemplateUpdate extends React.Component {
 
     cancel() {
         this.props.history.push("/admin/page/template/list");
-    }
-
-    pathChange(path) {
-        const processedPath = path;
-        this.setState({
-            form: Object.assign({}, this.state.form, {templatePath: "template/" + processedPath + ".html"}),
-            templatePath: processedPath
-        });
     }
 
     formChange(key, value) {
