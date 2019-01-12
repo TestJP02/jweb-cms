@@ -1,6 +1,5 @@
 package app.jweb.page.admin.web.api.template;
 
-import app.jweb.page.api.page.PageStatus;
 import app.jweb.page.api.template.PageSectionView;
 
 import javax.validation.constraints.NotNull;
@@ -29,6 +28,4 @@ public class UpdatePageAJAXRequest {
     public List<String> keywords;
     @XmlElement(name = "sections")
     public List<PageSectionView> sections;
-    @XmlElement(name = "status")
-    public PageStatus status;
 }

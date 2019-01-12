@@ -7,6 +7,7 @@ import app.jweb.message.MessageModule;
 import app.jweb.message.TopicOptions;
 import app.jweb.page.api.PageCategoryWebService;
 import app.jweb.page.api.PageComponentWebService;
+import app.jweb.page.api.PageDraftWebService;
 import app.jweb.page.api.PageKeywordWebService;
 import app.jweb.page.api.PageModule;
 import app.jweb.page.api.PageSavedComponentWebService;
@@ -43,6 +44,7 @@ import app.jweb.page.service.PageTemplateService;
 import app.jweb.page.service.PageVariableService;
 import app.jweb.page.web.PageCategoryWebServiceImpl;
 import app.jweb.page.web.PageComponentWebServiceImpl;
+import app.jweb.page.web.PageDraftWebServiceImpl;
 import app.jweb.page.web.PageKeywordWebServiceImpl;
 import app.jweb.page.web.PageSavedComponentWebServiceImpl;
 import app.jweb.page.web.PageTemplateWebServiceImpl;
@@ -99,6 +101,7 @@ public class PageModuleImpl extends PageModule {
         api().service(PageKeywordWebService.class, PageKeywordWebServiceImpl.class);
         api().service(PageCategoryWebService.class, PageCategoryWebServiceImpl.class);
         api().service(PageTemplateWebService.class, PageTemplateWebServiceImpl.class);
+        api().service(PageDraftWebService.class, PageDraftWebServiceImpl.class);
 
         onStartup(this::start);
     }

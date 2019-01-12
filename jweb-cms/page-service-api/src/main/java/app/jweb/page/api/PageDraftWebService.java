@@ -1,6 +1,7 @@
 package app.jweb.page.api;
 
 import app.jweb.page.api.page.CreatePageRequest;
+import app.jweb.page.api.page.GetPageDraftRequest;
 import app.jweb.page.api.page.PageDraftQuery;
 import app.jweb.page.api.page.PageResponse;
 import app.jweb.page.api.page.PublishPageRequest;
@@ -27,9 +28,9 @@ public interface PageDraftWebService {
     @GET
     Optional<PageResponse> findByPath(@PathParam("path") String path);
 
-    @Path("/page-id/{pageId}")
-    @GET
-    PageResponse draft(@PathParam("pageId") String pageId);
+    @Path("/get")
+    @PUT
+    PageResponse get(GetPageDraftRequest request);
 
     @POST
     PageResponse create(CreatePageRequest request);

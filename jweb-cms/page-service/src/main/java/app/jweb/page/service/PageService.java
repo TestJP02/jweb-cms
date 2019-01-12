@@ -53,6 +53,10 @@ public class PageService {
         return repository.query("SELECT t FROM Page t WHERE t.path=?0", path).findOne();
     }
 
+    public Optional<Page> findById(String id) {
+        return repository.query("SELECT t FROM Page t WHERE t.id=?0", id).findOne();
+    }
+
     public QueryResponse<Page> find(PageQuery pageQuery) {
         Query<Page> query = repository.query("SELECT t FROM Page t WHERE 1=1");
         int index = 0;
@@ -86,6 +90,7 @@ public class PageService {
         page.title = request.title;
         page.description = request.description;
         page.tags = request.tags == null ? null : Joiner.on(';').join(request.tags);
+        page.keywords = request.keywords == null ? null : Joiner.on(';').join(request.keywords);
         page.createdTime = OffsetDateTime.now();
         page.updatedTime = OffsetDateTime.now();
         page.createdBy = request.requestBy;
@@ -93,7 +98,30 @@ public class PageService {
         page.status = PageStatus.DRAFT;
         repository.insert(page);
         pageTemplateService.create(page.id, request.sections, request.requestBy);
-        notifyPageCreated(page);
+        return page;
+    }
+
+    @Transactional
+    public Page copy(Page request) {
+        Page page = new Page();
+        page.id = UUID.randomUUID().toString();
+        if (request.categoryId != null) {
+            PageCategory category = categoryService.get(request.categoryId);
+            page.categoryId = category.id;
+            page.categoryIds = categoryIds(category);
+        }
+        page.userId = request.userId;
+        page.path = request.path;
+        page.title = request.title;
+        page.description = request.description;
+        page.tags = request.tags;
+        page.keywords = request.keywords;
+        page.createdTime = OffsetDateTime.now();
+        page.updatedTime = OffsetDateTime.now();
+        page.createdBy = request.createdBy;
+        page.updatedBy = request.updatedBy;
+        page.status = PageStatus.DRAFT;
+        repository.insert(page);
         return page;
     }
 
@@ -107,66 +135,20 @@ public class PageService {
     @Transactional
     public Page update(String id, UpdatePageRequest request) {
         Page page = get(id);
-        if (page.status == PageStatus.ACTIVE) {
-            Optional<PageDraft> draftOptional = pageDraftService.findByPageId(page.id);
-            if (draftOptional.isEmpty()) {
-                Page draft = new Page();
-                draft.id = UUID.randomUUID().toString();
-                if (request.categoryId != null) {
-                    PageCategory category = categoryService.get(request.categoryId);
-                    draft.categoryId = category.id;
-                    draft.categoryIds = categoryIds(category);
-                }
-                draft.userId = page.userId;
-                draft.path = request.path;
-                draft.title = request.title;
-                draft.description = request.description;
-                draft.tags = request.tags == null ? null : Joiner.on(';').join(request.tags);
-                draft.createdTime = OffsetDateTime.now();
-                draft.updatedTime = OffsetDateTime.now();
-                draft.createdBy = request.requestBy;
-                draft.updatedBy = request.requestBy;
-                draft.status = PageStatus.DRAFT;
-                repository.insert(draft);
-                pageTemplateService.create(draft.id, request.sections, request.requestBy);
-                pageDraftService.create(draft.id, page.id, request.requestBy);
-                return draft;
-            } else {
-                Page draft = get(draftOptional.get().draftId);
-                if (request.categoryId != null) {
-                    PageCategory category = categoryService.get(request.categoryId);
-                    draft.categoryId = category.id;
-                    draft.categoryIds = categoryIds(category);
-                }
-                draft.path = request.path;
-                draft.title = request.title;
-                draft.description = request.description;
-                draft.tags = request.tags == null ? null : Joiner.on(';').join(request.tags);
-                draft.createdTime = OffsetDateTime.now();
-                draft.updatedTime = OffsetDateTime.now();
-                draft.createdBy = request.requestBy;
-                draft.updatedBy = request.requestBy;
-                draft.status = PageStatus.DRAFT;
-                repository.insert(draft);
-                pageTemplateService.create(draft.id, request.sections, request.requestBy);
-                return draft;
-            }
-        } else {
-            if (request.categoryId != null) {
-                PageCategory category = categoryService.get(request.categoryId);
-                page.categoryId = category.id;
-                page.categoryIds = categoryIds(category);
-            }
-            page.path = request.path;
-            page.title = request.title;
-            page.description = request.description;
-            page.tags = request.tags == null ? null : Joiner.on(';').join(request.tags);
-            page.updatedTime = OffsetDateTime.now();
-            page.updatedBy = request.requestBy;
-            repository.update(id, page);
-            pageTemplateService.update(page.id, request.sections, request.requestBy);
-            return page;
+        if (request.categoryId != null) {
+            PageCategory category = categoryService.get(request.categoryId);
+            page.categoryId = category.id;
+            page.categoryIds = categoryIds(category);
         }
+        page.path = request.path;
+        page.title = request.title;
+        page.description = request.description;
+        page.tags = request.tags == null ? null : Joiner.on(';').join(request.tags);
+        page.updatedTime = OffsetDateTime.now();
+        page.updatedBy = request.requestBy;
+        repository.update(id, page);
+        pageTemplateService.update(page.id, request.sections, request.requestBy);
+        return page;
     }
 
 
@@ -199,9 +181,10 @@ public class PageService {
             page.updatedTime = OffsetDateTime.now();
             page.updatedBy = request.requestBy;
             repository.update(page.id, page);
-            pageTemplateService.copySections(draft.id, page.id, request.requestBy);
+            pageTemplateService.replace(draft.id, page.id, request.requestBy);
 
             pageTemplateService.delete(draft.id);
+            pageDraftService.deleteByPageId(draft.id);
             repository.delete(draft.id);
 
             notifyPageUpdated(page);

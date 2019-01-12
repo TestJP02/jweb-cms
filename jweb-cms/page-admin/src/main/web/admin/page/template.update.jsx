@@ -17,7 +17,7 @@ export default class TemplateUpdate extends React.Component {
                 id: props.match.params.id,
                 title: null,
                 path: null,
-                sections: []
+                sections: null
             },
             formChanged: false,
             formRules: {
@@ -43,7 +43,9 @@ export default class TemplateUpdate extends React.Component {
         const form = this.state.form;
         if (this.state.form.id) {
             this.get();
-        } else {
+        } else if (!form.sections) {
+            form.sections = [];
+            this.setState({form});
             this.setCategory();
         }
         setTimeout(() => this.autoSave(), 10000);
@@ -71,7 +73,7 @@ export default class TemplateUpdate extends React.Component {
             this.form.validate((valid) => {
                 if (valid) {
                     if (form.id) {
-                        fetch("/admin/api/page/template/" + form.id, {
+                        fetch("/admin/api/page/" + form.id, {
                             method: "PUT",
                             body: JSON.stringify(form)
                         }).then((response) => {
@@ -80,7 +82,7 @@ export default class TemplateUpdate extends React.Component {
                             }
                         });
                     } else {
-                        fetch("/admin/api/page/template", {
+                        fetch("/admin/api/page", {
                             method: "POST",
                             body: JSON.stringify(form)
                         }).then((response) => {
@@ -97,8 +99,10 @@ export default class TemplateUpdate extends React.Component {
     }
 
     get() {
-        fetch("/admin/api/page/template/" + this.state.form.id, {method: "GET"})
+        fetch("/admin/api/page/" + this.state.form.id, {method: "GET"})
             .then((response) => {
+                window.console.log(response);
+
                 this.setState({form: response}, () => {
                     this.setCategory();
                 });
@@ -184,38 +188,18 @@ export default class TemplateUpdate extends React.Component {
     }
 
     publish() {
-        const form = this.state.form;
-        this.form.validate((valid) => {
-            if (valid) {
-                form.status = "ACTIVE";
-                if (form.id) {
-                    fetch("/admin/api/page/template/" + form.id, {
-                        method: "PUT",
-                        body: JSON.stringify(form)
-                    }).then(() => {
-                        notification({
-                            title: "Success",
-                            message: i18n.t("page.updateSuccessMessage"),
-                            type: "success"
-                        });
-                        this.props.history.push("/admin/page/template/list");
-                    });
-                } else {
-                    fetch("/admin/api/page/template", {
-                        method: "POST",
-                        body: JSON.stringify(form)
-                    }).then(() => {
-                        notification({
-                            title: "Success",
-                            message: i18n.t("page.createSuccessMessage"),
-                            type: "success"
-                        });
-                        this.props.history.push("/admin/page/template/list");
-                    });
-                }
-            } else {
-                return false;
-            }
+        this.savePage((response) => {
+            fetch("/admin/api/page/" + response.id + "/publish", {
+                method: "POST",
+                body: JSON.stringify({})
+            }).then(() => {
+                notification({
+                    title: "Success",
+                    message: i18n.t("page.publishSuccessMessage"),
+                    type: "success"
+                });
+                this.props.history.push("/admin/page/template/list");
+            });
         });
     }
 

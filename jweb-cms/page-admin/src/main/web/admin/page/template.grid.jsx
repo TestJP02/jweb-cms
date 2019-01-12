@@ -162,6 +162,9 @@ export default class LayoutGridEditor extends React.Component {
     fromTemplate(sections) {
         const sectionMap = this.state.sectionMap;
         let layoutSections = [];
+
+        window.console.log(JSON.stringify(sections));
+
         for (let i = 0; i < sections.length; i += 1) {
             const section = sections[i];
             sectionMap[section.id] = section;
@@ -189,6 +192,7 @@ export default class LayoutGridEditor extends React.Component {
                         h: width.height ? width.height : 4
                     });
                 }
+                window.console.log(JSON.stringify(layoutSection));
                 layoutSections.push(layoutSection);
             }
         }

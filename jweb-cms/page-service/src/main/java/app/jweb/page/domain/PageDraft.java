@@ -15,7 +15,7 @@ public class PageDraft {
     @Id
     @Column(name = "id", length = 36)
     public String id;
-    @Column(name = "craft_id", length = 36)
+    @Column(name = "draft_id", length = 36)
     public String draftId;
     @Column(name = "page_id", length = 36)
     public String pageId;

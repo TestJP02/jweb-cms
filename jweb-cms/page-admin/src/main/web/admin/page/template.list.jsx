@@ -89,7 +89,7 @@ export default class TemplateList extends React.Component {
     }
 
     find() {
-        fetch("/admin/api/page/template/find", {
+        fetch("/admin/api/page/find", {
             method: "PUT",
             body: JSON.stringify(this.state.query)
         }).then((response) => {
@@ -107,7 +107,7 @@ export default class TemplateList extends React.Component {
 
     delete(data, e) {
         e.preventDefault();
-        fetch("/admin/api/page/template/" + data.id, {method: "DELETE"}).then(() => {
+        fetch("/admin/api/page/" + data.id, {method: "DELETE"}).then(() => {
             this.find();
             notification({
                 title: i18n.t("page.successTitle"),
@@ -127,7 +127,7 @@ export default class TemplateList extends React.Component {
         for (let i = 0; i < list.length; i += 1) {
             ids.push(list[i].id);
         }
-        fetch("/admin/api/page/template/batch-delete", {
+        fetch("/admin/api/page/batch-delete", {
             method: "POST",
             body: JSON.stringify({ids: ids})
         }).then(() => {

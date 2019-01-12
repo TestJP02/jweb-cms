@@ -2,14 +2,17 @@ package app.jweb.page.web;
 
 import app.jweb.page.api.PageDraftWebService;
 import app.jweb.page.api.page.CreatePageRequest;
+import app.jweb.page.api.page.GetPageDraftRequest;
 import app.jweb.page.api.page.PageDraftQuery;
 import app.jweb.page.api.page.PageResponse;
+import app.jweb.page.api.page.PageStatus;
 import app.jweb.page.api.page.PublishPageRequest;
 import app.jweb.page.api.page.UpdatePageRequest;
 import app.jweb.page.domain.Page;
 import app.jweb.page.domain.PageDraft;
 import app.jweb.page.service.PageDraftService;
 import app.jweb.page.service.PageService;
+import app.jweb.page.service.PageTemplateService;
 import app.jweb.util.collection.QueryResponse;
 import com.google.common.base.Splitter;
 import com.google.common.collect.ImmutableList;
@@ -26,6 +29,8 @@ public class PageDraftWebServiceImpl implements PageDraftWebService {
 
     @Inject
     PageService pageService;
+    @Inject
+    PageTemplateService pageTemplateService;
 
     @Override
     public QueryResponse<PageResponse> find(PageDraftQuery query) {
@@ -38,14 +43,23 @@ public class PageDraftWebServiceImpl implements PageDraftWebService {
     }
 
     @Override
-    public PageResponse draft(String pageId) {
-        Optional<PageDraft> pageDraftOptional = pageDraftService.findByPageId(pageId);
-        if (pageDraftOptional.isEmpty()) {
-            Page page = pageService.get(pageId);
-            return response(page);
+    public PageResponse get(GetPageDraftRequest request) {
+        Optional<PageDraft> pageDraftOptional = pageDraftService.findByPageId(request.pageId);
+        if (pageDraftOptional.isPresent()) {
+            Optional<Page> page = pageService.findById(pageDraftOptional.get().draftId);
+            if (page.isPresent()) {
+                return response(page.get());
+            }
         }
-        Page page = pageService.get(pageDraftOptional.get().draftId);
-        return response(page);
+        Page page = pageService.get(request.pageId);
+        if (page.status == PageStatus.DRAFT) {
+            return response(page);
+        } else {
+            Page draft = pageService.copy(page);
+            pageTemplateService.copySections(page.id, draft.id, request.requestBy);
+            pageDraftService.create(draft.id, page.id, request.requestBy);
+            return response(draft);
+        }
     }
 
     @Override
@@ -60,8 +74,8 @@ public class PageDraftWebServiceImpl implements PageDraftWebService {
 
     @Override
     public PageResponse publish(PublishPageRequest request) {
-        pageService.publish(request);
-        return null;
+        Page page = pageService.publish(request);
+        return response(page);
     }
 
     private PageResponse response(Page page) {
@@ -74,6 +88,7 @@ public class PageDraftWebServiceImpl implements PageDraftWebService {
         response.title = page.title;
         response.description = page.description;
         response.tags = page.tags == null ? ImmutableList.of() : Splitter.on(';').splitToList(page.tags);
+        response.keywords = page.keywords == null ? ImmutableList.of() : Splitter.on(';').splitToList(page.keywords);
         response.status = page.status;
         response.createdTime = page.createdTime;
         response.createdBy = page.createdBy;

@@ -20,5 +20,6 @@ public class PageModule extends AbstractServiceModule {
         api().service(PageStatisticsWebService.class, options.url);
         api().service(PageCategoryWebService.class, options.url);
         api().service(PageKeywordWebService.class, options.url);
+        api().service(PageDraftWebService.class, options.url);
     }
 }

@@ -7,12 +7,15 @@ import app.jweb.page.admin.web.api.template.PageAJAXResponse;
 import app.jweb.page.admin.web.api.template.PageTemplateAJAXQuery;
 import app.jweb.page.admin.web.api.template.PageTemplateSectionAJAXView;
 import app.jweb.page.admin.web.api.template.UpdatePageAJAXRequest;
+import app.jweb.page.api.PageDraftWebService;
 import app.jweb.page.api.PageTemplateWebService;
 import app.jweb.page.api.PageWebService;
+import app.jweb.page.api.page.GetPageDraftRequest;
 import app.jweb.page.api.page.CreatePageRequest;
 import app.jweb.page.api.page.DeletePageRequest;
 import app.jweb.page.api.page.PageQuery;
 import app.jweb.page.api.page.PageResponse;
+import app.jweb.page.api.page.PublishPageRequest;
 import app.jweb.page.api.page.UpdatePageRequest;
 import app.jweb.page.api.template.PageComponentView;
 import app.jweb.page.api.template.PageSectionView;
@@ -36,12 +39,14 @@ import java.util.stream.Collectors;
 /**
  * @author chi
  */
-@Path("/admin/api/page/template")
+@Path("/admin/api/page")
 public class PageAdminController {
     @Inject
     PageWebService pageWebService;
     @Inject
     PageTemplateWebService pageTemplateWebService;
+    @Inject
+    PageDraftWebService pageDraftWebService;
 
     @Inject
     UserInfo userInfo;
@@ -50,7 +55,10 @@ public class PageAdminController {
     @Path("/{id}")
     @GET
     public PageAJAXResponse get(@PathParam("id") String id) {
-        return response(pageWebService.get(id));
+        GetPageDraftRequest request = new GetPageDraftRequest();
+        request.pageId = id;
+        request.requestBy = userInfo.username();
+        return response(pageDraftWebService.get(request));
     }
 
     @RolesAllowed("GET")
@@ -77,7 +85,9 @@ public class PageAdminController {
         createPageRequest.description = createPageAJAXRequest.description;
         createPageRequest.sections = createPageAJAXRequest.sections;
         createPageRequest.requestBy = userInfo.username();
-        return response(pageWebService.create(createPageRequest));
+
+        PageResponse page = pageDraftWebService.create(createPageRequest);
+        return response(page);
     }
 
     @RolesAllowed("UPDATE")
@@ -93,7 +103,20 @@ public class PageAdminController {
         updatePageRequest.keywords = updatePageAJAXRequest.keywords;
         updatePageRequest.sections = updatePageAJAXRequest.sections;
         updatePageRequest.requestBy = userInfo.username();
-        return response(pageWebService.update(id, updatePageRequest));
+
+        PageResponse page = pageWebService.update(id, updatePageRequest);
+        return response(page);
+    }
+
+    @RolesAllowed("PUBLISH")
+    @Path("/{id}/publish")
+    @POST
+    public PageAJAXResponse update(@PathParam("id") String id) {
+        PublishPageRequest publishPageRequest = new PublishPageRequest();
+        publishPageRequest.draftId = id;
+        publishPageRequest.requestBy = userInfo.username();
+        PageResponse page = pageDraftWebService.publish(publishPageRequest);
+        return response(page);
     }
 
     @RolesAllowed("DELETE")

@@ -79,7 +79,7 @@ export default class CategoryUpdate extends React.Component {
                     });
                 });
         }
-        fetch("/admin/api/page/template", {method: "GET"})
+        fetch("/admin/api/page", {method: "GET"})
             .then((response) => {
                 this.setState({templateOptions: response});
             });

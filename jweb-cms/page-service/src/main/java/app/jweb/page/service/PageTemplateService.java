@@ -45,6 +45,19 @@ public class PageTemplateService {
     @Transactional
     public void copySections(String fromPageId, String toPageId, String requestBy) {
         PageTemplate fromTemplate = get(fromPageId);
+        PageTemplate pageTemplate = new PageTemplate();
+        pageTemplate.pageId = toPageId;
+        pageTemplate.sections = fromTemplate.sections;
+        pageTemplate.updatedTime = OffsetDateTime.now();
+        pageTemplate.updatedBy = requestBy;
+        pageTemplate.createdTime = OffsetDateTime.now();
+        pageTemplate.createdBy = requestBy;
+        repository.insert(pageTemplate);
+    }
+
+    @Transactional
+    public void replace(String fromPageId, String toPageId, String requestBy) {
+        PageTemplate fromTemplate = get(fromPageId);
         PageTemplate pageTemplate = get(toPageId);
         pageTemplate.sections = fromTemplate.sections;
         pageTemplate.updatedTime = OffsetDateTime.now();

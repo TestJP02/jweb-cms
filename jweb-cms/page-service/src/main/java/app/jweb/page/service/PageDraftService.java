@@ -17,11 +17,11 @@ public class PageDraftService {
     Repository<PageDraft> repository;
 
     public Optional<PageDraft> findByPageId(String pageId) {
-        return repository.query("SELECT t FROM PageDraft WHERE t.pageId=?0", pageId).findOne();
+        return repository.query("SELECT t FROM PageDraft t WHERE t.pageId=?0", pageId).findOne();
     }
 
     public Optional<PageDraft> findByDraftId(String draftId) {
-        return repository.query("SELECT t FROM PageDraft WHERE t.draftId=?0", draftId).findOne();
+        return repository.query("SELECT t FROM PageDraft t WHERE t.draftId=?0", draftId).findOne();
     }
 
     @Transactional
@@ -38,6 +38,6 @@ public class PageDraftService {
 
     @Transactional
     public void deleteByPageId(String pageId) {
-        repository.execute("DELETE t FROM PageDraft WHERE t.pageId=?0", pageId);
+        repository.execute("DELETE FROM PageDraft t WHERE t.pageId=?0", pageId);
     }
 }
