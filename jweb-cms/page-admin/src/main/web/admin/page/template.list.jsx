@@ -9,7 +9,7 @@ export default class TemplateList extends React.Component {
         super(props);
         this.state = {
             query: {
-                path: "",
+                query: null,
                 status: null,
                 page: 1,
                 limit: 20
@@ -190,8 +190,8 @@ export default class TemplateList extends React.Component {
                     <div className="toolbar-form">
                         <Form inline={true} model={this.state.query}>
                             <Form.Item>
-                                <Input icon="fa fa-search" value={this.state.query.path} placeholder={i18n.t("page.pathPlaceHolder")}
-                                    onChange={value => this.queryChange("path", value)}/>
+                                <Input icon="fa fa-search" value={this.state.query.query} placeholder={i18n.t("page.pathPlaceHolder")}
+                                    onChange={value => this.queryChange("query", value)}/>
                             </Form.Item>
                             <Form.Item>
                                 <Button nativeType="button"

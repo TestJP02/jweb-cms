@@ -68,7 +68,7 @@ public class PageService {
         int index = 0;
         if (!Strings.isNullOrEmpty(pageQuery.query)) {
             query.append("AND (t.path LIKE ?" + index++, '%' + pageQuery.query + "%");
-            query.append("OR t.title LIKE ?" + index++, '%' + pageQuery.query + "%)");
+            query.append("OR t.title LIKE ?" + (index++) + ')', '%' + pageQuery.query + "%");
         }
         query.append("AND t.status=?" + index, PageStatus.ACTIVE);
         query.limit(pageQuery.page, pageQuery.limit);
@@ -85,7 +85,7 @@ public class PageService {
         int index = 0;
         if (!Strings.isNullOrEmpty(pageQuery.query)) {
             query.append("AND (t.path LIKE ?" + index++, '%' + pageQuery.query + "%");
-            query.append("OR t.title LIKE ?" + index++, '%' + pageQuery.query + "%)");
+            query.append("OR t.title LIKE ?" + (index++) + ')', '%' + pageQuery.query + "%");
         }
         if (pageQuery.status != null) {
             query.append("AND t.status=?" + index, pageQuery.status);
