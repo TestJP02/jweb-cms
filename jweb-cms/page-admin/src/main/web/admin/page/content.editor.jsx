@@ -5,8 +5,6 @@ import "../../node_modules/draft-js/dist/Draft.css";
 import "./content.editor.css";
 import {Button, Input} from "element-react";
 
-const bundle = window.app.bundle("pageBundle");
-
 export default class ContentEditor extends React.Component {
     constructor(props) {
         super(props);
@@ -177,9 +175,7 @@ export default class ContentEditor extends React.Component {
         } else {
             const bar = this.state.bar;
             bar.hidden = true;
-            this.setState({
-                bar: bar
-            });
+            this.setState({bar: bar});
         }
     }
 
@@ -321,9 +317,7 @@ export default class ContentEditor extends React.Component {
             {currentContent: newContentState}
         );
 
-        this.setState({
-            editorState: newEditorState
-        });
+        this.setState({editorState: newEditorState});
         this.props.onChange(newEditorState);
     }
 
@@ -513,14 +507,12 @@ export default class ContentEditor extends React.Component {
                         </div>
                         : <div>
                             {this.state.editorInlineCommands.map(
-                                (command) => {
-                                    return <Button
-                                        key={command.style}
-                                        className={"content-editor__bar-button " + (this.hasInlineStyle(command.style) ? "content-editor__bar-button--selected" : "")}
-                                        icon={command.icon}
-                                        onClick={() => this.executeInlineCommand(command.style)}
-                                        size="small"></Button>;
-                                }
+                                command => <Button
+                                    key={command.style}
+                                    className={"content-editor__bar-button " + (this.hasInlineStyle(command.style) ? "content-editor__bar-button--selected" : "")}
+                                    icon={command.icon}
+                                    onClick={() => this.executeInlineCommand(command.style)}
+                                    size="small"></Button>
                             )}
                             {
                                 this.state.editorBlockCommands.map(command =>

@@ -1,6 +1,6 @@
 import React from "react";
 import PropTypes from "prop-types";
-import {Button, ColorPicker,  Dialog, Form, Input, Layout, Select} from "element-react";
+import {Button, Dialog} from "element-react";
 import Editor from "./content.editor.jsx";
 import {stateToHTML} from "draft-js-export-html";
 
@@ -33,18 +33,12 @@ export default class PageTextComponent extends React.Component {
         const component = this.state.component;
         this.state.onChange(component);
     }
-    
+
     changeContent(editorState) {
-        this.formChange("content", stateToHTML(editorState.getCurrentContent()))
+        this.formChange("content", stateToHTML(editorState.getCurrentContent()));
     }
 
     render() {
-        const attributes = this.state.component.attributes;
-        const textareaStyle = Object.assign({}, {
-            fontSize: attributes.fontSize + attributes.fontSizeUnit,
-            lineHeight: attributes.lineHeight + attributes.lineHeightUnit,
-            color: attributes.color
-        });
         return (
             <div className="page-default-component page-text-component">
                 {this.state.mode === "edit" &&
@@ -54,7 +48,7 @@ export default class PageTextComponent extends React.Component {
                     >
                         <Dialog.Body>
                             <div className="page-text-component__editor">
-                                <Editor content={this.state.component.attributes.content} onChange={editorState=>this.changeContent(editorState)}></Editor>
+                                <Editor content={this.state.component.attributes.content} onChange={editorState => this.changeContent(editorState)}></Editor>
                             </div>
                         </Dialog.Body>
 
@@ -64,9 +58,7 @@ export default class PageTextComponent extends React.Component {
                     </Dialog>
                 }
                 <div className="page-default-component__content">
-                    <div dangerouslySetInnerHTML={{__html: this.state.component.attributes.content}}>
-                        
-                    </div>
+                    <div dangerouslySetInnerHTML={{__html: this.state.component.attributes.content}}></div>
                 </div>
             </div>
         );

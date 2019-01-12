@@ -4,7 +4,6 @@ import app.jweb.page.web.AbstractPageComponent;
 import app.jweb.page.web.PageBindings;
 import app.jweb.template.Attributes;
 import app.jweb.template.Children;
-import app.jweb.template.IntegerAttribute;
 import app.jweb.template.StringAttribute;
 import com.google.common.collect.ImmutableList;
 
@@ -17,10 +16,7 @@ import java.io.OutputStream;
 public class TextComponent extends AbstractPageComponent {
     public TextComponent() {
         super("text", "component/text/text.html", ImmutableList.of(
-            new IntegerAttribute("fontSize", 14),
-            new StringAttribute("fontSizeUnit", "px"),
-            new IntegerAttribute("lineHeight", 14),
-            new StringAttribute("lineHeightUnit", "px")
+            new StringAttribute("content", null)
         ));
     }
 
