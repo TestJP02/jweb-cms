@@ -2,8 +2,8 @@ app:
   name: test
   language: zh-CN
   supportLanguages:
-    - zh-CN
-    - en-US
+  - zh-CN
+  - en-US
   env: DEV
   host: 127.0.0.1
   port: 8080
@@ -22,18 +22,18 @@ email:
 web:
   cacheEnabled: false
   roots:
-    - ../../../../jweb-framework/admin/src/main/dist/web
-    - ../../../../jweb-framework/web/src/main/web
-    - ../../../../jweb-cms/jweb-email/email-admin/src/main/dist/web
-    - ../../../../jweb-cms/user-admin/src/main/dist/web
-    - ../../../../jweb-cms/user-web/src/main/web
-    - ../../../../jweb-cms/captcha-web-simple/src/main/web
-    - ../../../../jweb-cms/pincode-web/src/main/web
-    - ../../../../jweb-cms/file-admin/src/main/dist/web
-    - ../../../../jweb-cms/page-web/src/main/web
-    - ../../../../jweb-cms/page-admin/src/main/dist/web
-    - ../../../../jweb-cms/comment-admin/src/main/dist/web
-    - ../../../../jweb-cms/comment-web/src/main/web
+  - ../../../../jweb-framework/admin/src/main/dist/web
+  - ../../../../jweb-framework/web/src/main/web
+  - ../../../../jweb-cms/jweb-email/email-admin/src/main/dist/web
+  - ../../../../jweb-cms/user-admin/src/main/dist/web
+  - ../../../../jweb-cms/user-web/src/main/web
+  - ../../../../jweb-cms/captcha-web-simple/src/main/web
+  - ../../../../jweb-cms/pincode-web/src/main/web
+  - ../../../../jweb-cms/file-admin/src/main/dist/web
+  - ../../../../jweb-cms/page-web/src/main/web
+  - ../../../../jweb-cms/page-admin/src/main/dist/web
+  - ../../../../jweb-cms/comment-admin/src/main/dist/web
+  - ../../../../jweb-cms/comment-web/src/main/web
 
 user:
   defaultAdminUser:

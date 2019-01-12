@@ -180,7 +180,7 @@ public class PageService {
     }
 
     @Transactional
-    public void publish(PublishPageRequest request) {
+    public Page publish(PublishPageRequest request) {
         Page draft = repository.get(request.draftId);
         Optional<PageDraft> draftOptional = pageDraftService.findByDraftId(request.draftId);
         if (draftOptional.isPresent()) {
@@ -205,12 +205,14 @@ public class PageService {
             repository.delete(draft.id);
 
             notifyPageUpdated(page);
+            return page;
         } else {
             draft.status = PageStatus.ACTIVE;
             draft.updatedTime = OffsetDateTime.now();
             draft.updatedBy = request.requestBy;
             repository.update(draft.id, draft);
             notifyPageCreated(draft);
+            return draft;
         }
     }
 

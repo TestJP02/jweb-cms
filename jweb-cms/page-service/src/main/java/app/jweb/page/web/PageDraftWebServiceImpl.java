@@ -60,7 +60,7 @@ public class PageDraftWebServiceImpl implements PageDraftWebService {
 
     @Override
     public PageResponse publish(PublishPageRequest request) {
-        pageService.publish();
+        pageService.publish(request);
         return null;
     }
 

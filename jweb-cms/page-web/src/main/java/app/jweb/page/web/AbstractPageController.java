@@ -33,6 +33,7 @@ public abstract class AbstractPageController extends AbstractWebController {
         pageBindings.putAll(bindings);
         pageBindings.putAll(variables);
         pageBindings.put("page", variable(page));
+        pageBindings.put("client", clientInfo);
         pageBindings.put("template", variable(pageTemplateWebService.get(page.id)));
         return template(PageTemplateRepository.path(page.id), pageBindings);
     }
