@@ -202,10 +202,6 @@ export default class TemplateList extends React.Component {
                     <div className="toolbar-form">
                         <Form inline={true} model={this.state.query}>
                             <Form.Item>
-                                <Input icon="fa fa-search" value={this.state.query.query} placeholder={i18n.t("page.pathPlaceHolder")}
-                                    onChange={value => this.queryChange("query", value)}/>
-                            </Form.Item>
-                            <Form.Item>
                                 <Select value={this.state.query.status}
                                     onChange={value => this.queryChangeAndFind("status", value)}
                                     clearable={true}
@@ -215,6 +211,10 @@ export default class TemplateList extends React.Component {
                                             label={el.label} value={el.value}/>)
                                     }
                                 </Select>
+                            </Form.Item>
+                            <Form.Item>
+                                <Input icon="fa fa-search" value={this.state.query.query} placeholder={i18n.t("page.pathPlaceHolder")}
+                                    onChange={value => this.queryChange("query", value)}/>
                             </Form.Item>
                             <Form.Item>
                                 <Button nativeType="button"

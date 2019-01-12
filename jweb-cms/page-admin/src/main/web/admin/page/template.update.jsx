@@ -312,7 +312,7 @@ export default class TemplateUpdate extends React.Component {
                             <Breadcrumb.Item><Link to="/admin/">{i18n.t("page.home")}</Link></Breadcrumb.Item>
                             <Breadcrumb.Item><Link
                                 to="/admin/page/list">{i18n.t("page.pageList")}</Link></Breadcrumb.Item>
-                            <Breadcrumb.Item>{this.state.form.id ? i18n.t("page.updateLayout") : i18n.t("page.createLayout")}</Breadcrumb.Item>
+                            <Breadcrumb.Item>{this.state.form.id ? i18n.t("page.updatePage") : i18n.t("page.createPage")}</Breadcrumb.Item>
                         </Breadcrumb>
                     </div>
                     <div className="toolbar-buttons">
