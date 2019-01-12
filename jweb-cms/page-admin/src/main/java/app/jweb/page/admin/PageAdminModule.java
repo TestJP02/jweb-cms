@@ -41,8 +41,8 @@ public class PageAdminModule extends AbstractAdminModule {
         menu.path = "/admin/page/";
 
         ConsoleMenu.ConsoleMenuItem layoutItem = new ConsoleMenu.ConsoleMenuItem();
-        layoutItem.displayName = "page.templates";
-        layoutItem.path = "/admin/page/template/list";
+        layoutItem.displayName = "page.page";
+        layoutItem.path = "/admin/page/page/list";
         layoutItem.rolesAllowed = Lists.newArrayList("page.LIST");
 
         ConsoleMenu.ConsoleMenuItem categoryItem = new ConsoleMenu.ConsoleMenuItem();

@@ -69,7 +69,7 @@ export default class TemplateList extends React.Component {
                         return (
                             <span className="el-table__actions">
                                 <Button type="text">
-                                    <Link to={{pathname: "/admin/page/template/" + current.id + "/update"}}> {current.type === "DEFAULT" ? i18n.t("page.customize") : i18n.t("page.update")} </Link>
+                                    <Link to={{pathname: "/admin/page/" + current.id + "/update"}}> {current.type === "DEFAULT" ? i18n.t("page.customize") : i18n.t("page.update")} </Link>
                                 </Button>
                                 {current.status === "DRAFT" &&
                                 <Button type="text" onClick={e => this.publish(current, e)}>
@@ -113,9 +113,7 @@ export default class TemplateList extends React.Component {
     delete(data, e) {
         e.preventDefault();
 
-        MessageBox.confirm(i18n.t("page.deletePageTip"), i18n.t("page.deleteHint"), {
-            type: 'warning'
-        }).then(() => {
+        MessageBox.confirm(i18n.t("page.deletePageTip"), i18n.t("page.deleteHint"), {type: "warning"}).then(() => {
             fetch("/admin/api/page/" + data.id, {method: "DELETE"}).then(() => {
                 this.find();
                 notification({
@@ -130,9 +128,7 @@ export default class TemplateList extends React.Component {
     publish(data, e) {
         e.preventDefault();
 
-        MessageBox.confirm(i18n.t("page.publishPageTip"), i18n.t("page.publishHint"), {
-            type: 'info'
-        }).then(() => {
+        MessageBox.confirm(i18n.t("page.publishPageTip"), i18n.t("page.publishHint"), {type: "info"}).then(() => {
             fetch("/admin/api/page/" + data.id + "/publish", {
                 method: "POST",
                 body: JSON.stringify({})
@@ -151,9 +147,7 @@ export default class TemplateList extends React.Component {
     batchDelete(e) {
         e.preventDefault();
 
-        MessageBox.confirm(i18n.t("page.deletePageTip"), i18n.t("page.deleteHint"), {
-            type: 'warning'
-        }).then(() => {
+        MessageBox.confirm(i18n.t("page.deletePageTip"), i18n.t("page.deleteHint"), {type: "warning"}).then(() => {
             const list = this.state.selected;
             if (list.length === 0) {
                 return;
@@ -202,7 +196,7 @@ export default class TemplateList extends React.Component {
                     <div className="toolbar-buttons">
                         {this.state.selected.length > 0 ? <Button type="danger" onClick={e => this.batchDelete(e)}
                             nativeType="button">{i18n.t("page.batchDelete")}</Button> : <span></span>}
-                        <Link to="/admin/page/template/create">
+                        <Link to="/admin/page/create">
                             <Button type="primary" nativeType="button">
                                 {i18n.t("page.create")}
                             </Button>

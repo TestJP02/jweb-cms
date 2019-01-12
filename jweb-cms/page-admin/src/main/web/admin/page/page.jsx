@@ -183,9 +183,9 @@ export default function Page() {
             <Route path="/admin/page/category/list" component={CategoryList}/>
             <Route path="/admin/page/category/create/parent/:parentId" component={CategoryUpdate}/>
             <Route path="/admin/page/category/:id/update" component={CategoryUpdate}/>
-            <Route path="/admin/page/template/list" component={TemplateList}/>
-            <Route path="/admin/page/template/create" component={TemplateUpdate}/>
-            <Route path="/admin/page/template/:id/update" component={TemplateUpdate}/>
+            <Route path="/admin/page/list" component={TemplateList}/>
+            <Route path="/admin/page/create" component={TemplateUpdate}/>
+            <Route path="/admin/page/:id/update" component={TemplateUpdate}/>
             <Route path="/admin/page/component/list" component={ComponentList}/>
             <Route path="/admin/page/component/:id/update" component={ComponentUpdate}/>
             <Route path="/admin/page/component/create" component={ComponentUpdate}/>

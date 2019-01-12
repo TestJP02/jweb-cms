@@ -80,7 +80,10 @@ export default class TemplateUpdate extends React.Component {
             this.get();
         } else if (!form.sections) {
             form.sections = [];
-            this.setState({form: form, suggestPathEnabled: true});
+            this.setState({
+                form: form,
+                suggestPathEnabled: true
+            });
             this.setCategory();
         }
         setTimeout(() => this.autoSave(), 10000);
@@ -89,7 +92,10 @@ export default class TemplateUpdate extends React.Component {
     pageTitleChange(val) {
         const form = this.state.form;
         form.title = val;
-        this.setState({form: form, formChanged: true}, () => {
+        this.setState({
+            form: form,
+            formChanged: true
+        }, () => {
             if (this.state.suggestPathEnabled) {
                 this.suggestPath(form.title);
             }
@@ -125,7 +131,10 @@ export default class TemplateUpdate extends React.Component {
                 if (this.state.suggestPathEnabled && this.state.suggestPathRequest.title === title) {
                     const form = this.state.form;
                     form.path = "/" + response.path;
-                    this.setState({form: form, formChanged: true});
+                    this.setState({
+                        form: form,
+                        formChanged: true
+                    });
                 }
 
                 if (this.state.suggestPathRequest.title === title) {
@@ -250,11 +259,16 @@ export default class TemplateUpdate extends React.Component {
     }
 
     cancel() {
-        this.props.history.push("/admin/page/template/list");
+        this.props.history.push("/admin/page/list");
     }
 
     formChange(key, value) {
-        this.setState({form: Object.assign({}, this.state.form, {[key]: value, formChanged: true})});
+        this.setState({
+            form: Object.assign({}, this.state.form, {
+                [key]: value,
+                formChanged: true
+            })
+        });
     }
 
     layout() {
@@ -284,7 +298,7 @@ export default class TemplateUpdate extends React.Component {
                     message: i18n.t("page.publishSuccessMessage"),
                     type: "success"
                 });
-                this.props.history.push("/admin/page/template/list");
+                this.props.history.push("/admin/page/list");
             });
         });
     }
@@ -297,7 +311,7 @@ export default class TemplateUpdate extends React.Component {
                         <Breadcrumb separator="/">
                             <Breadcrumb.Item><Link to="/admin/">{i18n.t("page.home")}</Link></Breadcrumb.Item>
                             <Breadcrumb.Item><Link
-                                to="/admin/page/template/list">{i18n.t("page.templates")}</Link></Breadcrumb.Item>
+                                to="/admin/page/list">{i18n.t("page.pageList")}</Link></Breadcrumb.Item>
                             <Breadcrumb.Item>{this.state.form.id ? i18n.t("page.updateLayout") : i18n.t("page.createLayout")}</Breadcrumb.Item>
                         </Breadcrumb>
                     </div>
