@@ -12,6 +12,7 @@ import app.jweb.page.api.page.PageStatus;
 import app.jweb.page.api.page.PageUpdatedMessage;
 import app.jweb.page.api.page.PublishPageRequest;
 import app.jweb.page.api.page.UpdatePageRequest;
+import app.jweb.page.api.page.ValidatePagePathRequest;
 import app.jweb.page.domain.Page;
 import app.jweb.page.domain.PageCategory;
 import app.jweb.page.domain.PageDraft;
@@ -227,6 +228,15 @@ public class PageService {
             repository.update(draft.id, draft);
             notifyPageCreated(draft);
             return draft;
+        }
+    }
+
+    public boolean validatePath(ValidatePagePathRequest request) {
+        Optional<PageDraft> draftOptional = pageDraftService.findByDraftId(request.draftId);
+        if (draftOptional.isPresent()) {
+            return !pathExists(request.path, draftOptional.get().pageId);
+        } else {
+            return !pathExists(request.path, request.draftId);
         }
     }
 

@@ -8,6 +8,8 @@ import app.jweb.page.api.page.PageResponse;
 import app.jweb.page.api.page.PageStatus;
 import app.jweb.page.api.page.PublishPageRequest;
 import app.jweb.page.api.page.UpdatePageRequest;
+import app.jweb.page.api.page.ValidatePagePathRequest;
+import app.jweb.page.api.page.ValidatePagePathResponse;
 import app.jweb.page.domain.Page;
 import app.jweb.page.domain.PageDraft;
 import app.jweb.page.service.PageDraftService;
@@ -65,6 +67,14 @@ public class PageDraftWebServiceImpl implements PageDraftWebService {
     @Override
     public PageResponse create(CreatePageRequest request) {
         return response(pageService.create(request));
+    }
+
+    @Override
+    public ValidatePagePathResponse validatePath(ValidatePagePathRequest request) {
+        boolean valid = pageService.validatePath(request);
+        ValidatePagePathResponse response = new ValidatePagePathResponse();
+        response.valid = valid;
+        return response;
     }
 
     @Override

@@ -8,7 +8,10 @@ import javax.xml.bind.annotation.XmlElement;
  * @author chi
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-public class ValidatePathResponse {
-    @XmlElement(name = "valid")
-    public Boolean valid;
+public class ValidatePathAJAXRequest {
+    @XmlElement(name = "draftId")
+    public String draftId;
+
+    @XmlElement(name = "path")
+    public String path;
 }

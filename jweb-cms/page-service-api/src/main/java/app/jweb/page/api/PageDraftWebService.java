@@ -6,6 +6,8 @@ import app.jweb.page.api.page.PageDraftQuery;
 import app.jweb.page.api.page.PageResponse;
 import app.jweb.page.api.page.PublishPageRequest;
 import app.jweb.page.api.page.UpdatePageRequest;
+import app.jweb.page.api.page.ValidatePagePathRequest;
+import app.jweb.page.api.page.ValidatePagePathResponse;
 import app.jweb.util.collection.QueryResponse;
 
 import javax.ws.rs.GET;
@@ -34,6 +36,10 @@ public interface PageDraftWebService {
 
     @POST
     PageResponse create(CreatePageRequest request);
+
+    @PUT
+    @Path("/path/validate")
+    ValidatePagePathResponse validatePath(ValidatePagePathRequest request);
 
     @Path("/{id}")
     @PUT
