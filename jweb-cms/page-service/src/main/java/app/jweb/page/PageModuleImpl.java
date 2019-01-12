@@ -28,12 +28,14 @@ import app.jweb.page.api.statistics.PageVisitedMessage;
 import app.jweb.page.api.variable.VariableChangedMessage;
 import app.jweb.page.domain.Page;
 import app.jweb.page.domain.PageCategory;
+import app.jweb.page.domain.PageDraft;
 import app.jweb.page.domain.PageKeyword;
 import app.jweb.page.domain.PageSavedComponent;
 import app.jweb.page.domain.PageTemplate;
 import app.jweb.page.domain.PageVariable;
 import app.jweb.page.service.PageCategoryService;
 import app.jweb.page.service.PageComponentService;
+import app.jweb.page.service.PageDraftService;
 import app.jweb.page.service.PageKeywordService;
 import app.jweb.page.service.PageSavedComponentService;
 import app.jweb.page.service.PageService;
@@ -75,6 +77,7 @@ public class PageModuleImpl extends PageModule {
         databaseConfig
             .entity(PageVariable.class)
             .entity(Page.class)
+            .entity(PageDraft.class)
             .entity(PageTemplate.class)
             .entity(PageCategory.class)
             .entity(PageKeyword.class)
@@ -87,6 +90,7 @@ public class PageModuleImpl extends PageModule {
         bind(PageCategoryService.class);
         bind(PageKeywordService.class);
         bind(PageTemplateService.class);
+        bind(PageDraftService.class);
 
         api().service(PageVariableWebService.class, PageVariableWebServiceImpl.class);
         api().service(PageWebService.class, PageWebServiceImpl.class);

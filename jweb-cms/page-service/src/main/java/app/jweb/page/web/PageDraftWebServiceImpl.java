@@ -1,14 +1,14 @@
 package app.jweb.page.web;
 
-import app.jweb.page.api.PageWebService;
+import app.jweb.page.api.PageDraftWebService;
 import app.jweb.page.api.page.CreatePageRequest;
-import app.jweb.page.api.page.DeletePageRequest;
-import app.jweb.page.api.page.PageQuery;
+import app.jweb.page.api.page.PageDraftQuery;
 import app.jweb.page.api.page.PageResponse;
+import app.jweb.page.api.page.PublishPageRequest;
 import app.jweb.page.api.page.UpdatePageRequest;
 import app.jweb.page.domain.Page;
-import app.jweb.page.service.PageComponentService;
-import app.jweb.page.service.PageSavedComponentService;
+import app.jweb.page.domain.PageDraft;
+import app.jweb.page.service.PageDraftService;
 import app.jweb.page.service.PageService;
 import app.jweb.util.collection.QueryResponse;
 import com.google.common.base.Splitter;
@@ -20,28 +20,32 @@ import java.util.Optional;
 /**
  * @author chi
  */
-public class PageWebServiceImpl implements PageWebService {
+public class PageDraftWebServiceImpl implements PageDraftWebService {
+    @Inject
+    PageDraftService pageDraftService;
+
     @Inject
     PageService pageService;
-    @Inject
-    PageSavedComponentService pageSavedComponentService;
-    @Inject
-    PageComponentService pageComponentService;
 
     @Override
-    public PageResponse get(String id) {
-        return response(pageService.get(id));
+    public QueryResponse<PageResponse> find(PageDraftQuery query) {
+        return null;
     }
 
     @Override
     public Optional<PageResponse> findByPath(String path) {
-        Optional<Page> pageTemplate = pageService.findByPath(path);
-        return pageTemplate.map(this::response);
+        return Optional.empty();
     }
 
     @Override
-    public QueryResponse<PageResponse> find(PageQuery query) {
-        return pageService.find(query).map(this::response);
+    public PageResponse draft(String pageId) {
+        Optional<PageDraft> pageDraftOptional = pageDraftService.findByPageId(pageId);
+        if (pageDraftOptional.isEmpty()) {
+            Page page = pageService.get(pageId);
+            return response(page);
+        }
+        Page page = pageService.get(pageDraftOptional.get().draftId);
+        return response(page);
     }
 
     @Override
@@ -55,8 +59,9 @@ public class PageWebServiceImpl implements PageWebService {
     }
 
     @Override
-    public void delete(DeletePageRequest request) {
-        request.ids.forEach(id -> pageService.delete(id));
+    public PageResponse publish(PublishPageRequest request) {
+        pageService.publish();
+        return null;
     }
 
     private PageResponse response(Page page) {
@@ -76,5 +81,4 @@ public class PageWebServiceImpl implements PageWebService {
         response.updatedBy = page.updatedBy;
         return response;
     }
-
 }

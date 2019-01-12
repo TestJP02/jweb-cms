@@ -1,10 +1,9 @@
 package app.jweb.page.api;
 
-
 import app.jweb.page.api.page.CreatePageRequest;
-import app.jweb.page.api.page.DeletePageRequest;
-import app.jweb.page.api.page.PageQuery;
+import app.jweb.page.api.page.PageDraftQuery;
 import app.jweb.page.api.page.PageResponse;
+import app.jweb.page.api.page.PublishPageRequest;
 import app.jweb.page.api.page.UpdatePageRequest;
 import app.jweb.util.collection.QueryResponse;
 
@@ -18,20 +17,19 @@ import java.util.Optional;
 /**
  * @author chi
  */
-@Path("/api/page/")
-public interface PageWebService {
-    @Path("/{id}")
-    @GET
-    PageResponse get(@PathParam("id") String id);
-
+@Path("/api/page/draft")
+public interface PageDraftWebService {
+    @Path("/find")
+    @PUT
+    QueryResponse<PageResponse> find(PageDraftQuery query);
 
     @Path("/path/{path}")
     @GET
     Optional<PageResponse> findByPath(@PathParam("path") String path);
 
-    @Path("/find")
-    @PUT
-    QueryResponse<PageResponse> find(PageQuery query);
+    @Path("/page-id/{pageId}")
+    @GET
+    PageResponse draft(@PathParam("pageId") String pageId);
 
     @POST
     PageResponse create(CreatePageRequest request);
@@ -40,7 +38,7 @@ public interface PageWebService {
     @PUT
     PageResponse update(@PathParam("id") String id, UpdatePageRequest request);
 
-    @Path("/delete")
-    @POST
-    void delete(DeletePageRequest request);
+    @Path("/publish")
+    @PUT
+    PageResponse publish(PublishPageRequest request);
 }

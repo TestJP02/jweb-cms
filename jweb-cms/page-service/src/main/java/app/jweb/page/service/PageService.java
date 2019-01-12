@@ -9,9 +9,11 @@ import app.jweb.page.api.page.PageDeletedMessage;
 import app.jweb.page.api.page.PageQuery;
 import app.jweb.page.api.page.PageStatus;
 import app.jweb.page.api.page.PageUpdatedMessage;
+import app.jweb.page.api.page.PublishPageRequest;
 import app.jweb.page.api.page.UpdatePageRequest;
 import app.jweb.page.domain.Page;
 import app.jweb.page.domain.PageCategory;
+import app.jweb.page.domain.PageDraft;
 import app.jweb.util.collection.QueryResponse;
 import com.google.common.base.Joiner;
 import com.google.common.base.Splitter;
@@ -40,6 +42,8 @@ public class PageService {
     PageCategoryService categoryService;
     @Inject
     PageTemplateService pageTemplateService;
+    @Inject
+    PageDraftService pageDraftService;
 
     public Page get(String id) {
         return repository.get(id);
@@ -70,37 +74,6 @@ public class PageService {
 
     @Transactional
     public Page create(CreatePageRequest request) {
-        Optional<Page> pageOptional = findByPath(request.path);
-        if (pageOptional.isPresent()) {
-            Page page = pageOptional.get();
-
-            if (request.categoryId != null) {
-                PageCategory category = categoryService.get(request.categoryId);
-                page.categoryId = category.id;
-                page.categoryIds = categoryIds(category);
-            }
-
-            if (request.title != null) {
-                page.title = request.title;
-            }
-            if (request.description != null) {
-                page.description = request.description;
-            }
-            if (request.tags != null) {
-                page.tags = Joiner.on(';').join(request.tags);
-            }
-            if (request.keywords != null) {
-                page.keywords = Joiner.on(';').join(request.keywords);
-            }
-            page.updatedTime = OffsetDateTime.now();
-            page.updatedBy = request.requestBy;
-            page.status = request.status == null ? PageStatus.DRAFT : request.status;
-            repository.update(page.id, page);
-            pageTemplateService.update(page.id, request.sections, request.requestBy);
-            notifyPageUpdated(page);
-            return page;
-        }
-
         Page page = new Page();
         page.id = UUID.randomUUID().toString();
         if (request.categoryId != null) {
@@ -117,7 +90,7 @@ public class PageService {
         page.updatedTime = OffsetDateTime.now();
         page.createdBy = request.requestBy;
         page.updatedBy = request.requestBy;
-        page.status = request.status == null ? PageStatus.DRAFT : request.status;
+        page.status = PageStatus.DRAFT;
         repository.insert(page);
         pageTemplateService.create(page.id, request.sections, request.requestBy);
         notifyPageCreated(page);
@@ -134,38 +107,110 @@ public class PageService {
     @Transactional
     public Page update(String id, UpdatePageRequest request) {
         Page page = get(id);
-        if (request.categoryId != null) {
-            PageCategory category = categoryService.get(request.categoryId);
-            page.categoryId = category.id;
-            page.categoryIds = categoryIds(category);
+        if (page.status == PageStatus.ACTIVE) {
+            Optional<PageDraft> draftOptional = pageDraftService.findByPageId(page.id);
+            if (draftOptional.isEmpty()) {
+                Page draft = new Page();
+                draft.id = UUID.randomUUID().toString();
+                if (request.categoryId != null) {
+                    PageCategory category = categoryService.get(request.categoryId);
+                    draft.categoryId = category.id;
+                    draft.categoryIds = categoryIds(category);
+                }
+                draft.userId = page.userId;
+                draft.path = request.path;
+                draft.title = request.title;
+                draft.description = request.description;
+                draft.tags = request.tags == null ? null : Joiner.on(';').join(request.tags);
+                draft.createdTime = OffsetDateTime.now();
+                draft.updatedTime = OffsetDateTime.now();
+                draft.createdBy = request.requestBy;
+                draft.updatedBy = request.requestBy;
+                draft.status = PageStatus.DRAFT;
+                repository.insert(draft);
+                pageTemplateService.create(draft.id, request.sections, request.requestBy);
+                pageDraftService.create(draft.id, page.id, request.requestBy);
+                return draft;
+            } else {
+                Page draft = get(draftOptional.get().draftId);
+                if (request.categoryId != null) {
+                    PageCategory category = categoryService.get(request.categoryId);
+                    draft.categoryId = category.id;
+                    draft.categoryIds = categoryIds(category);
+                }
+                draft.path = request.path;
+                draft.title = request.title;
+                draft.description = request.description;
+                draft.tags = request.tags == null ? null : Joiner.on(';').join(request.tags);
+                draft.createdTime = OffsetDateTime.now();
+                draft.updatedTime = OffsetDateTime.now();
+                draft.createdBy = request.requestBy;
+                draft.updatedBy = request.requestBy;
+                draft.status = PageStatus.DRAFT;
+                repository.insert(draft);
+                pageTemplateService.create(draft.id, request.sections, request.requestBy);
+                return draft;
+            }
+        } else {
+            if (request.categoryId != null) {
+                PageCategory category = categoryService.get(request.categoryId);
+                page.categoryId = category.id;
+                page.categoryIds = categoryIds(category);
+            }
+            page.path = request.path;
+            page.title = request.title;
+            page.description = request.description;
+            page.tags = request.tags == null ? null : Joiner.on(';').join(request.tags);
+            page.updatedTime = OffsetDateTime.now();
+            page.updatedBy = request.requestBy;
+            repository.update(id, page);
+            pageTemplateService.update(page.id, request.sections, request.requestBy);
+            return page;
         }
-        page.path = request.path;
-        page.title = request.title;
-        page.description = request.description;
-        page.tags = request.tags == null ? null : Joiner.on(';').join(request.tags);
-        page.updatedTime = OffsetDateTime.now();
-        page.updatedBy = request.requestBy;
-        page.status = request.status == null ? PageStatus.DRAFT : request.status;
-        repository.update(id, page);
-        pageTemplateService.update(page.id, request.sections, request.requestBy);
-        notifyPageUpdated(page);
-
-        return page;
     }
 
 
     @Transactional
-    public void delete(String id, String requestBy) {
+    public void delete(String id) {
         Page page = repository.get(id);
-        if (page.status == PageStatus.INACTIVE) {
-            repository.delete(id);
-            pageTemplateService.delete(page.id);
-        } else {
-            page.status = PageStatus.INACTIVE;
+        repository.delete(id);
+        pageTemplateService.delete(page.id);
+        pageDraftService.deleteByPageId(page.id);
+        notifyPageDeleted(page);
+    }
+
+    @Transactional
+    public void publish(PublishPageRequest request) {
+        Page draft = repository.get(request.draftId);
+        Optional<PageDraft> draftOptional = pageDraftService.findByDraftId(request.draftId);
+        if (draftOptional.isPresent()) {
+            PageDraft pageDraft = draftOptional.get();
+            Page page = get(pageDraft.pageId);
+            if (draft.categoryId != null) {
+                PageCategory category = categoryService.get(draft.categoryId);
+                draft.categoryId = category.id;
+                draft.categoryIds = categoryIds(category);
+            }
+            page.path = draft.path;
+            page.title = draft.title;
+            page.description = draft.description;
+            page.tags = draft.tags;
+            page.keywords = draft.keywords;
             page.updatedTime = OffsetDateTime.now();
-            page.updatedBy = requestBy;
-            repository.update(id, page);
-            notifyPageDeleted(page);
+            page.updatedBy = request.requestBy;
+            repository.update(page.id, page);
+            pageTemplateService.copySections(draft.id, page.id, request.requestBy);
+
+            pageTemplateService.delete(draft.id);
+            repository.delete(draft.id);
+
+            notifyPageUpdated(page);
+        } else {
+            draft.status = PageStatus.ACTIVE;
+            draft.updatedTime = OffsetDateTime.now();
+            draft.updatedBy = request.requestBy;
+            repository.update(draft.id, draft);
+            notifyPageCreated(draft);
         }
     }
 

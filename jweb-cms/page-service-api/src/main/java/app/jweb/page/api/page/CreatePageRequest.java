@@ -28,8 +28,6 @@ public class CreatePageRequest {
     public List<String> keywords;
     @XmlElement(name = "sections")
     public List<PageSectionView> sections;
-    @XmlElement(name = "status")
-    public PageStatus status;
     @XmlElement(name = "requestBy")
     public String requestBy;
 }

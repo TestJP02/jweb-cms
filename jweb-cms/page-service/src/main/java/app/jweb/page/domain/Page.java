@@ -45,6 +45,9 @@ public class Page {
     @Column(name = "keywords", length = 512)
     public String keywords;
 
+    @Column(name = "version")
+    public Integer version;
+
     @Column(name = "status", length = 16)
     @Enumerated(EnumType.STRING)
     public PageStatus status;

@@ -43,6 +43,16 @@ public class PageTemplateService {
     }
 
     @Transactional
+    public void copySections(String fromPageId, String toPageId, String requestBy) {
+        PageTemplate fromTemplate = get(fromPageId);
+        PageTemplate pageTemplate = get(toPageId);
+        pageTemplate.sections = fromTemplate.sections;
+        pageTemplate.updatedTime = OffsetDateTime.now();
+        pageTemplate.updatedBy = requestBy;
+        repository.update(pageTemplate.pageId, pageTemplate);
+    }
+
+    @Transactional
     public void delete(String id) {
         repository.delete(id);
     }

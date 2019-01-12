@@ -33,6 +33,8 @@ public class PageUpdatedMessage {
     public List<String> keywords;
     @XmlElement(name = "status")
     public PageStatus status;
+    @XmlElement(name = "version")
+    public Integer version;
     @XmlElement(name = "createdTime")
     public OffsetDateTime createdTime;
     @XmlElement(name = "createdBy")

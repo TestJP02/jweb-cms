@@ -39,6 +39,8 @@ public class PageCreatedMessage {
     public List<PageSectionView> sections;
     @XmlElement(name = "status")
     public PageStatus status;
+    @XmlElement(name = "version")
+    public Integer version;
     @XmlElement(name = "createdTime")
     public OffsetDateTime createdTime;
     @XmlElement(name = "createdBy")
