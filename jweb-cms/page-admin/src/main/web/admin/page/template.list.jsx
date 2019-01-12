@@ -23,20 +23,24 @@ export default class TemplateList extends React.Component {
             columns: [
                 {type: "selection"},
                 {
+                    label: i18n.t("page.path"),
+                    render: function(data) {
+                        return (
+                            <span>
+                                {
+                                    data.status === "DRAFT" ? "* " + data.path : data.path
+                                }
+                            </span>
+                        );
+                    }
+                },
+                {
                     label: i18n.t("page.title"),
                     prop: "title"
                 },
                 {
-                    label: i18n.t("page.path"),
-                    prop: "path"
-                },
-                {
-                    label: i18n.t("page.templatePath"),
-                    prop: "templatePath"
-                },
-                {
-                    label: i18n.t("page.type"),
-                    prop: "type"
+                    label: i18n.t("page.description"),
+                    prop: "description"
                 },
                 {
                     label: i18n.t("page.status"),
