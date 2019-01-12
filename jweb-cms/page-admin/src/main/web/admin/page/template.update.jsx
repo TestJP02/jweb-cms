@@ -17,7 +17,7 @@ export default class TemplateUpdate extends React.Component {
                 id: props.match.params.id,
                 title: null,
                 path: null,
-                sections: null
+                sections: []
             },
             formChanged: false,
             formRules: {
@@ -43,9 +43,8 @@ export default class TemplateUpdate extends React.Component {
         const form = this.state.form;
         if (this.state.form.id) {
             this.get();
-        } else if (!form.sections) {
-            form.sections = [];
-            this.setState({form});
+        } else {
+            this.setCategory();
         }
         setTimeout(() => this.autoSave(), 10000);
     }
