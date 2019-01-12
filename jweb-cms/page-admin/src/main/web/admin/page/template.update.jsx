@@ -13,6 +13,8 @@ export default class TemplateUpdate extends React.Component {
             categoryCascade: [],
             categoryList: [],
             path: null,
+            suggestPathEnabled: false,
+            suggestPathRequest: null,
             form: {
                 id: props.match.params.id,
                 title: null,
@@ -33,6 +35,39 @@ export default class TemplateUpdate extends React.Component {
                         required: true,
                         message: i18n.t("page.pathRequired"),
                         trigger: "blur"
+                    },
+                    {
+                        required: true,
+                        validator: (rule, value, callback) => {
+                            if (value[0] !== "/") {
+                                callback(new Error(i18n.t("page.pathStartWithError")));
+                                return;
+                            }
+                            fetch("/admin/api/page/path/validate", {
+                                method: "PUT",
+                                body: JSON.stringify({
+                                    draftId: this.state.form.id,
+                                    path: value
+                                })
+                            }).then((response) => {
+                                if (response.valid) {
+                                    return callback();
+                                }
+                                return callback(new Error(i18n.t("page.duplicatePath")));
+                            });
+                        },
+                        trigger: "blur"
+                    },
+                    {
+                        required: true,
+                        validator: (rule, value, callback) => {
+                            if (value[0] !== "/") {
+                                callback(new Error(i18n.t("page.pathStartWithError")));
+                                return;
+                            }
+                            callback();
+                        },
+                        trigger: "blur"
                     }
                 ]
             }
@@ -45,10 +80,61 @@ export default class TemplateUpdate extends React.Component {
             this.get();
         } else if (!form.sections) {
             form.sections = [];
-            this.setState({form});
+            this.setState({form: form, suggestPathEnabled: true});
             this.setCategory();
         }
         setTimeout(() => this.autoSave(), 10000);
+    }
+
+    pageTitleChange(val) {
+        const form = this.state.form;
+        form.title = val;
+        this.setState({form: form, formChanged: true}, () => {
+            if (this.state.suggestPathEnabled) {
+                this.suggestPath(form.title);
+            }
+        });
+    }
+
+    pagePathChange(value) {
+        const path = value.startsWith("/") ? value : "/" + value;
+        const form = this.state.form;
+        form.path = path;
+        this.setState({
+            formChanged: true,
+            form: form,
+            suggestPathEnabled: false
+        });
+    }
+
+    suggestPath(title, callback) {
+        if (this.state.suggestPathRequest && !callback) {
+            const suggestPathRequest = {title: title};
+            this.setState({suggestPathRequest});
+            return;
+        }
+
+        const suggestPathRequest = {title: title};
+        this.setState({suggestPathRequest});
+
+        setTimeout(() => {
+            fetch("/admin/api/page/path/suggest", {
+                method: "PUT",
+                body: JSON.stringify({title: title})
+            }).then((response) => {
+                if (this.state.suggestPathEnabled && this.state.suggestPathRequest.title === title) {
+                    const form = this.state.form;
+                    form.path = "/" + response.path;
+                    this.setState({form: form, formChanged: true});
+                }
+
+                if (this.state.suggestPathRequest.title === title) {
+                    this.setState({suggestPathRequest: null});
+                } else {
+                    this.suggestPath(this.state.suggestPathRequest.title, true);
+                }
+            });
+        }, 500);
     }
 
     autoSave() {
@@ -168,7 +254,7 @@ export default class TemplateUpdate extends React.Component {
     }
 
     formChange(key, value) {
-        this.setState({form: Object.assign({}, this.state.form, {[key]: value})});
+        this.setState({form: Object.assign({}, this.state.form, {[key]: value, formChanged: true})});
     }
 
     layout() {
@@ -254,12 +340,11 @@ export default class TemplateUpdate extends React.Component {
                                         clearable={true}
                                     />
                                 </Form.Item>
-                                <Form.Item label={i18n.t("page.path")} prop="path">
-                                    <Input value={this.state.form.path} onChange={val => this.formChange("path", val)}/>
-                                </Form.Item>
-
                                 <Form.Item label={i18n.t("page.title")} prop="title">
-                                    <Input value={this.state.form.title} onChange={val => this.formChange("title", val)}/>
+                                    <Input value={this.state.form.title} onChange={val => this.pageTitleChange(val)}/>
+                                </Form.Item>
+                                <Form.Item label={i18n.t("page.path")} prop="path">
+                                    <Input value={this.state.form.path} onChange={val => this.pagePathChange(val)}/>
                                 </Form.Item>
                                 <Form.Item label={i18n.t("page.description")} prop="description">
                                     <Input type="textarea" value={this.state.form.description} onChange={val => this.formChange("description", val)} autosize={{

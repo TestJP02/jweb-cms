@@ -6,6 +6,7 @@ import app.jweb.message.MessagePublisher;
 import app.jweb.page.api.page.CreatePageRequest;
 import app.jweb.page.api.page.PageCreatedMessage;
 import app.jweb.page.api.page.PageDeletedMessage;
+import app.jweb.page.api.page.PageDraftQuery;
 import app.jweb.page.api.page.PageQuery;
 import app.jweb.page.api.page.PageStatus;
 import app.jweb.page.api.page.PageUpdatedMessage;
@@ -22,6 +23,7 @@ import com.google.common.collect.ImmutableList;
 
 import javax.inject.Inject;
 import javax.transaction.Transactional;
+import javax.ws.rs.BadRequestException;
 import java.time.OffsetDateTime;
 import java.util.Optional;
 import java.util.UUID;
@@ -50,7 +52,11 @@ public class PageService {
     }
 
     public Optional<Page> findByPath(String path) {
-        return repository.query("SELECT t FROM Page t WHERE t.path=?0", path).findOne();
+        return repository.query("SELECT t FROM Page t WHERE t.path=?0 AND t.status=?1", path, PageStatus.ACTIVE).findOne();
+    }
+
+    public Optional<Page> findDraftByPath(String path) {
+        return repository.query("SELECT t FROM Page t WHERE t.path=?0 AND t.status=?1", path, PageStatus.DRAFT).findOne();
     }
 
     public Optional<Page> findById(String id) {
@@ -58,6 +64,23 @@ public class PageService {
     }
 
     public QueryResponse<Page> find(PageQuery pageQuery) {
+        Query<Page> query = repository.query("SELECT t FROM Page t WHERE 1=1");
+        int index = 0;
+        if (!Strings.isNullOrEmpty(pageQuery.query)) {
+            query.append("AND (t.path LIKE ?" + index++, '%' + pageQuery.query + "%");
+            query.append("OR t.title LIKE ?" + index++, '%' + pageQuery.query + "%)");
+        }
+        query.append("AND t.status=?" + index, PageStatus.ACTIVE);
+        query.limit(pageQuery.page, pageQuery.limit);
+        if (pageQuery.sortingField != null) {
+            query.sort("t." + pageQuery.sortingField, pageQuery.desc);
+        } else {
+            query.sort("t.updatedTime", true);
+        }
+        return query.findAll();
+    }
+
+    public QueryResponse<Page> find(PageDraftQuery pageQuery) {
         Query<Page> query = repository.query("SELECT t FROM Page t WHERE 1=1");
         int index = 0;
         if (!Strings.isNullOrEmpty(pageQuery.query)) {
@@ -168,6 +191,11 @@ public class PageService {
         if (draftOptional.isPresent()) {
             PageDraft pageDraft = draftOptional.get();
             Page page = get(pageDraft.pageId);
+
+            if (pathExists(draft.path, page.id)) {
+                throw new BadRequestException("duplicate path, path=" + draft.path);
+            }
+
             if (draft.categoryId != null) {
                 PageCategory category = categoryService.get(draft.categoryId);
                 draft.categoryId = category.id;
@@ -190,6 +218,9 @@ public class PageService {
             notifyPageUpdated(page);
             return page;
         } else {
+            if (pathExists(draft.path, draft.id)) {
+                throw new BadRequestException("duplicate path, path=" + draft.path);
+            }
             draft.status = PageStatus.ACTIVE;
             draft.updatedTime = OffsetDateTime.now();
             draft.updatedBy = request.requestBy;
@@ -197,6 +228,11 @@ public class PageService {
             notifyPageCreated(draft);
             return draft;
         }
+    }
+
+    private boolean pathExists(String path, String pageId) {
+        Optional<Page> pageOptional = findByPath(path);
+        return pageOptional.isPresent() && !pageId.equals(pageOptional.get().id);
     }
 
     private void notifyPageCreated(Page page) {

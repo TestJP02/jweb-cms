@@ -1,16 +1,15 @@
 package app.jweb.page.web.web;
 
 import app.jweb.message.MessagePublisher;
+import app.jweb.page.api.PageDraftWebService;
 import app.jweb.page.api.PageWebService;
 import app.jweb.page.api.page.PageResponse;
-import app.jweb.page.api.page.PageStatus;
 import app.jweb.page.api.statistics.PageVisitedMessage;
 import app.jweb.page.web.AbstractPageController;
 import app.jweb.template.Template;
 import app.jweb.template.TemplateEngine;
 import app.jweb.web.ClientInfo;
 import app.jweb.web.NotFoundWebException;
-import com.google.common.collect.Maps;
 
 import javax.inject.Inject;
 import javax.ws.rs.GET;
@@ -19,7 +18,6 @@ import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 import java.time.OffsetDateTime;
-import java.util.Map;
 import java.util.Optional;
 
 /**
@@ -34,6 +32,8 @@ public class PageController extends AbstractPageController {
     @Inject
     PageWebService pageWebService;
     @Inject
+    PageDraftWebService pageDraftWebService;
+    @Inject
     UriInfo uriInfo;
     @Inject
     ClientInfo clientInfo;
@@ -47,17 +47,23 @@ public class PageController extends AbstractPageController {
     @Path("{s:.+}")
     public Response handle(@QueryParam("draft") Boolean draft) {
         String path = normalize("/" + uriInfo.getPath());
-        Optional<PageResponse> pageOptional = pageWebService.findByPath(path);
-        if (pageOptional.isEmpty()) {
+
+        if (Boolean.TRUE.equals(draft)) {
+            Optional<PageResponse> pageDraft = pageDraftWebService.findByPath(path);
+            if (pageDraft.isPresent()) {
+                return page(pageDraft.get()).build();
+            } else {
+                throw new NotFoundWebException("missing page, path={}", path);
+            }
+        } else {
+            Optional<PageResponse> pageOptional = pageWebService.findByPath(path);
+            if (pageOptional.isPresent()) {
+                PageResponse page = pageOptional.get();
+                notifyPageVisited(page);
+                return page(page).build();
+            }
             return tryTemplate(path).orElseThrow(() -> new NotFoundWebException("missing page, path={}", path));
         }
-        PageResponse page = pageOptional.get();
-        if (page.status == PageStatus.DRAFT && !Boolean.TRUE.equals(draft)) {
-            return tryTemplate(path).orElseThrow(() -> new NotFoundWebException("missing page, path={}", path));
-        }
-        Map<String, Object> bindings = Maps.newHashMap();
-        notifyPageVisited(page);
-        return page(page, bindings).build();
     }
 
     private String normalize(String path) {

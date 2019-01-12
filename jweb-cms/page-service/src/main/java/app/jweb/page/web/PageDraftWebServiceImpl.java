@@ -34,12 +34,12 @@ public class PageDraftWebServiceImpl implements PageDraftWebService {
 
     @Override
     public QueryResponse<PageResponse> find(PageDraftQuery query) {
-        return null;
+        return pageService.find(query).map(this::response);
     }
 
     @Override
     public Optional<PageResponse> findByPath(String path) {
-        return Optional.empty();
+        return pageService.findDraftByPath(path).map(this::response);
     }
 
     @Override

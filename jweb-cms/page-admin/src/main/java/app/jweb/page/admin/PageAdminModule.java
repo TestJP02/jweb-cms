@@ -4,10 +4,12 @@ package app.jweb.page.admin;
 import app.jweb.admin.AbstractAdminModule;
 import app.jweb.admin.ConsoleBundle;
 import app.jweb.admin.ConsoleMenu;
+import app.jweb.page.admin.service.PagePathService;
+import app.jweb.page.admin.web.api.PageAdminController;
 import app.jweb.page.admin.web.api.PageCategoryAdminController;
 import app.jweb.page.admin.web.api.PageComponentAdminController;
+import app.jweb.page.admin.web.api.PagePathAdminController;
 import app.jweb.page.admin.web.api.PageSavedComponentAdminController;
-import app.jweb.page.admin.web.api.PageAdminController;
 import app.jweb.page.admin.web.api.PageVariableAdminController;
 import com.google.common.collect.Lists;
 
@@ -21,12 +23,14 @@ public class PageAdminModule extends AbstractAdminModule {
 
 
         bind(PageAdminOptions.class).toInstance(pageAdminOptions);
+        bind(PagePathService.class);
 
         admin().controller(PageVariableAdminController.class);
         admin().controller(PageAdminController.class);
         admin().controller(PageSavedComponentAdminController.class);
         admin().controller(PageComponentAdminController.class);
         admin().controller(PageCategoryAdminController.class);
+        admin().controller(PagePathAdminController.class);
 
         admin().install(scriptModule());
     }

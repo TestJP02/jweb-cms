@@ -10,9 +10,10 @@ import app.jweb.page.admin.web.api.template.UpdatePageAJAXRequest;
 import app.jweb.page.api.PageDraftWebService;
 import app.jweb.page.api.PageTemplateWebService;
 import app.jweb.page.api.PageWebService;
-import app.jweb.page.api.page.GetPageDraftRequest;
 import app.jweb.page.api.page.CreatePageRequest;
 import app.jweb.page.api.page.DeletePageRequest;
+import app.jweb.page.api.page.GetPageDraftRequest;
+import app.jweb.page.api.page.PageDraftQuery;
 import app.jweb.page.api.page.PageQuery;
 import app.jweb.page.api.page.PageResponse;
 import app.jweb.page.api.page.PublishPageRequest;
@@ -71,7 +72,7 @@ public class PageAdminController {
     @Path("/find")
     @PUT
     public QueryResponse<PageAJAXResponse> find(PageTemplateAJAXQuery query) {
-        return pageWebService.find(query(query)).map(this::response);
+        return pageDraftWebService.find(query(query)).map(this::response);
     }
 
     @RolesAllowed("CREATE")
@@ -139,8 +140,8 @@ public class PageAdminController {
         pageWebService.delete(deletePageRequest);
     }
 
-    private PageQuery query(PageTemplateAJAXQuery ajaxQuery) {
-        PageQuery query = new PageQuery();
+    private PageDraftQuery query(PageTemplateAJAXQuery ajaxQuery) {
+        PageDraftQuery query = new PageDraftQuery();
         query.query = ajaxQuery.query;
         query.page = ajaxQuery.page;
         query.limit = ajaxQuery.limit;

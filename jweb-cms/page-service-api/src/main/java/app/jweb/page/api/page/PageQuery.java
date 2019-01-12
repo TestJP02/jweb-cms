@@ -21,6 +21,4 @@ public class PageQuery {
     public Boolean desc;
     @XmlElement(name = "sortingField")
     public String sortingField;
-    @XmlElement(name = "status")
-    public PageStatus status;
 }
