@@ -26,13 +26,11 @@ export default class TemplateList extends React.Component {
                 {
                     label: i18n.t("page.path"),
                     render: function(data) {
-                        return (
-                            <span>
-                                {
-                                    data.status === "DRAFT" ? "* " + data.path : data.path
-                                }
-                            </span>
-                        );
+                        if (data.status === "DRAFT") {
+                            return <a target="_blank" href={data.path + "?draft=true"}>*{data.path}</a>;
+                        } else if (data.status === "ACTIVE") {
+                            return <a target="_blank" href={data.path}>{data.path}</a>;
+                        }
                     }
                 },
                 {
@@ -73,12 +71,14 @@ export default class TemplateList extends React.Component {
                                 <Button type="text">
                                     <Link to={{pathname: "/admin/page/template/" + current.id + "/update"}}> {current.type === "DEFAULT" ? i18n.t("page.customize") : i18n.t("page.update")} </Link>
                                 </Button>
-
-                                {current.type !== "DEFAULT" &&
+                                {current.status === "DRAFT" &&
+                                <Button type="text" onClick={e => this.publish(current, e)}>
+                                    {i18n.t("page.publish")}
+                                </Button>
+                                }
                                 <Button type="text" onClick={e => this.delete(current, e)}>
                                     {i18n.t("page.delete")}
                                 </Button>
-                                }
                             </span>
                         );
                     }.bind(this)
@@ -123,6 +123,27 @@ export default class TemplateList extends React.Component {
                     type: "success",
                     message: i18n.t("page.deleteSuccessMessage")
                 });
+            });
+        });
+    }
+
+    publish(data, e) {
+        e.preventDefault();
+
+        MessageBox.confirm(i18n.t("page.publishPageTip"), i18n.t("page.publishHint"), {
+            type: 'info'
+        }).then(() => {
+            fetch("/admin/api/page/" + data.id + "/publish", {
+                method: "POST",
+                body: JSON.stringify({})
+            }).then(() => {
+                notification({
+                    title: "Success",
+                    message: i18n.t("page.publishSuccessMessage"),
+                    type: "success"
+                });
+
+                this.find();
             });
         });
     }
