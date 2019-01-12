@@ -1,0 +1,148 @@
+.content-editor {
+    position: relative;
+}
+
+.content-editor__buttons {
+    position: absolute;
+    margin-left: -50px;
+    z-index: 1;
+}
+
+.content-editor__button {
+    display: inline-block;
+    position: relative;
+    background-color: white;
+    margin-right: 9px;
+    outline: 0;
+    padding: 0;
+    vertical-align: top;
+    box-sizing: border-box;
+    border-radius: 50%;
+    cursor: pointer;
+    font-size: 14px;
+    text-decoration: none;
+    white-space: nowrap;
+    text-align: center;
+    text-rendering: optimizeLegibility;
+    width: 32px;
+    height: 32px;
+    line-height: 30px;
+    transition: 100ms border-color, 100ms color;
+    border: 1px solid;
+    border-color: #ccc;
+    color: #ccc;
+}
+
+.content-editor__editor {
+    min-height: 100px;
+    font-size: 16px;
+    line-height: 32px;
+    color: #333;
+}
+
+.content-editor__bar {
+    margin-top: -50px;
+    position: absolute;
+    z-index: 150;
+    background: #333;
+    color: #fff;
+    padding: 0 10px;
+    border-radius: 4px;
+    box-shadow: 3px 3px 5px 0 rgba(0, 0, 0, 0.15);
+}
+
+.content-editor__bar-input input {
+    padding: 0;
+    background: none;
+    border: 0;
+    color: #999;
+}
+
+.content-editor__bar-button {
+    position: relative;
+    display: inline-block;
+    background: none;
+    color: #fff;
+    border: 0;
+    height: 40px;
+    padding: 0 10px;
+    line-height: 40px;
+    text-align: center;
+    vertical-align: top;
+}
+
+.content-editor__bar .el-button+.el-button {
+    margin: 0;
+}
+
+.content-editor__bar .el-button [class*=el-icon-]+span {
+    margin: 0;
+}
+
+.content-editor__bar-button--selected {
+    background: none;
+    font-weight: bold;
+    color: #3498db;
+}
+
+.content-editor__bar .content-editor__bar-color-picker-label {
+    position: absolute;
+    z-index: -1;
+    width: 11px;
+    line-height: 22px;
+    top: 9px;
+    background: #333;
+}
+
+.content-editor__bar .el-color-picker__trigger {
+    height: 40px;
+    padding: 9px 0;
+    border: 0;
+    cursor: pointer;
+}
+
+.content-editor__bar-button .el-color-picker__color {
+    border: 0;
+}
+
+.content-editor__bar-button--color .el-color-picker__color {
+    width: 13px;
+    height: 3px;
+    margin-top: 18px;
+}
+
+.content-editor__bar-button--bgcolor .el-color-picker__color {
+    position: relative;
+    border: 1px solid #666;
+}
+
+.content-editor__bar-button--bgcolor .el-color-picker__color::before {
+    content: "A";
+    position: absolute;
+    color: #fff;
+    width: 19px;
+    font-size: 14px;
+    line-height: 20px;
+    top: 0;
+    left: 0;
+    z-index: 1;
+    text-align: center;
+}
+
+.content-editor__bar .el-color-picker__trigger .el-color-picker__icon {
+    display: none;
+}
+
+.blockquote {
+    position: relative;
+    color: #999;
+    font-weight: 400;
+    border-left: 1px solid #3498db;
+    padding-left: 1em;
+    margin: 1em 3em 1em 2em;
+}
+
+.public-DraftEditorPlaceholder-root {
+    position: absolute;
+    color: #CDCDCD;
+}

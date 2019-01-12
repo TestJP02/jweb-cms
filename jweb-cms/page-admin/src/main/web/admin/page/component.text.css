@@ -1,0 +1,26 @@
+.page-text-component .el-input-group__append .el-select,
+.page-text-component .el-input-group__prepend .el-select {
+    width: auto;
+}
+
+.page-text-component .el-input-group__append .el-select i,
+.page-text-component .el-input-group__prepend .el-select i {
+    display: none;
+}
+
+.page-text-component .el-input-group__append .el-select input,
+.page-text-component .el-input-group__prepend .el-select input {
+    padding: 0 10px;
+    width: 40px;
+    text-align: center;
+}
+
+.page-text-component__editor {
+    border: 1px solid #bfcbd9;
+    border-radius: 4px;
+    padding: 5px 7px;
+}
+
+.page-text-component__text textarea {
+    border: 0;
+}

@@ -34,6 +34,7 @@ import app.jweb.page.web.service.component.PostLinkListComponent;
 import app.jweb.page.web.service.component.PostListComponent;
 import app.jweb.page.web.service.component.PostPaginationComponent;
 import app.jweb.page.web.service.component.SavedComponent;
+import app.jweb.page.web.service.component.TextComponent;
 import app.jweb.page.web.service.message.CategoryCreatedMessageHandler;
 import app.jweb.page.web.service.message.CategoryDeletedMessageHandler;
 import app.jweb.page.web.service.message.CategoryUpdatedMessageHandler;
@@ -83,6 +84,7 @@ public class PageWebModule extends AbstractWebModule {
         web().addComponent(requestInjection(new FooterComponent()));
         web().addComponent(requestInjection(new HeaderComponent()));
         web().addComponent(requestInjection(new PostPaginationComponent()));
+        web().addComponent(requestInjection(new TextComponent()));
 //        web().addComponent(requestInjection(new CategoryPostListComponent()));
 //        web().addComponent(requestInjection(new RecentPostListComponent()));
 //        web().addComponent(requestInjection(new PostComponent()));

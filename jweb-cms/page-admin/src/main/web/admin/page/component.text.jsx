@@ -1,6 +1,10 @@
 import React from "react";
 import PropTypes from "prop-types";
-import {Button, Dialog, Form, Input, Layout} from "element-react";
+import {Button, ColorPicker,  Dialog, Form, Input, Layout, Select} from "element-react";
+import Editor from "./content.editor.jsx";
+import {stateToHTML} from "draft-js-export-html";
+
+import "./component.text.css";
 
 const i18n = window.i18n;
 export default class PageTextComponent extends React.Component {
@@ -29,37 +33,29 @@ export default class PageTextComponent extends React.Component {
         const component = this.state.component;
         this.state.onChange(component);
     }
+    
+    changeContent(editorState) {
+        this.formChange("content", stateToHTML(editorState.getCurrentContent()))
+    }
 
     render() {
+        const attributes = this.state.component.attributes;
+        const textareaStyle = Object.assign({}, {
+            fontSize: attributes.fontSize + attributes.fontSizeUnit,
+            lineHeight: attributes.lineHeight + attributes.lineHeightUnit,
+            color: attributes.color
+        });
         return (
-            <div className="page-default-component">
+            <div className="page-default-component page-text-component">
                 {this.state.mode === "edit" &&
                     <Dialog
                         visible={true}
                         onCancel={() => this.saveComponent()}
                     >
                         <Dialog.Body>
-                            <Form ref={(form) => {
-                                this.form = form;
-                            }} model={this.state.component.attributes} labelWidth="120" rules={this.state.formRules}>
-                                <Layout.Row>
-                                    <Layout.Col span="24">
-                                        <Form.Item label={i18n.t("page.name")} props="name">
-                                            <Input type="text" value={this.state.component.attributes.name} onChange={val => this.formChange("name", val)} />
-                                        </Form.Item>
-                                    </Layout.Col>
-                                    <Layout.Col span="24">
-                                        <Form.Item label={i18n.t("page.link")} props="name">
-                                            <Input type="text" value={this.state.component.attributes.link} onChange={val => this.formChange("link", val)} />
-                                        </Form.Item>
-                                    </Layout.Col>
-                                    <Layout.Col span="24">
-                                        <Form.Item label={i18n.t("page.content")} props="name">
-                                            <Input type="textarea" value={this.state.component.attributes.content} onChange={val => this.formChange("content", val)} />
-                                        </Form.Item>
-                                    </Layout.Col>
-                                </Layout.Row>
-                            </Form>
+                            <div className="page-text-component__editor">
+                                <Editor content={this.state.component.attributes.content} onChange={editorState=>this.changeContent(editorState)}></Editor>
+                            </div>
                         </Dialog.Body>
 
                         <Dialog.Footer className="dialog-footer">
@@ -67,10 +63,9 @@ export default class PageTextComponent extends React.Component {
                         </Dialog.Footer>
                     </Dialog>
                 }
-                <div className="page-default-component__name">{this.state.component.attributes.name}</div>
                 <div className="page-default-component__content">
-                    <div className="page-default-component__text">
-                        {this.state.component.attributes.content}
+                    <div dangerouslySetInnerHTML={{__html: this.state.component.attributes.content}}>
+                        
                     </div>
                 </div>
             </div>
