@@ -1,6 +1,17 @@
 package app.jweb.user.admin.web.ajax;
 
 
+import app.jweb.captcha.web.CaptchaCode;
+import app.jweb.user.admin.UserAdminOptions;
+import app.jweb.user.admin.web.ajax.user.BatchDeleteUserAJAXRequest;
+import app.jweb.user.admin.web.ajax.user.ChangePasswordAJAXRequest;
+import app.jweb.user.admin.web.ajax.user.ChangePasswordRequest;
+import app.jweb.user.admin.web.ajax.user.LoginAJAXRequest;
+import app.jweb.user.admin.web.ajax.user.LoginAJAXResponse;
+import app.jweb.user.admin.web.ajax.user.UserAJAXResponse;
+import app.jweb.user.admin.web.ajax.user.UserCreateAJAXRequest;
+import app.jweb.user.admin.web.ajax.user.UserFindAJAXRequest;
+import app.jweb.user.admin.web.ajax.user.UserUpdateAJAXRequest;
 import app.jweb.user.api.UserGroupWebService;
 import app.jweb.user.api.UserWebService;
 import app.jweb.user.api.group.BatchGetRequest;
@@ -13,23 +24,12 @@ import app.jweb.user.api.user.UpdateUserRequest;
 import app.jweb.user.api.user.UserQuery;
 import app.jweb.user.api.user.UserResponse;
 import app.jweb.user.api.user.UserStatus;
-import com.google.common.base.Joiner;
-import com.google.common.collect.Lists;
-import app.jweb.captcha.web.CaptchaCode;
-import app.jweb.user.admin.UserAdminOptions;
-import app.jweb.user.admin.web.ajax.user.BatchDeleteUserAJAXRequest;
-import app.jweb.user.admin.web.ajax.user.ChangePasswordAJAXRequest;
-import app.jweb.user.admin.web.ajax.user.ChangePasswordRequest;
-import app.jweb.user.admin.web.ajax.user.LoginAJAXRequest;
-import app.jweb.user.admin.web.ajax.user.LoginAJAXResponse;
-import app.jweb.user.admin.web.ajax.user.UserAJAXResponse;
-import app.jweb.user.admin.web.ajax.user.UserCreateAJAXRequest;
-import app.jweb.user.admin.web.ajax.user.UserFindAJAXRequest;
-import app.jweb.user.admin.web.ajax.user.UserUpdateAJAXRequest;
 import app.jweb.util.collection.QueryResponse;
 import app.jweb.web.Cookies;
 import app.jweb.web.SessionInfo;
 import app.jweb.web.UserInfo;
+import com.google.common.base.Joiner;
+import com.google.common.collect.Lists;
 
 import javax.annotation.security.RolesAllowed;
 import javax.inject.Inject;
@@ -179,6 +179,17 @@ public class UserAdminAJAXController {
     public Response logout() {
         sessionInfo.invalidate();
         return Response.ok().cookie(Cookies.removeCookie(userAdminOptions.autoLoginCookie)).build();
+    }
+
+    @Path("/total")
+    @PUT
+    public Response total() {
+        UserQuery userQuery = new UserQuery();
+        userQuery.status = UserStatus.ACTIVE;
+        userQuery.limit = Integer.MAX_VALUE;
+        userQuery.page = 1;
+        QueryResponse<UserResponse> userResponses = userWebService.find(userQuery);
+        return Response.ok(userResponses.total).build();
     }
 
     private UserQuery query(UserFindAJAXRequest request) {

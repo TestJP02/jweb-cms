@@ -1,16 +1,16 @@
 package app.jweb.user.admin;
 
 
-import app.jweb.user.admin.web.ajax.UserAdminAJAXController;
-import app.jweb.user.admin.web.ajax.UserGroupAdminAJAXController;
-import com.google.common.collect.Lists;
 import app.jweb.admin.AbstractAdminModule;
 import app.jweb.admin.ConsoleBundle;
 import app.jweb.admin.ConsoleMenu;
 import app.jweb.user.admin.service.AdminForbiddenExceptionHandler;
 import app.jweb.user.admin.service.AdminNotAuthorizedExceptionHandler;
+import app.jweb.user.admin.web.ajax.UserAdminAJAXController;
+import app.jweb.user.admin.web.ajax.UserGroupAdminAJAXController;
 import app.jweb.user.admin.web.interceptor.RolesAllowedAdminInterceptor;
 import app.jweb.user.admin.web.interceptor.UserAdminInterceptor;
+import com.google.common.collect.Lists;
 
 import javax.annotation.security.RolesAllowed;
 import javax.ws.rs.container.DynamicFeature;
@@ -37,6 +37,9 @@ public class UserAdminModule extends AbstractAdminModule {
         admin().controller(UserGroupAdminAJAXController.class);
         admin().controller(UserAdminAJAXController.class);
         admin().install(jsModule());
+        admin().bundle("dashboardBundle")
+            .addMessages("conf/messages/user-dashboard")
+            .addScriptFiles("admin/static/user/userDashboard.min.js");
     }
 
     private ConsoleBundle jsModule() {

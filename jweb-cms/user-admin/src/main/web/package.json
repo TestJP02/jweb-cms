@@ -4,13 +4,14 @@
     "description": "",
     "main": "main.jsx",
     "scripts": {
+        "webpack-dashboard": "webpack --entry userDashboard=./admin/user/dashboard.user --output-path=../dist/web/admin/static/user --output-filename=[name].min.js --output-library=[name]Bundle --config=./webpack.module.js",
         "webpack": "webpack --entry user=./admin/user/user --output-path=../dist/web/admin/static/user --output-filename=[name].min.js --output-library=[name]Bundle --config=webpack.module.js",
-        "build": "npm run webpack -- --mode=development",
-        "release": "npm run webpack -- --mode=production",
-        "watch": "npm run webpack -- --mode=development --watch"
+        "build": "npm run webpack -- --mode=development && npm run webpack-dashboard -- --mode=development",
+        "release": "npm run webpack -- --mode=production && npm run webpack-dashboard -- --mode=production",
+        "watch": "npm run webpack -- --mode=development --watch && npm run webpack-dashboard -- --mode=development --watch"
     },
     "author": "jweb.app",
-   "license": "AGPL",
+    "license": "AGPL",
     "dependencies": {
         "element-react": "^1.4.16",
         "font-awesome": "^4.7.0",
