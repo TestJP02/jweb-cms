@@ -1,8 +1,15 @@
 .image-component {
     text-align: center;
+    min-height: 200px;
 }
 
 .image-component__image img {
     display: block;
     max-width: 100%;
+}
+
+.image-component__image-caption {
+    display: block;
+    text-align: center;
+    padding: 10px 0;
 }

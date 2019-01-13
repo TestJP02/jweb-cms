@@ -78,7 +78,7 @@ export default class PageImageComponent extends React.Component {
         } else {
             this.delete();
         }
-        this.saveComponent();
+        // this.saveComponent();
     }
 
     editor() {
@@ -98,23 +98,10 @@ export default class PageImageComponent extends React.Component {
                     }} model={this.state.image} labelWidth="80" rules={this.state.formRules}>
                         <Layout.Row>
                             <Layout.Col span="24">
-                                <Form.Item label={i18n.t("page.link")} props="link">
-                                    <Input value={this.state.image.link} onChange={val => this.formChange("link", val)} />
+                                <Form.Item label={i18n.t("page.title")} props="caption">
+                                    <Input value={this.state.image.caption} onChange={val => this.formChange("caption", val)} />
                                 </Form.Item>
                             </Layout.Col>
-                            <Layout.Col span="12">
-                                <Form.Item label={i18n.t("page.width")} props="width">
-                                    <Input type="number" value={this.state.image.width}
-                                        onChange={val => this.formChange("width", val)} />
-                                </Form.Item>
-                            </Layout.Col>
-                            <Layout.Col span="12">
-                                <Form.Item label={i18n.t("page.height")} props="height">
-                                    <Input type="number" value={this.state.image.height}
-                                        onChange={val => this.formChange("height", val)} />
-                                </Form.Item>
-                            </Layout.Col>
-
                         </Layout.Row>
                     </Form>
                 </Dialog.Body>
@@ -128,8 +115,8 @@ export default class PageImageComponent extends React.Component {
 
     render() {
         return (
-            <div className={(this.state.mode === "edit" || !this.state.image.src ? "editing " : "page-component") + " image-component"}>
-                {(this.state.mode === "edit" || !this.state.image.src) && this.editor()}
+            <div className={(this.state.mode === "edit" ? "editing " : "page-component") + " image-component"}>
+                {this.state.mode === "edit" && this.editor()}
                 <div className="image-component__image" onClick={(e) => {
                     e.stopPropagation();
                     e.nativeEvent.stopImmediatePropagation();
@@ -137,6 +124,7 @@ export default class PageImageComponent extends React.Component {
                     {this.state.image.src &&
                         <img src={"/admin" + this.state.image.src} alt="" width={this.state.image.width + "px"} height={this.state.image.height + "px"} />
                     }
+                    <div className="image-component__image-caption">{this.state.image.caption}</div>
                 </div>
             </div>
         );

@@ -1,0 +1,9 @@
+.page-image image{
+    display: block;
+    margin: 20px auto;
+}
+
+.page-image__caption {
+    text-align: center;
+    padding: 10px 0;
+}

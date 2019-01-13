@@ -30,6 +30,7 @@ import app.jweb.page.web.service.component.BannerComponent;
 import app.jweb.page.web.service.component.BreadcrumbComponent;
 import app.jweb.page.web.service.component.FooterComponent;
 import app.jweb.page.web.service.component.HeaderComponent;
+import app.jweb.page.web.service.component.ImageComponent;
 import app.jweb.page.web.service.component.PostLinkListComponent;
 import app.jweb.page.web.service.component.PostListComponent;
 import app.jweb.page.web.service.component.PostPaginationComponent;
@@ -85,6 +86,7 @@ public class PageWebModule extends AbstractWebModule {
         web().addComponent(requestInjection(new HeaderComponent()));
         web().addComponent(requestInjection(new PostPaginationComponent()));
         web().addComponent(requestInjection(new TextComponent()));
+        web().addComponent(requestInjection(new ImageComponent()));
 //        web().addComponent(requestInjection(new CategoryPostListComponent()));
 //        web().addComponent(requestInjection(new RecentPostListComponent()));
 //        web().addComponent(requestInjection(new PostComponent()));
