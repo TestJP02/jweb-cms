@@ -2,7 +2,7 @@ import React from "react";
 
 const i18n = window.i18n;
 
-export default class TotalUsersReport extends React.Component {
+export default class TotalPagesReport extends React.Component {
     constructor(props) {
         super(props);
 
@@ -17,7 +17,7 @@ export default class TotalUsersReport extends React.Component {
     }
 
     componentWillMount() {
-        fetch("/admin/api/user/find", {
+        fetch("/admin/api/page/find", {
             method: "PUT",
             headers: {"Content-Type": "application/json"},
             body: JSON.stringify(this.state.query)
@@ -28,9 +28,7 @@ export default class TotalUsersReport extends React.Component {
 
     render() {
         return (
-            <div>
-                {i18n.t("user.total")}:{this.state.data}
-            </div>
+            <div>{i18n.t("page.total")}:{this.state.data}</div>
         );
     }
 }

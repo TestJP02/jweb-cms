@@ -33,6 +33,11 @@ public class PageAdminModule extends AbstractAdminModule {
         admin().controller(PagePathAdminController.class);
 
         admin().install(scriptModule());
+
+        admin().bundle("dashboardBundle")
+            .addMessages("conf/messages/page-dashboard")
+            .addScriptFiles("admin/static/page/pageDashboard.min.js");
+
     }
 
     private ConsoleBundle scriptModule() {

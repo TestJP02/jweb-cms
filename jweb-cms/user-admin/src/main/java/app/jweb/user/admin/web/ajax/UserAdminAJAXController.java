@@ -181,17 +181,6 @@ public class UserAdminAJAXController {
         return Response.ok().cookie(Cookies.removeCookie(userAdminOptions.autoLoginCookie)).build();
     }
 
-    @Path("/total")
-    @PUT
-    public Response total() {
-        UserQuery userQuery = new UserQuery();
-        userQuery.status = UserStatus.ACTIVE;
-        userQuery.limit = Integer.MAX_VALUE;
-        userQuery.page = 1;
-        QueryResponse<UserResponse> userResponses = userWebService.find(userQuery);
-        return Response.ok(userResponses.total).build();
-    }
-
     private UserQuery query(UserFindAJAXRequest request) {
         UserQuery instance = new UserQuery();
         instance.query = request.query;

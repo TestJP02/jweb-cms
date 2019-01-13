@@ -1,7 +1,7 @@
-import MostVisitedReport from "./dashboard.page.most-visited";
+import TotalPagesReport from "./dashboard.page.total-pages";
 
 window.app.bundle("dashboardBundle").addDashboard({
-    name: "Daily Most Visited",
-    messageKey: "page.mostMostVisitedReport",
-    component: MostVisitedReport
+    name: "Total Pages",
+    messageKey: "page.totalPages",
+    component: TotalPagesReport
 });
