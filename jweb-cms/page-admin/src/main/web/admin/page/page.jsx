@@ -35,6 +35,7 @@ import PageBannerSingleComponent from "./component.banner-single";
 import PageBreadcrumbComponent from "./component.breadcrumb";
 import PageCategoryTreeComponent from "./component.categoryTree";
 import PageCardComponent from "./component.card";
+import PageHeroComponent from "./component.hero";
 
 
 import "./page-edit.css";
@@ -167,6 +168,11 @@ module.addComponent({
 module.addComponent({
     name: "card",
     component: PageCardComponent
+});
+
+module.addComponent({
+    name: "hero",
+    component: PageHeroComponent
 });
 
 module.addComponent({

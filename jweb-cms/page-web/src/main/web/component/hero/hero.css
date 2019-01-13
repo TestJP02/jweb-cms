@@ -1,0 +1,252 @@
+.hero-container {
+    margin: calc(0% - 0px) 0 0;
+    position: relative;
+    color: #fff;
+    font-size: 16px;
+    line-height: 1.4;
+    min-height: 780px;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    font-weight: 100;
+    overflow: hidden;
+}
+
+.hero-container__background {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    margin: auto;
+    width: 100%;
+}
+
+.hero-container .container {
+    position: relative;
+    padding-top: 5%;
+    z-index: 1;
+}
+
+.divider-shape {
+    width: 130%;
+    overflow: hidden;
+    position: absolute;
+    left: 0;
+    line-height: 0;
+    direction: ltr;
+    bottom: -1px;
+    z-index: 1;
+}
+
+.divider-shape svg {
+    overflow: hidden;
+    display: block;
+    position: relative;
+    left: 50%;
+    -webkit-transform: translateX(-50%);
+    transform: translateX(-50%);
+    width: calc(159% + 1.3px);
+    height: 433px;
+}
+
+.divider-shape svg.shape-waves {
+    height: 133px;
+    left: 0;
+    transform: rotate3d(0, 1, 0, 180deg);
+}
+
+.shape-fill.shape-fill-1 {
+    fill: #fff;
+}
+
+.hero-container .row {
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -ms-flex-wrap: wrap;
+    flex-wrap: wrap;
+}
+
+.hero-container h1 {
+    color: #fff;
+    font-size: 44px;
+    line-height: 1.2;
+    font-weight: 300;
+    letter-spacing: -.025em;
+    margin: 0 0 15px;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-transform: none;
+    max-width: 429px;
+
+}
+
+.hero-container h1 small {
+    font-size: 32px;
+}
+
+.hero-container p {
+    max-width: 408px;
+    font-size: 16px;
+    margin-top: 25px;
+    line-height: 25px;
+}
+
+.hero-container a {
+    color: #fff;
+}
+
+.hero-image {
+    position: relative;
+    margin-top: 35px;
+    width: 100%;
+    transition: opacity .7s ease-in;
+    -webkit-transition: opacity .7s ease-in;
+    opacity: 1;
+    z-index: 9;
+    max-width: 480px;
+}
+
+.hero-image img {
+    max-width: 100%;
+}
+
+.hero-list {
+    list-style: circle;
+    padding-left: 15px;
+}
+
+.hero-form-button-group {
+    margin-top: 55px;
+}
+
+.hero-container .hero-form-button {
+    -webkit-transition: all .3s ease;
+    transition: all .3s ease;
+    text-decoration: none;
+    font-size: 15px;
+    line-height: 50px;
+    font-weight: 400;
+    padding: 5px 30px;
+    white-space: normal;
+    text-align: left;
+    color: #212529;
+    background-color: #fff;
+    cursor: pointer;
+    border: none;
+    display: inline-block;
+    border-radius: 10rem;
+}
+
+.hero-form-button + .hero-form-button {
+    margin-top: 10px;
+}
+
+.hero-more {
+    position: absolute;
+    bottom: 20px;
+    left: 50%;
+    margin-left: -11px;
+    width: 22px;
+    height: 32px;
+    border: 2px solid #fff;
+    border-radius: 10px;
+    z-index: 10;
+    box-sizing: border-box;
+}
+
+.hero-more::before {
+    content: "";
+    position: absolute;
+    top: 6px;
+    left: 8px;
+    width: 2px;
+    height: 8px;
+    border-radius: 1px;
+    background-color: #fff;
+}
+
+@media (min-width: 375px) {
+
+    .hero-container .container {
+        padding-top: 118px;
+    }
+
+}
+
+@media (min-width: 400px) {
+
+    .hero-form-button + .hero-form-button {
+        margin-top: 0;
+        margin-left: 20px;
+    }
+}
+
+@media (min-width: 480px) {
+
+    .hero-container {
+        font-size: 18px;
+        line-height: 1.6;
+    }
+
+    .divider-shape {
+        width: 100%;
+    }
+
+    .hero-container h1 {
+        font-size: 60px;
+    }
+
+    .hero-container h1 small {
+        font-size: 38px;
+    }
+}
+
+@media (min-width: 768px) {
+
+    .hero-container h1 small {
+        font-size: 34px;
+    }
+
+    .hero-title {
+        padding-bottom: 150px;
+    }
+
+    .hero-more {
+        bottom: 154px;
+    }
+}
+
+@media (min-width: 992px) {
+    .hero-container {
+        font-size: 22px;
+    }
+
+    .hero-container h1 {
+        font-size: 45px;
+        line-height: 50px;
+        letter-spacing: -1.69px;
+    }
+
+    .hero-container h1 small {
+        font-size: 20px;
+        letter-spacing: -0.75px;
+    }
+
+}
+
+@media (min-width: 1200px) {
+    .hero-container {
+        font-size: 18px;
+    }
+}
+
+@media (min-width: 1441px) {
+    .hero-container__background-1 {
+        display: none;
+    }
+
+    .hero-container__background-3 {
+        display: block;
+    }
+}
+
