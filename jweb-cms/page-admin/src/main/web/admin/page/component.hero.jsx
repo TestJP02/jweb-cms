@@ -58,9 +58,7 @@ export default class PageHeroComponent extends React.Component {
 
     files() {
         const files = [];
-        files.push({
-            src: this.state.component.attributes[this.state.editingImage]
-        });
+        files.push({src: this.state.component.attributes[this.state.editingImage]});
         return files;
     }
 
@@ -191,11 +189,11 @@ export default class PageHeroComponent extends React.Component {
                                 <p>{this.state.component.attributes.subtitle}</p>
 
                                 <div className="hero-form-button-group">
-                                    {this.state.component.attributes.btn1 && this.state.component.attributes.btn1.title
-                                    && <a className="btn hero-form-button">{this.state.component.attributes.btn1.title}</a>
+                                    {this.state.component.attributes.btn1 && this.state.component.attributes.btn1.title &&
+                                    <a className="btn hero-form-button">{this.state.component.attributes.btn1.title}</a>
                                     }
-                                    {this.state.component.attributes.btn2 && this.state.component.attributes.btn2.title
-                                    && <a className="btn hero-form-button">{this.state.component.attributes.btn2.title}</a>
+                                    {this.state.component.attributes.btn2 && this.state.component.attributes.btn2.title &&
+                                    <a className="btn hero-form-button">{this.state.component.attributes.btn2.title}</a>
                                     }
                                 </div>
 
