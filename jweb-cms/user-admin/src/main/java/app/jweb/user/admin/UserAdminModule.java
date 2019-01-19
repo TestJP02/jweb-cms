@@ -8,6 +8,7 @@ import app.jweb.user.admin.service.AdminForbiddenExceptionHandler;
 import app.jweb.user.admin.service.AdminNotAuthorizedExceptionHandler;
 import app.jweb.user.admin.web.ajax.UserAdminAJAXController;
 import app.jweb.user.admin.web.ajax.UserGroupAdminAJAXController;
+import app.jweb.user.admin.web.ajax.UserStatisticsAdminAJAXController;
 import app.jweb.user.admin.web.interceptor.RolesAllowedAdminInterceptor;
 import app.jweb.user.admin.web.interceptor.UserAdminInterceptor;
 import com.google.common.collect.Lists;
@@ -36,6 +37,7 @@ public class UserAdminModule extends AbstractAdminModule {
         web().bindRequestFilter(requestInjection(new UserAdminInterceptor()));
         admin().controller(UserGroupAdminAJAXController.class);
         admin().controller(UserAdminAJAXController.class);
+        admin().controller(UserStatisticsAdminAJAXController.class);
         admin().install(jsModule());
         admin().bundle("dashboardBundle")
             .addMessages("conf/messages/user-dashboard")

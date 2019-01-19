@@ -16,5 +16,6 @@ public class UserModule extends AbstractServiceModule {
         api().service(UserWebService.class, options.url);
         api().service(UserAutoLoginTokenWebService.class, options.url);
         api().service(OauthUserWebService.class, options.url);
+        api().service(UserStatisticsWebService.class, options.url);
     }
 }

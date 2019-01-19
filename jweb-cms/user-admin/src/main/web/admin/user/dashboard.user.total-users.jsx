@@ -7,29 +7,30 @@ export default class TotalUsersReport extends React.Component {
         super(props);
 
         this.state = {
-            query: {
-                status: "ACTIVE",
-                page: 1,
-                limit: 99999
-            },
-            data: 0
+            statistics: {
+                total: 0,
+                channels: []
+            }
         };
     }
 
     componentWillMount() {
-        fetch("/admin/api/user/find", {
-            method: "PUT",
-            headers: {"Content-Type": "application/json"},
-            body: JSON.stringify(this.state.query)
+        fetch("/admin/api/user/statistics", {
+            method: "GET",
+            headers: {"Content-Type": "application/json"}
         }).then((response) => {
-            this.setState({data: response.total});
+            this.setState({statistics: response});
         });
     }
 
     render() {
         return (
             <div>
-                {i18n.t("user.total")}:{this.state.data}
+                <div><h1>{i18n.t("user.total")}:{this.state.statistics.total}</h1></div>
+                <Recharts.PieChart width={300} height={300}>
+                    <Recharts.Pie isAnimationActive={true} nameKey="channel" dataKey="total" data={this.state.statistics.channels} cx={150} cy={150} outerRadius={80} fill="#8884d8" label/>
+                    <Recharts.Tooltip/>
+                </Recharts.PieChart>
             </div>
         );
     }

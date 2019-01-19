@@ -9,6 +9,7 @@ import app.jweb.user.api.OauthUserWebService;
 import app.jweb.user.api.UserAutoLoginTokenWebService;
 import app.jweb.user.api.UserGroupWebService;
 import app.jweb.user.api.UserModule;
+import app.jweb.user.api.UserStatisticsWebService;
 import app.jweb.user.api.UserWebService;
 import app.jweb.user.api.group.CreateUserGroupRequest;
 import app.jweb.user.api.group.UserGroupResponse;
@@ -24,15 +25,18 @@ import app.jweb.user.domain.OauthUser;
 import app.jweb.user.domain.ResetPasswordToken;
 import app.jweb.user.domain.User;
 import app.jweb.user.domain.UserAutoLoginToken;
+import app.jweb.user.domain.UserChannelStatistics;
 import app.jweb.user.domain.UserGroup;
 import app.jweb.user.service.OauthUserService;
 import app.jweb.user.service.ResetPasswordTokenService;
 import app.jweb.user.service.UserAutoLoginTokenService;
 import app.jweb.user.service.UserGroupService;
 import app.jweb.user.service.UserService;
+import app.jweb.user.service.UserStatisticsService;
 import app.jweb.user.web.OauthUserWebServiceImpl;
 import app.jweb.user.web.UserAutoLoginTokenWebServiceImpl;
 import app.jweb.user.web.UserGroupWebServiceImpl;
+import app.jweb.user.web.UserStatisticsWebServiceImpl;
 import app.jweb.user.web.UserWebServiceImpl;
 import com.google.common.collect.Lists;
 import org.slf4j.Logger;
@@ -57,7 +61,8 @@ public class UserModuleImpl extends UserModule {
             .entity(ResetPasswordToken.class)
             .entity(UserAutoLoginToken.class)
             .entity(User.class)
-            .entity(OauthUser.class);
+            .entity(OauthUser.class)
+            .entity(UserChannelStatistics.class);
 
         MessageConfig messageConfig = module(MessageModule.class);
         messageConfig.createTopic(UserLoginMessage.class, new TopicOptions());
@@ -70,11 +75,13 @@ public class UserModuleImpl extends UserModule {
         bind(ResetPasswordTokenService.class);
         bind(UserAutoLoginTokenService.class);
         bind(OauthUserService.class);
+        bind(UserStatisticsService.class);
 
         api().service(UserWebService.class, UserWebServiceImpl.class);
         api().service(UserGroupWebService.class, UserGroupWebServiceImpl.class);
         api().service(UserAutoLoginTokenWebService.class, UserAutoLoginTokenWebServiceImpl.class);
         api().service(OauthUserWebService.class, OauthUserWebServiceImpl.class);
+        api().service(UserStatisticsWebService.class, UserStatisticsWebServiceImpl.class);
 
         onStartup(this::start);
     }
