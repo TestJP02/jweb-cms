@@ -12,9 +12,8 @@ page-web:
   theme: cerulean
 
 database:
-  #  url: jdbc:mysql://localhost:3306/main?useUnicode=true&characterEncoding=utf8&autoReconnect=true&useSSL=false&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC
+  url: jdbc:mysql://localhost:3306/main?useUnicode=true&characterEncoding=utf8&autoReconnect=true&useSSL=false&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC
   username: root
-  url: jdbc:h2:./main
   createTableEnabled: true
   showSQLEnabled: true
 
@@ -36,6 +35,7 @@ web:
     - ./jweb-cms/page-admin/src/main/dist/web
     - ./jweb-cms/comment-admin/src/main/dist/web
     - ./jweb-cms/comment-web/src/main/web
+    - ./jweb-main/src/main/resources/web
 
 user:
   defaultAdminUser:

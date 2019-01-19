@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:j="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" type="text/css" href="post-navigation.d62f.css">
+</head>
+<body>
+<div class="panel page-navigation">
+    <div class="panel-body">
+        <div class="row">
+            <div class="col-md-6">
+                <a j:href="prev.path" class="page-navigation__item-link" j:if="prev!=null">
+                    <i class="page-navigation__item-icon fa fa-chevron-left"></i>
+                    <div class="page-navigation__item">
+                        <h6 class="page-navigation__item-title">Previous Post</h6>
+                        <span j:innerText="prev.title" class="page-navigation__item-text">PREV POST</span>
+                    </div>
+                </a>
+            </div>
+            <div class="col-md-6 page-navigation__item--next">
+                <a j:href="next.path" class="page-navigation__item-link" j:if="next!=null">
+                    <div class="page-navigation__item">
+                        <h6 class="page-navigation__item-title">Next Post</h6>
+                        <span j:innerText="next.title" class="page-navigation__item-text">NEXT POST</span>
+                    </div>
+                    <i class="page-navigation__item-icon fa fa-chevron-right"></i>
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

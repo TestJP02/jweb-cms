@@ -1,0 +1,16 @@
+<!doctype html>
+<html lang="en-US" xmlns:j="http://www.w3.org/1999/xhtml">
+    <head>
+        <link rel="stylesheet" type="text/css" href="author.d41d.css"/>
+    </head>
+    <body>
+        <div class="panel panel-default author">
+            <div class="panel-heading" j:innerText="title" j:if="title != null">
+            </div>
+            <div class="panel-body">
+                <j:user j:userId="userId"/>
+                <j:post-link-list j:posts="posts"/>
+            </div>
+        </div>
+    </body>
+</html>

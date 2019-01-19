@@ -1,0 +1,13 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:j="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" type="text/css" href="popular-post-list.d41d.css"/>
+</head>
+<body>
+<div class="component popular-page-list">
+    <j:post-list j:posts="posts" class="popular-page-list__list"/>
+    <j:pagination j:items="posts" j:path="path" j:if="paginationEnabled" class="popular-page-list__pagination"/>
+</div>
+</body>
+</html>

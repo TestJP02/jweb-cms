@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:j="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" type="text/css" href="tag-post-list.d41d.css">
+</head>
+<body>
+<div class="component tag-page-list">
+    <j:post-list j:posts="posts" class="tag-page-list__list"/>
+    <j:pagination j:items="posts" j:path="path" j:if="paginationEnabled" class="tag-page-list__pagination"/>
+</div>
+</body>
+</html>

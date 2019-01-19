@@ -1,9 +1,9 @@
 window.Uploader = {
-    panel: $(".sited-file-uploader"),
-    fileList: $(".sited-file-uploader__table-body"),
-    loadingBar: $(".sited-file-uploader__row-progress"),
-    failMessage: $(".sited-file-uploader__message-inner-fail"),
-    successMessage: $(".sited-file-uploader__message--success"),
+    panel: $(".file-uploader"),
+    fileList: $(".file-uploader__table-body"),
+    loadingBar: $(".file-uploader__row-progress"),
+    failMessage: $(".file-uploader__message-inner-fail"),
+    successMessage: $(".file-uploader__message--success"),
     fileQueue: [],
     isUploadHold: false,
     running: false,
@@ -13,7 +13,7 @@ window.Uploader = {
     failedNumber: $(".failed_number"),
     successNumber: $(".success_number"),
     init: function () {
-        $(document).on("change", ".sited-file-upload-handler", function (event) {
+        $(document).on("change", ".file-upload-handler", function (event) {
             var files = event.target.files;
             if (!files || !files[0]) {
                 return;
@@ -22,10 +22,10 @@ window.Uploader = {
             this.renderNodes();
             this.startUpload();
         }.bind(this));
-        $(".sited-file-uploader__toggle").click(function () {
+        $(".file-uploader__toggle").click(function () {
             this.expand();
         }.bind(this));
-        $(".sited-file-uploader__close").click(function () {
+        $(".file-uploader__close").click(function () {
             this.hide();
         }.bind(this))
     },
@@ -115,12 +115,12 @@ window.Uploader = {
         this.loadingBar.fadeIn();
         this.loadingBar.css("top", file.index * 44 + "px");
         this.loadingBar.css("width", progress + "%");
-        $("#uploading-index-" + file.index).find(".sited-file-uploader__status").text(progress + "%");
+        $("#uploading-index-" + file.index).find(".file-uploader__status").text(progress + "%");
     },
     finish: function (file) {
         file.uploaded = true;
         var row = $("#uploading-index-" + file.index),
-            status = row.find(".sited-file-uploader__status");
+            status = row.find(".file-uploader__status");
         if (file.status === "success") {
             status.html("<i class='iconfont icon-zhengque'>");
         } else {
@@ -157,11 +157,11 @@ window.Uploader = {
         }.bind(this));
     },
     renderNode: function (file) {
-        var node = $("<tr class='sited-file-uploader__row' id='uploading-index-" + file.index + "'></tr>");
-        node.append("<td class='sited-file-uploader__col' style='width:210px;'>" + file.file.name + "</td>");
-        node.append("<td class='sited-file-uploader__col' style='width:100px;text-align: center'>" + file.file.size + "</td>");
-        node.append("<td class='sited-file-uploader__col' style='width:100px;'>" + this.path + "</td>");
-        node.append("<td class='sited-file-uploader__col' style='width:50px;'><div class='sited-file-uploader__status'></div></td>");
+        var node = $("<tr class='file-uploader__row' id='uploading-index-" + file.index + "'></tr>");
+        node.append("<td class='file-uploader__col' style='width:210px;'>" + file.file.name + "</td>");
+        node.append("<td class='file-uploader__col' style='width:100px;text-align: center'>" + file.file.size + "</td>");
+        node.append("<td class='file-uploader__col' style='width:100px;'>" + this.path + "</td>");
+        node.append("<td class='file-uploader__col' style='width:50px;'><div class='file-uploader__status'></div></td>");
         this.fileList.append(node);
         file.rendered = true;
     },

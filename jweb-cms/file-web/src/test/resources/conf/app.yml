@@ -4,7 +4,7 @@ app:
 web:
   templateCacheEnabled: false
   roots:
-    - /Users/cyl/workspace/chi/sited-file-project/file-web/src/main/resources/web
+    - /Users/cyl/workspace/chi/file-project/file-web/src/main/resources/web
     - /Users/cyl/workspace/chi/sited-user-project/user-web/src/main/resources/web
     - /Users/cyl/workspace/chi/sited-captcha-project/captcha-web/src/main/resources/web
 

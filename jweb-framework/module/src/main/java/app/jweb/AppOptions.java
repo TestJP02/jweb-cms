@@ -20,7 +20,7 @@ public class AppOptions {
     @XmlElement(name = "env")
     public Environment env = Environment.PROD;
     @XmlElement(name = "language")
-    public String language = Locale.getDefault().getLanguage();
+    public String language = Locale.US.toLanguageTag();
     @XmlElement(name = "supportLanguages")
     public List<String> supportLanguages = Lists.newArrayList();
     @XmlElement(name = "webEnabled")

@@ -1,11 +1,11 @@
 window.Directory = {
-    panel: $(".sited-file-directory"),
+    panel: $(".file-directory"),
     form: $("#form"),
     init: function () {
-        $(document).on("click", ".sited-directory-create-handler", function (event) {
+        $(document).on("click", ".directory-create-handler", function (event) {
             this.show();
         }.bind(this));
-        $(".sited-file-directory__close").click(function () {
+        $(".file-directory__close").click(function () {
             this.hide();
         }.bind(this));
         $("#submit").click(function () {

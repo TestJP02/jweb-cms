@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:j="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="./page-banner.9bc5.css">
+    <script src="./post-banner.02a8.js"></script>
+</head>
+<body>
+<div class="component page-banner">
+    <div class="page-banner-item" j:for="banner:banners">
+        <a j:href="banner.link" class="page-banner-item-link">
+            <img j:src="banner.src" j:alt="banner.alt" j:width="banner.attribute.width+'px'" j:height="banner.attribute.height+'px'">
+        </a>
+    </div>
+</div>
+</body>
+</html>

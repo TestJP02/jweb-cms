@@ -14,7 +14,7 @@ var List = {
 
     },
     init: function () {
-        $(".sited-file-toolbar__input").change(function (e) {
+        $(".file-toolbar__input").change(function (e) {
             var query = $(e.currentTarget).val(),
                 url = window.location.href;
             if (url.indexOf("?") < 0) {
@@ -42,7 +42,7 @@ var List = {
             }
             window.location.href = url;
         });
-        $(".sited-file-table__path").click(function (e) {
+        $(".file-table__path").click(function (e) {
             var $e = $(e.currentTarget),
                 path = $e.html(),
                 directory = $e.data("directory"),
@@ -76,7 +76,7 @@ var List = {
             }
             window.location.href = url;
         });
-        $(".sited-file__delete").click(function (e) {
+        $(".file__delete").click(function (e) {
             var $e = $(e.currentTarget),
                 id = $e.data("id"),
                 directory = $e.data("directory");

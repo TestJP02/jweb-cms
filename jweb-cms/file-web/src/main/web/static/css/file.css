@@ -23,85 +23,85 @@ label {
     margin: auto;
 }
 
-.sited-file-header {
+.file-header {
     background: #fff;
 }
 
-.sited-file-header__logo {
+.file-header__logo {
     padding: 30px 0;
 }
 
-.sited-file-header__logo .icon-logo {
+.file-header__logo .icon-logo {
     font-size: 27px;
     line-height: 27px;
     vertical-align: middle;
 }
 
-.sited-file-header__logo .icon-logo-txt {
+.file-header__logo .icon-logo-txt {
     font-size: 19px;
     line-height: 27px;
     vertical-align: middle;
 }
 
-.sited-file-breadscrumb {
+.file-breadscrumb {
     background: #fafafa;
 }
 
-.sited-file-breadscrumb__list {
+.file-breadscrumb__list {
     text-align: left;
     letter-spacing: 0;
 }
 
-.sited-file-breadscrumb__item {
+.file-breadscrumb__item {
     display: inline-block;
     letter-spacing: normal;
     padding: 11px 0;
 }
 
-.sited-file-breadscrumb__item::before {
+.file-breadscrumb__item::before {
     content: "/";
     padding: 0 3px;
 }
 
-.sited-file-breadscrumb__item:first-child::before {
+.file-breadscrumb__item:first-child::before {
     content: none;
 }
 
-.sited-file-breadscrumb__link {
+.file-breadscrumb__link {
     color: #999;
     line-height: 1;
     text-decoration: none;
 }
 
-.sited-file-breadscrumb__item:last-child .sited-file-breadscrumb__link {
+.file-breadscrumb__item:last-child .file-breadscrumb__link {
     color: #151515;
 }
 
-.sited-file-toolbar {
+.file-toolbar {
     padding: 20px 0;
 }
 
-.sited-file-toolbar::before,
-.sited-file-toolbar::after {
+.file-toolbar::before,
+.file-toolbar::after {
     content: "";
     display: block;
     clear: both;
 }
 
-.sited-file-toolbar__form-container {
+.file-toolbar__form-container {
     float: left;
     max-width: 66.66%;
 }
 
-.sited-file-toolbar__form {
+.file-toolbar__form {
 }
 
-.sited-file-toolbar__form-item {
+.file-toolbar__form-item {
     display: inline-block;
     position: relative;
 }
 
-.sited-file-toolbar__form-item .icon-search {
+.file-toolbar__form-item .icon-search {
     position: absolute;
     display: block;
     font-size: 14px;
@@ -109,7 +109,7 @@ label {
     left: 12px;
 }
 
-.sited-file-toolbar__input {
+.file-toolbar__input {
     width: 320px;
     height: 32px;
     font-size: 14px;
@@ -118,11 +118,11 @@ label {
     border: 1px solid #e5e5e5;
 }
 
-.sited-file-toolbar__buttons {
+.file-toolbar__buttons {
     text-align: right;
 }
 
-.sited-file__button {
+.file__button {
     display: inline-block;
     height: 32px;
     line-height: 30px;
@@ -134,47 +134,47 @@ label {
     text-decoration: none;
 }
 
-.sited-file__button--primary {
+.file__button--primary {
     color: #fff;
     background: #3498db;
     border: 1px solid #e5e5e5;
 }
 
-.sited-file__button--text {
+.file__button--text {
     color: #3498db;
     border: 0;
     border-radius: 0;
 }
 
-.sited-file__button--text + .sited-file__button--text {
+.file__button--text + .file__button--text {
     padding-left: 0;
 }
 
-.sited-file__button--text + .sited-file__button--text::before {
+.file__button--text + .file__button--text::before {
     content: "|";
     padding-right: 18px;
     color: #e5e5e5;
 }
 
-.sited-file-body {
+.file-body {
     position: relative;
 }
 
-.sited-file-table {
+.file-table {
     width: 100%;
     font-size: 14px;
     line-height: 44px;
 }
 
-.sited-file-table__row {
+.file-table__row {
     border-bottom: 1px solid #e5e5e5;
 }
 
-.sited-file-table__head .sited-file-table__row {
+.file-table__head .file-table__row {
     background: #fafafa;
 }
 
-.sited-file-table__head .sited-file-table__row::before {
+.file-table__head .file-table__row::before {
     content: "";
     position: absolute;
     width: 100%;
@@ -184,11 +184,11 @@ label {
     z-index: -1;
 }
 
-.sited-file-table__body .sited-file-table__row {
+.file-table__body .file-table__row {
     border-bottom: 1px solid #e5e5e5;
 }
 
-.sited-file-table__body .sited-file-table__row::before {
+.file-table__body .file-table__row::before {
     content: "";
     position: absolute;
     width: 100%;
@@ -198,52 +198,52 @@ label {
     z-index: -1;
 }
 
-.sited-file-table__col {
+.file-table__col {
     text-align: left;
 }
 
-.sited-file-pagination {
+.file-pagination {
     padding: 20px 0;
     font-size: 12px;
     line-height: 28px;
     text-align: right;
 }
 
-.sited-file-pagination__count,
-.sited-file-pagination__selector,
-.sited-file-pagination__pager,
-.sited-file-pagination__navigator {
+.file-pagination__count,
+.file-pagination__selector,
+.file-pagination__pager,
+.file-pagination__navigator {
     display: inline-block;
     vertical-align: top;
 }
 
-.sited-file-pagination__size-select {
+.file-pagination__size-select {
     height: 28px;
     border: 1px solid #e5e5e5;
 }
 
-.sited-file-pagination__pager {
+.file-pagination__pager {
 }
 
-.sited-file-pagination__list {
+.file-pagination__list {
     letter-spacing: -5px;
     white-space: nowrap;
     border: 1px solid #e5e5e5;
     height: 28px;
 }
 
-.sited-file-pagination__item {
+.file-pagination__item {
     display: inline-block;
     letter-spacing: normal;
     border-left: 1px solid #e5e5e5;
     vertical-align: top;
 }
 
-.sited-file-pagination__item:first-child {
+.file-pagination__item:first-child {
     margin-left: -1px;
 }
 
-.sited-file-pagination__link {
+.file-pagination__link {
     display: block;
     line-height: 16px;
     padding: 5px 12px;
@@ -251,11 +251,11 @@ label {
     text-decoration: none;
 }
 
-.sited-file-pagination__link--active {
+.file-pagination__link--active {
     color: #333;
 }
 
-.sited-file-upload-handler {
+.file-upload-handler {
     display: none;
     width: 0;
     height: 0;
@@ -264,7 +264,7 @@ label {
     padding: 0;
 }
 
-.sited-file-uploader {
+.file-uploader {
     position: fixed;
     width: 500px;
     height: 50px;
@@ -279,16 +279,16 @@ label {
     transform: translate3d(0, 100%, 0);
 }
 
-.sited-file-uploader.expand {
+.file-uploader.expand {
     height: 436px;
 }
 
-.sited-file-uploader.show {
+.file-uploader.show {
     bottom: 38px;
     transform: translate3d(0, 0, 0);
 }
 
-.sited-file-uploader__head {
+.file-uploader__head {
     position: relative;
     line-height: 50px;
     height: 50px;
@@ -298,7 +298,7 @@ label {
     border-bottom: 1px solid #e8e8e8;
 }
 
-.sited-file-uploader__title {
+.file-uploader__title {
     position: absolute;
     left: 20px;
     top: 0;
@@ -308,57 +308,57 @@ label {
     transform: translate3d(0, 0, 0);
 }
 
-.expand .sited-file-uploader__title {
+.expand .file-uploader__title {
     transform: translate3d(0, -50%, 0);
 }
 
-.sited-file-uploader__head-button {
+.file-uploader__head-button {
     display: inline-block;
     color: #666;
     text-decoration: none;
     padding: 0 15px;
 }
 
-.sited-file-uploader__toggle {
+.file-uploader__toggle {
     transform: rotate3d(0, 0, 1, 180deg);
     transition: transform 0.4s ease 0.4s;
 }
 
-.expand .sited-file-uploader__toggle {
+.expand .file-uploader__toggle {
     transform: rotate3d(0, 0, 0, 0);
 }
 
-.sited-file-uploader__head .sited-file-uploader__close {
+.file-uploader__head .file-uploader__close {
     margin-right: -15px;
 }
 
-.sited-file-uploader__body {
+.file-uploader__body {
     position: relative;
     padding: 0 20px;
     border-bottom: 1px solid #e5e5e5;
     overflow: hidden;
 }
 
-.sited-file-uploader__message {
+.file-uploader__message {
     height: 75px;
     padding: 31px 0 30px;
     color: #3498db;
     text-align: center;
 }
 
-.sited-file-uploader__message-inner {
+.file-uploader__message-inner {
     overflow: hidden;
     height: 14px;
 }
 
-.sited-file-uploader__message-inner-fail {
+.file-uploader__message-inner-fail {
     transform: translate3d(0, -0, 0);
     transition: all 0.2s ease;
     background: #fff;
     color: #666;
 }
 
-.sited-file-uploader__message--success {
+.file-uploader__message--success {
     position: absolute;
     top: 0;
     left: 0;
@@ -371,51 +371,51 @@ label {
     z-index: 10;
 }
 
-.sited-file-uploader__message--success.show {
+.file-uploader__message--success.show {
     transform: translate3d(0, 0, 0);
 }
 
-.sited-file-uploader__message--success > .iconfont {
+.file-uploader__message--success > .iconfont {
     font-size: 14px;
     color: #00de8b;
 }
 
-.sited-file-uploader__message-inner-fail > .iconfont {
+.file-uploader__message-inner-fail > .iconfont {
     font-size: 14px;
     color: #ff6d2e;
 }
 
-.sited-file-uploader__message-inner-fail.show {
+.file-uploader__message-inner-fail.show {
     transform: translate3d(0, -100%, 0);
 }
 
-.sited-file-uploader__table-body-container {
+.file-uploader__table-body-container {
     position: relative;
     height: 195px;
     overflow: auto;
 }
 
-.sited-file-uploader__table {
+.file-uploader__table {
     width: 100%;
     line-height: 43px;
     border-collapse: collapse;
 }
 
-.sited-file-uploader__table-head {
+.file-uploader__table-head {
     background: #fafafa;
 }
 
-.sited-file-uploader__table-body {
+.file-uploader__table-body {
 
 }
 
-.sited-file-uploader__row {
+.file-uploader__row {
     position: relative;
     border-bottom: 1px solid #e5e5e5;
     height: 44px;
 }
 
-.sited-file-uploader__row-progress {
+.file-uploader__row-progress {
     display: block;
     position: absolute;
     background: #e7f0f7;
@@ -427,11 +427,11 @@ label {
     transition: all 0.5s linear;
 }
 
-.sited-file-uploader__table-head .sited-file-uploader__row {
+.file-uploader__table-head .file-uploader__row {
     border: 0;
 }
 
-.sited-file-uploader__col {
+.file-uploader__col {
     max-width: 210px;
     white-space: nowrap;
     overflow: hidden;
@@ -441,25 +441,25 @@ label {
     vertical-align: top;
 }
 
-.sited-file-uploader__status {
+.file-uploader__status {
 
 }
 
-.sited-file-uploader__status .icon-zhengque {
+.file-uploader__status .icon-zhengque {
     color: #00de8b;
 }
 
-.sited-file-uploader__status .icon-tishi {
+.file-uploader__status .icon-tishi {
     color: #ff6d2e;
 }
 
-.sited-file-uploader__foot {
+.file-uploader__foot {
     text-align: right;
     padding: 20px;
 }
 
 /*directory*/
-.sited-file-directory-handler {
+.file-directory-handler {
     display: none;
     width: 0;
     height: 0;
@@ -468,7 +468,7 @@ label {
     padding: 0;
 }
 
-.sited-file-directory {
+.file-directory {
     position: fixed;
     width: 500px;
     height: 50px;
@@ -483,16 +483,16 @@ label {
     transform: translate3d(0, 100%, 0);
 }
 
-.sited-file-directory.expand {
+.file-directory.expand {
     height: 460px;
 }
 
-.sited-file-directory.show {
+.file-directory.show {
     bottom: 38px;
     transform: translate3d(0, 0, 0);
 }
 
-.sited-file-directory__head {
+.file-directory__head {
     position: relative;
     line-height: 50px;
     height: 50px;
@@ -502,7 +502,7 @@ label {
     border-bottom: 1px solid #e8e8e8;
 }
 
-.sited-file-directory__title {
+.file-directory__title {
     position: absolute;
     left: 20px;
     top: 0;
@@ -512,18 +512,18 @@ label {
     transform: translate3d(0, 0, 0);
 }
 
-.sited-file-directory__head-button {
+.file-directory__head-button {
     display: inline-block;
     color: #666;
     text-decoration: none;
     padding: 0 15px;
 }
 
-.sited-file-directory__head .sited-file-directory__close {
+.file-directory__head .file-directory__close {
     margin-right: -15px;
 }
 
-.sited-file-directory__body {
+.file-directory__body {
     height: 350px;
     position: relative;
     padding: 0 20px;
@@ -531,19 +531,19 @@ label {
     overflow: hidden;
 }
 
-.sited-file-directory__table-body-container {
+.file-directory__table-body-container {
     position: relative;
     height: 350px;
     overflow: auto;
 }
 
-.sited-file-directory__row {
+.file-directory__row {
     padding-top: 15px;
     position: relative;
     height: 44px;
 }
 
-.sited-file-directory__col {
+.file-directory__col {
     float: left;
     max-width: 300px;
     white-space: nowrap;
@@ -553,18 +553,18 @@ label {
     vertical-align: top;
 }
 
-.sited-file-directory__foot {
+.file-directory__foot {
     text-align: right;
     padding: 20px;
 }
 
-.sited-file-directory__col label {
+.file-directory__col label {
     margin-right: 20px;
     width: 60px;
     display: inline-block;
 }
 
-.sited-file-directory-handler {
+.file-directory-handler {
     display: none;
     width: 0;
     height: 0;

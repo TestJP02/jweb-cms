@@ -1,5 +1,5 @@
 
-.sited-file-uploader {
+.file-uploader {
     position: fixed;
     width: 500px;
     height: 50px;
@@ -14,16 +14,16 @@
     transform: translate3d(0, 100%, 0);
 }
 
-.sited-file-uploader.expand {
+.file-uploader.expand {
     height: 436px;
 }
 
-.sited-file-uploader.show {
+.file-uploader.show {
     bottom: 38px;
     transform: translate3d(0, 0, 0);
 }
 
-.sited-file-uploader__head {
+.file-uploader__head {
     position: relative;
     line-height: 50px;
     height: 50px;
@@ -33,7 +33,7 @@
     border-bottom: 1px solid #e8e8e8;
 }
 
-.sited-file-uploader__title {
+.file-uploader__title {
     position: absolute;
     left: 20px;
     top: 0;
@@ -43,57 +43,57 @@
     transform: translate3d(0, 0, 0);
 }
 
-.expand .sited-file-uploader__title {
+.expand .file-uploader__title {
     transform: translate3d(0, -50%, 0);
 }
 
-.sited-file-uploader__head-button {
+.file-uploader__head-button {
     display: inline-block;
     color: #666;
     text-decoration: none;
     padding: 0 15px;
 }
 
-.sited-file-uploader__toggle {
+.file-uploader__toggle {
     transform: rotate3d(0, 0, 1, 180deg);
     transition: transform 0.4s ease 0.4s;
 }
 
-.expand .sited-file-uploader__toggle {
+.expand .file-uploader__toggle {
     transform: rotate3d(0, 0, 0, 0);
 }
 
-.sited-file-uploader__head .sited-file-uploader__close {
+.file-uploader__head .file-uploader__close {
     margin-right: -15px;
 }
 
-.sited-file-uploader__body {
+.file-uploader__body {
     position: relative;
     padding: 0 20px;
     border-bottom: 1px solid #e5e5e5;
     overflow: hidden;
 }
 
-.sited-file-uploader__message {
+.file-uploader__message {
     height: 75px;
     padding: 31px 0 30px;
     color: #3498db;
     text-align: center;
 }
 
-.sited-file-uploader__message-inner {
+.file-uploader__message-inner {
     overflow: hidden;
     height: 14px;
 }
 
-.sited-file-uploader__message-inner-fail {
+.file-uploader__message-inner-fail {
     transform: translate3d(0, -0, 0);
     transition: all 0.2s ease;
     background: #fff;
     color: #666;
 }
 
-.sited-file-uploader__message--success {
+.file-uploader__message--success {
     position: absolute;
     top: 0;
     left: 0;
@@ -106,51 +106,51 @@
     z-index: 10;
 }
 
-.sited-file-uploader__message--success.show {
+.file-uploader__message--success.show {
     transform: translate3d(0, 0, 0);
 }
 
-.sited-file-uploader__message--success > .iconfont {
+.file-uploader__message--success > .iconfont {
     font-size: 14px;
     color: #00de8b;
 }
 
-.sited-file-uploader__message-inner-fail > .iconfont {
+.file-uploader__message-inner-fail > .iconfont {
     font-size: 14px;
     color: #ff6d2e;
 }
 
-.sited-file-uploader__message-inner-fail.show {
+.file-uploader__message-inner-fail.show {
     transform: translate3d(0, -100%, 0);
 }
 
-.sited-file-uploader__table-body-container {
+.file-uploader__table-body-container {
     position: relative;
     height: 195px;
     overflow: auto;
 }
 
-.sited-file-uploader__table {
+.file-uploader__table {
     width: 100%;
     line-height: 43px;
     border-collapse: collapse;
 }
 
-.sited-file-uploader__table-head {
+.file-uploader__table-head {
     background: #fafafa;
 }
 
-.sited-file-uploader__table-body {
+.file-uploader__table-body {
 
 }
 
-.sited-file-uploader__row {
+.file-uploader__row {
     position: relative;
     border-bottom: 1px solid #e5e5e5;
     height: 44px;
 }
 
-.sited-file-uploader__row-progress {
+.file-uploader__row-progress {
     display: block;
     position: absolute;
     background: #e7f0f7;
@@ -162,11 +162,11 @@
     transition: all 0.5s linear;
 }
 
-.sited-file-uploader__table-head .sited-file-uploader__row {
+.file-uploader__table-head .file-uploader__row {
     border: 0;
 }
 
-.sited-file-uploader__col {
+.file-uploader__col {
     max-width: 210px;
     white-space: nowrap;
     overflow: hidden;
@@ -176,19 +176,19 @@
     vertical-align: top;
 }
 
-.sited-file-uploader__status {
+.file-uploader__status {
 
 }
 
-.sited-file-uploader__status .icon-zhengque {
+.file-uploader__status .icon-zhengque {
     color: #00de8b;
 }
 
-.sited-file-uploader__status .icon-tishi {
+.file-uploader__status .icon-tishi {
     color: #ff6d2e;
 }
 
-.sited-file-uploader__foot {
+.file-uploader__foot {
     text-align: right;
     padding: 20px;
 }

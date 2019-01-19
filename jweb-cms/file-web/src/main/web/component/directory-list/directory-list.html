@@ -5,36 +5,36 @@
     </head>
     <body>
 
-        <a href="javascript:void(0)" class="sited-directory-create-handler sited-file__button sited-file__button--primary">
+        <a href="javascript:void(0)" class="directory-create-handler file__button file__button--primary">
             <span j:innerText="i18n('file.createFolder')"></span>
         </a>
 
-        <div class="sited-file-directory">
-            <div class="sited-file-directory__head">
-                <div class="sited-file-directory__title">
+        <div class="file-directory">
+            <div class="file-directory__head">
+                <div class="file-directory__title">
                     <div j:innerText="i18n('file.createFolder')"></div>
                 </div>
-                <a href="javascript:void(0)" class="sited-file-directory__head-button sited-file-directory__close ">
+                <a href="javascript:void(0)" class="file-directory__head-button file-directory__close ">
                     <i class="iconfont icon-dms_close"></i>
                 </a>
             </div>
-            <div class="sited-file-directory__body">
-                <div class="sited-file-directory__table-body-container">
+            <div class="file-directory__body">
+                <div class="file-directory__table-body-container">
                     <form id="form" onsubmit="return false;">
-                        <div class="sited-file-directory__row">
-                            <div class="sited-file-directory__col">
+                        <div class="file-directory__row">
+                            <div class="file-directory__col">
                                 <label j:innerText="i18n('file.path')"></label>
                                 <input name="path">
                             </div>
                         </div>
-                        <div class="sited-file-directory__row">
-                            <div class="sited-file-directory__col">
+                        <div class="file-directory__row">
+                            <div class="file-directory__col">
                                 <label j:innerText="i18n('file.displayName')"></label>
                                 <input name="displayName">
                             </div>
                         </div>
-                        <div class="sited-file-directory__row">
-                            <div class="sited-file-directory__col">
+                        <div class="file-directory__row">
+                            <div class="file-directory__col">
                                 <label j:innerText="i18n('file.owner')"></label>
                                 <input name="owner">
                                 <label j:innerText="i18n('file.roles')"></label>
@@ -43,8 +43,8 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="sited-file-directory__row">
-                            <div class="sited-file-directory__col">
+                        <div class="file-directory__row">
+                            <div class="file-directory__col">
                                 <label j:innerText="i18n('file.userGroup')"></label>
                                 <input name="userGroup">
                                 <label j:innerText="i18n('file.roles')"></label>
@@ -56,11 +56,11 @@
                     </form>
                 </div>
             </div>
-            <div class="sited-file-directory__foot">
-                <a href="javascript:void(0)" class="sited-file__button sited-file-directory__close" j:innerText="i18n('file.close')"></a>
-                <a href="javascript:void(0)" class="sited-file__button sited-file__button--primary">
+            <div class="file-directory__foot">
+                <a href="javascript:void(0)" class="file__button file-directory__close" j:innerText="i18n('file.close')"></a>
+                <a href="javascript:void(0)" class="file__button file__button--primary">
                     <label for="submit" j:innerText="i18n('file.save')"></label>
-                    <input id="submit" class="sited-file-directory-handler">
+                    <input id="submit" class="file-directory-handler">
                 </a>
             </div>
         </div>

@@ -601,6 +601,9 @@ project(':jweb-main') {
         compile project(':jweb-framework:database')
         compile group: 'ch.qos.logback', name: 'logback-classic', version: '1.2.3'
         compile 'mysql:mysql-connector-java:8.0.11'
+        compile group: 'org.liquibase', name: 'liquibase-core', version: '3.6.2'
         compile 'com.h2database:h2:1.4.197'
+        compile "org.apache.commons:commons-dbcp2:${commonDBCPVersion}"
+        compile 'com.fasterxml.jackson.core:jackson-databind:2.9.8'
     }
 }

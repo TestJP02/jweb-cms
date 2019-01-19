@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="en-US">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" type="text/css" href="./hero.8472.css"/>
+</head>
+<body>
+<div class="hero-container">
+    <div class="hero-container__background">
+        <img class="hero-container__background" j:src="background" alt="">
+    </div>
+    <div class="container">
+
+        <div class="row">
+            <div class="hero-title col-sm-7 col-lg-6">
+                <h1 j:innerText="title">
+                    - Save 50% to build
+                    <br>
+                    <b>Java web apps</b>
+                </h1>
+                <p j:innerText="subtitle">
+                    With 50+ robust micro service based components, <a href="">see how it works.</a>
+                </p>
+
+                <div class="hero-form-button-group">
+                    <a class="btn hero-form-button" j:if="btn1!=null && btn1.url!=null" j:innerText="btn1.title" j:href="btn1.url">Free consulting</a>
+                    <a class="btn hero-form-button" j:if="btn2!=null && btn2.url!=null" j:innerText="btn2.title" j:href="btn2.url">Free consulting</a>
+                </div>
+                
+            </div>
+            <div class="col-sm-5 col-lg-6">
+                <div class="hero-image">
+                    <img j:src="clip">
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!--<div class="hero-more"></div>-->
+</div>
+</body>
+</html>

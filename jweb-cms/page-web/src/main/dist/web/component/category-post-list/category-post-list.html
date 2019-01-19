@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:j="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" type="text/css" href="category-post-list.d41d.css">
+</head>
+<body>
+<div class="panel panel-default category-page-list">
+    <div class="panel-heading" j:innerText="title" j:if="title != null">title</div>
+    <div class="panel-body">
+        <j:post-list j:posts="posts" class="category-page-list"/>
+        <j:pagination j:items="posts" j:path="path" j:display="display" j:if="paginationEnabled"></j:pagination>
+    </div>
+</div>
+</body>
+</html>

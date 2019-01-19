@@ -1,8 +1,5 @@
 package app.jweb;
 
-import com.google.common.base.Charsets;
-import com.google.common.collect.Lists;
-import com.google.common.collect.Maps;
 import app.jweb.resource.ClasspathResourceRepository;
 import app.jweb.resource.CompositeResourceRepository;
 import app.jweb.resource.FileResourceRepository;
@@ -11,6 +8,9 @@ import app.jweb.resource.ResourceRepository;
 import app.jweb.util.JSON;
 import app.jweb.util.YAML;
 import app.jweb.util.type.ClassValidator;
+import com.google.common.base.Charsets;
+import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
 import org.glassfish.hk2.utilities.general.internal.MessageInterpolatorImpl;
 
 import javax.validation.ConstraintViolation;
@@ -44,7 +44,7 @@ public final class YAMLProfile implements Profile {
     }
 
     public static Profile load(Path dir) {
-        ResourceRepository repository = new CompositeResourceRepository(new FileResourceRepository(dir), new ClasspathResourceRepository(""));
+        ResourceRepository repository = new CompositeResourceRepository(new ClasspathResourceRepository(""), new FileResourceRepository(dir));
         Optional<Resource> resource = repository.get("conf/app.yml");
         if (!resource.isPresent()) {
             throw new ApplicationException("missing configuration file, path=conf/app.yml");
