@@ -15,7 +15,7 @@ import java.time.OffsetDateTime;
  * @author chi
  */
 @Entity
-@Table(name = "page_saved_component")
+@Table(name = "page_component")
 public class PageSavedComponent {
     @Id
     @Column(name = "id", length = 36)

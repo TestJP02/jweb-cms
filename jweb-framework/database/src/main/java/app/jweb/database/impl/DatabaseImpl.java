@@ -109,6 +109,8 @@ public class DatabaseImpl implements Database {
                 return "org.hibernate.dialect.SQLServer2012Dialect";
             case "hsqldb":
                 return "org.hibernate.dialect.HSQLDialect";
+            case "derby":
+                return "org.hibernate.dialect.DerbyTenSevenDialect";
             default:
                 throw new ApplicationException("unknown dialect, vendor={}, url={}", vendor, url);
         }

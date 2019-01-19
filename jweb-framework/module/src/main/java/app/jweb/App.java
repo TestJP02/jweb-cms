@@ -128,6 +128,10 @@ public class App extends Application {
         return options.env == null ? Environment.PROD : options.env;
     }
 
+    protected Profile profile() {
+        return profile;
+    }
+
     public ServiceLocator serviceLocator() {
         if (serviceLocator == null) {
             throw new ApplicationException("service locator is not available during configure phase");

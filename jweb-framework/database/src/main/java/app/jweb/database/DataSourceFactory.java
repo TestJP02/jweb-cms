@@ -73,6 +73,8 @@ public class DataSourceFactory {
                 return "com.microsoft.sqlserver.jdbc.SQLServerDriver";
             case "hsqldb":
                 return "org.hsqldb.jdbc.JDBCDriver";
+            case "derby":
+                return "org.apache.derby.jdbc.EmbeddedDriver";
             default:
                 throw new ApplicationException("unknown driver, vendor={}, url={}", vendor, url);
         }

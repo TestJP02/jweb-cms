@@ -27,6 +27,7 @@ class DatabaseImplTest {
     void setup(@TempDirectory Path dir) {
         database = database(dir);
         database.addEntityClassName(TestEntity.class);
+        database.addEntityClassName(TestView.class);
         database.start();
 
         EntityManager em = database.em();
@@ -45,6 +46,12 @@ class DatabaseImplTest {
     @Test
     void query() {
         Optional<TestEntity> entity = database.query("select t from TestEntity t", TestEntity.class).findOne();
+        assertTrue(entity.isPresent());
+    }
+
+    @Test
+    void queryView() {
+        Optional<TestView> entity = database.query("select new app.jweb.database.impl.TestView(t.id, t.name) from TestEntity t", TestView.class).findOne();
         assertTrue(entity.isPresent());
     }
 
