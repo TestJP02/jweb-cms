@@ -11,6 +11,7 @@ import app.jweb.database.impl.TransactionalInterceptor;
 import com.google.common.collect.ImmutableList;
 
 import javax.transaction.Transactional;
+import java.nio.file.Path;
 import java.util.List;
 
 /**
@@ -25,10 +26,10 @@ public class DatabaseModule extends AbstractModule implements Configurable<Datab
         if (Boolean.TRUE.equals(options.createTableEnabled) && app().env() != Environment.DEV) {
             throw new ApplicationException("PROD env doesn't allow to auto create tables");
         }
-        this.database = new DatabaseImpl(options, app().dir());
+        options.url = resetBaseDir(options.url, app().dir().resolve("database"));
+        this.database = new DatabaseImpl(options);
         bind(Database.class).toInstance(this.database);
         bindInterceptor(Transactional.class, new TransactionalInterceptor(this.database));
-
         onStartup(database::start);
     }
 
@@ -40,5 +41,12 @@ public class DatabaseModule extends AbstractModule implements Configurable<Datab
     @Override
     public DatabaseConfig configurator(AbstractModule module, Binder binder) {
         return new DatabaseConfigImpl(binder, database);
+    }
+
+    private String resetBaseDir(String jdbcURL, Path databaseDir) {
+        if (jdbcURL != null) {
+            return jdbcURL.replace(":./", ':' + databaseDir.toString() + '/');
+        }
+        return null;
     }
 }

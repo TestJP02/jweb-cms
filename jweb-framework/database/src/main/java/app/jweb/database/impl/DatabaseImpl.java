@@ -2,13 +2,12 @@ package app.jweb.database.impl;
 
 
 import app.jweb.ApplicationException;
-import app.jweb.database.DataSourceFactory;
 import app.jweb.database.Database;
 import app.jweb.database.DatabaseOptions;
 import app.jweb.database.Query;
-import com.google.common.base.Strings;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Sets;
+import org.apache.commons.dbcp2.BasicDataSource;
 import org.hibernate.jpa.boot.internal.EntityManagerFactoryBuilderImpl;
 import org.hibernate.jpa.boot.internal.PersistenceUnitInfoDescriptor;
 
@@ -21,13 +20,11 @@ import javax.persistence.spi.PersistenceUnitInfo;
 import javax.persistence.spi.PersistenceUnitTransactionType;
 import javax.sql.DataSource;
 import java.net.URL;
-import java.nio.file.Path;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
-import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
@@ -38,12 +35,10 @@ public class DatabaseImpl implements Database {
     private final ThreadLocal<Transaction> currentTransaction = new ThreadLocal<>();
     private final Set<String> entityClassNames = Sets.newHashSet();
     private final DatabaseOptions options;
-    private final Path dir;
     private EntityManagerFactory emf;
 
-    public DatabaseImpl(DatabaseOptions options, Path dir) {
+    public DatabaseImpl(DatabaseOptions options) {
         this.options = options;
-        this.dir = dir;
     }
 
     public void start() {
@@ -79,43 +74,24 @@ public class DatabaseImpl implements Database {
 
     private Properties properties() {
         Properties properties = new Properties();
-        properties.put("hibernate.dialect", dialect(options.dialect, options.url));
         if (options.createTableEnabled) {
             properties.put("hibernate.hbm2ddl.auto", "create-drop");
         }
-        properties.put("hibernate.connection.datasource", new DataSourceFactory(options).setDir(dir).build());
+        properties.put("hibernate.connection.datasource", dataSource());
         properties.put("javax.persistence.validation.mode", "NONE");
         properties.put("hibernate.show_sql", options.showSQLEnabled);
         return properties;
     }
 
-    private String dialect(String dialect, String url) {
-        if (!Strings.isNullOrEmpty(dialect)) {
-            return dialect;
-        }
-        Matcher matcher = JDBC_URL.matcher(url);
-        if (!matcher.matches()) {
-            throw new ApplicationException("invalid database url, url={}", url);
-        }
-        String vendor = matcher.group(1);
-        switch (vendor) {
-            case "mysql":
-                return "org.hibernate.dialect.MySQL55Dialect";
-            case "oracle":
-                return "org.hibernate.dialect.Oracle10gDialect";
-            case "postgresql":
-                return "org.hibernate.dialect.PostgreSQL91Dialect";
-            case "sqlserver":
-                return "org.hibernate.dialect.SQLServer2012Dialect";
-            case "hsqldb":
-                return "org.hibernate.dialect.HSQLDialect";
-            case "derby":
-                return "org.hibernate.dialect.DerbyTenSevenDialect";
-            default:
-                throw new ApplicationException("unknown dialect, vendor={}, url={}", vendor, url);
-        }
+    private DataSource dataSource() {
+        BasicDataSource dataSource = new BasicDataSource();
+        dataSource.setUrl(options.url);
+        dataSource.setUsername(options.username);
+        dataSource.setPassword(options.password);
+        dataSource.setMaxTotal(options.pool.max);
+        dataSource.setMinIdle(options.pool.min);
+        return dataSource;
     }
-
 
     @Override
     public <T> Query<T> query(String sql, Class<T> viewClass, Object... params) {

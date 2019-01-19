@@ -25,7 +25,6 @@ import app.jweb.user.domain.OauthUser;
 import app.jweb.user.domain.ResetPasswordToken;
 import app.jweb.user.domain.User;
 import app.jweb.user.domain.UserAutoLoginToken;
-import app.jweb.user.domain.UserChannelStatistics;
 import app.jweb.user.domain.UserGroup;
 import app.jweb.user.service.OauthUserService;
 import app.jweb.user.service.ResetPasswordTokenService;
@@ -61,8 +60,7 @@ public class UserModuleImpl extends UserModule {
             .entity(ResetPasswordToken.class)
             .entity(UserAutoLoginToken.class)
             .entity(User.class)
-            .entity(OauthUser.class)
-            .entity(UserChannelStatistics.class);
+            .entity(OauthUser.class);
 
         MessageConfig messageConfig = module(MessageModule.class);
         messageConfig.createTopic(UserLoginMessage.class, new TopicOptions());

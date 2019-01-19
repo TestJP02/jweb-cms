@@ -42,6 +42,8 @@ import app.jweb.web.impl.processor.SrcElementProcessor;
 import app.jweb.web.impl.processor.ThemeProcessor;
 import com.google.common.base.Strings;
 
+import java.nio.file.Paths;
+
 /**
  * @author chi
  */
@@ -60,7 +62,7 @@ public final class WebModule extends AbstractModule implements Configurable<WebC
         webRoot.add(new ClasspathResourceRepository("web"));
         webRoot.add(new FileResourceRepository(app().dir().resolve("web")));
         if (webOptions.roots != null) {
-            webOptions.roots.forEach(dir -> webRoot.add(new FileResourceRepository(app().dir().resolve(dir))));
+            webOptions.roots.forEach(dir -> webRoot.add(new FileResourceRepository(Paths.get(dir))));
         }
         bind(WebRoot.class).toInstance(webRoot);
 

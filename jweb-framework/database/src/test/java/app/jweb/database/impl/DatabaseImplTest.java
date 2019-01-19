@@ -1,7 +1,6 @@
 package app.jweb.database.impl;
 
 import app.jweb.database.DatabaseOptions;
-import app.jweb.test.TempDirectory;
 import app.jweb.test.TempDirectoryExtension;
 import org.hibernate.dialect.HSQLDialect;
 import org.junit.jupiter.api.BeforeEach;
@@ -10,7 +9,6 @@ import org.junit.jupiter.api.extension.ExtendWith;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityTransaction;
-import java.nio.file.Path;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -24,8 +22,8 @@ class DatabaseImplTest {
     DatabaseImpl database;
 
     @BeforeEach
-    void setup(@TempDirectory Path dir) {
-        database = database(dir);
+    void setup() {
+        database = database();
         database.addEntityClassName(TestEntity.class);
         database.addEntityClassName(TestView.class);
         database.start();
@@ -55,13 +53,13 @@ class DatabaseImplTest {
         assertTrue(entity.isPresent());
     }
 
-    private DatabaseImpl database(Path dir) {
+    private DatabaseImpl database() {
         DatabaseOptions options = new DatabaseOptions();
         options.url = "jdbc:hsqldb:mem:db;sql.syntax_mys=true";
         options.createTableEnabled = true;
         options.dialect = HSQLDialect.class.getName();
         options.driver = "org.hsqldb.jdbc.JDBCDriver";
 
-        return new DatabaseImpl(options, dir);
+        return new DatabaseImpl(options);
     }
 }

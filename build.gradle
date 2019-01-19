@@ -582,9 +582,6 @@ project(':jweb-main') {
 
         // https://mvnrepository.com/artifact/org.snmp4j/snmp4j
         compile group: 'org.snmp4j', name: 'snmp4j', version: '2.6.3'
-        compile 'org.apache.derby:derby:10.14.2.0'
-
-
         compile project(':jweb-cms:page-service')
         compile project(':jweb-cms:page-service')
         compile project(':jweb-cms:page-web')
@@ -604,6 +601,6 @@ project(':jweb-main') {
         compile project(':jweb-framework:database')
         compile group: 'ch.qos.logback', name: 'logback-classic', version: '1.2.3'
         compile 'mysql:mysql-connector-java:8.0.11'
-        compile 'org.hsqldb:hsqldb:2.4.0'
+        compile 'com.h2database:h2:1.4.197'
     }
 }

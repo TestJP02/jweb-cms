@@ -1,5 +1,5 @@
 import app.jweb.AbstractModule;
-import app.jweb.lancher.CMSApp;
+import app.jweb.lancher.Launcher;
 
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -10,9 +10,10 @@ import java.util.ServiceLoader;
  */
 public class Main {
     public static void main(String[] args) {
-        Path path = Paths.get(System.getProperty("user.home")).resolve(".jweb");
-        CMSApp app = new CMSApp(path);
-        ServiceLoader.load(AbstractModule.class).forEach(app::install);
-        app.start();
+        String jwebHome = System.getProperty("jweb.home");
+        Path homeDir = jwebHome == null ? Paths.get(System.getProperty("user.home")).resolve(".jweb") : Paths.get(jwebHome);
+        Launcher launcher = new Launcher(homeDir);
+        ServiceLoader.load(AbstractModule.class).forEach(launcher::install);
+        launcher.start();
     }
 }
