@@ -13,6 +13,11 @@ export default class DashboardReport extends React.Component {
 
     render() {
         return <div className="page">
+            <div className="toolbar">
+                <h1>Dashboard</h1>
+                <div className="toolbar-buttons">
+                </div>
+            </div>
             <div className="body">
                 <Layout.Row>
                     <Layout.Col span="12">
