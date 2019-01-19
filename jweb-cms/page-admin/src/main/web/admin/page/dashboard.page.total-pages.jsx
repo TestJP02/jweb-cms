@@ -7,28 +7,31 @@ export default class TotalPagesReport extends React.Component {
         super(props);
 
         this.state = {
-            query: {
-                status: "ACTIVE",
-                page: 1,
-                limit: 99999
-            },
-            data: 0
+            statistics: {
+                total: 0,
+                pages: []
+            }
         };
     }
 
     componentWillMount() {
-        fetch("/admin/api/page/find", {
-            method: "PUT",
-            headers: {"Content-Type": "application/json"},
-            body: JSON.stringify(this.state.query)
+        fetch("/admin/api/page/statistics", {
+            method: "GET",
+            headers: {"Content-Type": "application/json"}
         }).then((response) => {
-            this.setState({data: response.total});
+            this.setState({statistics: response});
         });
     }
 
     render() {
         return (
-            <div>{i18n.t("page.total")}:{this.state.data}</div>
+            <div>
+                <div><h1>{i18n.t("page.total")}:{this.state.statistics.total}</h1></div>
+                <Recharts.PieChart width={300} height={300}>
+                    <Recharts.Pie isAnimationActive={true} nameKey="status" dataKey="total" data={this.state.statistics.pages} cx={150} cy={150} outerRadius={80} fill="#8884d8" label/>
+                    <Recharts.Tooltip/>
+                </Recharts.PieChart>
+            </div>
         );
     }
 }

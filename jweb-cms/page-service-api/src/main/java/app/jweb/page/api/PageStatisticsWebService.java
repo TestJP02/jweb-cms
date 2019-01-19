@@ -3,6 +3,7 @@ package app.jweb.page.api;
 import app.jweb.page.api.statistics.BatchGetPageStatisticsRequest;
 import app.jweb.page.api.statistics.PageStatisticsQuery;
 import app.jweb.page.api.statistics.PageStatisticsResponse;
+import app.jweb.page.api.statistics.PageStatusStatisticsView;
 import app.jweb.page.api.statistics.UpdatePageStatisticsRequest;
 import app.jweb.util.collection.QueryResponse;
 
@@ -33,4 +34,8 @@ public interface PageStatisticsWebService {
     @Path("/page/{pageId}")
     @PUT
     PageStatisticsResponse update(@PathParam("pageId") String pageId, UpdatePageStatisticsRequest request);
+
+    @Path("/status")
+    @GET
+    List<PageStatusStatisticsView> statusStatistics();
 }

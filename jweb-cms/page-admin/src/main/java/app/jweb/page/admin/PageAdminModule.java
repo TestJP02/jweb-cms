@@ -10,6 +10,7 @@ import app.jweb.page.admin.web.api.PageCategoryAdminController;
 import app.jweb.page.admin.web.api.PageComponentAdminController;
 import app.jweb.page.admin.web.api.PagePathAdminController;
 import app.jweb.page.admin.web.api.PageSavedComponentAdminController;
+import app.jweb.page.admin.web.api.PageStatisticsAdminController;
 import app.jweb.page.admin.web.api.PageVariableAdminController;
 import com.google.common.collect.Lists;
 
@@ -31,6 +32,7 @@ public class PageAdminModule extends AbstractAdminModule {
         admin().controller(PageComponentAdminController.class);
         admin().controller(PageCategoryAdminController.class);
         admin().controller(PagePathAdminController.class);
+        admin().controller(PageStatisticsAdminController.class);
 
         admin().install(scriptModule());
 

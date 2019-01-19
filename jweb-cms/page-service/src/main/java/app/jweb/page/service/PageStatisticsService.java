@@ -1,11 +1,13 @@
 package app.jweb.page.service;
 
+import app.jweb.database.Database;
 import app.jweb.database.Query;
 import app.jweb.database.Repository;
 import app.jweb.page.api.statistics.BatchGetPageStatisticsRequest;
 import app.jweb.page.api.statistics.PageStatisticsQuery;
 import app.jweb.page.api.statistics.UpdatePageStatisticsRequest;
 import app.jweb.page.domain.PageStatistics;
+import app.jweb.page.domain.PageStatusStatistics;
 import app.jweb.util.collection.QueryResponse;
 import com.google.common.collect.ImmutableList;
 
@@ -21,6 +23,8 @@ import java.util.Optional;
 public class PageStatisticsService {
     @Inject
     Repository<PageStatistics> repository;
+    @Inject
+    Database database;
 
     public Optional<PageStatistics> findById(String pageId) {
         return repository.query("SELECT t from PageStatistics t WHERE id=?0", pageId).findOne();
@@ -190,5 +194,11 @@ public class PageStatisticsService {
         pageStatistics.updatedTime = OffsetDateTime.now();
         repository.update(pageId, pageStatistics);
         return pageStatistics;
+    }
+
+    public List<PageStatusStatistics> statusStatistics() {
+        String sql = "SELECT t.status AS t.status, COUNT(*) AS t.total FROM Page t GROUP BY t.status";
+        Query<PageStatusStatistics> query = database.query(sql, PageStatusStatistics.class);
+        return query.find();
     }
 }

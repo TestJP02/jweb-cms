@@ -4,8 +4,10 @@ import app.jweb.page.api.PageStatisticsWebService;
 import app.jweb.page.api.statistics.BatchGetPageStatisticsRequest;
 import app.jweb.page.api.statistics.PageStatisticsQuery;
 import app.jweb.page.api.statistics.PageStatisticsResponse;
+import app.jweb.page.api.statistics.PageStatusStatisticsView;
 import app.jweb.page.api.statistics.UpdatePageStatisticsRequest;
 import app.jweb.page.domain.PageStatistics;
+import app.jweb.page.domain.PageStatusStatistics;
 import app.jweb.page.service.PageStatisticsService;
 import app.jweb.util.collection.QueryResponse;
 
@@ -43,6 +45,12 @@ public class PageStatisticsWebServiceImpl implements PageStatisticsWebService {
         return response(pageStatistics);
     }
 
+    @Override
+    public List<PageStatusStatisticsView> statusStatistics() {
+        return pageStatisticsService.statusStatistics().stream().map(this::view)
+            .collect(Collectors.toList());
+    }
+
     private PageStatisticsResponse response(PageStatistics pageStatistics) {
         PageStatisticsResponse response = new PageStatisticsResponse();
         response.id = pageStatistics.id;
@@ -62,5 +70,12 @@ public class PageStatisticsWebServiceImpl implements PageStatisticsWebService {
         response.updatedTime = pageStatistics.updatedTime;
         response.updatedBy = pageStatistics.updatedBy;
         return response;
+    }
+
+    private PageStatusStatisticsView view(PageStatusStatistics statistics) {
+        PageStatusStatisticsView view = new PageStatusStatisticsView();
+        view.status = statistics.status;
+        view.total = statistics.total;
+        return view;
     }
 }
