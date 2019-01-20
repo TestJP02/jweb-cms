@@ -6,9 +6,8 @@ const StyleLintPlugin = require(path.resolve("node_modules/stylelint-webpack-plu
 const styleOptions = JSON.parse(fs.readFileSync(path.resolve(__dirname, "./stylelint.json"), "utf8"));
 let configFile = path.resolve(__dirname, "./eslint.json");
 
-module.exports = (env, {mode}) => {
-    const rules = [
-        {
+module.exports = (env, { mode }) => {
+    const rules = [{
             test: /\.(js|jsx)$/,
             loader: "babel-loader",
             exclude: /node_modules/,
@@ -21,12 +20,12 @@ module.exports = (env, {mode}) => {
         {
             test: /\.(css|scss|sass)$/,
             use: [
-                {loader: "style-loader"},
+                { loader: "style-loader" },
                 {
                     loader: "css-loader",
                     options: {
-                        minimize: {safe: true},
-                        sourceMap: true
+                        minimize: { safe: true },
+                        // sourceMap: true
                     }
                 }
             ]
@@ -34,20 +33,24 @@ module.exports = (env, {mode}) => {
         {
             test: /\.less$/,
             use: [
-                {loader: "style-loader"},
+                { loader: "style-loader" },
                 {
                     loader: "css-loader",
                     options: {
-                        minimize: {safe: true},
+                        minimize: { safe: true },
                         sourceMap: true
                     }
                 },
-                {loader: "less-loader"}
+                { loader: "less-loader" }
             ]
         },
         {
             test: /\.(png|jpe?g|gif|svg)$/,
-            loader: "url-loader?limit=1000"
+            loader: "file-loader",
+            options: {
+                name: "/admin/static/page/[name].[hash:7].[ext]",
+                outputPath: "../../../"
+            }
         },
         {
             test: /\.(woff|woff2|eot|ttf)$/,
@@ -65,7 +68,7 @@ module.exports = (env, {mode}) => {
                 configFile: configFile,
                 parserOptions: {
                     sourceType: "module",
-                    ecmaFeatures: {jsx: true}
+                    ecmaFeatures: { jsx: true }
                 },
                 envs: ["es6", "browser"],
                 failOnWarning: true,
@@ -89,8 +92,8 @@ module.exports = (env, {mode}) => {
                 }
             })
         ],
-        module: {rules},
-        resolve: {extensions: [".js", ".jsx"]},
+        module: { rules },
+        resolve: { extensions: [".js", ".jsx"] },
         externals: {
             "react": "React",
             "react-dom": "ReactDOM",
