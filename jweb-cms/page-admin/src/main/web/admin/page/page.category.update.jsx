@@ -1,7 +1,7 @@
 import React from "react";
 import PropTypes from "prop-types";
 import {Link} from "react-router-dom";
-import {Breadcrumb, Button, Card, Form, Input, Message as notification, Select, Upload} from "element-react";
+import {Breadcrumb, Button, Card, Form, Input, Message as notification, Upload} from "element-react";
 
 const i18n = window.i18n;
 export default class CategoryUpdate extends React.Component {
@@ -16,17 +16,9 @@ export default class CategoryUpdate extends React.Component {
                 tags: [],
                 keywords: [],
                 fields: {},
-                templatePath: "template/category.html",
                 displayOrder: 0
             },
             formRules: {
-                templatePath: [
-                    {
-                        required: true,
-                        message: i18n.t("page.templatePathRequired"),
-                        trigger: "blur"
-                    }
-                ],
                 displayName: [
                     {
                         required: true,
@@ -327,13 +319,6 @@ export default class CategoryUpdate extends React.Component {
                             <Form.Item label={i18n.t("page.name")} prop="displayName">
                                 <Input type="text" value={this.state.form.displayName}
                                     onChange={val => this.formChange("displayName", val)}/>
-                            </Form.Item>
-                            <Form.Item label={i18n.t("page.pageTemplate")} prop="templatePath" labelPosition="top">
-                                <Select value={this.state.form.templatePath} onChange={val => this.formChange("templatePath", val)}
-                                    placeholder={i18n.t("page.layoutSelect")} clearable={true}>
-                                    {this.state.templateOptions.map(el => <Select.Option key={el.templatePath} label={el.title + "(" + el.templatePath + ")"}
-                                        value={el.templatePath}/>)}
-                                </Select>
                             </Form.Item>
                             <Form.Item label={i18n.t("page.displayOrder")} prop="displayOrder">
                                 <Input type="number" value={this.state.form.displayOrder}
