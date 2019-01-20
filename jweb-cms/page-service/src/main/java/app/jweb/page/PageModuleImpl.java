@@ -11,6 +11,7 @@ import app.jweb.page.api.PageDraftWebService;
 import app.jweb.page.api.PageKeywordWebService;
 import app.jweb.page.api.PageModule;
 import app.jweb.page.api.PageSavedComponentWebService;
+import app.jweb.page.api.PageStatisticsWebService;
 import app.jweb.page.api.PageTemplateWebService;
 import app.jweb.page.api.PageVariableWebService;
 import app.jweb.page.api.PageWebService;
@@ -32,6 +33,7 @@ import app.jweb.page.domain.PageCategory;
 import app.jweb.page.domain.PageDraft;
 import app.jweb.page.domain.PageKeyword;
 import app.jweb.page.domain.PageSavedComponent;
+import app.jweb.page.domain.PageStatistics;
 import app.jweb.page.domain.PageTemplate;
 import app.jweb.page.domain.PageVariable;
 import app.jweb.page.service.PageCategoryService;
@@ -40,6 +42,7 @@ import app.jweb.page.service.PageDraftService;
 import app.jweb.page.service.PageKeywordService;
 import app.jweb.page.service.PageSavedComponentService;
 import app.jweb.page.service.PageService;
+import app.jweb.page.service.PageStatisticsService;
 import app.jweb.page.service.PageTemplateService;
 import app.jweb.page.service.PageVariableService;
 import app.jweb.page.web.PageCategoryWebServiceImpl;
@@ -47,6 +50,7 @@ import app.jweb.page.web.PageComponentWebServiceImpl;
 import app.jweb.page.web.PageDraftWebServiceImpl;
 import app.jweb.page.web.PageKeywordWebServiceImpl;
 import app.jweb.page.web.PageSavedComponentWebServiceImpl;
+import app.jweb.page.web.PageStatisticsWebServiceImpl;
 import app.jweb.page.web.PageTemplateWebServiceImpl;
 import app.jweb.page.web.PageVariableWebServiceImpl;
 import app.jweb.page.web.PageWebServiceImpl;
@@ -83,7 +87,8 @@ public class PageModuleImpl extends PageModule {
             .entity(PageTemplate.class)
             .entity(PageCategory.class)
             .entity(PageKeyword.class)
-            .entity(PageSavedComponent.class);
+            .entity(PageSavedComponent.class)
+            .entity(PageStatistics.class);
 
         bind(PageVariableService.class);
         bind(PageSavedComponentService.class);
@@ -93,6 +98,7 @@ public class PageModuleImpl extends PageModule {
         bind(PageKeywordService.class);
         bind(PageTemplateService.class);
         bind(PageDraftService.class);
+        bind(PageStatisticsService.class);
 
         api().service(PageVariableWebService.class, PageVariableWebServiceImpl.class);
         api().service(PageWebService.class, PageWebServiceImpl.class);
@@ -102,6 +108,7 @@ public class PageModuleImpl extends PageModule {
         api().service(PageCategoryWebService.class, PageCategoryWebServiceImpl.class);
         api().service(PageTemplateWebService.class, PageTemplateWebServiceImpl.class);
         api().service(PageDraftWebService.class, PageDraftWebServiceImpl.class);
+        api().service(PageStatisticsWebService.class, PageStatisticsWebServiceImpl.class);
 
         onStartup(this::start);
     }

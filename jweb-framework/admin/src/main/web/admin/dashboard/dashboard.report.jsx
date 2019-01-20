@@ -1,5 +1,5 @@
 import React from "react";
-import {Card, Layout} from "element-react";
+import {Breadcrumb, Card, Layout} from "element-react";
 import "./dashboard.report.css";
 
 const bundle = window.app.bundle("dashboardBundle");
@@ -14,7 +14,11 @@ export default class DashboardReport extends React.Component {
     render() {
         return <div className="page">
             <div className="toolbar">
-                <h1>Dashboard</h1>
+                <div className="toolbar-form">
+                    <Breadcrumb separator="/">
+                        <Breadcrumb.Item><h1 className="toolbar-header">Dashboard</h1></Breadcrumb.Item>
+                    </Breadcrumb>
+                </div>
                 <div className="toolbar-buttons">
                 </div>
             </div>
