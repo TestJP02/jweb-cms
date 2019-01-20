@@ -1,8 +1,8 @@
 package app.jweb.page.web;
 
 import app.jweb.page.api.PageSavedComponentWebService;
-import app.jweb.page.api.component.BatchDeleteSavedComponentAJAXRequest;
 import app.jweb.page.api.component.CreateSavedComponentRequest;
+import app.jweb.page.api.component.DeleteSavedComponentRequest;
 import app.jweb.page.api.component.SavedComponentQuery;
 import app.jweb.page.api.component.SavedComponentResponse;
 import app.jweb.page.api.component.UpdateSavedComponentRequest;
@@ -60,10 +60,8 @@ public class PageSavedComponentWebServiceImpl implements PageSavedComponentWebSe
     }
 
     @Override
-    public void delete(BatchDeleteSavedComponentAJAXRequest request) {
-        for (String id : request.ids) {
-            pageComponentService.delete(id, request.requestBy);
-        }
+    public void delete(DeleteSavedComponentRequest request) {
+        pageComponentService.delete(request);
     }
 
     private SavedComponentResponse response(PageSavedComponent pageComponent) {

@@ -1,6 +1,6 @@
 import React from "react";
 import {Link} from "react-router-dom";
-import {Button, Form, Input, Message as notification, Pagination, Table} from "element-react";
+import {Button, Form, Input, Message as notification, MessageBox, Pagination, Table} from "element-react";
 
 const i18n = window.i18n;
 export default class ComponentList extends React.Component {
@@ -112,44 +112,48 @@ export default class ComponentList extends React.Component {
 
     delete(data, e) {
         e.preventDefault();
-
-        fetch("/admin/api/page/saved-component/batch-delete", {
-            method: "POST",
-            body: JSON.stringify({ids: [data.id]})
-        }).then(() => {
-            this.find();
-            notification({
-                title: i18n.t("page.successTitle"),
-                type: "success",
-                message: i18n.t("page.deleteSuccessMessage")
+        MessageBox.confirm(i18n.t("page.deleteComponentTip"), i18n.t("page.deleteHint"), {type: "warning"}).then(() => {
+            fetch("/admin/api/page/saved-component/batch-delete", {
+                method: "POST",
+                body: JSON.stringify({ids: [data.id]})
+            }).then(() => {
+                this.find();
+                notification({
+                    title: i18n.t("page.successTitle"),
+                    type: "success",
+                    message: i18n.t("page.deleteSuccessMessage")
+                });
             });
         });
     }
 
     batchDelete(e) {
         e.preventDefault();
-        const list = this.state.selected;
-        if (list.length === 0) {
-            return;
-        }
-        const pages = [];
-        for (let i = 0; i < list.length; i += 1) {
-            pages.push({
-                id: list[i].id,
-                status: list[i].status
+
+        MessageBox.confirm(i18n.t("page.deleteComponentTip"), i18n.t("page.deleteHint"), {type: "warning"}).then(() => {
+            const list = this.state.selected;
+            if (list.length === 0) {
+                return;
+            }
+            const pages = [];
+            for (let i = 0; i < list.length; i += 1) {
+                pages.push({
+                    id: list[i].id,
+                    status: list[i].status
+                });
+            }
+            fetch("/admin/api/page/batch-delete", {
+                method: "POST",
+                body: JSON.stringify({pages: pages})
+            }).then(() => {
+                notification({
+                    title: i18n.t("page.successTitle"),
+                    type: "success",
+                    message: i18n.t("page.deleteSuccessMessage")
+                });
+                this.setState({selected: []});
+                this.find();
             });
-        }
-        fetch("/admin/api/page/batch-delete", {
-            method: "POST",
-            body: JSON.stringify({pages: pages})
-        }).then(() => {
-            notification({
-                title: i18n.t("page.successTitle"),
-                type: "success",
-                message: i18n.t("page.deleteSuccessMessage")
-            });
-            this.setState({selected: []});
-            this.find();
         });
     }
 

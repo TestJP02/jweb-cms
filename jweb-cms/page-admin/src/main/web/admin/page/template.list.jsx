@@ -10,7 +10,6 @@ export default class TemplateList extends React.Component {
         this.state = {
             query: {
                 query: null,
-                status: null,
                 page: 1,
                 limit: 20
             },

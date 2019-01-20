@@ -9,7 +9,7 @@ import java.util.List;
  * @author chi
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-public class BatchDeleteSavedComponentAJAXRequest {
+public class DeleteSavedComponentRequest {
     @XmlElement(name = "ids")
     public List<String> ids;
 

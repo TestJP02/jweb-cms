@@ -1,7 +1,7 @@
 package app.jweb.page.api;
 
 
-import app.jweb.page.api.component.BatchDeleteSavedComponentAJAXRequest;
+import app.jweb.page.api.component.DeleteSavedComponentRequest;
 import app.jweb.page.api.component.CreateSavedComponentRequest;
 import app.jweb.page.api.component.SavedComponentQuery;
 import app.jweb.page.api.component.SavedComponentResponse;
@@ -49,5 +49,5 @@ public interface PageSavedComponentWebService {
 
     @Path("/batch-delete")
     @POST
-    void delete(BatchDeleteSavedComponentAJAXRequest request);
+    void delete(DeleteSavedComponentRequest request);
 }

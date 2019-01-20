@@ -1,22 +1,25 @@
 package app.jweb.page.service;
 
-import app.jweb.page.domain.PageSavedComponent;
-import com.google.common.base.Strings;
 import app.jweb.database.Query;
 import app.jweb.database.Repository;
 import app.jweb.message.MessagePublisher;
 import app.jweb.page.api.component.CreateSavedComponentRequest;
+import app.jweb.page.api.component.DeleteSavedComponentRequest;
 import app.jweb.page.api.component.SavedComponentChangedMessage;
 import app.jweb.page.api.component.SavedComponentQuery;
 import app.jweb.page.api.component.SavedComponentStatus;
 import app.jweb.page.api.component.UpdateSavedComponentRequest;
+import app.jweb.page.domain.PageSavedComponent;
 import app.jweb.util.JSON;
 import app.jweb.util.collection.QueryResponse;
+import com.google.common.base.Strings;
+import com.google.common.collect.ImmutableMap;
 
 import javax.inject.Inject;
 import javax.transaction.Transactional;
 import java.time.OffsetDateTime;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -113,24 +116,35 @@ public class PageSavedComponentService {
         message.updatedBy = pageComponent.updatedBy;
         message.updatedTime = pageComponent.updatedTime;
         publisher.publish(message);
-
         return pageComponent;
     }
 
     @Transactional
-    public void delete(String id, String requestBy) {
-        PageSavedComponent pageComponent = get(id);
-        if (pageComponent.status == SavedComponentStatus.ACTIVE) {
-            pageComponent.status = SavedComponentStatus.INACTIVE;
-            pageComponent.updatedTime = OffsetDateTime.now();
-            pageComponent.updatedBy = requestBy;
-            repository.update(id, pageComponent);
-        } else {
-            repository.delete(id);
+    public void delete(DeleteSavedComponentRequest request) {
+        List<PageSavedComponent> pageSavedComponents = batchGet(request.ids);
+        for (PageSavedComponent pageSavedComponent : pageSavedComponents) {
+            pageSavedComponent.status = SavedComponentStatus.INACTIVE;
+            notifyPageSavedComponentChanged(pageSavedComponent);
         }
+        repository.batchDelete(request.ids);
     }
 
     public List<PageSavedComponent> batchGet(List<String> savedComponentsId) {
         return repository.batchGet(savedComponentsId);
+    }
+
+    public void notifyPageSavedComponentChanged(PageSavedComponent pageComponent) {
+        SavedComponentChangedMessage message = new SavedComponentChangedMessage();
+        message.id = pageComponent.id;
+        message.name = pageComponent.name;
+        message.componentName = pageComponent.componentName;
+        message.displayName = pageComponent.displayName;
+        message.attributes = pageComponent.attributes == null ? ImmutableMap.of() : JSON.fromJSON(pageComponent.attributes, Map.class);
+        message.status = pageComponent.status;
+        message.createdBy = pageComponent.createdBy;
+        message.createdTime = pageComponent.createdTime;
+        message.updatedBy = pageComponent.updatedBy;
+        message.updatedTime = pageComponent.updatedTime;
+        publisher.publish(message);
     }
 }

@@ -1,5 +1,5 @@
 import React from "react";
-import {Button, Form, Input, Message as notification, Pagination, Table} from "element-react";
+import {Button, Form, Input, Message as notification, MessageBox, Pagination, Table} from "element-react";
 import {Link} from "react-router-dom";
 
 const i18n = window.i18n;
@@ -126,8 +126,11 @@ export default class VariableList extends React.Component {
 
     delete(data, e) {
         e.preventDefault();
-        fetch("/admin/api/page/variable/" + data.id, {method: "DELETE"})
-            .then(() => {
+        MessageBox.confirm(i18n.t("page.deleteVariableTip"), i18n.t("page.deleteHint"), {type: "warning"}).then(() => {
+            fetch("/admin/api/page/variable/batch-delete", {
+                method: "PUT",
+                body: JSON.stringify({ids: [data.id]})
+            }).then(() => {
                 notification({
                     title: i18n.t("page.successTitle"),
                     type: "success",
@@ -135,27 +138,30 @@ export default class VariableList extends React.Component {
                 });
                 this.find();
             });
+        });
     }
 
     batchDelete() {
-        const list = this.state.selected,
-            ids = [];
-        if (list.length === 0) {
-            return;
-        }
-        for (let i = 0; i < list.length; i += 1) {
-            ids.push(list[i].id);
-        }
-        fetch("/admin/api/page/variable/batch-delete", {
-            method: "PUT",
-            body: JSON.stringify({ids: ids})
-        }).then(() => {
-            notification({
-                title: i18n.t("page.successTitle"),
-                type: "success",
-                message: i18n.t("page.deleteSuccessMessage")
+        MessageBox.confirm(i18n.t("page.deleteVariableTip"), i18n.t("page.deleteHint"), {type: "warning"}).then(() => {
+            const list = this.state.selected,
+                ids = [];
+            if (list.length === 0) {
+                return;
+            }
+            for (let i = 0; i < list.length; i += 1) {
+                ids.push(list[i].id);
+            }
+            fetch("/admin/api/page/variable/batch-delete", {
+                method: "PUT",
+                body: JSON.stringify({ids: ids})
+            }).then(() => {
+                notification({
+                    title: i18n.t("page.successTitle"),
+                    type: "success",
+                    message: i18n.t("page.deleteSuccessMessage")
+                });
+                this.find();
             });
-            this.find();
         });
     }
 

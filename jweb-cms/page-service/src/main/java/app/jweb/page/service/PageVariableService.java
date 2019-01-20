@@ -1,17 +1,18 @@
 package app.jweb.page.service;
 
-import app.jweb.page.domain.PageVariable;
-import com.google.common.base.Strings;
 import app.jweb.database.Query;
 import app.jweb.database.Repository;
 import app.jweb.message.MessagePublisher;
 import app.jweb.page.api.variable.CreateVariableRequest;
+import app.jweb.page.api.variable.DeleteVariableRequest;
 import app.jweb.page.api.variable.UpdateVariableRequest;
 import app.jweb.page.api.variable.VariableChangedMessage;
 import app.jweb.page.api.variable.VariableQuery;
 import app.jweb.page.api.variable.VariableStatus;
+import app.jweb.page.domain.PageVariable;
 import app.jweb.util.JSON;
 import app.jweb.util.collection.QueryResponse;
+import com.google.common.base.Strings;
 
 import javax.inject.Inject;
 import javax.transaction.Transactional;
@@ -86,25 +87,13 @@ public class PageVariableService {
     }
 
     @Transactional
-    public boolean delete(String id, String requestBy) {
-        PageVariable pageVariable = get(id);
-        if (pageVariable.status.equals(VariableStatus.INACTIVE)) {
+    public void delete(DeleteVariableRequest request) {
+        for (String id : request.ids) {
+            PageVariable pageVariable = get(id);
+            repository.delete(id);
             VariableChangedMessage message = new VariableChangedMessage();
             message.name = pageVariable.name;
             publisher.publish(message);
-
-            return repository.delete(id);
-        } else {
-            pageVariable.status = VariableStatus.INACTIVE;
-            pageVariable.updatedBy = requestBy;
-            pageVariable.updatedTime = OffsetDateTime.now();
-            repository.update(id, pageVariable);
-
-            VariableChangedMessage message = new VariableChangedMessage();
-            message.name = pageVariable.name;
-            publisher.publish(message);
-
-            return true;
         }
     }
 }

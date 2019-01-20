@@ -1,6 +1,5 @@
 package app.jweb.page.web;
 
-import com.google.common.collect.ImmutableList;
 import app.jweb.page.api.PageVariableWebService;
 import app.jweb.page.api.variable.CreateVariableRequest;
 import app.jweb.page.api.variable.DeleteVariableRequest;
@@ -13,6 +12,7 @@ import app.jweb.page.service.PageVariableService;
 import app.jweb.util.JSON;
 import app.jweb.util.collection.QueryResponse;
 import app.jweb.util.type.Types;
+import com.google.common.collect.ImmutableList;
 
 import javax.inject.Inject;
 import java.util.List;
@@ -52,7 +52,7 @@ public class PageVariableWebServiceImpl implements PageVariableWebService {
 
     @Override
     public void delete(DeleteVariableRequest request) {
-        request.ids.forEach(id -> pageVariableService.delete(id, request.requestBy));
+        pageVariableService.delete(request);
     }
 
     private VariableResponse response(PageVariable request) {

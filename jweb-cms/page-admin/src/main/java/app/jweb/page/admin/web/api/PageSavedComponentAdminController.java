@@ -2,7 +2,7 @@ package app.jweb.page.admin.web.api;
 
 
 import app.jweb.page.api.PageSavedComponentWebService;
-import app.jweb.page.api.component.BatchDeleteSavedComponentAJAXRequest;
+import app.jweb.page.api.component.DeleteSavedComponentRequest;
 import app.jweb.page.api.component.CreateSavedComponentRequest;
 import app.jweb.page.api.component.SavedComponentQuery;
 import app.jweb.page.api.component.SavedComponentResponse;
@@ -63,9 +63,9 @@ public class PageSavedComponentAdminController {
     @RolesAllowed("DELETE")
     @Path("/batch-delete")
     @POST
-    public void delete(BatchDeleteSavedComponentAJAXRequest batchDeleteSavedComponentAJAXRequest) {
-        BatchDeleteSavedComponentAJAXRequest batchDeletePageComponentRequest = new BatchDeleteSavedComponentAJAXRequest();
-        batchDeletePageComponentRequest.ids = batchDeleteSavedComponentAJAXRequest.ids;
+    public void delete(DeleteSavedComponentRequest deleteSavedComponentRequest) {
+        DeleteSavedComponentRequest batchDeletePageComponentRequest = new DeleteSavedComponentRequest();
+        batchDeletePageComponentRequest.ids = deleteSavedComponentRequest.ids;
         batchDeletePageComponentRequest.requestBy = userInfo.username();
         pageSavedComponentWebService.delete(batchDeletePageComponentRequest);
     }
