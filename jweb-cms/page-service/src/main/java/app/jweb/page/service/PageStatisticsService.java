@@ -197,7 +197,7 @@ public class PageStatisticsService {
     }
 
     public List<PageStatusStatistics> statusStatistics() {
-        String sql = "SELECT t.status AS status, COUNT(*) AS total FROM Page t GROUP BY t.status";
+        String sql = "SELECT new app.jweb.page.domain.PageStatusStatistics(t.status , COUNT(*))  FROM Page t GROUP BY t.status";
         Query<PageStatusStatistics> query = database.query(sql, PageStatusStatistics.class);
         return query.find();
     }
