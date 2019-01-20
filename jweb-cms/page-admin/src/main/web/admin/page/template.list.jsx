@@ -1,6 +1,6 @@
 import React from "react";
 import {Link} from "react-router-dom";
-import {Button, Form, Input, Message as notification, MessageBox, Pagination, Select, Table} from "element-react";
+import {Button, Form, Input, Message as notification, MessageBox, Pagination, Table} from "element-react";
 
 
 const i18n = window.i18n;
@@ -14,16 +14,6 @@ export default class TemplateList extends React.Component {
                 page: 1,
                 limit: 20
             },
-            statusOptions: [
-                {
-                    label: i18n.t("page.statusActive"),
-                    value: "ACTIVE"
-                },
-                {
-                    label: i18n.t("page.statusDraft"),
-                    value: "DRAFT"
-                }
-            ],
             data: {
                 total: 0,
                 page: 1,
@@ -201,17 +191,6 @@ export default class TemplateList extends React.Component {
                 <div className="toolbar">
                     <div className="toolbar-form">
                         <Form inline={true} model={this.state.query}>
-                            <Form.Item>
-                                <Select value={this.state.query.status}
-                                    onChange={value => this.queryChangeAndFind("status", value)}
-                                    clearable={true}
-                                    placeholder={i18n.t("page.statusAll")}>
-                                    {
-                                        this.state.statusOptions.map(el => <Select.Option key={el.value}
-                                            label={el.label} value={el.value}/>)
-                                    }
-                                </Select>
-                            </Form.Item>
                             <Form.Item>
                                 <Input icon="fa fa-search" value={this.state.query.query} placeholder={i18n.t("page.pathPlaceHolder")}
                                     onChange={value => this.queryChange("query", value)}/>

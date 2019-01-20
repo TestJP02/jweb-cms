@@ -1,13 +1,10 @@
 package app.jweb.file.service;
 
-import app.jweb.file.api.directory.DirectoryQuery;
-import app.jweb.file.api.directory.DirectoryStatus;
-import com.google.common.base.Joiner;
-import com.google.common.base.Strings;
-import com.google.common.collect.Lists;
-import com.google.common.io.Files;
 import app.jweb.database.Query;
 import app.jweb.database.Repository;
+import app.jweb.file.api.directory.DirectoryQuery;
+import app.jweb.file.api.directory.DirectoryStatus;
+import app.jweb.file.api.file.DeleteFileRequest;
 import app.jweb.file.api.file.CreateFileRequest;
 import app.jweb.file.api.file.FileListQuery;
 import app.jweb.file.api.file.FileListResponse;
@@ -18,10 +15,15 @@ import app.jweb.file.domain.Directory;
 import app.jweb.file.domain.File;
 import app.jweb.util.collection.QueryResponse;
 import app.jweb.util.exception.Exceptions;
+import com.google.common.base.Joiner;
+import com.google.common.base.Strings;
+import com.google.common.collect.Lists;
+import com.google.common.io.Files;
 
 import javax.inject.Inject;
 import javax.transaction.Transactional;
 import java.time.OffsetDateTime;
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -196,15 +198,10 @@ public class FileService {
     }
 
     @Transactional
-    public void delete(String id, String requestBy) {
-        File file = get(id);
-        if (file.status.equals(FileStatus.INACTIVE)) {
-            repository.delete(id);
-        } else {
-            file.status = FileStatus.INACTIVE;
-            file.updatedBy = requestBy;
-            file.updatedTime = OffsetDateTime.now();
-            repository.update(id, file);
+    public void batchDelete(DeleteFileRequest request) {
+        List<File> files = repository.batchGet(request.ids);
+        for (File file : files) {
+            repository.delete(file.id);
         }
     }
 

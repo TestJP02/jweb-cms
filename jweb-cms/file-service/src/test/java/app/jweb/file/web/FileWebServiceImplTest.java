@@ -6,7 +6,7 @@ import app.jweb.database.DatabaseModule;
 import app.jweb.file.api.DirectoryWebService;
 import app.jweb.file.api.FileWebService;
 import app.jweb.file.api.directory.CreateDirectoryRequest;
-import app.jweb.file.api.file.BatchDeleteFileRequest;
+import app.jweb.file.api.file.DeleteFileRequest;
 import app.jweb.file.api.file.CreateFileRequest;
 import app.jweb.file.api.file.FileListQuery;
 import app.jweb.file.api.file.FileListResponse;
@@ -151,10 +151,10 @@ public class FileWebServiceImplTest {
         request.requestBy = "test";
         String newId = fileWebService.create(request).id;
 
-        BatchDeleteFileRequest batchDeleteFileRequest = new BatchDeleteFileRequest();
-        batchDeleteFileRequest.ids = Lists.newArrayList(file.id, newId);
-        batchDeleteFileRequest.requestBy = "test";
-        app.post("/api/file/batch-delete").setEntity(batchDeleteFileRequest).execute();
+        DeleteFileRequest deleteFileRequest = new DeleteFileRequest();
+        deleteFileRequest.ids = Lists.newArrayList(file.id, newId);
+        deleteFileRequest.requestBy = "test";
+        app.post("/api/file/batch-delete").setEntity(deleteFileRequest).execute();
 
         FileResponse response = fileWebService.get(file.id);
         assertEquals(FileStatus.INACTIVE, response.status);

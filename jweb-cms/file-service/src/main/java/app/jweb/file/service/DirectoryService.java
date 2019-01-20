@@ -1,20 +1,21 @@
 package app.jweb.file.service;
 
+import app.jweb.database.Query;
+import app.jweb.database.Repository;
 import app.jweb.file.api.directory.CreateDirectoriesRequest;
+import app.jweb.file.api.directory.CreateDirectoryRequest;
+import app.jweb.file.api.directory.DeleteDirectoryRequest;
 import app.jweb.file.api.directory.DirectoryQuery;
 import app.jweb.file.api.directory.DirectoryStatus;
 import app.jweb.file.api.directory.UpdateDirectoryRequest;
+import app.jweb.file.domain.Directory;
+import app.jweb.util.collection.QueryResponse;
+import app.jweb.util.exception.Exceptions;
 import com.google.common.base.Joiner;
 import com.google.common.base.Splitter;
 import com.google.common.base.Strings;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
-import app.jweb.database.Query;
-import app.jweb.database.Repository;
-import app.jweb.file.api.directory.CreateDirectoryRequest;
-import app.jweb.file.domain.Directory;
-import app.jweb.util.collection.QueryResponse;
-import app.jweb.util.exception.Exceptions;
 
 import javax.inject.Inject;
 import javax.transaction.Transactional;
@@ -117,20 +118,6 @@ public class DirectoryService {
         }
         dbQuery.append(")");
         return dbQuery.find();
-    }
-
-    @Transactional
-    public boolean delete(String id, String requestBy) {
-        Directory directory = get(id);
-        if (directory.status.equals(DirectoryStatus.INACTIVE)) {
-            return repository.delete(id);
-        } else {
-            directory.status = DirectoryStatus.INACTIVE;
-            directory.updatedBy = requestBy;
-            directory.updatedTime = OffsetDateTime.now();
-            repository.update(id, directory);
-            return true;
-        }
     }
 
     @Transactional
@@ -263,6 +250,12 @@ public class DirectoryService {
         directory.updatedBy = request.requestBy;
         repository.update(id, directory);
         return directory;
+    }
+
+    @Transactional
+    public void delete(DeleteDirectoryRequest request) {
+        repository.batchDelete(request.ids);
+        repository.batchDelete(children(request.ids));
     }
 
     private List<String> directories(String path) {

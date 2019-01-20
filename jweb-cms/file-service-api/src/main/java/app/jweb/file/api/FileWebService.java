@@ -1,15 +1,14 @@
 package app.jweb.file.api;
 
-import app.jweb.file.api.file.FileListQuery;
-import app.jweb.file.api.file.BatchDeleteFileRequest;
+import app.jweb.file.api.file.DeleteFileRequest;
 import app.jweb.file.api.file.CreateFileRequest;
+import app.jweb.file.api.file.FileListQuery;
 import app.jweb.file.api.file.FileListResponse;
 import app.jweb.file.api.file.FileQuery;
 import app.jweb.file.api.file.FileResponse;
 import app.jweb.file.api.file.UpdateFileRequest;
 import app.jweb.util.collection.QueryResponse;
 
-import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
@@ -44,13 +43,9 @@ public interface FileWebService {
     @PUT
     FileResponse update(@PathParam("id") String id, UpdateFileRequest request);
 
-    @Path("/{id}")
-    @DELETE
-    void delete(@PathParam("id") String id, @QueryParam("requestBy") String requestBy);
-
     @Path("/batch-delete")
     @POST
-    void batchDelete(BatchDeleteFileRequest request);
+    void batchDelete(DeleteFileRequest request);
 
     @Path("/{id}/revert")
     @PUT

@@ -1,6 +1,6 @@
 import React from "react";
 import {Link} from "react-router-dom";
-import {Button, Cascader, DateFormatter, Form, Input, Message as alert, Message as notification, MessageBox as dialog, Pagination, Popover, Select, Table, Upload} from "element-react";
+import {Button, Cascader, DateFormatter, Form, Input, Message as alert, Message as notification, MessageBox, MessageBox as dialog, Pagination, Popover, Table, Upload} from "element-react";
 import PropTypes from "prop-types";
 
 const i18n = window.i18n;
@@ -21,7 +21,6 @@ export default class FileList extends React.Component {
             directorySelected: [],
             query: {
                 keywords: "",
-                status: "ACTIVE",
                 directoryId: null,
                 limit: 20,
                 page: 1
@@ -39,7 +38,7 @@ export default class FileList extends React.Component {
                 {
                     label: i18n.t("file.path"),
                     prop: "path",
-                    render: function (data) {
+                    render: function(data) {
                         return (/.*\.(jpg|jpeg|png|gif)/i).test(data.path)
                             ? <Popover placement="top-start" trigger="hover" content={(<img style={{
                                 display: "block",
@@ -60,7 +59,7 @@ export default class FileList extends React.Component {
                 },
                 {
                     label: i18n.t("file.length"),
-                    render: function (data) {
+                    render: function(data) {
                         if (data.length) {
                             const length = Math.round(data.length * 100 / 1024) / 100;
                             return length + "K";
@@ -74,13 +73,13 @@ export default class FileList extends React.Component {
                 },
                 {
                     label: i18n.t("file.createdTime"),
-                    render: function (data) {
+                    render: function(data) {
                         return <DateFormatter date={new Date(data.createdTime)}/>;
                     }
                 },
                 {
                     label: i18n.t("file.updatedTime"),
-                    render: function (data) {
+                    render: function(data) {
                         return <DateFormatter date={new Date(data.updatedTime)}/>;
                     }
                 },
@@ -88,7 +87,7 @@ export default class FileList extends React.Component {
                     label: i18n.t("file.action"),
                     fixed: "right",
                     width: 200,
-                    render: function (data) {
+                    render: function(data) {
                         return (
                             <span className="el-table__actions">
                                 <Button type="text" size="mini"><Link to={{pathname: "/admin/file/" + data.id + "/update"}}>{i18n.t("file.update")}</Link></Button>
@@ -178,21 +177,10 @@ export default class FileList extends React.Component {
     }
 
     delete(data) {
-        fetch("/admin/api/file/" + data.id, {method: "DELETE"}).then(() => {
-            this.find();
-        });
-    }
-
-    batchDelete() {
-        const list = this.state.selected;
-        if (list.length !== 0) {
-            const ids = [];
-            for (let i = 0; i < list.length; i += 1) {
-                ids.push(list[i].id);
-            }
+        MessageBox.confirm(i18n.t("file.deleteFileTip"), i18n.t("file.deleteHint"), {type: "warning"}).then(() => {
             fetch("/admin/api/file/delete", {
                 method: "POST",
-                body: JSON.stringify({ids: ids})
+                body: JSON.stringify({ids: [data.id]})
             }).then(() => {
                 alert({
                     type: "success",
@@ -200,7 +188,29 @@ export default class FileList extends React.Component {
                 });
                 this.find();
             });
-        }
+        });
+    }
+
+    batchDelete() {
+        MessageBox.confirm(i18n.t("file.deleteFileTip"), i18n.t("file.deleteHint"), {type: "warning"}).then(() => {
+            const list = this.state.selected;
+            if (list.length !== 0) {
+                const ids = [];
+                for (let i = 0; i < list.length; i += 1) {
+                    ids.push(list[i].id);
+                }
+                fetch("/admin/api/file/delete", {
+                    method: "POST",
+                    body: JSON.stringify({ids: ids})
+                }).then(() => {
+                    alert({
+                        type: "success",
+                        message: i18n.t("file.deleteSuccessTip")
+                    });
+                    this.find();
+                });
+            }
+        });
     }
 
     uploadSuccess(file, fileList) {
@@ -271,17 +281,6 @@ export default class FileList extends React.Component {
                                         label: "name"
                                     }}
                                 />
-                            </Form.Item>
-                            <Form.Item>
-                                <Select
-                                    clearable={true}
-                                    placeholder={i18n.t("file.statusAll")}
-                                    value={this.state.query.status}
-                                    onChange={value => this.statusChange(value)}>
-                                    {
-                                        this.state.statusOptions.map(el => <Select.Option key={el.value} label={el.label} value={el.value}/>)
-                                    }
-                                </Select>
                             </Form.Item>
                             <Form.Item> <Input value={this.state.query.keywords} onChange={value => this.queryChange("keywords", value)} icon="fa fa-search"/> </Form.Item>
                             <Form.Item> <Button nativeType="button" onClick={e => this.find(e)}>{i18n.t("file.search")}</Button> </Form.Item>

@@ -32,13 +32,13 @@ export default class DirectoryList extends React.Component {
                 },
                 {
                     label: i18n.t("file.createdTime"),
-                    render: function (data) {
+                    render: function(data) {
                         return <DateFormatter date={new Date(data.createdTime)}/>;
                     }
                 },
                 {
                     label: i18n.t("file.updatedTime"),
-                    render: function (data) {
+                    render: function(data) {
                         return <DateFormatter date={new Date(data.updatedTime)}/>;
                     }
                 },
@@ -46,7 +46,7 @@ export default class DirectoryList extends React.Component {
                     label: i18n.t("file.action"),
                     fixed: "right",
                     width: 250,
-                    render: function (data) {
+                    render: function(data) {
                         return (
                             <span className="el-table__actions">
                                 <Button type="text" size="mini"><Link to={{pathname: "/admin/file/directory/" + data.id + "/create"}}>{i18n.t("file.create")}</Link></Button>
@@ -119,9 +119,15 @@ export default class DirectoryList extends React.Component {
     }
 
     delete(data) {
-        fetch("/admin/api/directory/" + data.id, {method: "DELETE"}).then(() => {
-            this.find();
+        dialog.confirm(i18n.t("file.deleteDirectoryTip"), i18n.t("file.deleteHint"), {type: "warning"}).then(() => {
+            fetch("/admin/api/directory/batch-delete", {
+                method: "POST",
+                body: JSON.stringify({ids: [data.id]})
+            }).then(() => {
+                this.find();
+            });
         });
+
     }
 
     loadChildren(data) {

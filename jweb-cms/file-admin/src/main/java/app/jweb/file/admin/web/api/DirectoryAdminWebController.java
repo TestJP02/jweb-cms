@@ -1,20 +1,20 @@
 package app.jweb.file.admin.web.api;
 
-import app.jweb.file.api.directory.DirectoryNodeResponse;
-import app.jweb.file.api.directory.DirectoryResponse;
-import app.jweb.file.api.directory.UpdateDirectoryRequest;
-import com.google.common.collect.Lists;
 import app.jweb.file.admin.web.api.directory.CreateDirectoryAJAXRequest;
 import app.jweb.file.admin.web.api.directory.DirectoryAJAXResponse;
 import app.jweb.file.admin.web.api.directory.DirectoryNodeAJAXResponse;
 import app.jweb.file.admin.web.api.directory.UpdateDirectoryAJAXRequest;
 import app.jweb.file.api.DirectoryWebService;
 import app.jweb.file.api.directory.CreateDirectoryRequest;
+import app.jweb.file.api.directory.DeleteDirectoryRequest;
+import app.jweb.file.api.directory.DirectoryNodeResponse;
+import app.jweb.file.api.directory.DirectoryResponse;
+import app.jweb.file.api.directory.UpdateDirectoryRequest;
 import app.jweb.web.UserInfo;
+import com.google.common.collect.Lists;
 
 import javax.annotation.security.RolesAllowed;
 import javax.inject.Inject;
-import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
@@ -72,12 +72,10 @@ public class DirectoryAdminWebController {
     }
 
     @RolesAllowed("DELETE")
-    @Path("/{id}")
-    @DELETE
-    public void delete(@PathParam("id") String id) {
-        List<String> children = directoryService.children(id);
-        directoryService.delete(id, userInfo.username());
-        children.forEach(directoryId -> directoryService.delete(directoryId, userInfo.username()));
+    @Path("/batch-delete")
+    @POST
+    public void delete(DeleteDirectoryRequest request) {
+        directoryService.delete(request);
     }
 
     @RolesAllowed("LIST")

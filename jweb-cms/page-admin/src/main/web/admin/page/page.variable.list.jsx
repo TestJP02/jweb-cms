@@ -1,5 +1,5 @@
 import React from "react";
-import {Button, Form, Input, Message as notification, Pagination, Select, Table} from "element-react";
+import {Button, Form, Input, Message as notification, Pagination, Table} from "element-react";
 import {Link} from "react-router-dom";
 
 const i18n = window.i18n;
@@ -9,8 +9,7 @@ export default class VariableList extends React.Component {
 
         this.state = {
             query: {
-                name: "",
-                status: "ACTIVE",
+                name: null,
                 page: 1,
                 limit: 10
             },
@@ -21,16 +20,6 @@ export default class VariableList extends React.Component {
                 items: []
             },
             limitOptions: [10, 20, 50],
-            statusOptions: [
-                {
-                    label: i18n.t("page.statusActive"),
-                    value: "ACTIVE"
-                },
-                {
-                    label: i18n.t("page.statusInactive"),
-                    value: "INACTIVE"
-                }
-            ],
             columns: [
                 {type: "selection"},
                 {
@@ -176,15 +165,6 @@ export default class VariableList extends React.Component {
                 <div className="toolbar">
                     <div className="toolbar-form">
                         <Form inline={true} model={this.state.query}>
-                            <Form.Item>
-                                <Select value={this.state.query.status} clearable={true}
-                                    onChange={value => this.statusChange(value)}>
-                                    {
-                                        this.state.statusOptions.map(el => <Select.Option key={el.value}
-                                            label={el.label} value={el.value}/>)
-                                    }
-                                </Select>
-                            </Form.Item>
                             <Form.Item>
                                 <Input icon="fa fa-search" placeholder={i18n.t("page.namePlaceHolder")} value={this.state.query.name}
                                     onChange={value => this.queryChange("name", value)}/>

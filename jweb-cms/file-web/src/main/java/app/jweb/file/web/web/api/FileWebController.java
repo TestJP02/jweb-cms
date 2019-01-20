@@ -1,37 +1,35 @@
 package app.jweb.file.web.web.api;
 
-import app.jweb.file.api.directory.CreateDirectoriesRequest;
-import app.jweb.file.api.directory.DirectoryResponse;
-import app.jweb.file.web.web.api.file.FileListAJAXResponse;
-import app.jweb.file.web.web.api.file.FileUploadAJAXResponse;
-import app.jweb.file.web.web.api.file.ListFileAJAXRequest;
-import com.google.common.base.Strings;
-import com.google.common.io.Files;
 import app.jweb.ApplicationException;
 import app.jweb.file.api.DirectoryWebService;
 import app.jweb.file.api.FileRepository;
 import app.jweb.file.api.FileWebService;
+import app.jweb.file.api.directory.CreateDirectoriesRequest;
+import app.jweb.file.api.directory.DirectoryResponse;
 import app.jweb.file.api.file.CreateFileRequest;
 import app.jweb.file.api.file.FileListQuery;
 import app.jweb.file.api.file.FileResponse;
 import app.jweb.file.api.file.UpdateFileRequest;
 import app.jweb.file.web.service.FileService;
+import app.jweb.file.web.web.api.file.FileListAJAXResponse;
+import app.jweb.file.web.web.api.file.FileUploadAJAXResponse;
+import app.jweb.file.web.web.api.file.ListFileAJAXRequest;
 import app.jweb.resource.InputStreamResource;
 import app.jweb.resource.Resource;
 import app.jweb.resource.ResourceWrapper;
 import app.jweb.util.collection.QueryResponse;
 import app.jweb.util.exception.Exceptions;
 import app.jweb.web.UserInfo;
+import com.google.common.base.Strings;
+import com.google.common.io.Files;
 import org.glassfish.jersey.media.multipart.FormDataContentDisposition;
 import org.glassfish.jersey.media.multipart.FormDataParam;
 
 import javax.inject.Inject;
 import javax.ws.rs.Consumes;
-import javax.ws.rs.DELETE;
 import javax.ws.rs.NotFoundException;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.io.IOException;
@@ -66,12 +64,6 @@ public class FileWebController {
         query.sortingField = listFileAJAXRequest.sortingField;
         query.desc = listFileAJAXRequest.desc;
         return fileService.list(query);
-    }
-
-    @Path("/{id}")
-    @DELETE
-    public void delete(@PathParam("id") String id) {
-        fileWebService.delete(id, userInfo.username());
     }
 
     @Path("/upload")

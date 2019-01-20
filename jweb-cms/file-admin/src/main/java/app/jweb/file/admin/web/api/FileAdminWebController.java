@@ -1,10 +1,5 @@
 package app.jweb.file.admin.web.api;
 
-import app.jweb.file.api.directory.CreateDirectoriesRequest;
-import app.jweb.file.api.directory.DirectoryResponse;
-import com.google.common.base.Strings;
-import com.google.common.collect.Lists;
-import com.google.common.io.Files;
 import app.jweb.ApplicationException;
 import app.jweb.file.admin.web.api.file.BatchDeleteAJAXRequest;
 import app.jweb.file.admin.web.api.file.FileAJAXResponse;
@@ -13,7 +8,9 @@ import app.jweb.file.admin.web.api.file.UpdateFileAJAXRequest;
 import app.jweb.file.api.DirectoryWebService;
 import app.jweb.file.api.FileRepository;
 import app.jweb.file.api.FileWebService;
-import app.jweb.file.api.file.BatchDeleteFileRequest;
+import app.jweb.file.api.directory.CreateDirectoriesRequest;
+import app.jweb.file.api.directory.DirectoryResponse;
+import app.jweb.file.api.file.DeleteFileRequest;
 import app.jweb.file.api.file.CreateFileRequest;
 import app.jweb.file.api.file.FileQuery;
 import app.jweb.file.api.file.FileResponse;
@@ -24,13 +21,15 @@ import app.jweb.resource.ResourceWrapper;
 import app.jweb.util.collection.QueryResponse;
 import app.jweb.util.exception.Exceptions;
 import app.jweb.web.UserInfo;
+import com.google.common.base.Strings;
+import com.google.common.collect.Lists;
+import com.google.common.io.Files;
 import org.glassfish.jersey.media.multipart.FormDataContentDisposition;
 import org.glassfish.jersey.media.multipart.FormDataParam;
 
 import javax.annotation.security.RolesAllowed;
 import javax.inject.Inject;
 import javax.ws.rs.Consumes;
-import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
 import javax.ws.rs.NotFoundException;
 import javax.ws.rs.POST;
@@ -169,20 +168,13 @@ public class FileAdminWebController {
     }
 
     @RolesAllowed("DELETE")
-    @Path("/{id}")
-    @DELETE
-    public void delete(@PathParam("id") String id) {
-        fileWebService.delete(id, userInfo.username());
-    }
-
-    @RolesAllowed("DELETE")
     @Path("/delete")
     @POST
     public void batchDelete(BatchDeleteAJAXRequest batchDeleteAJAXRequest) {
-        BatchDeleteFileRequest batchDeleteFileRequest = new BatchDeleteFileRequest();
-        batchDeleteFileRequest.ids = batchDeleteAJAXRequest.ids;
-        batchDeleteFileRequest.requestBy = userInfo.username();
-        fileWebService.batchDelete(batchDeleteFileRequest);
+        DeleteFileRequest deleteFileRequest = new DeleteFileRequest();
+        deleteFileRequest.ids = batchDeleteAJAXRequest.ids;
+        deleteFileRequest.requestBy = userInfo.username();
+        fileWebService.batchDelete(deleteFileRequest);
     }
 
     @RolesAllowed("UPDATE")

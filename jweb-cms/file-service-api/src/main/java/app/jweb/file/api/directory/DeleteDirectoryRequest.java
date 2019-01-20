@@ -1,4 +1,4 @@
-package app.jweb.file.api.file;
+package app.jweb.file.api.directory;
 
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
@@ -11,7 +11,7 @@ import java.util.List;
  * @author chi
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-public class BatchDeleteFileRequest {
+public class DeleteDirectoryRequest {
     @NotNull
     @XmlElement(name = "ids")
     public List<String> ids;

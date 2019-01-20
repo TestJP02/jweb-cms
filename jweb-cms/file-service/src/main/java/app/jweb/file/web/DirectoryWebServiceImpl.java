@@ -1,19 +1,20 @@
 package app.jweb.file.web;
 
+import app.jweb.file.api.DirectoryWebService;
 import app.jweb.file.api.directory.CreateDirectoriesRequest;
+import app.jweb.file.api.directory.CreateDirectoryRequest;
+import app.jweb.file.api.directory.DeleteDirectoryRequest;
 import app.jweb.file.api.directory.DirectoryNodeResponse;
 import app.jweb.file.api.directory.DirectoryQuery;
 import app.jweb.file.api.directory.DirectoryResponse;
 import app.jweb.file.api.directory.UpdateDirectoryRequest;
 import app.jweb.file.domain.Directory;
 import app.jweb.file.service.DirectoryService;
+import app.jweb.util.collection.QueryResponse;
 import com.google.common.base.Splitter;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
-import app.jweb.file.api.DirectoryWebService;
-import app.jweb.file.api.directory.CreateDirectoryRequest;
-import app.jweb.util.collection.QueryResponse;
 
 import javax.inject.Inject;
 import java.util.ArrayList;
@@ -160,8 +161,8 @@ public class DirectoryWebServiceImpl implements DirectoryWebService {
     }
 
     @Override
-    public void delete(String id, String requestBy) {
-        directoryService.delete(id, requestBy);
+    public void delete(DeleteDirectoryRequest request) {
+        directoryService.delete(request);
     }
 
     private DirectoryResponse response(Directory directory) {

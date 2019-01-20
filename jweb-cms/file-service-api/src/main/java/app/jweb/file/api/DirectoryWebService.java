@@ -1,11 +1,12 @@
 package app.jweb.file.api;
 
 import app.jweb.file.api.directory.CreateDirectoriesRequest;
+import app.jweb.file.api.directory.CreateDirectoryRequest;
+import app.jweb.file.api.directory.DeleteDirectoryRequest;
 import app.jweb.file.api.directory.DirectoryNodeResponse;
 import app.jweb.file.api.directory.DirectoryQuery;
 import app.jweb.file.api.directory.DirectoryResponse;
 import app.jweb.file.api.directory.UpdateDirectoryRequest;
-import app.jweb.file.api.directory.CreateDirectoryRequest;
 import app.jweb.util.collection.QueryResponse;
 
 import javax.annotation.security.RolesAllowed;
@@ -73,6 +74,6 @@ public interface DirectoryWebService {
 
     @Path("/{id}")
     @DELETE
-    @RolesAllowed("DELETE")
-    void delete(@PathParam("id") String id, @QueryParam("requestBy") String requestBy);
+    @RolesAllowed("POST")
+    void delete(DeleteDirectoryRequest request);
 }

@@ -1,18 +1,18 @@
 package app.jweb.file.web;
 
-import app.jweb.file.domain.File;
-import app.jweb.file.service.FileService;
-import com.google.common.base.Splitter;
 import app.jweb.file.api.FileWebService;
-import app.jweb.file.api.file.BatchDeleteFileRequest;
+import app.jweb.file.api.file.DeleteFileRequest;
 import app.jweb.file.api.file.CreateFileRequest;
 import app.jweb.file.api.file.FileListQuery;
 import app.jweb.file.api.file.FileListResponse;
 import app.jweb.file.api.file.FileQuery;
 import app.jweb.file.api.file.FileResponse;
 import app.jweb.file.api.file.UpdateFileRequest;
+import app.jweb.file.domain.File;
+import app.jweb.file.service.FileService;
 import app.jweb.file.service.FileSynchronizeService;
 import app.jweb.util.collection.QueryResponse;
+import com.google.common.base.Splitter;
 
 import javax.inject.Inject;
 import java.util.Optional;
@@ -58,13 +58,8 @@ public class FileWebServiceImpl implements FileWebService {
     }
 
     @Override
-    public void delete(String id, String requestBy) {
-        fileService.delete(id, requestBy);
-    }
-
-    @Override
-    public void batchDelete(BatchDeleteFileRequest request) {
-        request.ids.forEach(id -> fileService.delete(id, request.requestBy));
+    public void batchDelete(DeleteFileRequest request) {
+        fileService.batchDelete(request);
     }
 
     @Override
