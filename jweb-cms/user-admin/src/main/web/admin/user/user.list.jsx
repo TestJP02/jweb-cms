@@ -29,11 +29,16 @@ export default class UserList extends React.Component {
                     label: i18n.t("user.icon"),
                     prop: "imageURL",
                     width: 100,
-                    render: function(user) {
-                        return <img style={{
-                            "max-height": "32px",
-                            "vertical-align": "middle"
-                        }} src={"/admin" + user.imageURL}/>;
+                    render: function (user) {
+                        if (user.imageURL) {
+                            return <img style={{
+                                "max-height": "32px",
+                                "vertical-align": "middle"
+                            }} src={"/admin" + user.imageURL} />;
+                        } else {
+                            return <div className="user-default-avatar"><i className="fa fa-user"></i></div>;
+                        }
+
                     }
                 },
                 {
@@ -59,21 +64,21 @@ export default class UserList extends React.Component {
                 },
                 {
                     label: i18n.t("user.createdTime"),
-                    render: function(data) {
-                        return <DateFormatter date={new Date(data.createdTime)}/>;
+                    render: function (data) {
+                        return <DateFormatter date={new Date(data.createdTime)} />;
                     }
                 },
                 {
                     label: i18n.t("user.updatedTime"),
-                    render: function(data) {
-                        return <DateFormatter date={new Date(data.updatedTime)}/>;
+                    render: function (data) {
+                        return <DateFormatter date={new Date(data.updatedTime)} />;
                     }
                 },
                 {
                     label: i18n.t("user.action"),
                     width: 200,
                     fixed: "right",
-                    render: function(data) {
+                    render: function (data) {
                         return (
                             <span className="el-table__actions">
                                 <Button type="text"> <Link to={{pathname: "/admin/user/" + data.id + "/update"}}> {i18n.t("user.update")} </Link></Button>
@@ -228,11 +233,11 @@ export default class UserList extends React.Component {
                                     placeholder={i18n.t("user.userGroup")}
                                     clearable={true}
                                     onChange={value => this.roleChange("userGroupId", value)}>
-                                    {this.state.userGroupOptions.map(el => <Select.Option key={el.value} label={el.label} value={el.value}/>)}
+                                    {this.state.userGroupOptions.map(el => <Select.Option key={el.value} label={el.label} value={el.value} />)}
                                 </Select>
                             </Form.Item>
                             <Form.Item>
-                                <Input value={this.state.query.query} onChange={value => this.queryChange("query", value)} icon="fa fa-search"/>
+                                <Input value={this.state.query.query} onChange={value => this.queryChange("query", value)} icon="fa fa-search" />
                             </Form.Item>
                             <Form.Item>
                                 <Button onClick={() => this.find()}>{i18n.t("user.search")}</Button>
@@ -250,7 +255,7 @@ export default class UserList extends React.Component {
                         highlightCurrentRow={true}
                         columns={this.state.columns}
                         data={this.state.data.items}
-                        onSelectChange={selected => this.select(selected)}/>
+                        onSelectChange={selected => this.select(selected)} />
                 </div>
                 <div className="footer">
                     <Pagination layout="total,sizes,prev,pager,next,jumper" total={this.state.data.total} pageSizes={this.state.limitOptions} pageSize={this.state.query.limit}
@@ -263,7 +268,7 @@ export default class UserList extends React.Component {
                         onCurrentChange={(page) => {
                             this.queryChange("page", page);
                             this.find();
-                        }}/>
+                        }} />
                 </div>
             </div>
         );
