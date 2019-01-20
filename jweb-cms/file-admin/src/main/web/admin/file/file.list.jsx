@@ -293,7 +293,7 @@ export default class FileList extends React.Component {
                             marginLeft: "10px"
                         }}>
                             <Upload
-                                action="/admin/api/file/upload"
+                                action={"/admin/api/file/upload?directoryId=" + this.state.query.directoryId}
                                 showFileList={false}
                                 onProgress={() => this.setState({uploading: true})}
                                 onSuccess={(response, file, fileList) => this.uploadSuccess(file, fileList)}

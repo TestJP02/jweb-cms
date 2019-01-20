@@ -10,8 +10,8 @@ import app.jweb.file.api.FileRepository;
 import app.jweb.file.api.FileWebService;
 import app.jweb.file.api.directory.CreateDirectoriesRequest;
 import app.jweb.file.api.directory.DirectoryResponse;
-import app.jweb.file.api.file.DeleteFileRequest;
 import app.jweb.file.api.file.CreateFileRequest;
+import app.jweb.file.api.file.DeleteFileRequest;
 import app.jweb.file.api.file.FileQuery;
 import app.jweb.file.api.file.FileResponse;
 import app.jweb.file.api.file.UpdateFileRequest;
@@ -36,6 +36,7 @@ import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
+import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.io.IOException;
@@ -89,9 +90,9 @@ public class FileAdminWebController {
     @Path("/upload")
     @POST
     @Consumes(MediaType.MULTIPART_FORM_DATA)
-    public Response upload(@FormDataParam("directoryId") String directoryId, @FormDataParam("path") String path,
-                           @FormDataParam("directoryPath") String directoryPath,
-                           @FormDataParam("title") String title, @FormDataParam("description") String description,
+    public Response upload(@QueryParam("directoryId") String directoryId, @QueryParam("path") String path,
+                           @QueryParam("directoryPath") String directoryPath,
+                           @QueryParam("title") String title, @QueryParam("description") String description,
                            @FormDataParam("file") InputStream file,
                            @FormDataParam("file") FormDataContentDisposition fileDisposition) throws IOException {
         Resource resource = new InputStreamResource(fileDisposition.getFileName(), file);
