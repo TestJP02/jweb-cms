@@ -39,6 +39,7 @@
     border: 1px solid #e5e5e5;
     overflow: hidden;
     background: #fff;
+    transform: translate(0px, 0px) !important;
 }
 
 .page-grid-editor__ruler {
@@ -92,4 +93,12 @@
 
 .el-button--text + .el-button--text.page-grid-editor__grid-operation {
     border: 0;
+}
+
+.page-grid-editor__grid-body .el-form {
+    padding: 15px;
+}
+
+.page-grid-editor__body .el-card__body {
+    padding: 0 !important;
 }

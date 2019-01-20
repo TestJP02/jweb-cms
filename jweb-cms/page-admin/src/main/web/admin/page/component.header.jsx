@@ -1,6 +1,6 @@
 import React from "react";
 import PropTypes from "prop-types";
-import {Button, Checkbox, Dialog, Form, Input, Layout} from "element-react";
+import {Button, Checkbox, Form, Input, Layout} from "element-react";
 import FileBrowser from "./page.file.browser";
 
 import "./component.header.css";
@@ -53,8 +53,9 @@ export default class PageHeaderComponent extends React.Component {
         this.setState({component});
     }
 
-    save() {
+    save(e) {
         this.state.onChange(this.state.component);
+        e.preventDefault();
     }
 
     addLink() {
@@ -298,74 +299,47 @@ export default class PageHeaderComponent extends React.Component {
                 multiple={false}
                 onChange={files => this.onFileChange(files)}/>;
         }
-        return <Dialog className="page-header__editor" visible={true} onCancel={() => this.save()}>
-            <Dialog.Body>
-                <Form>
-                    <Layout.Row>
-                        <Layout.Col span="12">
-                            <Form.Item label={i18n.t("page.logoText")} labelWidth="120">
-                                <Input value={this.state.component.attributes.logoText}
-                                    onChange={value => this.formChange("logoText", value)}></Input>
-                            </Form.Item>
-                            <Form.Item label={i18n.t("page.headerUserEnabled")} labelWidth="120">
-                                <Checkbox checked={Boolean(this.state.component.attributes.userEnabled)}
-                                    onChange={value => this.toggleUserEnabled()}>
-                                    {""}
-                                </Checkbox>
-                            </Form.Item>
-                            <Form.Item label={i18n.t("page.headerSearchEnabled")} labelWidth="120">
-                                <Checkbox checked={Boolean(this.state.component.attributes.searchEnabled)}
-                                    onChange={value => this.toggleSearchEnabled()}>
-                                    {""}
-                                </Checkbox>
-                            </Form.Item>
-                        </Layout.Col>
-                        <Layout.Col span="12">
-                            <Form.Item label={i18n.t("page.headerLogo")} labelWidth="50">
-                                {!this.state.component.attributes.logoImageURL &&
-                                <div className="page-image-slider__image-container page-image-slider__image-add">
-                                    <Button type="text" size="small"
-                                        className="page-file-browser__add-button"
-                                        onClick={() => this.setState({isChangingFile: true})}>+</Button>
-                                </div>
-                                }
-                                <FileBrowser buttonType="button" buttonSize="large"
-                                    files={this.files()}
-                                    multiple={false}
-                                    onChange={files => this.onFileChange(files)}/>
-                                {this.state.component.attributes.logoImageURL &&
-                                <div className="page-header-container__logo-preview">
-                                    <img src={this.state.component.attributes.logoImageURL} alt=""/>
-                                    <Button icon="close" onClick={() => this.deleteLogo()}></Button>
-                                </div>
-                                }
-                            </Form.Item>
-                        </Layout.Col>
-                        <Layout.Col span="24">
-                            {this.state.component.attributes.searchEnabled &&
-                            <Form.Item label={i18n.t("page.headerSearchURL")} labelWidth="120">
-                                <Input value={this.state.component.attributes.searchURL}
-                                    onChange={value => this.formChange("searchURL", value)}></Input>
-                            </Form.Item>
-                            }
-                        </Layout.Col>
-                        {this.state.component.attributes.links.length === 0 &&
-                        <Layout.Col span="24">
-                            <Form.Item label={i18n.t("page.headerLinks")} labelWidth="120">
-                                <Button type="primary" icon="plus"
-                                    onClick={() => this.addLink()}></Button>
-                            </Form.Item>
-                        </Layout.Col>
+        return <Form>
+            <Layout.Row>
+                <Layout.Col span="12">
+                    <Form.Item label={i18n.t("page.logoText")} labelWidth="120">
+                        <Input value={this.state.component.attributes.logoText}
+                            onChange={value => this.formChange("logoText", value)}></Input>
+                    </Form.Item>
+                </Layout.Col>
+                <Layout.Col span="12">
+                    <Form.Item label={i18n.t("page.headerLogo")} labelWidth="50">
+                        {!this.state.component.attributes.logoImageURL &&
+                        <div className="page-image-slider__image-container page-image-slider__image-add">
+                            <Button type="text" size="small"
+                                className="page-file-browser__add-button"
+                                onClick={() => this.setState({isChangingFile: true})}>+</Button>
+                        </div>
                         }
-                        {this.state.component.attributes.links.map((link, index) => this.renderLink(link, index))}
-                    </Layout.Row>
-                </Form>
-            </Dialog.Body>
-
-            <Dialog.Footer className="dialog-footer">
-                <Button type="primary" onClick={() => this.save()}>{i18n.t("page.save")}</Button>
-            </Dialog.Footer>
-        </Dialog>;
+                        <FileBrowser buttonType="button" buttonSize="large"
+                            files={this.files()}
+                            multiple={false}
+                            onChange={files => this.onFileChange(files)}/>
+                        {this.state.component.attributes.logoImageURL &&
+                        <div className="page-header-container__logo-preview">
+                            <img src={this.state.component.attributes.logoImageURL} alt=""/>
+                            <Button icon="close" onClick={() => this.deleteLogo()}></Button>
+                        </div>
+                        }
+                    </Form.Item>
+                </Layout.Col>
+                {this.state.component.attributes.links.length === 0 &&
+                <Layout.Col span="24">
+                    <Form.Item label={i18n.t("page.headerLinks")} labelWidth="120">
+                        <Button type="primary" icon="plus"
+                            onClick={() => this.addLink()}></Button>
+                    </Form.Item>
+                </Layout.Col>
+                }
+                {this.state.component.attributes.links.map((link, index) => this.renderLink(link, index))}
+            </Layout.Row>
+            <Button type="primary" onClick={(e) => this.save(e)}>{i18n.t("page.save")}</Button>
+        </Form>;
     }
 
     render() {

@@ -15,6 +15,7 @@ export default class TemplateUpdate extends React.Component {
             path: null,
             suggestPathEnabled: false,
             suggestPathRequest: null,
+            changed: false,
             form: {
                 id: props.match.params.id,
                 title: null,
@@ -147,18 +148,23 @@ export default class TemplateUpdate extends React.Component {
     }
 
     autoSave() {
-        this.savePage((response) => {
-            const form = this.state.form;
-            if (!form.id) {
-                form.id = response.id;
-                this.setState({form});
-            }
-            notification({
-                title: "Success",
-                message: i18n.t("page.autoSaved"),
-                type: "success"
+        if (this.state.changed) {
+            this.savePage((response) => {
+                const form = this.state.form;
+                if (!form.id) {
+                    form.id = response.id;
+                    this.setState({
+                        form: form,
+                        changed: false
+                    });
+                }
+                notification({
+                    title: "Success",
+                    message: i18n.t("page.autoSaved"),
+                    type: "success"
+                });
             });
-        });
+        }
         setTimeout(() => this.autoSave(), 30000);
     }
 
@@ -332,7 +338,10 @@ export default class TemplateUpdate extends React.Component {
                                 onChange={(sections) => {
                                     const form = this.state.form;
                                     form.sections = sections;
-                                    this.setState({form});
+                                    this.setState({
+                                        form: form,
+                                        changed: true
+                                    });
                                 }}/>
                             }
                         </Layout.Col>

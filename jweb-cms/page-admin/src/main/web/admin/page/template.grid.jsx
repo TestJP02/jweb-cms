@@ -381,6 +381,11 @@ export default class LayoutGridEditor extends React.Component {
     }
 
     renderComponent(componentValue, section) {
+        if (componentValue.id === this.state.editingComponentId) {
+            window.console.log("edit component " + this.state.editingComponentId);
+            return this.editComponent(componentValue, section);
+        }
+
         const component = this.component(componentValue.name);
         if (component) {
             if (component.component) {
@@ -393,13 +398,16 @@ export default class LayoutGridEditor extends React.Component {
                             return;
                         }
                         const domHeight = this.state.domHeights[section.i];
-                        const minH = parseInt(domHeight / (this.state.rowHeight + 10), 10) + 1;
+                        const minH = parseInt(domHeight / (this.state.rowHeight + 10), 10) + 2;
+                        window.console.log("height=" + domHeight + "; minH=" + minH);
                         if (!isNaN(minH)) {
                             if (!section.minH || minH > section.minH) {
                                 section.minH = minH;
                                 section.h = minH;
                                 const componentHeights = this.state.componentHeights;
                                 componentHeights[section.i] = minH * (this.state.rowHeight + 10);
+
+                                window.console.log("componentHeight=" + componentHeights[section.i]);
                                 this.setState({layout: this.state.layout.filter(child => child.i !== section.i)}, () => {
                                     this.setState({
                                         layout: this.state.layout.filter(child => child.i !== section.i).concat([section]),
@@ -432,21 +440,50 @@ export default class LayoutGridEditor extends React.Component {
     }
 
     updateComponent(component) {
+        window.console.log("update component");
         const layoutComponents = this.state.layoutComponents;
         layoutComponents[this.state.editingSectionId] = [component];
+        const layout = this.state.layout;
         this.setState({
             layoutComponents,
-            editingComponentId: null
+            editingComponentId: null,
+            editSectionId: null,
+            layout: [],
+            changed: true
+        }, () => {
+            this.setState({layout});
         });
     }
 
-    editComponent() {
-        const component = this.state.layoutComponents[this.state.editingSectionId][0];
+    editComponent(component, section) {
         return React.createElement(bundle.component(component.name), {
             component: component,
             readOnly: this.state.readOnly,
             mode: "edit",
-            onChange: value => this.updateComponent(value)
+            onChange: value => this.updateComponent(value),
+            style: {height: this.state.componentHeights[section.i]},
+            ref: () => {
+                if (!this.state.domHeights[section.i]) {
+                    return;
+                }
+                const domHeight = this.state.domHeights[section.i];
+
+                const minH = parseInt(domHeight / (this.state.rowHeight + 10), 10) + 2;
+                if (!isNaN(minH)) {
+                    if (!section.minH || minH > section.minH) {
+                        section.minH = minH;
+                        section.h = minH;
+                        const componentHeights = this.state.componentHeights;
+                        componentHeights[section.i] = minH * (this.state.rowHeight + 10);
+                        this.setState({layout: this.state.layout.filter(child => child.i !== section.i)}, () => {
+                            this.setState({
+                                layout: this.state.layout.filter(child => child.i !== section.i).concat([section]),
+                                componentHeights
+                            });
+                        });
+                    }
+                }
+            }
         });
     }
 
@@ -502,11 +539,6 @@ export default class LayoutGridEditor extends React.Component {
                     <div className="page-grid-editor__body">
                         <Card>
                             <div ref={dom => !this.state.dom && this.setState({dom})}>
-                                <div className="page-grid-editor__component-container">
-                                    {this.state.editingComponentId && this.state.editingSectionId &&
-                                    this.editComponent()
-                                    }
-                                </div>
                                 {
                                     this.state.componentOptions.length &&
                                     <ReactGridLayout
@@ -514,44 +546,64 @@ export default class LayoutGridEditor extends React.Component {
                                         className="layout"
                                         layout={this.state.layout}
                                         containerPadding={[0, 10]}
+                                        draggableHandle=".page-grid-editor__grid-header"
                                         rowHeight={this.state.rowHeight}
                                         width={this.state.dom && this.state.dom.offsetWidth}
                                         onLayoutChange={layout => this.onLayoutChange(layout)}
                                         onResize={(layout, oldItem, newItem) => this.onResize(layout, oldItem, newItem)}
                                         onResizeStop={() => this.onResizeStop()}
                                         cols={12}>
-                                        {this.state.layout.map((section, index) =>
+                                        {this.state.layout.map((section) =>
                                             <div key={section.i} className="page-grid-editor__grid">
                                                 {this.state.currentI === section.i &&
                                                 <div className="page-grid-editor__ruler" data-width={this.state.currentWidth}></div>
                                                 }
-                                                <div ref={(dom) => {
+                                                <div className="page-grid-editor__grid-header">
+                                                    <span className="page-grid-editor__grid-header-title">{this.componentDisplayName(this.state.layoutComponents[section.i][0])}</span>
+                                                    <Button className="page-grid-editor__grid-operation" type="text"
+                                                        onClick={() => this.setState({updatingSectionId: section.i})}><i className="fa fa-gear"/></Button>
+                                                    <Button className="page-grid-editor__grid-operation" type="text" icon="close"
+                                                        onClick={() => this.removeSection(section.i)}></Button>
+                                                </div>
+                                                <div className="page-grid-editor__grid-body" onClick={(e) => {
+                                                    if (this.isComponentEditable(this.state.layoutComponents[section.i][0].name)) {
+                                                        this.setState({
+                                                            editingComponentId: this.state.layoutComponents[section.i][0].id,
+                                                            editingSectionId: section.i,
+                                                            domHeights: {}
+                                                        });
+                                                    }
+                                                }} ref={(dom) => {
                                                     if (!dom) {
                                                         return;
                                                     }
                                                     if (!this.state.domHeights[section.i]) {
                                                         const domHeights = this.state.domHeights;
                                                         domHeights[section.i] = dom.offsetHeight;
-                                                        this.setState({domHeights});
+                                                        this.setState({domHeights}, () => {
+                                                            if (!this.state.domHeights[section.i]) {
+                                                                return;
+                                                            }
+                                                            const domHeight = this.state.domHeights[section.i];
+
+                                                            const minH = parseInt(domHeight / (this.state.rowHeight + 10), 10) + 1;
+                                                            if (!isNaN(minH)) {
+                                                                if (!section.minH || minH > section.minH) {
+                                                                    section.minH = minH;
+                                                                    section.h = minH;
+                                                                    const componentHeights = this.state.componentHeights;
+                                                                    componentHeights[section.i] = minH * (this.state.rowHeight + 10);
+                                                                    this.setState({layout: this.state.layout.filter(child => child.i !== section.i)}, () => {
+                                                                        this.setState({
+                                                                            layout: this.state.layout.filter(child => child.i !== section.i).concat([section]),
+                                                                            componentHeights
+                                                                        });
+                                                                    });
+                                                                }
+                                                            }
+                                                        });
                                                     }
-                                                }}
-                                                >
-                                                    <div className="page-grid-editor__grid-header">
-                                                        <span className="page-grid-editor__grid-header-title">{this.componentDisplayName(this.state.layoutComponents[section.i][0])}</span>
-                                                        {this.isComponentEditable(this.state.layoutComponents[section.i][0].name) &&
-                                                        <Button className="page-grid-editor__grid-operation" type="text" icon="edit"
-                                                            onClick={() => {
-                                                                this.setState({
-                                                                    editingComponentId: this.state.layoutComponents[section.i][0].id,
-                                                                    editingSectionId: section.i
-                                                                });
-                                                            }}></Button>
-                                                        }
-                                                        <Button className="page-grid-editor__grid-operation" type="text"
-                                                            onClick={() => this.setState({updatingSectionId: section.i})}><i className="fa fa-gear"/></Button>
-                                                        <Button className="page-grid-editor__grid-operation" type="text" icon="close"
-                                                            onClick={() => this.removeSection(section.i)}></Button>
-                                                    </div>
+                                                }}>
                                                     {this.state.layoutComponents[section.i] &&
                                                     this.state.layoutComponents[section.i][0] &&
                                                     this.renderComponent(this.state.layoutComponents[section.i][0], section)}
