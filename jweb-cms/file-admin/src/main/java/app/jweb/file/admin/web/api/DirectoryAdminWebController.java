@@ -46,6 +46,7 @@ public class DirectoryAdminWebController {
         DirectoryResponse parentDirectory = directoryService.get(createDirectoryAJAXRequest.parentId);
         CreateDirectoryRequest instance = new CreateDirectoryRequest();
         instance.path = parentDirectory.path.substring(0, parentDirectory.path.length() - 1) + createDirectoryAJAXRequest.path;
+        instance.parentId = createDirectoryAJAXRequest.parentId;
         instance.description = createDirectoryAJAXRequest.description;
         instance.ownerId = createDirectoryAJAXRequest.ownerId;
         instance.ownerRoles = createDirectoryAJAXRequest.ownerRoles;
