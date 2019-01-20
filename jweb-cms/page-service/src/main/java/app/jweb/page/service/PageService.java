@@ -113,8 +113,8 @@ public class PageService {
         page.path = request.path;
         page.title = request.title;
         page.description = request.description;
-        page.tags = request.tags == null ? null : Joiner.on(';').join(request.tags);
-        page.keywords = request.keywords == null ? null : Joiner.on(';').join(request.keywords);
+        page.tags = request.tags == null ? null : Joiner.on(';').skipNulls().join(request.tags);
+        page.keywords = request.keywords == null ? null : Joiner.on(';').skipNulls().join(request.keywords);
         page.createdTime = OffsetDateTime.now();
         page.updatedTime = OffsetDateTime.now();
         page.createdBy = request.requestBy;
@@ -167,7 +167,7 @@ public class PageService {
         page.path = request.path;
         page.title = request.title;
         page.description = request.description;
-        page.tags = request.tags == null ? null : Joiner.on(';').join(request.tags);
+        page.tags = request.tags == null ? null : Joiner.on(';').skipNulls().join(request.tags);
         page.updatedTime = OffsetDateTime.now();
         page.updatedBy = request.requestBy;
         repository.update(id, page);
