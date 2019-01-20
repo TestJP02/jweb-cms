@@ -15,13 +15,10 @@ import app.jweb.web.impl.SessionInfoContextProvider;
 import app.jweb.web.impl.SessionRepository;
 import app.jweb.web.impl.SitemapService;
 import app.jweb.web.impl.TemplateMessageBodyWriter;
-import app.jweb.web.impl.Theme;
 import app.jweb.web.impl.ThemedResourceRepository;
 import app.jweb.web.impl.WebConfigImpl;
 import app.jweb.web.impl.WebFilter;
 import app.jweb.web.impl.WebTemplateFunctions;
-import app.jweb.web.impl.component.ThemeCSSComponent;
-import app.jweb.web.impl.component.ThemeScriptComponent;
 import app.jweb.web.impl.controller.FaviconResourceController;
 import app.jweb.web.impl.controller.HealthCheckController;
 import app.jweb.web.impl.controller.NodeModulesResourceController;
@@ -39,7 +36,6 @@ import app.jweb.web.impl.exception.NotFoundWebExceptionMapper;
 import app.jweb.web.impl.exception.ValidationWebExceptionMapper;
 import app.jweb.web.impl.processor.HrefElementProcessor;
 import app.jweb.web.impl.processor.SrcElementProcessor;
-import app.jweb.web.impl.processor.ThemeProcessor;
 import com.google.common.base.Strings;
 
 import java.nio.file.Paths;
@@ -63,6 +59,10 @@ public final class WebModule extends AbstractModule implements Configurable<WebC
         webRoot.add(new FileResourceRepository(app().dir().resolve("web")));
         if (webOptions.roots != null) {
             webOptions.roots.forEach(dir -> webRoot.add(new FileResourceRepository(Paths.get(dir))));
+        }
+        if (!Strings.isNullOrEmpty(webOptions.theme)) {
+            ThemedResourceRepository themedResourceRepository = new ThemedResourceRepository(webOptions.theme, webRoot);
+            templateEngine.addRepository(themedResourceRepository);
         }
         bind(WebRoot.class).toInstance(webRoot);
 
@@ -91,14 +91,7 @@ public final class WebModule extends AbstractModule implements Configurable<WebC
         webConfig.controller(SitemapController.class);
         webConfig.controller(SitemapIndexController.class);
 
-        if (!Strings.isNullOrEmpty(webOptions.theme)) {
-            Theme theme = new Theme(webOptions.theme, templateEngine);
-            webConfig.addElementProcessor(new ThemeProcessor());
-            webConfig.addComponent(new ThemeCSSComponent(theme));
-            webConfig.addComponent(new ThemeScriptComponent(theme));
-            ThemedResourceRepository themedResourceRepository = new ThemedResourceRepository(webOptions.theme, webRoot);
-            templateEngine.addRepository(themedResourceRepository);
-        }
+
 
 //        webConfig.bind(UserInfo.class, UserInfoContextProvider.class);
         webConfig.bind(ClientInfo.class, ClientInfoContextProvider.class);

@@ -6,13 +6,12 @@ import app.jweb.template.Component;
 import app.jweb.template.ComponentAttribute;
 import app.jweb.template.Script;
 import app.jweb.template.StyleSheet;
+import app.jweb.template.Template;
 import app.jweb.template.TemplateEngine;
 import app.jweb.template.TemplateException;
-import com.google.common.base.Strings;
 import com.google.common.collect.ImmutableList;
 
 import java.util.List;
-import java.util.Optional;
 
 /**
  * @author chi
@@ -20,7 +19,6 @@ import java.util.Optional;
 public abstract class AbstractWebComponent extends AbstractComponent {
     private final String templatePath;
     TemplateEngine templateEngine;
-    String theme;
 
     public AbstractWebComponent(String name, String templatePath) {
         this(name, templatePath, ImmutableList.of());
@@ -60,27 +58,14 @@ public abstract class AbstractWebComponent extends AbstractComponent {
         return template().styles();
     }
 
-
-    public AbstractWebComponent setTheme(String theme) {
-        this.theme = theme;
-        return this;
-    }
-
     public AbstractWebComponent setTemplateEngine(TemplateEngine templateEngine) {
         this.templateEngine = templateEngine;
         return this;
     }
 
-    protected app.jweb.template.Template template() {
+    protected Template template() {
         TemplateEngine templateEngine = templateEngine();
         String templatePath = templatePath();
-        if (!Strings.isNullOrEmpty(theme)) {
-            String themeTemplatePath = "theme/" + theme + '/' + templatePath;
-            Optional<app.jweb.template.Template> template = templateEngine.template(themeTemplatePath, true);
-            if (template.isPresent()) {
-                return template.get();
-            }
-        }
         return templateEngine.template(templatePath, true).orElseThrow(() -> new TemplateException("missing template, path={}", templatePath));
     }
 }

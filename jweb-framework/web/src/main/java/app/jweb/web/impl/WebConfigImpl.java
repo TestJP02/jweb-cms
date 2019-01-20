@@ -108,7 +108,6 @@ public class WebConfigImpl implements WebConfig {
         if (component instanceof AbstractWebComponent) {
             AbstractWebComponent abstractWebComponent = (AbstractWebComponent) component;
             abstractWebComponent.setTemplateEngine(templateEngine);
-            abstractWebComponent.setTheme(webOptions.theme);
         }
         templateEngine.addComponent(component);
         return this;

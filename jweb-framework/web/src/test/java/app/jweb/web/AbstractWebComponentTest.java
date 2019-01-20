@@ -1,17 +1,13 @@
 package app.jweb.web;
 
-import com.google.common.base.Charsets;
-import com.google.common.collect.Maps;
 import app.jweb.resource.ClasspathResourceRepository;
 import app.jweb.template.Attributes;
 import app.jweb.template.Children;
 import app.jweb.template.Component;
 import app.jweb.template.TemplateEngine;
 import app.jweb.template.TemplateException;
-import app.jweb.web.impl.Theme;
-import app.jweb.web.impl.component.ThemeCSSComponent;
-import app.jweb.web.impl.component.ThemeScriptComponent;
-import app.jweb.web.impl.processor.ThemeProcessor;
+import com.google.common.base.Charsets;
+import com.google.common.collect.Maps;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -32,12 +28,7 @@ class AbstractWebComponentTest {
     public void setup() {
         templateEngine = new TemplateEngine();
         templateEngine.addRepository(new ClasspathResourceRepository("web"));
-        templateEngine.addElementProcessor(new ThemeProcessor());
-
-        Theme theme = new Theme("test", templateEngine);
-        templateEngine.addComponent(new ThemeScriptComponent(theme));
-        templateEngine.addComponent(new ThemeCSSComponent(theme));
-        templateEngine.addComponent(new TestComponent().setTemplateEngine(templateEngine).setTheme(theme.name()));
+        templateEngine.addComponent(new TestComponent().setTemplateEngine(templateEngine).setTheme("test"));
     }
 
     @Test
