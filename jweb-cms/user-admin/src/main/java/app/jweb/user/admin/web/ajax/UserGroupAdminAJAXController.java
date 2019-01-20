@@ -1,25 +1,23 @@
 package app.jweb.user.admin.web.ajax;
 
 
-import app.jweb.user.admin.web.ajax.group.BatchDeleteUserGroupAJAXRequest;
 import app.jweb.user.admin.web.ajax.group.CreateUserGroupAJAXRequest;
+import app.jweb.user.admin.web.ajax.group.DeleteUserGroupAJAXRequest;
 import app.jweb.user.admin.web.ajax.group.UpdateUserGroupWebRequest;
 import app.jweb.user.admin.web.ajax.group.UserGroupAJAXResponse;
 import app.jweb.user.admin.web.ajax.group.UserGroupFindAJAXRequest;
 import app.jweb.user.api.UserGroupWebService;
-import app.jweb.user.api.group.BatchDeleteUserGroupRequest;
 import app.jweb.user.api.group.CreateUserGroupRequest;
+import app.jweb.user.api.group.DeleteUserGroupRequest;
 import app.jweb.user.api.group.UpdateUserGroupRequest;
 import app.jweb.user.api.group.UserGroupQuery;
 import app.jweb.user.api.group.UserGroupResponse;
 import app.jweb.user.api.user.UserGroupStatus;
 import app.jweb.util.collection.QueryResponse;
 import app.jweb.web.UserInfo;
-import com.google.common.collect.Lists;
 
 import javax.annotation.security.RolesAllowed;
 import javax.inject.Inject;
-import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
@@ -74,15 +72,6 @@ public class UserGroupAdminAJAXController {
         return response(userGroupWebService.create(createUserGroupRequest(createUserGroupAJAXRequest, userInfo)));
     }
 
-    @RolesAllowed("DELETE")
-    @Path("/{id}")
-    @DELETE
-    public void delete(@PathParam("id") String id) throws IOException {
-        BatchDeleteUserGroupRequest batchDeleteUserGroupRequest = new BatchDeleteUserGroupRequest();
-        batchDeleteUserGroupRequest.ids = Lists.newArrayList(id);
-        batchDeleteUserGroupRequest.requestBy = userInfo.username();
-        userGroupWebService.batchDelete(batchDeleteUserGroupRequest);
-    }
 
     @RolesAllowed("UPDATE")
     @Path("/{id}/revert")
@@ -92,12 +81,13 @@ public class UserGroupAdminAJAXController {
     }
 
     @RolesAllowed("DELETE")
-    @PUT
-    public void batchDelete(BatchDeleteUserGroupAJAXRequest batchDeleteUserGroupAJAXRequest) {
-        BatchDeleteUserGroupRequest batchDeleteUserGroupRequest = new BatchDeleteUserGroupRequest();
-        batchDeleteUserGroupRequest.ids = batchDeleteUserGroupAJAXRequest.ids;
-        batchDeleteUserGroupRequest.requestBy = userInfo.username();
-        userGroupWebService.batchDelete(batchDeleteUserGroupRequest);
+    @POST
+    @Path("/batch-delete")
+    public void batchDelete(DeleteUserGroupAJAXRequest request) {
+        DeleteUserGroupRequest deleteUserGroupRequest = new DeleteUserGroupRequest();
+        deleteUserGroupRequest.ids = request.ids;
+        deleteUserGroupRequest.requestBy = userInfo.username();
+        userGroupWebService.delete(deleteUserGroupRequest);
     }
 
     private UserGroupAJAXResponse response(UserGroupResponse instance) {

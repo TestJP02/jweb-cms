@@ -1,18 +1,19 @@
 package app.jweb.user.service;
 
+import app.jweb.database.Query;
+import app.jweb.database.Repository;
 import app.jweb.user.api.group.CreateUserGroupRequest;
+import app.jweb.user.api.group.DeleteUserGroupRequest;
 import app.jweb.user.api.group.UpdateUserGroupRequest;
 import app.jweb.user.api.group.UserGroupQuery;
 import app.jweb.user.api.user.UserGroupStatus;
 import app.jweb.user.domain.UserGroup;
+import app.jweb.util.collection.QueryResponse;
+import app.jweb.util.exception.Exceptions;
 import com.google.common.base.Joiner;
 import com.google.common.base.Strings;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
-import app.jweb.database.Query;
-import app.jweb.database.Repository;
-import app.jweb.util.collection.QueryResponse;
-import app.jweb.util.exception.Exceptions;
 
 import javax.inject.Inject;
 import javax.transaction.Transactional;
@@ -116,17 +117,8 @@ public class UserGroupService {
     }
 
     @Transactional
-    public boolean delete(String id, String requestBy) {
-        UserGroup userGroup = get(id);
-        if (userGroup.status.equals(UserGroupStatus.INACTIVE)) {
-            return repository.delete(userGroup.id);
-        } else {
-            userGroup.status = UserGroupStatus.INACTIVE;
-            userGroup.updatedBy = requestBy;
-            userGroup.updatedTime = now();
-            repository.update(userGroup.id, userGroup);
-            return true;
-        }
+    public void delete(DeleteUserGroupRequest request) {
+        repository.batchDelete(request.ids);
     }
 
     @Transactional

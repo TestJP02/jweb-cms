@@ -1,7 +1,7 @@
 package app.jweb.user.api;
 
 
-import app.jweb.user.api.group.BatchDeleteUserGroupRequest;
+import app.jweb.user.api.group.DeleteUserGroupRequest;
 import app.jweb.user.api.group.BatchGetRequest;
 import app.jweb.user.api.group.CreateUserGroupRequest;
 import app.jweb.user.api.group.UpdateUserGroupRequest;
@@ -52,7 +52,7 @@ public interface UserGroupWebService {
 
     @Path("/batch-delete")
     @PUT
-    void batchDelete(BatchDeleteUserGroupRequest request);
+    void delete(DeleteUserGroupRequest request);
 
     @Path("/{id}/revert")
     @PUT

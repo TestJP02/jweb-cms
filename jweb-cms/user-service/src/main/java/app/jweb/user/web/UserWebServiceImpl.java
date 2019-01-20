@@ -2,9 +2,9 @@ package app.jweb.user.web;
 
 import app.jweb.user.api.UserWebService;
 import app.jweb.user.api.user.ApplyPasswordRequest;
-import app.jweb.user.api.user.BatchDeleteUserRequest;
 import app.jweb.user.api.user.BatchGetUserRequest;
 import app.jweb.user.api.user.CreateUserRequest;
+import app.jweb.user.api.user.DeleteUserRequest;
 import app.jweb.user.api.user.LoginRequest;
 import app.jweb.user.api.user.LoginResponse;
 import app.jweb.user.api.user.ResetPasswordRequest;
@@ -15,9 +15,6 @@ import app.jweb.user.api.user.UpdateUserRequest;
 import app.jweb.user.api.user.UserQuery;
 import app.jweb.user.api.user.UserResponse;
 import app.jweb.user.api.user.UserView;
-import com.google.common.base.Splitter;
-import com.google.common.collect.ImmutableList;
-import com.google.common.collect.ImmutableMap;
 import app.jweb.user.domain.ResetPasswordToken;
 import app.jweb.user.domain.User;
 import app.jweb.user.domain.UserAutoLoginToken;
@@ -27,6 +24,9 @@ import app.jweb.user.service.UserService;
 import app.jweb.util.JSON;
 import app.jweb.util.collection.QueryResponse;
 import app.jweb.util.exception.Exceptions;
+import com.google.common.base.Splitter;
+import com.google.common.collect.ImmutableList;
+import com.google.common.collect.ImmutableMap;
 
 import javax.inject.Inject;
 import java.util.List;
@@ -127,10 +127,8 @@ public class UserWebServiceImpl implements UserWebService {
     }
 
     @Override
-    public void batchDelete(BatchDeleteUserRequest request) {
-        request.ids.forEach(id -> {
-            userService.delete(id, request.requestBy);
-        });
+    public void delete(DeleteUserRequest request) {
+        userService.delete(request);
     }
 
     @Override

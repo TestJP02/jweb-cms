@@ -3,9 +3,9 @@ package app.jweb.user.admin.web.ajax;
 
 import app.jweb.captcha.web.CaptchaCode;
 import app.jweb.user.admin.UserAdminOptions;
-import app.jweb.user.admin.web.ajax.user.BatchDeleteUserAJAXRequest;
 import app.jweb.user.admin.web.ajax.user.ChangePasswordAJAXRequest;
 import app.jweb.user.admin.web.ajax.user.ChangePasswordRequest;
+import app.jweb.user.admin.web.ajax.user.DeleteUserAJAXRequest;
 import app.jweb.user.admin.web.ajax.user.LoginAJAXRequest;
 import app.jweb.user.admin.web.ajax.user.LoginAJAXResponse;
 import app.jweb.user.admin.web.ajax.user.UserAJAXResponse;
@@ -15,8 +15,8 @@ import app.jweb.user.admin.web.ajax.user.UserUpdateAJAXRequest;
 import app.jweb.user.api.UserGroupWebService;
 import app.jweb.user.api.UserWebService;
 import app.jweb.user.api.group.BatchGetRequest;
-import app.jweb.user.api.user.BatchDeleteUserRequest;
 import app.jweb.user.api.user.CreateUserRequest;
+import app.jweb.user.api.user.DeleteUserRequest;
 import app.jweb.user.api.user.LoginRequest;
 import app.jweb.user.api.user.LoginResponse;
 import app.jweb.user.api.user.UpdatePasswordRequest;
@@ -29,11 +29,9 @@ import app.jweb.web.Cookies;
 import app.jweb.web.SessionInfo;
 import app.jweb.web.UserInfo;
 import com.google.common.base.Joiner;
-import com.google.common.collect.Lists;
 
 import javax.annotation.security.RolesAllowed;
 import javax.inject.Inject;
-import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
@@ -127,7 +125,7 @@ public class UserAdminAJAXController {
 
         UpdatePasswordRequest updatePasswordRequest = new UpdatePasswordRequest();
         updatePasswordRequest.password = request.newPassword;
-        updatePasswordRequest.requestBy = "user-admin";
+        updatePasswordRequest.requestBy = userInfo.username();
         userWebService.updatePassword(user.id, updatePasswordRequest);
     }
 
@@ -138,7 +136,7 @@ public class UserAdminAJAXController {
     public void changePassword(ChangePasswordAJAXRequest request) {
         UpdatePasswordRequest updatePasswordRequest = new UpdatePasswordRequest();
         updatePasswordRequest.password = request.password;
-        updatePasswordRequest.requestBy = "user-admin";
+        updatePasswordRequest.requestBy = userInfo.username();
         userWebService.updatePassword(request.userId, updatePasswordRequest);
     }
 
@@ -146,16 +144,6 @@ public class UserAdminAJAXController {
     @POST
     public UserAJAXResponse create(UserCreateAJAXRequest request) {
         return response(userWebService.create(createUserRequest(request)));
-    }
-
-    @RolesAllowed("DELETE")
-    @Path("/{id}")
-    @DELETE
-    public void delete(@PathParam("id") String id) {
-        BatchDeleteUserRequest batchDeleteUserRequest = new BatchDeleteUserRequest();
-        batchDeleteUserRequest.ids = Lists.newArrayList(id);
-        batchDeleteUserRequest.requestBy = "user-admin";
-        userWebService.batchDelete(batchDeleteUserRequest);
     }
 
     @RolesAllowed("UPDATE")
@@ -166,12 +154,13 @@ public class UserAdminAJAXController {
     }
 
     @RolesAllowed("DELETE")
-    @PUT
-    public void batchDelete(BatchDeleteUserAJAXRequest request) {
-        BatchDeleteUserRequest batchDeleteUserRequest = new BatchDeleteUserRequest();
-        batchDeleteUserRequest.ids = request.ids;
-        batchDeleteUserRequest.requestBy = "user-admin";
-        userWebService.batchDelete(batchDeleteUserRequest);
+    @Path("/batch-delete")
+    @POST
+    public void batchDelete(DeleteUserAJAXRequest request) {
+        DeleteUserRequest deleteUserRequest = new DeleteUserRequest();
+        deleteUserRequest.ids = request.ids;
+        deleteUserRequest.requestBy = userInfo.username();
+        userWebService.delete(deleteUserRequest);
     }
 
     @Path("/logout")
@@ -204,7 +193,7 @@ public class UserAdminAJAXController {
         request.description = Objects.requireNonNullElse(ajaxRequest.description, "");
         request.tags = ajaxRequest.tags;
         request.fields = ajaxRequest.fields;
-        request.requestBy = "user-admin";
+        request.requestBy = userInfo.username();
         return request;
     }
 
@@ -222,7 +211,7 @@ public class UserAdminAJAXController {
         request.userGroupIds = ajaxRequest.userGroupIds;
         request.status = UserStatus.ACTIVE;
         request.description = ajaxRequest.description;
-        request.requestBy = "user-admin";
+        request.requestBy = userInfo.username();
         request.tags = ajaxRequest.tags;
         request.fields = ajaxRequest.fields;
         return request;

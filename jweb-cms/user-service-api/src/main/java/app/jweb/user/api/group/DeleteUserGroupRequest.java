@@ -12,7 +12,7 @@ import java.util.List;
  * @author chi
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-public class BatchDeleteUserGroupRequest {
+public class DeleteUserGroupRequest {
     @NotNull
     @XmlElement(name = "ids")
     public List<String> ids;

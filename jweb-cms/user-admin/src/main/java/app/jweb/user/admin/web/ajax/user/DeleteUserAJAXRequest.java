@@ -9,7 +9,7 @@ import java.util.List;
  * @author chi
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-public class BatchDeleteUserAJAXRequest {
+public class DeleteUserAJAXRequest {
     @XmlElement(name = "ids")
     public List<String> ids;
 }

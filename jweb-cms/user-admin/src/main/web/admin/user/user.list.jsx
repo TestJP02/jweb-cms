@@ -10,7 +10,6 @@ export default class UserList extends React.Component {
         this.state = {
             query: {
                 query: "",
-                status: "ACTIVE",
                 userGroupId: null,
                 page: 1,
                 limit: 20,
@@ -24,20 +23,6 @@ export default class UserList extends React.Component {
                 items: []
             },
             limitOptions: [20, 50, 100],
-            statusOptions: [
-                {
-                    label: i18n.t("user.statusActive"),
-                    value: "ACTIVE"
-                },
-                {
-                    label: i18n.t("user.statusInactive"),
-                    value: "INACTIVE"
-                },
-                {
-                    label: i18n.t("user.statusLocked"),
-                    value: "LOCKED"
-                }
-            ],
             columns: [
                 {type: "selection"},
                 {
@@ -195,33 +180,39 @@ export default class UserList extends React.Component {
     }
 
     delete(data) {
-        fetch("/admin/api/user/" + data.id, {method: "DELETE"})
-            .then(() => {
+        dialog.confirm(i18n.t("user.deleteTip"), i18n.t("user.deleteHint"), {type: "warning"}).then(() => {
+            fetch("/admin/api/user/batch-delete", {
+                method: "POST",
+                body: JSON.stringify({ids: [data.id]})
+            }).then(() => {
                 alert({
                     type: "success",
                     message: i18n.t("user.deleteSuccessContent")
                 });
                 this.find();
             });
+        });
     }
 
     batchDelete() {
-        const list = this.state.selected, ids = [];
-        if (list.length === 0) {
-            return;
-        }
-        for (let i = 0; i < list.length; i += 1) {
-            ids.push(list[i].id);
-        }
-        fetch("/admin/api/user", {
-            method: "PUT",
-            body: JSON.stringify({ids: ids})
-        }).then(() => {
-            alert({
-                type: "success",
-                message: i18n.t("user.deleteSuccessContent")
+        dialog.confirm(i18n.t("user.deleteTip"), i18n.t("user.deleteHint"), {type: "warning"}).then(() => {
+            const list = this.state.selected, ids = [];
+            if (list.length === 0) {
+                return;
+            }
+            for (let i = 0; i < list.length; i += 1) {
+                ids.push(list[i].id);
+            }
+            fetch("/admin/api/user/batch-delete", {
+                method: "POST",
+                body: JSON.stringify({ids: ids})
+            }).then(() => {
+                alert({
+                    type: "success",
+                    message: i18n.t("user.deleteSuccessContent")
+                });
+                this.find();
             });
-            this.find();
         });
     }
 
@@ -238,18 +229,6 @@ export default class UserList extends React.Component {
                                     clearable={true}
                                     onChange={value => this.roleChange("userGroupId", value)}>
                                     {this.state.userGroupOptions.map(el => <Select.Option key={el.value} label={el.label} value={el.value}/>)}
-                                </Select>
-                            </Form.Item>
-                            <Form.Item>
-                                <Select
-                                    value={this.state.query.status}
-                                    placeholder={i18n.t("user.status")}
-                                    clearable={true}
-                                    onChange={value => this.statusChange("status", value)}>
-                                    {
-                                        this.state.statusOptions.map(el => <Select.Option key={el.value}
-                                            label={el.label} value={el.value}/>)
-                                    }
                                 </Select>
                             </Form.Item>
                             <Form.Item>

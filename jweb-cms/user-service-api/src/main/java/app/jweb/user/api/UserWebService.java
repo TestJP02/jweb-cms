@@ -2,9 +2,9 @@ package app.jweb.user.api;
 
 
 import app.jweb.user.api.user.ApplyPasswordRequest;
-import app.jweb.user.api.user.BatchDeleteUserRequest;
 import app.jweb.user.api.user.BatchGetUserRequest;
 import app.jweb.user.api.user.CreateUserRequest;
+import app.jweb.user.api.user.DeleteUserRequest;
 import app.jweb.user.api.user.LoginRequest;
 import app.jweb.user.api.user.LoginResponse;
 import app.jweb.user.api.user.ResetPasswordRequest;
@@ -88,7 +88,7 @@ public interface UserWebService {
 
     @Path("/batch-delete")
     @POST
-    void batchDelete(BatchDeleteUserRequest request);
+    void delete(DeleteUserRequest request);
 
     @Path("/{id}/revert")
     @PUT

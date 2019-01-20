@@ -1,8 +1,12 @@
 package app.jweb.user.service;
 
+import app.jweb.database.Query;
+import app.jweb.database.Repository;
+import app.jweb.message.MessagePublisher;
 import app.jweb.user.UserOptions;
 import app.jweb.user.api.user.BatchGetUserRequest;
 import app.jweb.user.api.user.CreateUserRequest;
+import app.jweb.user.api.user.DeleteUserRequest;
 import app.jweb.user.api.user.LoginRequest;
 import app.jweb.user.api.user.UpdatePasswordRequest;
 import app.jweb.user.api.user.UpdateUserRequest;
@@ -13,15 +17,12 @@ import app.jweb.user.api.user.UserQuery;
 import app.jweb.user.api.user.UserRegisterMessage;
 import app.jweb.user.api.user.UserStatus;
 import app.jweb.user.domain.User;
-import com.google.common.base.Joiner;
-import com.google.common.base.Strings;
-import com.google.common.hash.Hashing;
-import app.jweb.database.Query;
-import app.jweb.database.Repository;
-import app.jweb.message.MessagePublisher;
 import app.jweb.util.JSON;
 import app.jweb.util.collection.QueryResponse;
 import app.jweb.util.exception.Exceptions;
+import com.google.common.base.Joiner;
+import com.google.common.base.Strings;
+import com.google.common.hash.Hashing;
 
 import javax.inject.Inject;
 import javax.transaction.Transactional;
@@ -339,18 +340,12 @@ public class UserService {
     }
 
     @Transactional
-    public void delete(String id, String requestBy) {
-        User user = get(id);
-        if (user.status.equals(UserStatus.INACTIVE)) {
+    public void delete(DeleteUserRequest request) {
+        for (String id : request.ids) {
+            User user = get(id);
             repository.delete(id);
-        } else {
-            user.status = UserStatus.INACTIVE;
-            user.updatedBy = requestBy;
-            user.updatedTime = OffsetDateTime.now();
-            repository.update(user.id, user);
+            notifyUserChanged(user);
         }
-
-        notifyUserChanged(user);
     }
 
     @Transactional

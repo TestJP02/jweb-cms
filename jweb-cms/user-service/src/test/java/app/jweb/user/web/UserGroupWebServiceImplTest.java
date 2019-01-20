@@ -2,7 +2,7 @@ package app.jweb.user.web;
 
 import app.jweb.user.UserModuleImpl;
 import app.jweb.user.api.UserGroupWebService;
-import app.jweb.user.api.group.BatchDeleteUserGroupRequest;
+import app.jweb.user.api.group.DeleteUserGroupRequest;
 import app.jweb.user.api.group.BatchGetRequest;
 import app.jweb.user.api.group.CreateUserGroupRequest;
 import app.jweb.user.api.group.UpdateUserGroupRequest;
@@ -91,7 +91,7 @@ public class UserGroupWebServiceImplTest {
 
     @Test
     public void batchDelete() {
-        BatchDeleteUserGroupRequest request = new BatchDeleteUserGroupRequest();
+        DeleteUserGroupRequest request = new DeleteUserGroupRequest();
         request.ids = Lists.newArrayList(id);
         request.requestBy = "test";
         ContainerResponse response = app.put("/api/user/group/batch-delete").setEntity(request).execute();

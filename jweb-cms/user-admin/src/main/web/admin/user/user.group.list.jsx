@@ -1,5 +1,5 @@
 import React from "react";
-import {Button, DateFormatter, Form, Input, Message as alert, MessageBox as dialog, Pagination, Select, Table} from "element-react";
+import {Button, DateFormatter, Form, Input, Message as alert, MessageBox as dialog, Pagination, Table} from "element-react";
 import {Link} from "react-router-dom";
 
 const i18n = window.i18n;
@@ -10,7 +10,6 @@ export default class UserGroupList extends React.Component {
         this.state = {
             query: {
                 query: "",
-                status: "ACTIVE",
                 page: 1,
                 limit: 5
             },
@@ -21,16 +20,6 @@ export default class UserGroupList extends React.Component {
                 items: []
             },
             limitOptions: [20, 50, 100],
-            statusOptions: [
-                {
-                    label: i18n.t("user.statusActive"),
-                    value: "ACTIVE"
-                },
-                {
-                    label: i18n.t("user.statusInactive"),
-                    value: "INACTIVE"
-                }
-            ],
             columns: [
                 {type: "selection"},
                 {
@@ -115,35 +104,41 @@ export default class UserGroupList extends React.Component {
     }
 
     delete(data) {
-        fetch("/admin/api/user/group/" + data.id, {method: "DELETE"})
-            .then(() => {
+        dialog.confirm(i18n.t("user.deleteUserGroupTip"), i18n.t("user.deleteHint"), {type: "warning"}).then(() => {
+            fetch("/admin/api/user/group/batch-delete", {
+                method: "POST",
+                body: JSON.stringify({ids: [data.id]})
+            }).then(() => {
                 alert({
                     type: "success",
                     message: i18n.t("user.deleteSuccessContent")
                 });
                 this.find();
             });
+        });
     }
 
     batchDelete() {
-        const list = this.state.selected,
-            ids = [];
-        if (list.length === 0) {
-            return;
-        }
-        for (let i = 0; i < list.length; i += 1) {
-            ids.push(list[i].id);
-        }
-        fetch("/admin/api/user/group", {
-            method: "PUT",
-            body: JSON.stringify({ids: ids})
-        }).then(() => {
-            alert({
-                type: "success",
-                message: i18n.t("user.deleteSuccessContent")
+        dialog.confirm(i18n.t("user.deleteUserGroupTip"), i18n.t("user.deleteHint"), {type: "warning"}).then(() => {
+            const list = this.state.selected,
+                ids = [];
+            if (list.length === 0) {
+                return;
+            }
+            for (let i = 0; i < list.length; i += 1) {
+                ids.push(list[i].id);
+            }
+            fetch("/admin/api/user/group/batch-delete", {
+                method: "POST",
+                body: JSON.stringify({ids: ids})
+            }).then(() => {
+                alert({
+                    type: "success",
+                    message: i18n.t("user.deleteSuccessContent")
+                });
+                this.select([]);
+                this.find();
             });
-            this.select([]);
-            this.find();
         });
     }
 
@@ -154,18 +149,6 @@ export default class UserGroupList extends React.Component {
                 <div className="toolbar">
                     <div className="toolbar-form">
                         <Form inline={true} model={this.state.query}>
-                            <Form.Item>
-                                <Select
-                                    placeholder={i18n.t("user.status")}
-                                    value={this.state.query.status}
-                                    clearable={true}
-                                    onChange={value => this.queryChange("status", value)}>
-                                    {
-                                        this.state.statusOptions.map(el => <Select.Option key={el.value}
-                                            label={el.label} value={el.value}/>)
-                                    }
-                                </Select>
-                            </Form.Item>
                             <Form.Item>
                                 <Input value={this.state.query.query} onChange={value => this.queryChange("query", value)} icon="fa fa-search"/>
                             </Form.Item>

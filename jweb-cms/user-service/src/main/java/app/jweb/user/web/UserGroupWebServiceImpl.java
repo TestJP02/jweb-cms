@@ -1,16 +1,16 @@
 package app.jweb.user.web;
 
 import app.jweb.user.api.UserGroupWebService;
-import app.jweb.user.api.group.BatchDeleteUserGroupRequest;
 import app.jweb.user.api.group.BatchGetRequest;
 import app.jweb.user.api.group.CreateUserGroupRequest;
+import app.jweb.user.api.group.DeleteUserGroupRequest;
 import app.jweb.user.api.group.UpdateUserGroupRequest;
 import app.jweb.user.api.group.UserGroupQuery;
 import app.jweb.user.api.group.UserGroupResponse;
 import app.jweb.user.domain.UserGroup;
-import com.google.common.base.Splitter;
 import app.jweb.user.service.UserGroupService;
 import app.jweb.util.collection.QueryResponse;
+import com.google.common.base.Splitter;
 
 import javax.inject.Inject;
 import java.util.List;
@@ -61,8 +61,8 @@ public class UserGroupWebServiceImpl implements UserGroupWebService {
     }
 
     @Override
-    public void batchDelete(BatchDeleteUserGroupRequest request) {
-        request.ids.forEach(id -> userGroupService.delete(id, request.requestBy));
+    public void delete(DeleteUserGroupRequest request) {
+        userGroupService.delete(request);
     }
 
     @Override
