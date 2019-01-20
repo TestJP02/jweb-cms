@@ -4,8 +4,8 @@ import app.jweb.database.Query;
 import app.jweb.database.Repository;
 import app.jweb.file.api.directory.DirectoryQuery;
 import app.jweb.file.api.directory.DirectoryStatus;
-import app.jweb.file.api.file.DeleteFileRequest;
 import app.jweb.file.api.file.CreateFileRequest;
+import app.jweb.file.api.file.DeleteFileRequest;
 import app.jweb.file.api.file.FileListQuery;
 import app.jweb.file.api.file.FileListResponse;
 import app.jweb.file.api.file.FileQuery;
@@ -57,8 +57,7 @@ public class FileService {
 
         if (!Strings.isNullOrEmpty(query.keywords)) {
             String keywords = '%' + query.keywords + '%';
-            dbQuery.append(String.format("AND (t.title LIKE ?%d OR t.description LIKE ?%d OR t.tags LIKE ?%d) ", index, index, index), keywords, keywords, keywords);
-            index++;
+            dbQuery.append(String.format("AND (t.title LIKE ?%d OR t.path LIKE ?%d OR t.fileName LIKE ?%d) ", index++, index++, index++), keywords, keywords, keywords);
         }
 
         if (query.startUpdatedTime != null) {
