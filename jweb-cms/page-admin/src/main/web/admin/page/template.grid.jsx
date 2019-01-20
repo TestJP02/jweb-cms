@@ -1,5 +1,5 @@
 import React from "react";
-import {Button, Card, Layout, MessageBox} from "element-react";
+import {Button, Card, Layout, MessageBox, Radio} from "element-react";
 import ReactGridLayout from "react-grid-layout";
 import PropTypes from "prop-types";
 import uuid from "react-native-uuid";
@@ -29,7 +29,8 @@ export default class LayoutGridEditor extends React.Component {
             dom: null,
             rowHeight: 10,
             domHeights: {},
-            componentHeights: {}
+            componentHeights: {},
+            responsiveMode: "md"
         };
         fetch("/admin/api/page/component/section", {method: "GET"}).then((response) => {
             const componentOptions = response;
@@ -43,7 +44,11 @@ export default class LayoutGridEditor extends React.Component {
         });
     }
 
-    componentWillMount() {
+    componentDidMount() {
+        this.refreshLayout();
+    }
+
+    refreshLayout() {
         const layout = this.fromTemplate(this.state.sections);
         this.setState({layout});
     }
@@ -66,7 +71,7 @@ export default class LayoutGridEditor extends React.Component {
                     section.name = "section";
                 }
             }
-
+            this.setState({sections});
             this.state.onChange(sections);
         } catch (e) {
             window.console.error(e);
@@ -82,25 +87,15 @@ export default class LayoutGridEditor extends React.Component {
             wrapper: section.wrapper
         });
         if (this.getSection(layoutSection.id) && this.getSection(layoutSection.id).widths) {
-            layoutSection.widths = this.getSection(layoutSection.id).widths.filter(width => width.screenWidth !== "lg");
+            layoutSection.widths = this.getSection(layoutSection.id).widths.filter(width => width.screenWidth !== this.state.responsiveMode);
         } else {
-            layoutSection.widths = [
-                {
-                    screenWidth: "xs",
-                    width: 12
-                },
-                {
-                    screenWidth: "sm",
-                    width: 12
-                },
-                {
-                    screenWidth: "md",
-                    width: 12
-                }
-            ];
+            layoutSection.widths = ["xs", "sm", "md"].filter(width => width !== this.state.responsiveMode).map(width => ({
+                screenWidth: width,
+                width: 12
+            }));
         }
         layoutSection.widths.push({
-            screenWidth: "lg",
+            screenWidth: this.state.responsiveMode,
             x: section.x,
             y: section.y,
             width: section.w,
@@ -183,7 +178,7 @@ export default class LayoutGridEditor extends React.Component {
                     minH: 4,
                     widths: section.widths
                 };
-                const width = this.getScreenWidth(section.widths, "lg");
+                const width = this.getScreenWidth(section.widths, this.state.responsiveMode);
                 if (width) {
                     Object.assign(layoutSection, {
                         x: width.x ? width.x : 0,
@@ -391,6 +386,7 @@ export default class LayoutGridEditor extends React.Component {
             if (component.component) {
                 return React.createElement(component.component, {
                     component: componentValue,
+                    responsiveMode: this.state.responsiveMode,
                     readOnly: this.state.readOnly,
                     style: {height: this.state.componentHeights[section.i]},
                     ref: () => {
@@ -419,9 +415,9 @@ export default class LayoutGridEditor extends React.Component {
                     }
                 });
             }
-            return <DefaultComponent component={componentValue}/>;
+            return <DefaultComponent component={componentValue} responsiveMode={this.state.responsiveMode} />;
         }
-        return <ErrorComponent component={componentValue}/>;
+        return <ErrorComponent component={componentValue} responsiveMode={this.state.responsiveMode} />;
     }
 
     component(name) {
@@ -460,6 +456,7 @@ export default class LayoutGridEditor extends React.Component {
             component: component,
             readOnly: this.state.readOnly,
             mode: "edit",
+            responsiveMode: this.state.responsiveMode,
             onChange: value => this.updateComponent(value),
             style: {height: this.state.componentHeights[section.i]},
             ref: () => {
@@ -526,18 +523,27 @@ export default class LayoutGridEditor extends React.Component {
         });
     }
 
+    changeResponsive(mode) {
+        this.setState({responsiveMode: mode}, () => this.refreshLayout());
+    }
+
     render() {
         return (
             <Layout.Row className="el-form-group" gutter="30">
                 <Layout.Col span="6">
                     <div className="page-grid-editor__header">
                         <ComponentMenu componentOptions={this.state.componentOptions}
-                            onSelect={component => this.selectComponent(component)}/>
+                            onSelect={component => this.selectComponent(component)} />
                     </div>
                 </Layout.Col>
                 <Layout.Col span="18">
                     <div className="page-grid-editor__body">
-                        <Card>
+                        <Radio.Group value={this.state.responsiveMode} onChange={value => this.changeResponsive(value)}>
+                            <Radio.Button value="md" ><i className="fa fa-desktop"></i></Radio.Button>
+                            <Radio.Button value="sm" ><i className="fa fa-tablet"></i></Radio.Button>
+                            <Radio.Button value="xs" ><i className="fa fa-mobile"></i></Radio.Button>
+                        </Radio.Group>
+                        <Card className={"page-grid-editor__card--" + this.state.responsiveMode}>
                             <div ref={dom => !this.state.dom && this.setState({dom})}>
                                 {
                                     this.state.componentOptions.length &&
@@ -545,7 +551,7 @@ export default class LayoutGridEditor extends React.Component {
                                         verticalCompact={true}
                                         className="layout"
                                         layout={this.state.layout}
-                                        containerPadding={[0, 10]}
+                                        containerPadding={[0, 0]}
                                         draggableHandle=".page-grid-editor__grid-header"
                                         rowHeight={this.state.rowHeight}
                                         width={this.state.dom && this.state.dom.offsetWidth}
@@ -556,12 +562,12 @@ export default class LayoutGridEditor extends React.Component {
                                         {this.state.layout.map(section =>
                                             <div key={section.i} className="page-grid-editor__grid">
                                                 {this.state.currentI === section.i &&
-                                                <div className="page-grid-editor__ruler" data-width={this.state.currentWidth}></div>
+                                                    <div className="page-grid-editor__ruler" data-width={this.state.currentWidth}></div>
                                                 }
                                                 <div className="page-grid-editor__grid-header">
                                                     <span className="page-grid-editor__grid-header-title">{this.componentDisplayName(this.state.layoutComponents[section.i][0])}</span>
                                                     <Button className="page-grid-editor__grid-operation" type="text"
-                                                        onClick={() => this.setState({updatingSectionId: section.i})}><i className="fa fa-gear"/></Button>
+                                                        onClick={() => this.setState({updatingSectionId: section.i})}><i className="fa fa-gear" /></Button>
                                                     <Button className="page-grid-editor__grid-operation" type="text" icon="close"
                                                         onClick={() => this.removeSection(section.i)}></Button>
                                                 </div>
@@ -605,18 +611,18 @@ export default class LayoutGridEditor extends React.Component {
                                                     }
                                                 }}>
                                                     {this.state.layoutComponents[section.i] &&
-                                                    this.state.layoutComponents[section.i][0] &&
-                                                    this.renderComponent(this.state.layoutComponents[section.i][0], section)}
+                                                        this.state.layoutComponents[section.i][0] &&
+                                                        this.renderComponent(this.state.layoutComponents[section.i][0], section)}
                                                 </div>
                                             </div>
                                         )}
                                     </ReactGridLayout>
                                 }
                                 {this.state.updatingSectionId &&
-                                <TemplateGridEditor section={this.getSection(this.state.updatingSectionId)}
-                                    onChange={section => this.updateSection(section)}
-                                    onCancel={() => this.cancelCreate()}
-                                    template={this.state.template}/>
+                                    <TemplateGridEditor section={this.getSection(this.state.updatingSectionId)}
+                                        onChange={section => this.updateSection(section)}
+                                        onCancel={() => this.cancelCreate()}
+                                        template={this.state.template} />
                                 }
                             </div>
                         </Card>
