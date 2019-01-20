@@ -9,6 +9,7 @@
     position: absolute;
     top: 37px;
     bottom: 61px;
+    width: 100%;
 }
 
 .page-file-browser__container {

@@ -1,6 +1,6 @@
 import React from "react";
 import PropTypes from "prop-types";
-import {Button, Checkbox, Form, Input, Layout} from "element-react";
+import {Button, Form, Input, Layout} from "element-react";
 import FileBrowser from "./page.file.browser";
 
 import "./component.header.css";
@@ -338,7 +338,7 @@ export default class PageHeaderComponent extends React.Component {
                 }
                 {this.state.component.attributes.links.map((link, index) => this.renderLink(link, index))}
             </Layout.Row>
-            <Button type="primary" onClick={(e) => this.save(e)}>{i18n.t("page.save")}</Button>
+            <Button type="primary" onClick={e => this.save(e)}>{i18n.t("page.save")}</Button>
         </Form>;
     }
 

@@ -553,7 +553,7 @@ export default class LayoutGridEditor extends React.Component {
                                         onResize={(layout, oldItem, newItem) => this.onResize(layout, oldItem, newItem)}
                                         onResizeStop={() => this.onResizeStop()}
                                         cols={12}>
-                                        {this.state.layout.map((section) =>
+                                        {this.state.layout.map(section =>
                                             <div key={section.i} className="page-grid-editor__grid">
                                                 {this.state.currentI === section.i &&
                                                 <div className="page-grid-editor__ruler" data-width={this.state.currentWidth}></div>

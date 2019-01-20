@@ -17,7 +17,8 @@ public class ImageComponent extends AbstractPageComponent {
     public ImageComponent() {
         super("image", "component/image/image.html", ImmutableList.of(
             new StringAttribute("caption", null),
-            new StringAttribute("src", null)
+            new StringAttribute("src", null),
+            new StringAttribute("align", null)
         ));
     }
 

@@ -1,11 +1,15 @@
 .image-component {
-    text-align: center;
     min-height: 200px;
+}
+
+.image-component__image {
+    margin: auto;
 }
 
 .image-component__image img {
     display: block;
     max-width: 100%;
+    margin: auto;
 }
 
 .image-component__image-caption {

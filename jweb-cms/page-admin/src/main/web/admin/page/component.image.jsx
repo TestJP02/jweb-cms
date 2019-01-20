@@ -1,6 +1,6 @@
 import React from "react";
 import PropTypes from "prop-types";
-import {Button, Dialog, Form, Input, Layout} from "element-react";
+import {Button, Dialog, Form, Input, Layout, Radio} from "element-react";
 import FileBrowser from "./page.file.browser";
 import "./component.image.css";
 
@@ -16,11 +16,12 @@ export default class PageImageComponent extends React.Component {
             mode: props.mode,
             image: props.component.attributes,
             uploading: false,
-            index: null
+            index: null,
+            style: {}
         };
     }
 
-    componentWillMount() {
+    componentDidMount() {
         if (!this.state.image) {
             this.setState({image: {src: ""}});
         }
@@ -81,6 +82,12 @@ export default class PageImageComponent extends React.Component {
         // this.saveComponent();
     }
 
+    changeAlign(align) {
+        const image = this.state.image;
+        image.align = align;
+        this.setState({image});
+    }
+
     editor() {
         if (!this.state.image.src) {
             return <FileBrowser files={this.files()}
@@ -102,6 +109,13 @@ export default class PageImageComponent extends React.Component {
                                     <Input value={this.state.image.caption} onChange={val => this.formChange("caption", val)} />
                                 </Form.Item>
                             </Layout.Col>
+                            <Layout.Col span="24">
+                                <Form.Item label={i18n.t("page.align")} props="align">
+                                    <Radio value="left" checked={this.state.image.align === "left"} onChange={value => this.changeAlign(value)}><i className="fa fa-align-left" /></Radio>
+                                    <Radio value="none" checked={this.state.image.align === "none" || !this.state.image.align} onChange={value => this.changeAlign(value)}><i className="fa fa-align-center"></i></Radio>
+                                    <Radio value="right" checked={this.state.image.align === "right"} onChange={value => this.changeAlign(value)}><i className="fa fa-align-right"></i></Radio>
+                                </Form.Item>
+                            </Layout.Col>
                         </Layout.Row>
                     </Form>
                 </Dialog.Body>
@@ -120,7 +134,7 @@ export default class PageImageComponent extends React.Component {
                 <div className="image-component__image" onClick={(e) => {
                     e.stopPropagation();
                     e.nativeEvent.stopImmediatePropagation();
-                }}>
+                }} style={{float: this.state.image.align || "none"}}>
                     {this.state.image.src &&
                         <img src={"/admin" + this.state.image.src} alt="" width={this.state.image.width + "px"} height={this.state.image.height + "px"} />
                     }
