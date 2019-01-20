@@ -33,11 +33,11 @@ class Page extends React.Component {
         return (
             <Router history={history}>
                 <Switch>
-                    <Route exact path="/admin/" render={() => <Redirect to="/admin/dashboard/report"/>}/>
+                    <Route exact path="/admin/" render={() => <Redirect to="/admin/dashboard/report" />} />
                     {
-                        this.state.app.bundles.map(bundle => <Route path={bundle.path} component={() => <Bundle bundle={bundle}></Bundle>} key={bundle.path}/>)
+                        this.state.app.bundles.map(bundle => <Route path={bundle.path} component={() => <Bundle bundle={bundle}></Bundle>} key={bundle.path} />)
                     }
-                    <Route component={Error404}/>
+                    <Route component={Error404} />
                 </Switch>
             </Router>
         );
@@ -102,7 +102,7 @@ class App extends React.Component {
     render() {
         return (
             <div className={window.app.user.id ? "" : "unauthenticated"}>
-                <Sticky/>
+                <Sticky />
                 {!this.state.fixedMenu && this.state.shownMenu && <div className="nav__mask" onClick={() => this.toggleMenu()}></div>}
                 <div className={(this.state.shownMenu ? "nav--fixed " : "") + "nav"}>
                     <div className="nav__header">
@@ -124,19 +124,25 @@ class App extends React.Component {
                                 title={
                                     <span>
                                         <div className="menu-user__image">
-                                            {window.app.user.imageURL ? <img src={window.app.user.imageURL}/> : <i className="fa fa-user"/>}
+                                            {window.app.user.imageURL ? <img src={window.app.user.imageURL} /> : <i className="fa fa-user" />}
                                         </div>
                                         {window.app.user.nickname}
                                     </span>
                                 }>
                                 {
                                     window.app.bundle("adminBundle").options.languages.length > 1 &&
-                                    window.app.bundle("adminBundle").options.languages.map(language =>
-                                        <Menu.Item index={language.value}
-                                            key={language.value}>
-                                            {language.displayName}
-                                        </Menu.Item>
-                                    )
+                                    <Menu.SubMenu index="language" key="language"
+                                        title={window.ElementUI.i18n.t("menu.switchLanguage")}>
+                                        {
+                                            window.app.bundle("adminBundle").options.languages.length > 1 &&
+                                            window.app.bundle("adminBundle").options.languages.map(language =>
+                                                <Menu.Item index={language.value}
+                                                    key={language.value}>
+                                                    {language.displayName}
+                                                </Menu.Item>
+                                            )
+                                        }
+                                    </Menu.SubMenu>
                                 }
                                 <Menu.Item index="/admin/user/logout"
                                     key={"item-logout"}>
@@ -176,7 +182,7 @@ class App extends React.Component {
                 </div>
                 <Button className="nav__toggle--fixed" type="text" icon="menu" onClick={() => this.toggleMenu()}></Button>
                 <div className={"page-container" + (this.state.pageFixed ? " page-container--fixed" : "")}>
-                    <Page/>
+                    <Page />
                 </div>
             </div>
         );
@@ -187,12 +193,12 @@ class App extends React.Component {
             history.push(index);
         } else {
             fetch("/admin/api/switch-language/" + index, {method: "GET"})
-                .then(function() {
+                .then(function () {
                     window.location.replace(window.location.href);
                 });
         }
     }
 }
 
-ReactDOM.render(<App/>, document.getElementById("app"));
+ReactDOM.render(<App />, document.getElementById("app"));
 
