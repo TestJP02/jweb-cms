@@ -56,12 +56,12 @@ public class PageCategoryAdminController {
     }
 
     @RolesAllowed("LIST")
-    @Path("/first-two-levels")
+    @Path("/first-three-levels")
     @GET
-    public List<CategoryNodeResponse> firstTwoLevels() {
+    public List<CategoryNodeResponse> firstThreeLevels() {
         CategoryTreeQuery query = new CategoryTreeQuery();
         query.parentId = null;
-        query.level = 2;
+        query.level = 3;
         return pageCategoryWebService.tree(query);
     }
 

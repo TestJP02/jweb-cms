@@ -27,7 +27,7 @@ export default class CategoryList extends React.Component {
                 },
                 {
                     label: i18n.t("page.createdTime"),
-                    render: function(data) {
+                    render: function (data) {
                         return (
                             <ElementUI.DateFormatter date={data.createdTime}/>
                         );
@@ -35,7 +35,7 @@ export default class CategoryList extends React.Component {
                 },
                 {
                     label: i18n.t("page.updatedTime"),
-                    render: function(data) {
+                    render: function (data) {
                         return (
                             <ElementUI.DateFormatter date={data.updatedTime}/>
                         );
@@ -45,7 +45,7 @@ export default class CategoryList extends React.Component {
                     label: i18n.t("page.action"),
                     fixed: "right",
                     width: 200,
-                    render: function(data) {
+                    render: function (data) {
                         return (
                             <span className="el-table__actions">
                                 <Button type="text">
@@ -74,8 +74,7 @@ export default class CategoryList extends React.Component {
         if (e) {
             e.preventDefault();
         }
-        fetch("/admin/api/page/category/first-two-levels", {method: "GET"}).then((response) => {
-            window.console.log(response);
+        fetch("/admin/api/page/category/first-three-levels", {method: "GET"}).then((response) => {
             this.setState({data: response});
         });
     }

@@ -48,10 +48,10 @@ public interface DirectoryWebService {
     @RolesAllowed("LIST")
     List<DirectoryNodeResponse> tree();
 
-    @Path("/first-two-levels")
+    @Path("/first-three-levels")
     @GET
     @RolesAllowed("LIST")
-    List<DirectoryNodeResponse> firstTwoLevels();
+    List<DirectoryNodeResponse> firstThreeLevels();
 
     @Path("/{id}/sub-tree")
     @GET

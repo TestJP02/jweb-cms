@@ -98,7 +98,7 @@ export default class DirectoryList extends React.Component {
     }
 
     find() {
-        fetch("/admin/api/directory/first-two-levels", {method: "GET"}).then((response) => {
+        fetch("/admin/api/directory/first-three-levels", {method: "GET"}).then((response) => {
             this.setState({data: response});
         });
     }

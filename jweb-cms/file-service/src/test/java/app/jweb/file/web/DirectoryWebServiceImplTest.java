@@ -109,7 +109,7 @@ public class DirectoryWebServiceImplTest {
 
     @Test
     void firstTwoLevels() {
-        ContainerResponse containerResponse = app.get("/api/directory/first-two-levels").execute();
+        ContainerResponse containerResponse = app.get("/api/directory/first-three-levels").execute();
         assertEquals(200, containerResponse.getStatus());
         List<DirectoryNodeResponse> list = (List) containerResponse.getEntity();
         assertEquals(1, list.size());

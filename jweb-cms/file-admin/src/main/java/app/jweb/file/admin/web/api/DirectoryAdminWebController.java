@@ -87,10 +87,10 @@ public class DirectoryAdminWebController {
     }
 
     @RolesAllowed("LIST")
-    @Path("/first-two-levels")
+    @Path("/first-three-levels")
     @GET
-    public List<DirectoryNodeAJAXResponse> firstTwoLevels() {
-        return directoryService.firstTwoLevels().stream().map(this::response).collect(Collectors.toList());
+    public List<DirectoryNodeAJAXResponse> firstThree() {
+        return directoryService.firstThreeLevels().stream().map(this::response).collect(Collectors.toList());
     }
 
     @RolesAllowed("LIST")

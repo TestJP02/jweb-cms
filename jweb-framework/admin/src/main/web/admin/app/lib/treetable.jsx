@@ -3,10 +3,20 @@ import PropTypes from "prop-types";
 import {Table} from "element-react";
 import "../css/tree-table.css";
 
+const foldList = [];
+const loadList = [];
+let needInitFlag = false;
+let initDepth = 2;
 export default class TreeTable extends React.Component {
     constructor(props) {
         super(props);
-        const data = this.initData(props.treeData);
+        let data = [];
+        if (props.treeData && props.treeData.length > 0) {
+            data = this.initData(props.treeData);
+        } else {
+            needInitFlag = true;
+        }
+        initDepth = props.initDepth || 2;
         this.state = {
             origin: data,
             treeData: data.concat([]),
@@ -16,7 +26,13 @@ export default class TreeTable extends React.Component {
     }
 
     static getDerivedStateFromProps(nextProps, prevState) {
-        const data = initData(nextProps.treeData);
+        let data = [];
+        if (needInitFlag && nextProps.treeData && nextProps.treeData.length > 0) {
+            data = initData(nextProps.treeData, needInitFlag);
+            needInitFlag = false;
+        } else {
+            data = initData(nextProps.treeData, false);
+        }
         return {
             origin: data,
             treeData: data.concat([])
@@ -29,19 +45,14 @@ export default class TreeTable extends React.Component {
         return result;
     }
 
-    initChildren(list, depth) {
-        const result = [];
-        this.traversal(list, result, depth);
-        return result;
-    }
-
     traversal(firstLevels, list, depth) {
         for (let i = 0; i < firstLevels.length; i += 1) {
             const node = firstLevels[i];
-            node.fold = false;
             node.index = list.length;
             node.depth = depth;
-            list.push(node);
+            if (depth < initDepth) {
+                list.push(node);
+            }
             this.traversal(node.children, list, depth + 1);
         }
     }
@@ -53,19 +64,11 @@ export default class TreeTable extends React.Component {
                 <div className={"key-column depth-" + data.depth} onClick={() => this.click(data)}>
                     {data.children && data.children.length > 0
                         ? <span>
-                            {data.fold
-                                ? <i className="el-icon-arrow-right"></i>
-                                : <i className="el-icon-arrow-down"></i>}
+                            {foldList.indexOf(data.id) < 0
+                                ? <i className="el-icon-arrow-down"></i>
+                                : <i className="el-icon-arrow-right"></i>}
                         </span>
-                        : <span>
-                            {data.load
-                                ? <span className="empty-children"></span>
-                                : <span>
-                                    {this.loadChildren
-                                        ? <i className="el-icon-arrow-right"></i>
-                                        : <span className="empty-children"></span>}
-                                </span>}
-                        </span>}
+                        : <span><i className="empty-children"></i></span>}
                     <span className="key-column-name">
                         {render ? render(data) : this.getValue(key.prop, data)}
                     </span>
@@ -88,9 +91,12 @@ export default class TreeTable extends React.Component {
 
     click(data) {
         if (data.children && data.children.length > 0) {
-            if (data.fold) {
+            const index = foldList.indexOf(data.id);
+            if (index > -1) {
+                foldList.splice(index, 1);
                 this.setState({treeData: this.open(data)});
             } else {
+                foldList.push(data.id);
                 this.setState({treeData: this.fold(data)});
             }
         } else if (this.loadChildren) {
@@ -101,8 +107,8 @@ export default class TreeTable extends React.Component {
     open(data) {
         const list = this.state.treeData;
         const index = this.getIndex(data, this.state.treeData);
-        list[index].fold = false;
         this.openFromOrigin(list, index, data);
+        this.loadChildren(data);
         return list.concat([]);
     }
 
@@ -122,7 +128,6 @@ export default class TreeTable extends React.Component {
     fold(data) {
         const list = this.state.treeData;
         const index = this.getIndex(data, list);
-        list[index].fold = true;
         let count = 0;
         for (let i = index + 1; i < list.length; i += 1) {
             if (list[i].depth > data.depth) {
@@ -144,13 +149,20 @@ export default class TreeTable extends React.Component {
         return -1;
     }
 
+    tryLoadChildren(data) {
+        const index = loadList.indexOf(data.id);
+        if (index < 0) {
+            return this.loadChildren(data);
+        }
+    }
+
     render() {
         return (
             <div className="el-tree-table">
                 <Table
                     style={{width: "100%"}}
                     columns={this.state.treeColumns}
-                    data={this.state.treeData}
+                    data={this.state.treeData.concat([])}
                 />
             </div>
         );
@@ -160,22 +172,46 @@ TreeTable.propTypes = {
     treeData: PropTypes.object.treeData,
     treeColumns: PropTypes.array.treeColumns,
     keyColumn: PropTypes.array.keyColumn,
-    loadChildren: PropTypes.func
+    loadChildren: PropTypes.func,
+    initDepth: PropTypes.initDepth
 };
 
-function initData(list) {
+function initData(list, needInit) {
     const result = [];
-    traversal(list, result, 0);
+    if (needInit) {
+        initTraversal(list, result, 0, needInit);
+    } else {
+        traversal(list, result, 0, needInit);
+    }
     return result;
 }
 
 function traversal(firstLevels, list, depth) {
     for (let i = 0; i < firstLevels.length; i += 1) {
         const node = firstLevels[i];
-        node.fold = false;
         node.index = list.length;
         node.depth = depth;
         list.push(node);
-        traversal(node.children, list, depth + 1);
+        if (foldList.indexOf(node.id) < 0) {
+            traversal(node.children, list, depth + 1);
+        }
+    }
+}
+
+function initTraversal(firstLevels, list, depth) {
+    if (depth === initDepth) {
+        return;
+    }
+    for (let i = 0; i < firstLevels.length; i += 1) {
+        const node = firstLevels[i];
+        node.index = list.length;
+        node.depth = depth;
+        if (depth === initDepth - 1 && node.children && node.children.length > 0) {
+            foldList.push(node.id);
+        }
+        list.push(node);
+        if (foldList.indexOf(node.id) < 0) {
+            initTraversal(node.children, list, depth + 1);
+        }
     }
 }

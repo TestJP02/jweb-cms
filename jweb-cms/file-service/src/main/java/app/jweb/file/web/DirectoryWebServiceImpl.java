@@ -23,6 +23,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 /**
  * @author chi
@@ -60,9 +61,10 @@ public class DirectoryWebServiceImpl implements DirectoryWebService {
     }
 
     @Override
-    public List<DirectoryNodeResponse> firstTwoLevels() {
+    public List<DirectoryNodeResponse> firstThreeLevels() {
         List<Directory> roots = directoryService.roots();
         List<Directory> directories = directoryService.childrenDirectories(roots);
+        List<Directory> thirdLevels = directoryService.childrenDirectories(directories);
         List<DirectoryNodeResponse> result = Lists.newArrayList();
         for (Directory root : roots) {
             DirectoryNodeResponse node = new DirectoryNodeResponse();
@@ -72,7 +74,13 @@ public class DirectoryWebServiceImpl implements DirectoryWebService {
                 if (root.id.equals(child.parentId)) {
                     DirectoryNodeResponse childNode = new DirectoryNodeResponse();
                     childNode.directory = response(child);
-                    childNode.children = Lists.newArrayList();
+                    childNode.children = thirdLevels.stream().filter(d -> childNode.directory.id.equals(d.parentId))
+                        .map(d -> {
+                            DirectoryNodeResponse thirdLevel = new DirectoryNodeResponse();
+                            thirdLevel.directory = response(d);
+                            thirdLevel.children = List.of();
+                            return thirdLevel;
+                        }).collect(Collectors.toList());
                     node.children.add(childNode);
                 }
             }
