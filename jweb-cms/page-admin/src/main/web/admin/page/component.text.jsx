@@ -1,6 +1,6 @@
 import React from "react";
 import PropTypes from "prop-types";
-import {Button, Dialog} from "element-react";
+import {Button} from "element-react";
 import Editor from "./content.editor.jsx";
 import {stateToHTML} from "draft-js-export-html";
 
