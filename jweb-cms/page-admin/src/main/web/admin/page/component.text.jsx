@@ -14,6 +14,7 @@ export default class PageTextComponent extends React.Component {
             component: props.component,
             onChange: props.onChange,
             mode: props.mode,
+            content: props.component.attributes.content || "",
             editingIndex: null
         };
     }
@@ -23,43 +24,37 @@ export default class PageTextComponent extends React.Component {
         this.setState({mode});
     }
 
-    formChange(key, val) {
-        const component = this.state.component;
-        component.attributes[key] = val;
-        this.setState({component});
-    }
-
     saveComponent() {
         const component = this.state.component;
         this.state.onChange(component);
     }
 
     changeContent(editorState) {
-        this.formChange("content", stateToHTML(editorState.getCurrentContent()));
+        const content = stateToHTML(editorState.getCurrentContent());
+        const component = this.state.component;
+        component.attributes.content = content;
+        this.setState({
+            content: content,
+            component: component
+        });
     }
 
     render() {
         return (
             <div className="page-default-component page-text-component">
                 {this.state.mode === "edit" &&
-                    <Dialog
-                        visible={true}
-                        onCancel={() => this.saveComponent()}
-                    >
-                        <Dialog.Body>
-                            <div className="page-text-component__editor">
-                                <Editor content={this.state.component.attributes.content} onChange={editorState => this.changeContent(editorState)}></Editor>
-                            </div>
-                        </Dialog.Body>
-
-                        <Dialog.Footer className="dialog-footer">
-                            <Button type="primary" onClick={() => this.saveComponent()}>{i18n.t("page.save")}</Button>
-                        </Dialog.Footer>
-                    </Dialog>
-                }
-                <div className="page-default-component__content">
-                    <div dangerouslySetInnerHTML={{__html: this.state.component.attributes.content}}></div>
+                <div className="page-text-component__editor">
+                    <Editor content={this.state.content} onChange={editorState => this.changeContent(editorState)}></Editor>
+                    < Button type="primary" onClick={() => this.saveComponent()}>{i18n.t("page.save")}</Button>
                 </div>
+                }
+
+                {this.state.mode !== "edit" &&
+                <div className="page-default-component__content">
+                    <div dangerouslySetInnerHTML={{__html: this.state.content}}></div>
+                </div>
+                }
+
             </div>
         );
     }

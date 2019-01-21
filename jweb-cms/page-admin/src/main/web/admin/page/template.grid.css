@@ -1,10 +1,12 @@
-.react-grid-layout {}
+.react-grid-layout {
+}
 
 .react-grid-placeholder {
     background: #ccc !important;
 }
 
-.page-grid-editor {}
+.page-grid-editor {
+}
 
 .page-grid-editor__header {
     box-sizing: border-box;
@@ -56,7 +58,7 @@
     background-size: 100% 100%;
 }
 
-.page-grid-editor__card--xs .el-card__body>div {
+.page-grid-editor__card--xs .el-card__body > div {
     position: relative;
     z-index: 1;
     background: #fff;
@@ -82,7 +84,6 @@
 .page-grid-editor__grid {
     position: relative;
     border: 1px solid #e5e5e5;
-    overflow: hidden;
     background: #fff;
     /* transform: translate(0px, 0px) !important; */
 }
@@ -136,7 +137,7 @@
     color: #999;
 }
 
-.el-button--text+.el-button--text.page-grid-editor__grid-operation {
+.el-button--text + .el-button--text.page-grid-editor__grid-operation {
     border: 0;
 }
 

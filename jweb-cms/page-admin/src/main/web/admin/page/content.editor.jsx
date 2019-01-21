@@ -12,11 +12,13 @@ export default class ContentEditor extends React.Component {
 
         if (this.props.content && this.props.content.length) {
             const blocksFromHTML = convertFromHTML(this.props.content);
-            const state = ContentState.createFromBlockArray(
-                blocksFromHTML.contentBlocks,
-                blocksFromHTML.entityMap
-            );
-            editorState = EditorState.createWithContent(state);
+            if (blocksFromHTML.contentBlocks) {
+                const state = ContentState.createFromBlockArray(
+                    blocksFromHTML.contentBlocks,
+                    blocksFromHTML.entityMap
+                );
+                editorState = EditorState.createWithContent(state);
+            }
         }
 
         this.enterCount = 0;

@@ -439,15 +439,15 @@ export default class LayoutGridEditor extends React.Component {
     }
 
     componentFocused(section) {
-        window.console.log("componentFocused");
-        window.console.log(this.state.editingSectionId);
-        if (this.state.editingSectionId !== section.i) {
-            if (this.isComponentEditable(this.state.layoutComponents[section.i][0].name)) {
-                this.setState({
-                    editingComponentId: this.state.layoutComponents[section.i][0].id,
-                    editingSectionId: section.i,
-                    elements: {}
-                }, () => this.resizeSection(section));
+        if (this.state.responsiveMode === "md") {
+            if (this.state.editingSectionId !== section.i) {
+                if (this.isComponentEditable(this.state.layoutComponents[section.i][0].name)) {
+                    this.setState({
+                        editingComponentId: this.state.layoutComponents[section.i][0].id,
+                        editingSectionId: section.i,
+                        elements: {}
+                    }, () => this.resizeSection(section));
+                }
             }
         }
     }
@@ -570,19 +570,17 @@ export default class LayoutGridEditor extends React.Component {
                                         onResize={(layout, oldItem, newItem) => this.onResize(layout, oldItem, newItem)}
                                         onResizeStop={() => this.onResizeStop()}
                                         cols={12}>
-                                        {this.state.layout.map(section =>
-                                            <div id={section.i} key={section.i} className="page-grid-editor__grid">
+                                        {this.state.layout.map((section, index) =>
+                                            <div id={section.i} tabIndex={index} key={section.i} className="page-grid-editor__grid" onFocus={() => this.componentFocused(section)}>
                                                 {this.state.currentI === section.i &&
                                                 <div className="page-grid-editor__ruler" data-width={this.state.currentWidth}></div>
                                                 }
                                                 <div className="page-grid-editor__grid-header">
                                                     <span className="page-grid-editor__grid-header-title">{this.componentDisplayName(this.state.layoutComponents[section.i][0])}</span>
-                                                    <Button className="page-grid-editor__grid-operation" type="text"
-                                                        onClick={() => this.setState({updatingSectionId: section.i})}><i className="fa fa-gear"/></Button>
                                                     <Button className="page-grid-editor__grid-operation" type="text" icon="close"
                                                         onClick={() => this.removeSection(section.i)}></Button>
                                                 </div>
-                                                <div className="page-grid-editor__grid-body" tabIndex={section.i} onFocus={() => this.componentFocused(section)}>
+                                                <div className="page-grid-editor__grid-body">
                                                     {this.state.layoutComponents[section.i] &&
                                                     this.state.layoutComponents[section.i][0] &&
                                                     this.renderComponent(this.state.layoutComponents[section.i][0], section)}
