@@ -1,12 +1,10 @@
-.react-grid-layout {
-}
+.react-grid-layout {}
 
 .react-grid-placeholder {
     background: #ccc !important;
 }
 
-.page-grid-editor {
-}
+.page-grid-editor {}
 
 .page-grid-editor__header {
     box-sizing: border-box;
@@ -38,45 +36,48 @@
     min-height: 600px;
 }
 
-.page-grid-editor__card--xs .el-card__body::before {
+
+
+.page .el-card.page-grid-editor__card--xs {
+    position: relative;
+    max-width: 440px;
+    margin: auto;
+    padding: 107px 29px 112px 31px !important;
+    background: url("./mobile-wireframe-1.png") no-repeat 0 360px;
+    background-size: 100% calc(100% - 667px);
+    border: 0;
+}
+
+.page-grid-editor__card--xs .el-card__body {
+    position: relative;
+    z-index: 1;
+}
+
+.page-grid-editor__card--xs::before {
     content: "";
     position: absolute;
     top: 0;
     left: 0;
     width: 100%;
     height: 360px;
-    background: #fff url("./mobile-wireframe.png") no-repeat;
+    background: url("./mobile-wireframe.png") no-repeat;
     background-size: 100% auto;
 }
 
-.page-grid-editor__card--xs .el-card__body {
-    position: relative;
-    max-width: 440px;
-    margin: auto;
-    padding: 105px 29px 112px 31px !important;
-    background: #fff url("./mobile-wireframe.png") no-repeat;
-    background-size: 100% 100%;
-}
 
-.page-grid-editor__card--xs .el-card__body > div {
-    position: relative;
-    z-index: 1;
-    background: #fff;
-}
-
-.page-grid-editor__card--xs .el-card__body::after {
+.page-grid-editor__card--xs::after {
     content: "";
     position: absolute;
     bottom: 0;
     left: 0;
     width: 100%;
     height: 307px;
-    background: #fff url("./mobile-wireframe.png") no-repeat bottom;
+    background: url("./mobile-wireframe.png") no-repeat bottom;
     background-size: 100% auto;
 }
 
-.page-grid-editor__card--sm .el-card__body {
-    max-width: 750px;
+.page-grid-editor__card--sm {
+    max-width: 768px;
     border: 1px solid #e5e5e5;
     margin: auto;
 }
@@ -86,6 +87,11 @@
     border: 1px solid #e5e5e5;
     background: #fff;
     /* transform: translate(0px, 0px) !important; */
+}
+
+.page-grid-editor__body .react-grid-item>.react-resizable-handle {
+    width: 15px;
+    height: 15px;
 }
 
 .page-grid-editor__ruler {
@@ -116,15 +122,23 @@
 }
 
 .page-grid-editor__grid-header {
-    width: 100%;
+    position: absolute;
     height: 24px;
     line-height: 24px;
     background: #f4f4f4;
     border-bottom: 1px solid #e5e5e5;
     text-align: right;
     top: -24px;
+    right: 0;
+    transform: translate3d(0, 100%, 0);
     transition: all 0.2s ease;
-    z-index: 100;
+    z-index: -1;
+    cursor: move;
+}
+
+.page-grid-editor__grid:hover .page-grid-editor__grid-header {
+    transform: translate3d(0, 0, 0);
+    box-shadow: 0 -5px 10px 0 rgba(0, 0, 0, 0.1);
 }
 
 .page-grid-editor__grid-header-title {
@@ -137,10 +151,17 @@
     color: #999;
 }
 
-.el-button--text + .el-button--text.page-grid-editor__grid-operation {
+.el-button--text+.el-button--text.page-grid-editor__grid-operation {
     border: 0;
 }
 
 .page-grid-editor__grid-body .el-form {
     padding: 15px;
+}
+
+
+.page-grid-editor__grid-body,
+.page-grid-editor__grid-body :focus {
+    outline: none;
+    background: #fff;
 }

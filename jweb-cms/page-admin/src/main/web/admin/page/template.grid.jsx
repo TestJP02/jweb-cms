@@ -571,7 +571,7 @@ export default class LayoutGridEditor extends React.Component {
                                         onResizeStop={() => this.onResizeStop()}
                                         cols={12}>
                                         {this.state.layout.map((section, index) =>
-                                            <div id={section.i} tabIndex={index} key={section.i} className="page-grid-editor__grid" onFocus={() => this.componentFocused(section)}>
+                                            <div id={section.i} key={section.i} className="page-grid-editor__grid">
                                                 {this.state.currentI === section.i &&
                                                 <div className="page-grid-editor__ruler" data-width={this.state.currentWidth}></div>
                                                 }
@@ -580,7 +580,7 @@ export default class LayoutGridEditor extends React.Component {
                                                     <Button className="page-grid-editor__grid-operation" type="text" icon="close"
                                                         onClick={() => this.removeSection(section.i)}></Button>
                                                 </div>
-                                                <div className="page-grid-editor__grid-body">
+                                                <div tabIndex={index} className="page-grid-editor__grid-body"  onFocus={() => this.componentFocused(section)}>
                                                     {this.state.layoutComponents[section.i] &&
                                                     this.state.layoutComponents[section.i][0] &&
                                                     this.renderComponent(this.state.layoutComponents[section.i][0], section)}
